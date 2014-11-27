@@ -49,3 +49,12 @@ Route::any('signout', array(
     'as' => 'auth.signout',
     'uses' => 'AuthController@doSignout'
 ));
+
+// get paypal information
+Route::get('paypalinformation', array(
+	'before' => 'auth',
+	'as' => 'site.paypalinfo',
+	'uses' => 'PaypalController@showPaypalInfo'
+));
+
+
