@@ -57,4 +57,8 @@ Route::get('paypalinformation', array(
 	'uses' => 'PaypalController@showPaypalInfo'
 ));
 
-
+// go to paypal login
+Route::get('paypallogin', array(
+	'as' => 'site.paypallogin',
+	'uses' => 'PaypalController@loginWithPaypal'
+));

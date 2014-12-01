@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -36,9 +37,11 @@
 <body>
 	<div class="welcome">
 		<h1>You have arrived.</h1>
-		<a href="{{ URL::route('auth.signout'); }}">Sign out</a>
+		<a href="{{ URL::route('auth.signout') }}">Sign out</a>
 		<br>
-		<a href="{{ URL::route('site.paypalinfo'); }}">Get paypal token</a>
+		<a href="{{ URL::route('site.paypalinfo') }}">Get paypal token</a>
+		<br>
+		<a href="{{ URL::route('site.paypallogin') }}">Login with paypal</a>
 	</div>
 </body>
 </html>
