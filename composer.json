@@ -39,6 +39,7 @@
 		"ext-curl" : "*",
 		"ext-json" : "*",
 		"paypal/rest-api-sdk-php" : "*",
-		"paypal/sdk-core-php" : "*"
+		"paypal/sdk-core-php" : "*",
+		"stripe/stripe-php": "1.*"
 	}
 }

@@ -55,8 +55,8 @@ class AuthController extends BaseController
                 // please note: the user will never see this action
                 // since it will be triggered automatically right after login
 
-                
-                return Redirect::route('auth.signin')->with('success', 'You have been signed in.');
+
+                return Redirect::route('auth.addkey')->with('success', 'You have been signed in.');
             } else {
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')
@@ -102,7 +102,7 @@ class AuthController extends BaseController
                 ->withInput(); // sending back data
         } else {
             // validator success -> signup
-            
+
             // create user
             $user = new User;
             // set auth info
@@ -125,4 +125,19 @@ class AuthController extends BaseController
         Auth::logout();
         return Redirect::route('auth.signin');
     }
+
+    /*
+    |=====================================================
+    | <GET> | addKey: renders the signup page or redirects
+    |=====================================================
+    */
+    public function showAddKey()
+    {
+        // checking if we have key
+        Auth::user()->stripe_key;
+        //return Redirect::route('dev.stripe');
+        return View::make('auth.addkey');
+
+    }
+
 }
