@@ -1,6 +1,10 @@
 <?php
 
+use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Auth\Openid;
+
+use PayPal\Auth\Openid\PPOpenIdSession;
 
 class PaypalController extends BaseController 
 {
@@ -10,8 +14,18 @@ class PaypalController extends BaseController
 
 	public function showPaypalInfo () 
 	{
-		$oauthCredential = new OAuthTokenCredential(self::client_id,self::client_secret);
-		$accessToken = $oauthCredential->getAccessToken(array('mode' => 'sandbox'));
+		
+		$apiContext = new ApiContext();		
+
+		$baseUrl = getBaseUrl() . '/UserConsentRedirect.php?success=true';
+		$redirectUrl = PPOpenIdSession::getAuthorizationUrl(
+    		$baseUrl,
+    		array('profile', 'email', 'phone'),
+    		null,
+    		null,
+    		null,
+    		$apiContext
+);
 
 		return View::make('site.paypalinfo', array(
 			'accessToken' => $accessToken

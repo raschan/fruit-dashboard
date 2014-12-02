@@ -25,9 +25,8 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(array(
-
-	'local' => array('homestead'),
-
+   'development' => array('*.dev', gethostname()),
+   'production' => array('*.com', 'www.supdashboard.com')
 ));
 
 /*
