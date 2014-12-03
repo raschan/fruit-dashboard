@@ -133,11 +133,65 @@ class AuthController extends BaseController
     */
     public function showAddKey()
     {
-        // checking if we have key
-        Auth::user()->stripe_key;
-        //return Redirect::route('dev.stripe');
-        return View::make('auth.addkey');
+        // if we have valid key redirect
+        if (strlen(Auth::user()->stripe_key) > 16) {
+            // valid key -> redirect
+            return Redirect::route('dev.stripe');
+        } else {
+            return View::make('auth.addkey');
+        }
 
+    }
+
+    /*
+    |=====================================================
+    | <POST> | addKey: validates and updates api key
+    |=====================================================
+    */
+    public function doAddKey()
+    {
+        // Validation
+        $rules = array(
+            'api_key' => 'required|min:16|max:64',
+        );
+
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            // validation error -> sending back
+            return Redirect::back()
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // validator success
+            try {
+                // trying to login with this key
+                Stripe::setApiKey(Input::get('api_key'));
+                $balance = Stripe_Balance::retrieve(); // catchable line
+                // success
+                $returned_object = json_decode(strstr($balance, '{'), true);
+
+                // updating the user
+                $user = Auth::user();
+
+                $user->stripe_key = Input::get('api_key');
+                $user->balance = $returned_object['available'][0]['amount'];
+
+                // saving user
+                $user->save();
+
+            } catch(Stripe_AuthenticationError $e) {
+                // code was invalid
+                return Redirect::back()->withErrors(
+                    array('api_key' => "Authentication unsuccessful!")
+                );
+            }
+
+            // redirect to stripe page
+            return Redirect::route('dev.stripe');
+
+        }
     }
 
 }
