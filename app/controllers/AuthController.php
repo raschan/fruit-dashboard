@@ -56,7 +56,7 @@ class AuthController extends BaseController
                 // since it will be triggered automatically right after login
 
 
-                return Redirect::route('auth.addkey')->with('success', 'You have been signed in.');
+                return Redirect::route('hello')->with('success', 'You have been signed in.');
             } else {
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')

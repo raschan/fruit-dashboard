@@ -66,12 +66,18 @@ Route::post('addkey', array(
 // get paypal information
 Route::get('paypalinformation', array(
     'before' => 'auth',
-    'as' => 'site.paypalinfo',
+    'as' => 'dev.paypalinfo',
     'uses' => 'PaypalController@showPaypalInfo'
 ));
 
 // go to paypal login
 Route::get('paypallogin', array(
-    'as' => 'site.paypallogin',
+    'as' => 'dev.paypallogin',
     'uses' => 'PaypalController@loginWithPaypal'
+));
+
+// get paypal user information
+Route::get('paypaluserinfo', array(
+    'as' => 'dev.paypaluserinfo',
+    'uses' => 'PaypalController@showUserInfo'
 ));

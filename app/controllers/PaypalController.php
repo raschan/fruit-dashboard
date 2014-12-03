@@ -6,7 +6,6 @@ use PayPal\Auth\Openid;
 
 use PayPal\Auth\Openid\PPOpenIdSession;
 use PayPal\Auth\Openid\PPOpenIdTokeninfo;
-use PayPal\Exception\PPConnectionException;
 
 class PaypalController extends BaseController 
 {
@@ -22,10 +21,9 @@ class PaypalController extends BaseController
 	{
 		
 		// make API context
-		$apiContext = new ApiContext(new OAuthTokenCredential(self::client_id,self::client_secret));
-
+		$apiContext = $this->getApiContext();
 		$accessToken = $apiContext->getCredential()->getAccessToken(array('mode'=>'sandbox'));
-		return View::make('site.paypalinfo', array(
+		return View::make('dev.paypalinfo', array(
 			'accessToken' => $accessToken
 			));
 	}
@@ -35,17 +33,9 @@ class PaypalController extends BaseController
 
 	public function loginWithPaypal ()
 	{
-		$apiContext = new ApiContext(new OAuthTokenCredential(self::client_id,self::client_secret));
-	    $apiContext->setConfig(
-	    	array(
-        		'mode' => 'sandbox',
-        		'http.ConnectionTimeOut' => 30,
-        		'log.LogEnabled' => true,
-        		'log.FileName' => '../PayPal.log',
-        		'log.LogLevel' => 'FINE',
-        		'validation.level' => 'log'
-    	));
+		$apiContext = $this->getApiContext();
 
+		// building the return link
 		$baseUrl = $this->getBaseUrl() . '/paypaluserinfo?success=true';
 		$redirectUrl = PPOpenIdSession::getAuthorizationUrl(
     		$baseUrl,
@@ -56,7 +46,8 @@ class PaypalController extends BaseController
     		$apiContext
 		);
 
-	echo "Generated the User Consent URL <br> <a href=". $redirectUrl . " >Click Here to Obtain User Consent</a>";
+		return Redirect::secure($redirectUrl);
+
 	}
 
 /*
@@ -64,21 +55,26 @@ class PaypalController extends BaseController
 */
 	public function showUserInfo ()
 	{
+		$apiContext = $this->getApiContext();
 
 		if (isset($_GET['success']) && $_GET['success'] == 'true') {
 
 			$code = $_GET['code'];
+			$scope = $_GET['scope'];
 
-			try {
-        	// Obtain Authorization Code from Code, Client ID and Client Secret
-				$accessToken = PPOpenIdTokeninfo::createFromAuthorizationCode(array('code' => $code), null, null, $apiContext);
-			} catch (PPConnectionException $ex) {
+			// Obtain Authorization Code from Code, Client ID and Client Secret
+			$accessToken = PPOpenIdTokeninfo::createFromAuthorizationCode(array(
+				'code' => $code), 
+				null, 
+				null, 
+				$apiContext
+			);
 			
-			}
-
-
-			return View::make('site.paypaluserinfo', array(
-				'accessToken' => $accessToken
+			// return with the extracted data	
+			return View::make('dev.paypaluserinfo', array(
+				'accessToken' => $accessToken,
+				'scope' => $scope,
+				'code' => $code
 			));
 		}
 	}
@@ -86,6 +82,23 @@ class PaypalController extends BaseController
 /* returns the app's base URL */
 	private function getBaseUrl()
 	{
-		return 'http://localhost';
+		return 'http://localhost:8001';
+	}
+
+/* return the apiContext */
+	private function getApiContext()
+	{
+		$apiContext = new ApiContext(new OAuthTokenCredential(self::client_id,self::client_secret));
+		$apiContext->setConfig(
+	    	array(
+	    		'mode' => 'sandbox',
+	    		'http.ConnectionTimeOut' => 30,
+	    		'log.LogEnabled' => true,
+	    		'log.FileName' => '../PayPal.log',
+	    		'log.LogLevel' => 'FINE',
+	    		'validation.level' => 'log'
+		));
+
+		return $apiContext;
 	}
 }
