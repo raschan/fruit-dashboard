@@ -16,7 +16,7 @@ class AuthController extends BaseController
     public function showSignin()
     {
         if (Auth::check()) {
-            return Redirect::route('hello');
+            return Redirect::route('auth.addkey');
         } else {
             return View::make('auth.signin');
         }
@@ -74,7 +74,7 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('hello');
+            return Redirect::route('auth.addkey');
         } else {
             return View::make('auth.signup');
         }
@@ -134,7 +134,7 @@ class AuthController extends BaseController
     public function showAddKey()
     {
         // if we have valid key redirect
-        if (strlen(Auth::user()->stripe_key) > 16) {
+        if (strlen(Auth::user()->stripe_key) > 16) { //this is not enough
             // valid key -> redirect
             return Redirect::route('dev.stripe');
         } else {
@@ -168,15 +168,16 @@ class AuthController extends BaseController
             try {
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('api_key'));
-                $balance = Stripe_Balance::retrieve(); // catchable line
+                $returned_object = Stripe_Balance::retrieve(); // catchable line
                 // success
-                $returned_object = json_decode(strstr($balance, '{'), true);
-
+                // warning the next line is hacked!
+                $balance = json_decode(strstr($returned_object, '{'), true);
+                Log::info($balance);
                 // updating the user
-                $user = Auth::user();
 
+                $user = Auth::user();
                 $user->stripe_key = Input::get('api_key');
-                $user->balance = $returned_object['available'][0]['amount'];
+                $user->balance = $balance['available'][0]['amount'];
 
                 // saving user
                 $user->save();
@@ -184,8 +185,13 @@ class AuthController extends BaseController
             } catch(Stripe_AuthenticationError $e) {
                 // code was invalid
                 return Redirect::back()->withErrors(
-                    array('api_key' => "Authentication unsuccessful!")
+                    array('api_key' => "This key does not seem to be valid!")
                 );
+            } catch (Stripe_ApiConnectionError $e) {
+                return Redirect::back()->withErrors(
+                    array('api_key' => "Hmm... that's strange looks like Stripe is down.!")
+                );
+
             }
 
             // redirect to stripe page
