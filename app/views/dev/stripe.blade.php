@@ -15,6 +15,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Your stripe account info</h1>
+                {{$balance}}
             </div>
         </div>
         <!-- /.row -->

@@ -16,7 +16,7 @@ class AddedBalanceToUser extends Migration
         Schema::table('users', function($table)
         {
             // adding title
-            $table->float('balance', 64)->nullable();
+            $table->bigInteger('balance', 64)->nullable()->unsigned();
 
         });
     }
