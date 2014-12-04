@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">
-				<h1 class="text-center text-white padding-sm-vr">Start up Dashboard</h1>
+				<h1 class="page-title">Start up Dashboard</h1>
 				{{ Form::open(array('route' => 'auth.signup', 'class' => 'panel' )) }}
 				<div class="login-text">
 					<span>Sign up</span><span class="pull-right">or <a href="{{ URL::route('auth.signin') }}">sign in</a></span>

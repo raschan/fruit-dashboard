@@ -1,0 +1,45 @@
+/* Signin, signout page */
+.theme-signout {
+	background-color: #27ae60;
+}
+
+@media (max-width: 767px) {
+	.theme-signout .container {
+		padding: 30px 0 0 0 !important;
+	}
+}
+
+.theme-signout .container {
+	padding: 80px 0 0 0;
+}
+
+.theme-signout .panel {
+	border-radius: 12px;
+}
+
+.theme-signout .page-title{
+	color: #fff;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.theme-signout .login-text {
+	padding: 0 0 15px 0;
+}
+
+.theme-signout .footer-copyright > a{
+	color: #fff;
+}
+
+.theme-signout .footer-copyright > a:hover{
+	color: #fff;
+	text-decoration: underline;
+}
+
+
+/*Utility*/
+
+
+
