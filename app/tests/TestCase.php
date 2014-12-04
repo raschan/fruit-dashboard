@@ -1,19 +1,40 @@
 <?php
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
+class TestCase extends Illuminate\Foundation\Testing\TestCase
+{
+    /**
+     * Default preparation for each test
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-	/**
-	 * Creates the application.
-	 *
-	 * @return \Symfony\Component\HttpKernel\HttpKernelInterface
-	 */
-	public function createApplication()
-	{
-		$unitTesting = true;
+        $this->prepareForTests();
+        $this->seed();
+    }
 
-		$testEnvironment = 'testing';
+    /**
+     * Creates the application.
+     *
+     * @return \Symfony\Component\HttpKernel\HttpKernelInterface
+     */
+    public function createApplication()
+    {
+        $unitTesting = true;
 
-		return require __DIR__.'/../../bootstrap/start.php';
-	}
+        $testEnvironment = 'testing';
+
+        return require __DIR__.'/../../bootstrap/start.php';
+    }
+
+    /**
+     * Migrates the database and set the mailer to 'pretend'.
+     * This will cause the tests to run quickly.
+     */
+    private function prepareForTests()
+    {
+        Artisan::call('migrate');
+        Mail::pretend(true);
+    }
 
 }
