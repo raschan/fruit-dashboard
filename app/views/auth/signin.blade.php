@@ -1,9 +1,9 @@
 @extends('meta.base-user-signout')
 
 @section('pageContent')
+  @include('meta.pageAlerts')
   <!-- login form box -->
   <div class="container">
-    @include('meta.pageAlerts')
     <div class="row">
       <div class="col-sm-6 col-sm-offset-3">
         <h1 class="page-title">Start Up Dashboard</h1>

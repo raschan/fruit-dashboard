@@ -5,6 +5,7 @@
 
 @stop
 
+
 @section('pageContent')
 	@include('meta.pageAlerts')
 	<!-- login form box -->

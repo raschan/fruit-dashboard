@@ -3,6 +3,18 @@
 	background-color: #27ae60;
 }
 
+.theme-signout .pa_page_alerts_default {
+	margin-bottom: 0px;
+}
+
+.pa-page-alerts-box .alert {
+	border-radius: 0px;
+}
+
+.theme-signout #main-navbar {
+	display: none;
+}
+
 @media (max-width: 767px) {
 	.theme-signout .container {
 		padding: 30px 0 0 0 !important;
@@ -29,6 +41,10 @@
 	padding: 0 0 15px 0;
 }
 
+.theme-signout .input-group-addon {
+	min-width: 38px;
+}
+
 .theme-signout .footer-copyright > a{
 	color: #fff;
 }
@@ -37,6 +53,7 @@
 	color: #fff;
 	text-decoration: underline;
 }
+
 
 
 /*Utility*/

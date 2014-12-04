@@ -59,7 +59,22 @@
     <!-- Base scripts -->
     {{ HTML::script('js/jquery.js'); }}
     {{ HTML::script('js/bootstrap.min.js'); }}
+    {{ HTML::script('js/pixel-admin.min.js'); }}
     <!-- /Base scripts -->
+
+    <!-- PixelAdmin -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        window.PixelAdmin.start([]);
+
+        setTimeout(function() {
+            $('.pa-page-alerts-box').fadeTo(500, 0).slideUp(500, function(){
+              $(this).remove(); 
+            });
+          }, 5000);
+        });
+    </script>
+    <!-- /PixelAdmin -->
 
     
     <!-- Page specific scripts -->
