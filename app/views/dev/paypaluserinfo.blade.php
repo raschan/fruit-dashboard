@@ -2,7 +2,9 @@
 
 @section('pageContent')
 
-<p class="text-center">{{ $accessToken }}</p>
-<p class="text-center">{{ $code }}</p>
-<p class="text-center">{{ $scope }}</p>
+<p>Dummy user information:</p><br>
+@foreach($user_info as $key => $value)
+	<p>{{ $key }} => {{ $value }}</p>
+@endforeach
+
 @stop

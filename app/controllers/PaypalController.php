@@ -6,6 +6,9 @@ use PayPal\Auth\Openid;
 
 use PayPal\Auth\Openid\PPOpenIdSession;
 use PayPal\Auth\Openid\PPOpenIdTokeninfo;
+use PayPal\Auth\Openid\PPOpenIdUserInfo;
+
+use PayPal\Validation\JsonValidator;
 
 class PaypalController extends BaseController 
 {
@@ -60,21 +63,49 @@ class PaypalController extends BaseController
 		if (isset($_GET['success']) && $_GET['success'] == 'true') {
 
 			$code = $_GET['code'];
-			$scope = $_GET['scope'];
 
+			$user = Auth::user();
+			$user->paypal_key = $code;
+			$user->save();
+
+			/*
+			get access_token - start
+			*/
+			
 			// Obtain Authorization Code from Code, Client ID and Client Secret
-			$accessToken = PPOpenIdTokeninfo::createFromAuthorizationCode(array(
-				'code' => $code), 
+			$tokenInfo = PPOpenIdTokeninfo::createFromAuthorizationCode(array(
+				'code' => $user->paypal_key), 
 				null, 
 				null, 
 				$apiContext
 			);
+
+			if(!is_array($tokenInfo) && JsonValidator::validate($tokenInfo))
+			{
+				// tokenInfo is not Array and is Json
+				$tokenInfoArray = json_decode($tokenInfo,true);
+			}
+
+			/*
+			get access_token - stop
+			*/
 			
+			// get user information
+			$user = PPOpenIdUserinfo::getUserinfo(
+				array(
+					'access_token' => $tokenInfoArray['access_token']
+				), $apiContext
+			);
+
+			if(!is_array($user) && JsonValidator::validate($user))
+			{
+				// tokenInfo is not Array and is Json
+				$userArray = json_decode($user,true);
+			}
+
 			// return with the extracted data	
 			return View::make('dev.paypaluserinfo', array(
-				'accessToken' => $accessToken,
-				'scope' => $scope,
-				'code' => $code
+				'user_info' => $userArray
 			));
 		}
 	}
