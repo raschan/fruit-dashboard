@@ -5,7 +5,7 @@
   <div class="container">
     @include('meta.pageAlerts')
     <div class="row">
-      <div class="col-sm-4 col-sm-offset-4">
+      <div class="col-sm-6 col-sm-offset-3">
         <h1 class="page-title">Start Up Dashboard</h1>
       	  {{ Form::open(array('route' => 'auth.signin', 'class' => 'panel' )) }}
             <div class="login-text">
@@ -14,7 +14,7 @@
             <div class="form-group @if ($errors->first('email')) has-error @endif">
               <div class="input-group">
                   <span class="input-group-addon"><strong>@</strong></span>
-                  {{ Form::text('email', Input::old('email'), array('placeholder' => 'youremail@yourprovider.com', 'class' => 'form-control')) }}
+                  {{ Form::text('email', Input::old('email'), array('placeholder' => 'Email@provider.com', 'class' => 'form-control')) }}
             </div>
               <p class="help-block">
               @if ($errors->first('email'))
@@ -26,7 +26,7 @@
             <div class="form-group @if ($errors->first('password')) has-error @endif">
               <div class="input-group">
                   <span class="input-group-addon"><i class="icon fa fa-lock"></i></span>
-			    {{ Form::password('Password', array('placeholder' => 'password', 'class' => 'form-control')) }}
+			    {{ Form::password('password', array('placeholder' => 'Password', 'class' => 'form-control')) }}
 			</div>
               <p class="help-block">
               @if ($errors->first('password'))
