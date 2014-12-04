@@ -18,18 +18,13 @@ class HelloController extends BaseController
     */
     public function showStripe ()
     {
-        // this means we have valid balance
-        //$account_info = json_decode(Stripe_Account::retrieve(), true);
-        //Log::info(Stripe_Balance::retrieve());
-        //Log::info(Stripe_Account::retrieve());
-        Stripe::setApiKey(Auth::user()->stripe_key);
-
-        Log::info(Stripe_Charge::all());
-
         # trying to acquire Stripe
         return View::make(
             'dev.stripe',
-            array('balance' => Auth::user()->balance)
+            array(
+                'balance' => Auth::user()->balance,
+                'charges' => Auth::user()->getCharges()
+            )
         );
     }
 }

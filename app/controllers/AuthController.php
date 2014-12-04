@@ -168,14 +168,16 @@ class AuthController extends BaseController
             try {
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('api_key'));
-                $balance = Stripe_Balance::retrieve(); // catchable line
+                $returned_object = Stripe_Balance::retrieve(); // catchable line
                 // success
-                $returned_object = json_decode(strstr($balance, '{'), true);
-                Log::info($returned_object);
+                // warning the next line is hacked!
+                $balance = json_decode(strstr($returned_object, '{'), true);
+                Log::info($balance);
                 // updating the user
+
                 $user = Auth::user();
                 $user->stripe_key = Input::get('api_key');
-                $user->balance = $returned_object['available'][0]['amount'];
+                $user->balance = $balance['available'][0]['amount'];
 
                 // saving user
                 $user->save();
