@@ -10,11 +10,10 @@ use PayPal\Auth\Openid\PPOpenIdUserInfo;
 
 use PayPal\Validation\JsonValidator;
 
+use PayPal\Api\Payment;
+
 class PaypalController extends BaseController 
 {
-	const client_id = 'AXzgsBDDtHj6G0XUF4VFNnZY8hmtGkbB9ywVfGLsdpJCvkpDgwFCJfO_waxf';
-	const client_secret = 'EPxI-BCsBeaFaZ99xj6W4_U5UGkX4yaNnUTiHaJyuZ2V0YfGcGdVRd1HV5IA';
-
 
 /*
 	test for connecting to Paypal servers through the API
@@ -102,10 +101,21 @@ class PaypalController extends BaseController
 				// tokenInfo is not Array and is Json
 				$userArray = json_decode($user,true);
 			}
+		
+			// get payment information
+			$payments = Payment::all(array('count' => 10, 'start_index' => 0), 
+				$apiContext);
+
+			if(!is_array($payments) && JsonValidator::validate($payments))
+			{
+				// tokenInfo is not Array and is Json
+				$paymentsArray = json_decode($payments,true);
+			}
 
 			// return with the extracted data	
 			return View::make('dev.paypaluserinfo', array(
-				'user_info' => $userArray
+				'user_info' => $userArray,
+				'payment_info' => $paymentsArray
 			));
 		}
 	}
@@ -119,7 +129,14 @@ class PaypalController extends BaseController
 /* return the apiContext */
 	private function getApiContext()
 	{
-		$apiContext = new ApiContext(new OAuthTokenCredential(self::client_id,self::client_secret));
+		$client_id = 'AXzgsBDDtHj6G0XUF4VFNnZY8hmtGkbB9ywVfGLsdpJCvkpDgwFCJfO_waxf';
+		$client_secret = 'EPxI-BCsBeaFaZ99xj6W4_U5UGkX4yaNnUTiHaJyuZ2V0YfGcGdVRd1HV5IA';
+
+		$apiContext = new ApiContext(new OAuthTokenCredential(
+			$client_id,
+			$client_secret
+			)
+		);
 		$apiContext->setConfig(
 	    	array(
 	    		'mode' => 'sandbox',

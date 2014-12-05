@@ -50,6 +50,13 @@ Route::any('signout', array(
     'uses' => 'AuthController@doSignout'
 ));
 
+// dashboard route
+Route::get('dashboard', array(
+    'before' => 'auth',
+    'as' => 'auth.dashboard',
+    'uses' => 'AuthController@showDashboard'
+));
+
 // adding a key to a user
 Route::get('addkey', array(
     'as' => 'auth.addkey',

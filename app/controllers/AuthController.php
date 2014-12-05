@@ -56,7 +56,7 @@ class AuthController extends BaseController
                 // since it will be triggered automatically right after login
 
 
-                return Redirect::route('hello')->with('success', 'You have been signed in.');
+                return Redirect::route('auth.dashboard')->with('success', 'You have been signed in.');
             } else {
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')
@@ -200,4 +200,13 @@ class AuthController extends BaseController
         }
     }
 
+    /*
+    |===================================================
+    | <GET> | showDashboard: renders the dashboard page
+    |===================================================
+    */
+    public function showDashboard()
+    {
+        return View::make('auth.dashboard');  
+    }
 }
