@@ -63,6 +63,12 @@ Route::post('addkey', array(
     'uses' => 'AuthController@doAddKey'
 ));
 
+/*
+|--------------------------------------------------------------------------
+| Paypal Routes
+|--------------------------------------------------------------------------
+*/
+
 // get paypal information
 Route::get('paypalinformation', array(
     'before' => 'auth',

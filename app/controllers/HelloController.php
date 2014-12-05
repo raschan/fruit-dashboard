@@ -26,7 +26,8 @@ class HelloController extends BaseController
             'dev.stripe',
             array(
                 'balance' => Auth::user()->balance,
-                'charges' => Auth::user()->getCharges()
+                'charges' => Auth::user()->getCharges(),
+                'plans' => Auth::user()->getMRR()
             )
         );
     }
