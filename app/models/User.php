@@ -34,10 +34,8 @@ class User extends Eloquent implements UserInterface
             // getting relevant fields
             foreach ($charges['data'] as $charge) {
                 // updating array
-                array_push(
-                    $out_charges,
+                $out_charges[$charge['id']] =
                     array(
-                        'id' => $charge['id'],
                         'created' => $charge['created'],
                         'amount' => $charge['amount'],
                         'currency' => $charge['currency'],
@@ -46,8 +44,7 @@ class User extends Eloquent implements UserInterface
                         'description' => $charge['description'],
                         'statement_description' => $charge['statement_description'],
                         'failure_code' => $charge['failure_code']
-                    )
-                );
+                    );
             }
         } else {
             // paypal
@@ -81,8 +78,7 @@ class User extends Eloquent implements UserInterface
             // getting relevant fields
             foreach ($plans['data'] as $plan) {
                 // updating array
-                array_push(
-                    $out_plans,
+                $out_plans[$plan['id']] =
                     array(
                         'interval' => $plan['interval'],
                         'name' => $plan['name'],
@@ -90,8 +86,7 @@ class User extends Eloquent implements UserInterface
                         'amount' => $plan['amount'],
                         'currency' => $plan['currency'],
                         'interval_count' => $plan['interval_count']
-                    )
-                );
+                    );
             }
         } else {
             // paypal
@@ -101,21 +96,114 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
-     * Getting the MRR based on the plans
+     * Getting all the customers for the user
+     *
+     * @return an array with the subscriptions
+    */
+    public function getCustomers()
+    {
+        // init out array
+        $out_customers = array();
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // setting stripe key
+            Stripe::setApiKey($this->stripe_key);
+
+            // getting the customers
+            $returned_object = Stripe_Customer::all();
+
+            // extracting data
+            $customers = json_decode(strstr($returned_object, '{'), true);
+
+            // setting the data to our own format
+            foreach ($customers['data'] as $customer) {
+                // updating array
+                $out_customers[$customer['id']] =
+                    array(
+                        'zombie' => $customer['livemode'],
+                        'email' => $customer['email'],
+                        'subscriptions' => $customer['subscriptions']
+                    );
+            }
+        } else {
+            // paypal
+        }
+
+        // return with the customers
+        return $out_customers;
+    }
+
+    /**
+     * Getting all the subscriptions. PROBLEM WITH HISTORY!
+     *
+     * @return an array with the subscriptions
+    */
+    public function getCurrentSubscriptions()
+    {
+        // intializing out array
+        $active_subscriptions = array();
+
+        // getting the customers
+        $customers = $this->getCustomers();
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // getting the active subsciprionts for a customer
+            foreach ($customers as $customer) {
+                // going through each subscription if any
+                if ($customer['subscriptions']['total_count'] > 0) {
+                    // there are some subs
+                    foreach ($customer['subscriptions']['data'] as
+                             $subscription) {
+                        // updating array
+                        $active_subscriptions[$subscription['id']] =
+                            array(
+                                'plan_id' => $subscription['plan']['id'],
+                                'start' => $subscription['start'],
+                                'status' => $subscription['status'],
+                                'quantity' => $subscription['quantity']
+                            );
+                    } // foreach suibscriptions
+                } // if subscriptions
+            } // foreach customer
+
+        }
+        return $active_subscriptions;
+    }
+
+    /**
+     * Getting the MRR based on the plans. High lvl function!
+     * Don't use paypal/stripe specific methods here
      *
      * @return a bigint with the MRR in it
     */
     public function getMRR()
     {
-        $mrr = 54327890534;
         // getting the plans
         $plans = $this->getPlans();
 
-        // going through them
-        foreach ($plans as $plan) {
-            // getting subscriptions
+        // getting current subscriptions
+        $current_subscriptions = $this->getCurrentSubscriptions();
+
+        // we'll store the relations here
+        $plan_subscriptions = array();
+
+        // dividing subscriptions among the plans and summing the mrr
+        $mrr = 0;
+
+        foreach ($current_subscriptions as $subscription) {
+            // getting the plan
+            $plan_subscriptions[$subscription['plan_id']] += 1;
+
+            $mrr += $plans[$subscription['plan_id']]['amount'];
 
         }
+
         // returning object
         return $mrr;
     }

@@ -26,9 +26,9 @@
                       <th>failure_code</th>
                     </thead>
                     <tbody>
-                    @foreach ($charges as $charge)
+                    @foreach ($charges as $id=>$charge)
                     <tr>
-                      <td>{{ $charge['id'] }}</td>
+                      <td>{{ $id }}</td>
                       <td>{{ gmdate('Y-m-d H:i:s',$charge['created']) }}</td>
                       <td>{{ strtoupper($charge['currency']) }} {{ number_format($charge['amount']/100, 2) }}</td>
                       <td>{{ $charge['paid'] }}</td>
