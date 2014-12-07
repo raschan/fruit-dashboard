@@ -60,6 +60,7 @@
     {{ HTML::script('js/jquery.js'); }}
     {{ HTML::script('js/bootstrap.min.js'); }}
     {{ HTML::script('js/pixel-admin.min.js'); }}
+    {{ HTML::script('js/chart.min.js'); }}
     <!-- /Base scripts -->
 
     <!-- PixelAdmin -->

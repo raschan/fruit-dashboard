@@ -48,13 +48,6 @@
 
 							<!-- NOTIFICATIONS -->
 							
-							<!-- Javascript -->
-							<script>
-								init.push(function () {
-									$('#main-navbar-notifications').slimScroll({ height: 250 });
-								});
-							</script>
-							<!-- / Javascript -->
 
 							<div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
 								<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><div class="notifications-list" id="main-navbar-notifications" style="overflow: hidden; width: auto; height: 250px;">
