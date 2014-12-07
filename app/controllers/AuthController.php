@@ -231,7 +231,7 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules, $messages);
         if ($validator->fails()) {
             // validation error -> redirect
-            return Redirect::route('site.settings')
+            return Redirect::route('auth.settings')
                 ->withErrors($validator) // send back errors
                 ->withInput(); // sending back data
         } else {
@@ -249,7 +249,7 @@ class AuthController extends BaseController
             } else {
                 // if email is registered and changed
                 if ($user->email != Input::get('email')) {
-                    return Redirect::route('site.settings')
+                    return Redirect::route('auth.settings')
                         ->withErrors('email', 'This email is already registered.') // send back errors
                         ->withInput(); // sending back data
                 }
@@ -258,7 +258,47 @@ class AuthController extends BaseController
     
             $user->save();
             // setting data
-            return Redirect::route('site.settings')
+            return Redirect::route('auth.settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    /*
+    |===================================================
+    | <GET> | showConnect: renders the connect page
+    |===================================================
+    */
+    public function showConnect()
+    {
+        return View::make('auth.connect');  
+    }
+
+
+    /*
+    |===================================================
+    | <POST> | doConnect: updates user service data
+    |===================================================
+    */
+    public function doConnect()
+    {
+        Log::info(Input::all());
+        // Validation rules
+        $rules = array(
+            //'paypal' => ''
+            //'stripe' => ''
+        );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules, $messages);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::route('auth.connect')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            
+            // $user->save();
+            // setting data
+            return Redirect::route('auth.connect')
                 ->with('success', 'Edit was successful.');
         }
     }

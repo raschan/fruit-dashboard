@@ -57,7 +57,7 @@ Route::get('dashboard', array(
     'uses' => 'AuthController@showDashboard'
 ));
 
-// settings route
+// settings routes
 
 Route::get('settings', array(
     'before' => 'auth',
@@ -69,6 +69,20 @@ Route::post('settings', array(
     'before' => 'auth',
     'as' => 'auth.settings',
     'uses' => 'AuthController@doSettings'
+));
+
+// connect routes
+
+Route::get('connect', array(
+    'before' => 'auth',
+    'as' => 'auth.connect',
+    'uses' => 'AuthController@showConnect'
+));
+
+Route::post('connect', array(
+    'before' => 'auth',
+    'as' => 'auth.connect',
+    'uses' => 'AuthController@doConnect'
 ));
 
 // adding a key to a user

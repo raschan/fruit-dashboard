@@ -5,7 +5,7 @@
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-success panel-dark">
           <div class="panel-heading">
-            <span class="panel-title"><i class="fa fa-cog"></i> Settings</span>
+            <span class="panel-title"><i class="fa icon fa-cog"></i> Settings</span>
           </div>
           <div class="panel-body">
             <h4>Change your account settings</h4>
@@ -65,12 +65,16 @@
             <div class="connect-form">
               <h4>Connect a service</h4>
               <div class="col-md-4 col-md-offset-2 text-center">
-                <h1>IMAGE BE HERE</h1>
-                <span class="text-success">is connected. </span><a href="#">View settings.</a>
+                <div class="service-icon">
+                  <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-paypal"></i></a>
+                </div>
+                <span class="text-success">is connected. </span><a href="{{ URL::route('auth.connect') }}">View settings.</a>
               </div>
               <div class="col-md-4 text-center">
-                <h1>IMAGE BE HERE</h1>
-                <span class="default">is not yet connected. </span><a href="#">Connect it now!</a>
+                <div class="service-icon">
+                  <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-stripe"></i></a>
+                </div>
+                <span class="default">is not yet connected. </span><a href="{{ URL::route('auth.connect') }}">Connect it now!</a>
               </div>
             </div> <!-- /. connect-form -->
 
