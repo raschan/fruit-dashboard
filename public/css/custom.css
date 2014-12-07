@@ -58,6 +58,14 @@
 	background-color: #fff;
 }
 
+.single-statistic {
+	background-color: #fff;
+}
+
+.single-statistic canvas {
+	max-width: 85%;
+	max-height: 400px;
+}
 
 
 /*Utility*/

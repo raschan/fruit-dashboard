@@ -85,6 +85,15 @@ Route::post('connect', array(
     'uses' => 'AuthController@doConnect'
 ));
 
+// single_stat route
+
+Route::get('statistics', array(
+    'before' => 'auth',
+    'as' => 'auth.single_stat',
+    'uses' => 'AuthController@showSinglestat'
+));
+
+
 // adding a key to a user
 Route::get('addkey', array(
     'as' => 'auth.addkey',

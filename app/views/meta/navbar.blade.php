@@ -22,6 +22,9 @@
 					<li>
 						<a href="{{ URL::route('auth.dashboard') }}">Home</a>
 					</li>
+					<li>
+						<a href="{{ URL::route('auth.single_stat') }}">Statistics</a>
+					</li>
 				</ul> <!-- / .navbar-nav -->
 
 				<div class="right clearfix">

@@ -302,4 +302,15 @@ class AuthController extends BaseController
                 ->with('success', 'Edit was successful.');
         }
     }
+
+    /*
+    |===================================================
+    | <GET> | showSinglestat: renders the single stats page
+    |===================================================
+    */
+    public function showSinglestat()
+    {
+        return View::make('auth.single_stat');  
+    }
+
 }
