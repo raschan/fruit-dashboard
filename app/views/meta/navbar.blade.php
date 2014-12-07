@@ -101,7 +101,7 @@
 						
 <!-- /3. $END_NAVBAR_ICON_BUTTONS -->
 						<li>
-							<a href="#">
+							<a href="{{ URL::route('auth.settings') }}">
 								Settings
 							</a>
 						</li>

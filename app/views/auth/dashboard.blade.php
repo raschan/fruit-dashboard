@@ -1,8 +1,6 @@
 @extends('meta.base-user')
 
   @section('pageContent')
-    <div id="main-wrapper">
-
       <!-- <div id="main-menu" role="navigation">
       </div> -->
 
