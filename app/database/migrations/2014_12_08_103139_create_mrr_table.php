@@ -19,8 +19,7 @@ class CreateMrrTable extends Migration {
             // user id
             $table->integer('user')->unsigned();
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
-
-            $table->timestamps();
+            $table->date('date');
         });
     }
 

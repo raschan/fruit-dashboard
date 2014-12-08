@@ -6,11 +6,56 @@
     <title>Stripe testing Page</title>
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+{{ HTML::script('js/jquery.js'); }}
+<script>
+jQuery( document ).ready( function( $ ) {
+
+    $('#getevents').on( 'submit', function() {
+        //.....
+        //show some spinner etc to indicate operation in progress
+        //.....
+
+        $.post(
+            $( this ).prop( 'action' ),
+            {
+                "_token": $( this ).find( 'input[name=_token]' ).val()
+            },
+            function( data ) {
+                alert(data);
+            },
+            'json'
+        );
+
+        //.....
+        //do anything else you might want to do
+        //.....
+
+        //prevent the form from actually submitting in browser
+        return false;
+    } );
+
+} );
+
+</script>
+
 </head>
 <body>
+{{ Form::open( array(
+    'route' => 'dev.stripe',
+    'method' => 'post',
+    'id' => 'getevents'
+) ) }}
+
+{{ Form::submit( 'Get events', array(
+    'id' => 'btn-get-events',
+) ) }}
+
+{{ Form::close() }}
+
+
     <!-- Page Content -->
     <div class="container">
-    <h2>Your current MRR (or something like that) is: ${{number_format($mrr/100, 2) }}</h2>
+    <h2 id="mrr_here">{{$mrr}}</h2>
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Your stripe account charges</h1>
@@ -55,11 +100,7 @@
                       <td>{{ gmdate('Y-m-d H:i:s',$event['created']) }}</td>
                       <td>{{ strtoupper($event['type']) }}</td>
                       <td>
-                      @if(isset($event['object']['id']))
-                        {{ $event['object']['id'] }}
-                      @else
-                      <td></td>
-                      @endif
+                      {{ $event['event_id'] }}
                       </td>
                     </tr>
                     @endforeach
@@ -70,5 +111,6 @@
         <!-- /.row -->
 
     </div>
-    <!-- /.container --></body>
+    <!-- /.container -->
+    </body>
 </html>

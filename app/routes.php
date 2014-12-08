@@ -15,6 +15,11 @@ Route::get('/stripe', array(
     'as' => 'dev.stripe',
     'uses' => 'HelloController@showStripe'
 ));
+Route::post('/stripe', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.stripe',
+    'uses' => 'HelloController@ajaxGetMrr'
+));
 
 /*
 |--------------------------------------------------------------------------

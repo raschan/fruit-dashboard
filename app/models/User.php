@@ -58,7 +58,7 @@ class User extends Eloquent implements UserInterface
      *
      * @return an array with the charges
     */
-    public function getEvents($type)
+    public function getEvents()
     {
         $out_evnets = array();
 
@@ -68,24 +68,64 @@ class User extends Eloquent implements UserInterface
 
             // stripe
 
-            // telling stripe who we are
-            Stripe::setApiKey($this->stripe_key);
+            // initializing variables
+            $has_more = true;
+            $last_obj = null;
+            $count = 0;
 
-            // getting the events
-            $returned_object = Stripe_Event::all(array('limit' => 100));
-            // extractin json (this is not the best approach)
-            $events = json_decode(strstr($returned_object, '{'), true);
-            // getting relevant fields
-            foreach ($events['data'] as $event) {
-                // updating array
-                Log::info($event['data']['object']);
-                $out_events[$event['id']] =
-                    array(
-                        'created' => $event['created'],
-                        'type'    => $event['type'],
-                        'object'      => $event['data']['object']
+            while ($has_more) {
+                // trying to avoid overflow
+                $previous_last_obj = $last_obj;
+
+                // telling stripe who we are
+                Stripe::setApiKey($this->stripe_key);
+
+                // getting the events
+                // pagination....
+                if ($last_obj) {
+                    // we have last obj -> starting from there
+                    $returned_object = Stripe_Event::all(
+                        array(
+                            'limit'          => 100,
+                            'starting_after' => $last_obj
+                        )
                     );
-            }
+                } else {
+                    // starting from zero
+                    $returned_object = Stripe_Event::all(
+                        array(
+                            'limit' => 100
+                            )
+                    );
+                }
+
+                // extractin json (this is not the best approach)
+                $events = json_decode(strstr($returned_object, '{'), true);
+
+                // getting relevant fields
+                foreach ($events['data'] as $event) {
+
+                    // updating array
+                    if (isset($event['data']['object']['id'])) {
+                        $out_events[$event['id']] =
+                            array(
+                                'created' => $event['created'],
+                                'type'    => $event['type'],
+                                'event_id'  => $event['data']['object']['id']
+                            );
+                        $last_obj = $event['id'];
+                    }
+                }// foreach
+                // updating has_more
+                $has_more = $events['has_more'];
+                $count += 1;
+                // avoiding infinite loop
+                if ((($previous_last_obj == $last_obj) and $has_more) or $count > 100) {
+                    // we should never get here
+                    // this is too bad system failure :(
+                    $has_more = false;
+                }
+            } // while
         } else {
             // paypal
         }
@@ -262,5 +302,56 @@ class User extends Eloquent implements UserInterface
 
         // returning object
         return $mrr;
+    }
+
+    /**
+     * Getting the Mrr for a timestamp (must be within 30 days in the past)
+     * Description: checks the day before and the events during the day
+     *
+     * @return void
+    */
+    public function buildMrrOnDay($timestamp, $events)
+    {
+        // building up yesterday date
+        $yesterday_ts = $timestamp - 86400;
+        $yesterday = date('Y-m-d', $yesterday_ts);
+
+        $current_day = date('Y-m-d', $timestamp);
+
+        // selecting mrr for the user on this day
+        $yesterday_mrr = DB::table('mrr')
+            ->where('date', $yesterday)
+            ->where('user', Auth::user()->id)
+            ->get();
+
+        // now see the changes
+
+        // selecting the relevant events
+        // building up the range
+        $range_start = strtotime($current_day);
+        $range_stop = $range_start + 86400;
+
+        // building the mrr
+        foreach ($events as $event) {
+            // checking if created is in the range
+            if ($event['created'] > $range_start and $event['created'] < $range_stop) {
+                $this->addToMrr($mrr, $event);
+            }
+        }
+        Log::info($events);
+    }
+
+    /**
+     * Building up the mrr histogram for the last 30 days
+     * Stripe only!
+     *
+     * @return a bigint with the MRR in it
+    */
+    public function buildMrr()
+    {
+        // getting the events
+        $events = $this->getEvents();
+        $this->buildMrrOnDay(1418014821, $events);
+
     }
 }

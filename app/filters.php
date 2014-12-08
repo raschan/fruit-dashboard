@@ -59,7 +59,7 @@ Route::filter('api_key', function()
     if (strlen(Auth::user()->stripe_key) < 16)
     {
         // no valid key
-        return Redirect::route('auth.addkey');
+        return Redirect::route('auth.connect');
     }
 });
 
