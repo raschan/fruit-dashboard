@@ -5,7 +5,7 @@ A Controller for testing stuff
 
 class HelloController extends BaseController
 {
-    public function showHello ()
+    public function showHello()
     {
         if (Auth::check()) {
             return View::make('hello');
@@ -19,15 +19,16 @@ class HelloController extends BaseController
     | <GET> | showStripe: renders the stripe testing page
     |====================================================
     */
-    public function showStripe ()
+    public function showStripe()
     {
         # trying to acquire Stripe
         return View::make(
             'dev.stripe',
             array(
                 'balance' => Auth::user()->balance,
+                'events'  => Auth::user()->getEvents(null),
                 'charges' => Auth::user()->getCharges(),
-                'plans' => Auth::user()->getMRR()
+                'mrr'     => Auth::user()->getMRR()
             )
         );
     }

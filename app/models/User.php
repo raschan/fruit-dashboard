@@ -36,14 +36,14 @@ class User extends Eloquent implements UserInterface
                 // updating array
                 $out_charges[$charge['id']] =
                     array(
-                        'created' => $charge['created'],
-                        'amount' => $charge['amount'],
-                        'currency' => $charge['currency'],
-                        'paid' => $charge['paid'],
-                        'captured' => $charge['captured'],
-                        'description' => $charge['description'],
+                        'created'               => $charge['created'],
+                        'amount'                => $charge['amount'],
+                        'currency'              => $charge['currency'],
+                        'paid'                  => $charge['paid'],
+                        'captured'              => $charge['captured'],
+                        'description'           => $charge['description'],
                         'statement_description' => $charge['statement_description'],
-                        'failure_code' => $charge['failure_code']
+                        'failure_code'          => $charge['failure_code']
                     );
             }
         } else {
@@ -51,6 +51,46 @@ class User extends Eloquent implements UserInterface
         }
         // returning object
         return $out_charges;
+    }
+
+    /**
+     * Getting specific events for the user (null = all)
+     *
+     * @return an array with the charges
+    */
+    public function getEvents($type)
+    {
+        $out_evnets = array();
+
+        // paypal/stripe decision
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // telling stripe who we are
+            Stripe::setApiKey($this->stripe_key);
+
+            // getting the events
+            $returned_object = Stripe_Event::all(array('limit' => 100));
+            // extractin json (this is not the best approach)
+            $events = json_decode(strstr($returned_object, '{'), true);
+            // getting relevant fields
+            foreach ($events['data'] as $event) {
+                // updating array
+                Log::info($event['data']['object']);
+                $out_events[$event['id']] =
+                    array(
+                        'created' => $event['created'],
+                        'type'    => $event['type'],
+                        'object'      => $event['data']['object']
+                    );
+            }
+        } else {
+            // paypal
+        }
+        // returning object
+        return $out_events;
     }
     /**
      * Getting all the plans for the user
@@ -80,11 +120,11 @@ class User extends Eloquent implements UserInterface
                 // updating array
                 $out_plans[$plan['id']] =
                     array(
-                        'interval' => $plan['interval'],
-                        'name' => $plan['name'],
-                        'created' => $plan['created'],
-                        'amount' => $plan['amount'],
-                        'currency' => $plan['currency'],
+                        'interval'       => $plan['interval'],
+                        'name'           => $plan['name'],
+                        'created'        => $plan['created'],
+                        'amount'         => $plan['amount'],
+                        'currency'       => $plan['currency'],
                         'interval_count' => $plan['interval_count']
                     );
             }
@@ -123,8 +163,8 @@ class User extends Eloquent implements UserInterface
                 // updating array
                 $out_customers[$customer['id']] =
                     array(
-                        'zombie' => $customer['livemode'],
-                        'email' => $customer['email'],
+                        'zombie'        => $customer['livemode'],
+                        'email'         => $customer['email'],
                         'subscriptions' => $customer['subscriptions']
                     );
             }
@@ -155,6 +195,7 @@ class User extends Eloquent implements UserInterface
 
             // getting the active subsciprionts for a customer
             foreach ($customers as $customer) {
+
                 // going through each subscription if any
                 if ($customer['subscriptions']['total_count'] > 0) {
                     // there are some subs
@@ -163,9 +204,9 @@ class User extends Eloquent implements UserInterface
                         // updating array
                         $active_subscriptions[$subscription['id']] =
                             array(
-                                'plan_id' => $subscription['plan']['id'],
-                                'start' => $subscription['start'],
-                                'status' => $subscription['status'],
+                                'plan_id'  => $subscription['plan']['id'],
+                                'start'    => $subscription['start'],
+                                'status'   => $subscription['status'],
                                 'quantity' => $subscription['quantity']
                             );
                     } // foreach suibscriptions
@@ -198,10 +239,25 @@ class User extends Eloquent implements UserInterface
 
         foreach ($current_subscriptions as $subscription) {
             // getting the plan
-            $plan_subscriptions[$subscription['plan_id']] += 1;
+            // checking for previous
+            if (isset($plan_subscriptions[$subscription['plan_id']])) {
+                // has previous data
+                $plan_subscriptions[$subscription['plan_id']] += 1;
+            } else {
+                // initializing data
+                $plan_subscriptions[$subscription['plan_id']] = 1;
+            }
+        }
 
-            $mrr += $plans[$subscription['plan_id']]['amount'];
+        // counting the mrr
+        foreach ($plan_subscriptions as $plan_id => $count) {
+            // now this is obviously not enough
 
+            // checking interval
+            // checking now - trial_end
+            // canceled_at
+
+            $mrr += $plans[$plan_id]['amount']*$count;
         }
 
         // returning object
