@@ -54,9 +54,24 @@
 	text-decoration: underline;
 }
 
+.chart-box {
+	background-color: #fff;
+}
+
+.single-statistic {
+	background-color: #fff;
+}
+
+.single-statistic canvas {
+	max-width: 85%;
+	max-height: 400px;
+}
 
 
 /*Utility*/
 
+.service-icon .fa {
+	font-size: 10em;
+}
 
 

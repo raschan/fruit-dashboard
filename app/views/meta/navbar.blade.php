@@ -22,6 +22,9 @@
 					<li>
 						<a href="{{ URL::route('auth.dashboard') }}">Home</a>
 					</li>
+					<li>
+						<a href="{{ URL::route('auth.single_stat') }}">Statistics</a>
+					</li>
 				</ul> <!-- / .navbar-nav -->
 
 				<div class="right clearfix">
@@ -48,13 +51,6 @@
 
 							<!-- NOTIFICATIONS -->
 							
-							<!-- Javascript -->
-							<script>
-								init.push(function () {
-									$('#main-navbar-notifications').slimScroll({ height: 250 });
-								});
-							</script>
-							<!-- / Javascript -->
 
 							<div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
 								<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><div class="notifications-list" id="main-navbar-notifications" style="overflow: hidden; width: auto; height: 250px;">
@@ -101,7 +97,7 @@
 						
 <!-- /3. $END_NAVBAR_ICON_BUTTONS -->
 						<li>
-							<a href="#">
+							<a href="{{ URL::route('auth.settings') }}">
 								Settings
 							</a>
 						</li>

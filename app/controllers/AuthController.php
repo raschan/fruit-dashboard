@@ -16,7 +16,7 @@ class AuthController extends BaseController
     public function showSignin()
     {
         if (Auth::check()) {
-            return Redirect::route('auth.addkey');
+            return Redirect::route('hello');
         } else {
             return View::make('auth.signin');
         }
@@ -74,7 +74,7 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('auth.addkey');
+            return Redirect::route('hello');
         } else {
             return View::make('auth.signup');
         }
@@ -134,7 +134,7 @@ class AuthController extends BaseController
     public function showAddKey()
     {
         // if we have valid key redirect
-        if (strlen(Auth::user()->stripe_key) > 16) { //this is not enough
+        if (strlen(Auth::user()->stripe_key) > 16) {
             // valid key -> redirect
             return Redirect::route('dev.stripe');
         } else {
@@ -168,16 +168,15 @@ class AuthController extends BaseController
             try {
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('api_key'));
-                $returned_object = Stripe_Balance::retrieve(); // catchable line
+                $balance = Stripe_Balance::retrieve(); // catchable line
                 // success
-                // warning the next line is hacked!
-                $balance = json_decode(strstr($returned_object, '{'), true);
-                Log::info($balance);
-                // updating the user
+                $returned_object = json_decode(strstr($balance, '{'), true);
 
+                // updating the user
                 $user = Auth::user();
+
                 $user->stripe_key = Input::get('api_key');
-                $user->balance = $balance['available'][0]['amount'];
+                $user->balance = $returned_object['available'][0]['amount'];
 
                 // saving user
                 $user->save();
@@ -185,13 +184,8 @@ class AuthController extends BaseController
             } catch(Stripe_AuthenticationError $e) {
                 // code was invalid
                 return Redirect::back()->withErrors(
-                    array('api_key' => "This key does not seem to be valid!")
+                    array('api_key' => "Authentication unsuccessful!")
                 );
-            } catch (Stripe_ApiConnectionError $e) {
-                return Redirect::back()->withErrors(
-                    array('api_key' => "Hmm... that's strange looks like Stripe is down.!")
-                );
-
             }
 
             // redirect to stripe page
@@ -209,4 +203,114 @@ class AuthController extends BaseController
     {
         return View::make('auth.dashboard');  
     }
+
+    /*
+    |===================================================
+    | <GET> | showSettings: renders the settings page
+    |===================================================
+    */
+    public function showSettings()
+    {
+        return View::make('auth.settings');  
+    }
+
+
+    /*
+    |===================================================
+    | <POST> | doSettings: updates user data
+    |===================================================
+    */
+    public function doSettings()
+    {
+        Log::info(Input::all());
+        // Validation rules
+        $rules = array(
+            'email' => 'email'
+        );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules, $messages);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::route('auth.settings')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // Log::info($validator);
+            // validator success -> edit_profile
+            // selecting logged in user
+            $user = Auth::user();
+            // checking actions and updating data
+            // checking if submitted email has registered user
+            $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
+            // if email is not registered
+            if (is_null($user_to_check)) {
+                // we have valid email
+                $user->email = Input::get('email');
+            } else {
+                // if email is registered and changed
+                if ($user->email != Input::get('email')) {
+                    return Redirect::route('auth.settings')
+                        ->withErrors('email', 'This email is already registered.') // send back errors
+                        ->withInput(); // sending back data
+                }
+            }
+
+    
+            $user->save();
+            // setting data
+            return Redirect::route('auth.settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    /*
+    |===================================================
+    | <GET> | showConnect: renders the connect page
+    |===================================================
+    */
+    public function showConnect()
+    {
+        return View::make('auth.connect');  
+    }
+
+
+    /*
+    |===================================================
+    | <POST> | doConnect: updates user service data
+    |===================================================
+    */
+    public function doConnect()
+    {
+        Log::info(Input::all());
+        // Validation rules
+        $rules = array(
+            //'paypal' => ''
+            //'stripe' => ''
+        );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules, $messages);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::route('auth.connect')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            
+            // $user->save();
+            // setting data
+            return Redirect::route('auth.connect')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    /*
+    |===================================================
+    | <GET> | showSinglestat: renders the single stats page
+    |===================================================
+    */
+    public function showSinglestat()
+    {
+        return View::make('auth.single_stat');  
+    }
+
 }
