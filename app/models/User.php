@@ -8,15 +8,20 @@ class User extends Eloquent implements UserInterface
     use UserTrait;
 
     /**
-     * Getting all the charges from
+     * Getting all the charges for the user
      *
      * @return an array with the charges
     */
     public function getCharges()
     {
         $out_charges = array();
-        // the function has two
+
+        // paypal/stripe decision
+
         if ($this->stripe_key) {
+
+            // stripe
+
             // telling stripe who we are
             Stripe::setApiKey($this->stripe_key);
 
@@ -29,25 +34,324 @@ class User extends Eloquent implements UserInterface
             // getting relevant fields
             foreach ($charges['data'] as $charge) {
                 // updating array
-                array_push(
-                    $out_charges,
+                $out_charges[$charge['id']] =
                     array(
-                        'id' => $charge['id'],
-                        'created' => $charge['created'],
-                        'amount' => $charge['amount'],
-                        'currency' => $charge['currency'],
-                        'paid' => $charge['paid'],
-                        'captured' => $charge['captured'],
-                        'description' => $charge['description'],
+                        'created'               => $charge['created'],
+                        'amount'                => $charge['amount'],
+                        'currency'              => $charge['currency'],
+                        'paid'                  => $charge['paid'],
+                        'captured'              => $charge['captured'],
+                        'description'           => $charge['description'],
                         'statement_description' => $charge['statement_description'],
-                        'failure_code' => $charge['failure_code']
-                    )
-                );
+                        'failure_code'          => $charge['failure_code']
+                    );
             }
         } else {
             // paypal
         }
         // returning object
         return $out_charges;
+    }
+
+    /**
+     * Getting specific events for the user (null = all)
+     *
+     * @return an array with the charges
+    */
+    public function getEvents()
+    {
+        $out_evnets = array();
+
+        // paypal/stripe decision
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // initializing variables
+            $has_more = true;
+            $last_obj = null;
+            $count = 0;
+
+            while ($has_more) {
+                // trying to avoid overflow
+                $previous_last_obj = $last_obj;
+
+                // telling stripe who we are
+                Stripe::setApiKey($this->stripe_key);
+
+                // getting the events
+                // pagination....
+                if ($last_obj) {
+                    // we have last obj -> starting from there
+                    $returned_object = Stripe_Event::all(
+                        array(
+                            'limit'          => 100,
+                            'starting_after' => $last_obj
+                        )
+                    );
+                } else {
+                    // starting from zero
+                    $returned_object = Stripe_Event::all(
+                        array(
+                            'limit' => 100
+                            )
+                    );
+                }
+
+                // extractin json (this is not the best approach)
+                $events = json_decode(strstr($returned_object, '{'), true);
+
+                // getting relevant fields
+                foreach ($events['data'] as $event) {
+
+                    // updating array
+                    if (isset($event['data']['object']['id'])) {
+                        $out_events[$event['id']] =
+                            array(
+                                'created' => $event['created'],
+                                'type'    => $event['type'],
+                                'event_id'  => $event['data']['object']['id']
+                            );
+                        $last_obj = $event['id'];
+                    }
+                }// foreach
+                // updating has_more
+                $has_more = $events['has_more'];
+                $count += 1;
+                // avoiding infinite loop
+                if ((($previous_last_obj == $last_obj) and $has_more) or $count > 100) {
+                    // we should never get here
+                    // this is too bad system failure :(
+                    $has_more = false;
+                }
+            } // while
+        } else {
+            // paypal
+        }
+        // returning object
+        return $out_events;
+    }
+    /**
+     * Getting all the plans for the user
+     *
+     * @return an array with the plans
+    */
+    public function getPlans()
+    {
+        $out_plans = array();
+        // paypal/stripe decision
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // telling stripe who we are
+            Stripe::setApiKey($this->stripe_key);
+
+            // getting the charges
+            $returned_object = Stripe_Plan::all();
+
+            // extractin json (this is not the best approach)
+            $plans = json_decode(strstr($returned_object, '{'), true);
+
+            // getting relevant fields
+            foreach ($plans['data'] as $plan) {
+                // updating array
+                $out_plans[$plan['id']] =
+                    array(
+                        'interval'       => $plan['interval'],
+                        'name'           => $plan['name'],
+                        'created'        => $plan['created'],
+                        'amount'         => $plan['amount'],
+                        'currency'       => $plan['currency'],
+                        'interval_count' => $plan['interval_count']
+                    );
+            }
+        } else {
+            // paypal
+        }
+        // returning object
+        return $out_plans;
+    }
+
+    /**
+     * Getting all the customers for the user
+     *
+     * @return an array with the subscriptions
+    */
+    public function getCustomers()
+    {
+        // init out array
+        $out_customers = array();
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // setting stripe key
+            Stripe::setApiKey($this->stripe_key);
+
+            // getting the customers
+            $returned_object = Stripe_Customer::all();
+
+            // extracting data
+            $customers = json_decode(strstr($returned_object, '{'), true);
+
+            // setting the data to our own format
+            foreach ($customers['data'] as $customer) {
+                // updating array
+                $out_customers[$customer['id']] =
+                    array(
+                        'zombie'        => $customer['livemode'],
+                        'email'         => $customer['email'],
+                        'subscriptions' => $customer['subscriptions']
+                    );
+            }
+        } else {
+            // paypal
+        }
+
+        // return with the customers
+        return $out_customers;
+    }
+
+    /**
+     * Getting all the subscriptions. PROBLEM WITH HISTORY!
+     *
+     * @return an array with the subscriptions
+    */
+    public function getCurrentSubscriptions()
+    {
+        // intializing out array
+        $active_subscriptions = array();
+
+        // getting the customers
+        $customers = $this->getCustomers();
+
+        if ($this->stripe_key) {
+
+            // stripe
+
+            // getting the active subsciprionts for a customer
+            foreach ($customers as $customer) {
+
+                // going through each subscription if any
+                if ($customer['subscriptions']['total_count'] > 0) {
+                    // there are some subs
+                    foreach ($customer['subscriptions']['data'] as
+                             $subscription) {
+                        // updating array
+                        $active_subscriptions[$subscription['id']] =
+                            array(
+                                'plan_id'  => $subscription['plan']['id'],
+                                'start'    => $subscription['start'],
+                                'status'   => $subscription['status'],
+                                'quantity' => $subscription['quantity']
+                            );
+                    } // foreach suibscriptions
+                } // if subscriptions
+            } // foreach customer
+
+        }
+        return $active_subscriptions;
+    }
+
+    /**
+     * Getting the MRR based on the plans. High lvl function!
+     * Don't use paypal/stripe specific methods here
+     *
+     * @return a bigint with the MRR in it
+    */
+    public function getMRR()
+    {
+        // getting the plans
+        $plans = $this->getPlans();
+
+        // getting current subscriptions
+        $current_subscriptions = $this->getCurrentSubscriptions();
+
+        // we'll store the relations here
+        $plan_subscriptions = array();
+
+        // dividing subscriptions among the plans and summing the mrr
+        $mrr = 0;
+
+        foreach ($current_subscriptions as $subscription) {
+            // getting the plan
+            // checking for previous
+            if (isset($plan_subscriptions[$subscription['plan_id']])) {
+                // has previous data
+                $plan_subscriptions[$subscription['plan_id']] += 1;
+            } else {
+                // initializing data
+                $plan_subscriptions[$subscription['plan_id']] = 1;
+            }
+        }
+
+        // counting the mrr
+        foreach ($plan_subscriptions as $plan_id => $count) {
+            // now this is obviously not enough
+
+            // checking interval
+            // checking now - trial_end
+            // canceled_at
+
+            $mrr += $plans[$plan_id]['amount']*$count;
+        }
+
+        // returning object
+        return $mrr;
+    }
+
+    /**
+     * Getting the Mrr for a timestamp (must be within 30 days in the past)
+     * Description: checks the day before and the events during the day
+     *
+     * @return void
+    */
+    public function buildMrrOnDay($timestamp, $events)
+    {
+        // building up yesterday date
+        $yesterday_ts = $timestamp - 86400;
+        $yesterday = date('Y-m-d', $yesterday_ts);
+
+        $current_day = date('Y-m-d', $timestamp);
+
+        // selecting mrr for the user on this day
+        $yesterday_mrr = DB::table('mrr')
+            ->where('date', $yesterday)
+            ->where('user', Auth::user()->id)
+            ->get();
+
+        // now see the changes
+
+        // selecting the relevant events
+        // building up the range
+        $range_start = strtotime($current_day);
+        $range_stop = $range_start + 86400;
+
+        // building the mrr
+        foreach ($events as $event) {
+            // checking if created is in the range
+            if ($event['created'] > $range_start and $event['created'] < $range_stop) {
+                $this->addToMrr($mrr, $event);
+            }
+        }
+        Log::info($events);
+    }
+
+    /**
+     * Building up the mrr histogram for the last 30 days
+     * Stripe only!
+     *
+     * @return a bigint with the MRR in it
+    */
+    public function buildMrr()
+    {
+        // getting the events
+        $events = $this->getEvents();
+        $this->buildMrrOnDay(1418014821, $events);
+
     }
 }

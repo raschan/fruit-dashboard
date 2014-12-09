@@ -74,7 +74,7 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('hello');
+            return Redirect::route('auth.connect');
         } else {
             return View::make('auth.signup');
         }
@@ -127,81 +127,13 @@ class AuthController extends BaseController
     }
 
     /*
-    |=====================================================
-    | <GET> | addKey: renders the signup page or redirects
-    |=====================================================
-    */
-    public function showAddKey()
-    {
-        // if we have valid key redirect
-        if (strlen(Auth::user()->stripe_key) > 16) {
-            // valid key -> redirect
-            return Redirect::route('dev.stripe');
-        } else {
-            return View::make('auth.addkey');
-        }
-
-    }
-
-    /*
-    |=====================================================
-    | <POST> | addKey: validates and updates api key
-    |=====================================================
-    */
-    public function doAddKey()
-    {
-        // Validation
-        $rules = array(
-            'api_key' => 'required|min:16|max:64',
-        );
-
-        // run the validation rules on the inputs
-        $validator = Validator::make(Input::all(), $rules);
-
-        if ($validator->fails()) {
-            // validation error -> sending back
-            return Redirect::back()
-                ->withErrors($validator) // send back errors
-                ->withInput(); // sending back data
-        } else {
-            // validator success
-            try {
-                // trying to login with this key
-                Stripe::setApiKey(Input::get('api_key'));
-                $balance = Stripe_Balance::retrieve(); // catchable line
-                // success
-                $returned_object = json_decode(strstr($balance, '{'), true);
-
-                // updating the user
-                $user = Auth::user();
-
-                $user->stripe_key = Input::get('api_key');
-                $user->balance = $returned_object['available'][0]['amount'];
-
-                // saving user
-                $user->save();
-
-            } catch(Stripe_AuthenticationError $e) {
-                // code was invalid
-                return Redirect::back()->withErrors(
-                    array('api_key' => "Authentication unsuccessful!")
-                );
-            }
-
-            // redirect to stripe page
-            return Redirect::route('dev.stripe');
-
-        }
-    }
-
-    /*
     |===================================================
     | <GET> | showDashboard: renders the dashboard page
     |===================================================
     */
     public function showDashboard()
     {
-        return View::make('auth.dashboard');  
+        return View::make('auth.dashboard');
     }
 
     /*
@@ -211,7 +143,7 @@ class AuthController extends BaseController
     */
     public function showSettings()
     {
-        return View::make('auth.settings');  
+        return View::make('auth.settings');
     }
 
 
@@ -255,7 +187,7 @@ class AuthController extends BaseController
                 }
             }
 
-    
+
             $user->save();
             // setting data
             return Redirect::route('auth.settings')
@@ -270,7 +202,7 @@ class AuthController extends BaseController
     */
     public function showConnect()
     {
-        return View::make('auth.connect');  
+        return View::make('auth.connect');
     }
 
 
@@ -281,28 +213,61 @@ class AuthController extends BaseController
     */
     public function doConnect()
     {
-        Log::info(Input::all());
-        // Validation rules
+        // Validation
         $rules = array(
-            //'paypal' => ''
-            //'stripe' => ''
+            'stripe' => 'min:16|max:64',
+            'paypal' => 'min:16|max:64',
         );
+
         // run the validation rules on the inputs
-        $validator = Validator::make(Input::all(), $rules, $messages);
+        $validator = Validator::make(Input::all(), $rules);
+
         if ($validator->fails()) {
-            // validation error -> redirect
-            return Redirect::route('auth.connect')
+            // validation error -> sending back
+            return Redirect::back()
                 ->withErrors($validator) // send back errors
                 ->withInput(); // sending back data
         } else {
-            
-            // $user->save();
-            // setting data
-            return Redirect::route('auth.connect')
-                ->with('success', 'Edit was successful.');
+            // validator success
+            if (Input::get('stripe')) {
+                try {
+                    // trying to login with this key
+                    Stripe::setApiKey(Input::get('stripe'));
+                    $balance = Stripe_Balance::retrieve(); // catchable line
+                    // success
+                    $returned_object = json_decode(strstr($balance, '{'), true);
+
+                    // updating the user
+                    $user = Auth::user();
+
+                    $user->stripe_key = Input::get('stripe');
+                    $user->balance = $returned_object['available'][0]['amount'];
+
+                    // saving user
+                    $user->save();
+
+                } catch(Stripe_AuthenticationError $e) {
+                    // code was invalid
+                    return Redirect::back()->withErrors(
+                        array('stripe' => "Authentication unsuccessful!")
+                    );
+                }
+            } else if (Input::get('paypal')) {
+
+            } else {
+                return Redirect::back()->withErrors(
+                    array(
+                        'stripe' => "At least one of the fields are required!",
+                        'paypal' => "At least one of the fields are required!"
+                    )
+                );
+            }
+
+            // redirect to stripe page
+            return Redirect::route('dev.stripe');
+
         }
     }
-
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page
@@ -310,7 +275,7 @@ class AuthController extends BaseController
     */
     public function showSinglestat()
     {
-        return View::make('auth.single_stat');  
+        return View::make('auth.single_stat');
     }
 
 }

@@ -15,6 +15,11 @@ Route::get('/stripe', array(
     'as' => 'dev.stripe',
     'uses' => 'HelloController@showStripe'
 ));
+Route::post('/stripe', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.stripe',
+    'uses' => 'HelloController@ajaxGetMrr'
+));
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +111,12 @@ Route::post('addkey', array(
     'before' => 'auth',
     'uses' => 'AuthController@doAddKey'
 ));
+
+/*
+|--------------------------------------------------------------------------
+| Paypal Routes
+|--------------------------------------------------------------------------
+*/
 
 // get paypal information
 Route::get('paypalinformation', array(
