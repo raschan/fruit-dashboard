@@ -2,11 +2,12 @@
 
   @section('pageContent')
     <div id="content-wrapper">
+      <div class="page-header">
+        <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
+      </div> <!-- / .page-header -->
+
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-success panel-dark">
-          <div class="panel-heading">
-            <span class="panel-title"><i class="fa icon fa-cog"></i> Settings</span>
-          </div>
           <div class="panel-body">
             <h4>Change your account settings</h4>
           	<div class="col-md-6 settings-form">
@@ -50,33 +51,20 @@
           	</div> <!-- /. settings-form -->
 
           	<div class="col-md-6 settings-description">
-              <div class="note note-info">
-                <h4 class="note-title">Info note title</h4>
-                Info note text here.
-              </div>
-              <div class="note note-info">
-                <h4 class="note-title">Info note title</h4>
-                Info note text here.
-              </div>
-          	</div> <!-- /. settings-description -->
-
-            <hr>
-            
-            <div class="connect-form">
+              <div class="connect-form">
               <h4>Connect a service</h4>
-              <div class="col-md-4 col-md-offset-2 text-center">
-                <div class="service-icon">
-                  <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-paypal"></i></a>
-                </div>
-                <span class="text-success">is connected. </span><a href="{{ URL::route('auth.connect') }}">View settings.</a>
+              <div class="services-row">
+                <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-paypal fa-2x"></i></a>
+                <span class="text-success">&nbsp;&nbsp;is connected. </span><a href="{{ URL::route('auth.connect') }}">View settings.</a>
               </div>
-              <div class="col-md-4 text-center">
-                <div class="service-icon">
-                  <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-stripe"></i></a>
-                </div>
-                <span class="default">is not yet connected. </span><a href="{{ URL::route('auth.connect') }}">Connect it now!</a>
+              <div class="services-row">
+                <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-stripe fa-2x"></i></a>
+                <span class="text-danger">&nbsp;&nbsp;is not yet connected. </span><a href="{{ URL::route('auth.connect') }}">Connect it now!</a>
               </div>
             </div> <!-- /. connect-form -->
+          	</div> <!-- /. settings-description -->
+            
+            
 
           </div> <!-- /. panel-body -->
         </div> <!-- /. panel -->

@@ -42,6 +42,11 @@
       <!-- Custom styles -->
       {{ HTML::style('css/custom.css') }}
       <!-- /Custom styles -->
+
+      <script type="text/javascript">
+        var init = [];
+      </script>
+      <!-- /Pixeladmin js init array -->
       
       <!-- Page specific stylesheet -->
       @section('pageStylesheet')
@@ -63,10 +68,9 @@
     {{ HTML::script('js/chart.min.js'); }}
     <!-- /Base scripts -->
 
-    <!-- PixelAdmin -->
+    <!-- Pagealert timeout -->
     <script type="text/javascript">
       $(document).ready(function(){
-        window.PixelAdmin.start([]);
 
         setTimeout(function() {
             $('.pa-page-alerts-box').fadeTo(500, 0).slideUp(500, function(){
@@ -75,13 +79,19 @@
           }, 5000);
         });
     </script>
-    <!-- /PixelAdmin -->
+    <!-- /Pagealert timeout -->
 
     
     <!-- Page specific scripts -->
     @section('pageScripts')
     @show
     <!-- /Page specific scripts -->
+
+    <!-- PixelAdmin js start -->
+    <script type="text/javascript">
+      window.PixelAdmin.start(init);
+    </script>
+    <!-- /PixelAdmin js start -->
   @show
      
 </html>

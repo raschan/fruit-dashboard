@@ -56,15 +56,29 @@
 
 .chart-box {
 	background-color: #fff;
+	padding: 10px;
 }
 
-.single-statistic {
-	background-color: #fff;
+.feed-box .list-group-item > .badge {
+	float: right;
 }
 
-.single-statistic canvas {
-	max-width: 85%;
-	max-height: 400px;
+.services-row {
+	display: table;
+}
+
+.services-row span,
+.services-row a {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.services-row a {
+	color: #777;
+}
+
+.services-row a:hover {
+	color: #000;
 }
 
 

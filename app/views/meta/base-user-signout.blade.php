@@ -2,8 +2,6 @@
 
 @section('body')
 
-	<body class="theme-default page-signin-alt theme-signout">
-
 	  @section('navbar')
 			@include('meta.navbar')
 	  @show

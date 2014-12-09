@@ -9,89 +9,44 @@
       </div> <!-- / .page-header -->
 
       <div class="row panel-padding">
-        <div class="col-md-5">
-          <div class="stat-panel">
-            <!-- Success background, bordered, without top and bottom borders, without left border, without padding, vertically and horizontally centered text, large text -->
-            <a href="#" class="stat-cell col-xs-5 bg-success bordered no-border-vr no-border-l no-padding valign-middle text-center text-lg">
-              <i class="fa fa-calendar"></i>&nbsp;&nbsp;<strong>11</strong>
-            </a> <!-- /.stat-cell -->
-            <!-- Without padding, extra small text -->
-            <div class="stat-cell col-xs-7 no-padding valign-middle">
-              <!-- Add parent div.stat-rows if you want build nested rows -->
-              <div class="stat-rows">
-                <div class="stat-row">
-                  <!-- Success background, small padding, vertically aligned text -->
-                  <a href="#" class="stat-cell bg-success padding-sm valign-middle">
-                    32 messages
-                    <i class="fa fa-envelope-o pull-right"></i>
-                  </a>
-                </div>
-                <div class="stat-row">
-                  <!-- Success darken background, small padding, vertically aligned text -->
-                  <a href="#" class="stat-cell bg-success darken padding-sm valign-middle">
-                    9 issues
-                    <i class="fa fa-bug pull-right"></i>
-                  </a>
-                </div>
-                <div class="stat-row">
-                  <!-- Success darker background, small padding, vertically aligned text -->
-                  <a href="#" class="stat-cell bg-success darker padding-sm valign-middle">
-                    47 new users
-                    <i class="fa fa-users pull-right"></i>
-                  </a>
-                </div>
-              </div> <!-- /.stat-rows -->
-            </div> <!-- /.stat-cell -->
+
+        <div class="col-md-8 quickstats-box">
+          <div class="col-md-4 chart-box">
+            <a href=""><h4 class="text-default">I have a link :(</h4></a>
+            <canvas class="center-block"></canvas>
           </div>
-        </div>
 
-        <div class="col-md-4 chart-box">
-          <a href=""><h4 class="text-default">I have a link col-md-4 :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
+          <div class="col-md-4 chart-box">
+            <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
+            <canvas class="center-block"></canvas>
+          </div>
 
-        <div class="col-md-3 chart-box">
-          <h4><i class="fa icon fa-arrow-left"></i> I have an icon col-md-3 :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
+          <div class="col-md-4 chart-box">
+            <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
+            <canvas class="center-block"></canvas>
+          </div>
+        </div> <!-- /. col-md-8 -->
 
-      </div> <!-- /.row -->
+        <div class="col-md-4 feed-box">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <h4>Feed</h4>
+            </li>
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              Cras justo odio
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-danger">FAILED</span>
+              Dapibus ac facilisis in
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-info">Downgrade</span>
+              Morbi leo risus
+            </li> <!-- / .list-group-item -->
+          </ul>
 
-      <div class="row panel-padding">
-
-        <div class="col-md-4 chart-box">
-          <a href=""><h4 class="text-default">I have a link col-md-4 :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
-
-        <div class="col-md-3 col-md-offset-1 chart-box">
-          <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
-
-        <div class="col-md-3 col-md-offset-1 chart-box">
-          <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
-
-      </div> <!-- /.row -->
-
-      <div class="row panel-padding">
-
-        <div class="col-md-4 chart-box">
-          <a href=""><h4 class="text-default">I have a link col-md-4 :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
-
-        <div class="col-md-4 chart-box">
-          <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
-
-        <div class="col-md-4 chart-box">
-          <h4><i class="fa icon fa-arrow-left"></i> I have an icon :(</h4></a>
-          <canvas class="center-block"></canvas>
-        </div>
+        </div> <!-- /. col-md-4 -->
 
       </div> <!-- /.row -->
 
@@ -102,8 +57,9 @@
   @section('pageScripts')
 
     <script type="text/javascript">
+      Chart.defaults.global.responsive = true;
       var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["", "", "", "", "", "", ""],
     datasets: [
         {
             label: "My First dataset",

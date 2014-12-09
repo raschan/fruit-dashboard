@@ -5,56 +5,96 @@
 
 @stop
 
+@section('navbar')
+@stop
 
 @section('pageContent')
 	@include('meta.pageAlerts')
-	<!-- login form box -->
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<h1 class="page-title">Start up Dashboard</h1>
-				{{ Form::open(array('route' => 'auth.signup', 'class' => 'panel' )) }}
-				<div class="login-text">
-					<span>Sign up</span><span class="pull-right">or <a href="{{ URL::route('auth.signin') }}">sign in</a></span>
-				</div>
-				<div class="form-group @if ($errors->first('email')) has-error @endif">
-					<div class="input-group">
-						<span class="input-group-addon"><strong>@</strong></span>
-						{{ Form::text('email', Input::old('email'), array('placeholder' => 'Email@provider.com', 'class' => 'form-control')) }}
-					</div>
-					<p class="help-block">
-						@if ($errors->first('email'))
-						{{ $errors->first('email') }}
-						@endif
-					</p>
+
+<body class="theme-asphalt page-signup" style="">
+
+	<!-- Page background -->
+	<div id="page-signup-bg">
+		<!-- Background overlay -->
+		<div class="overlay"></div>
+		{{ HTML::image('img/backgrounds/advertise_background.jpg','', array('class' => 'image')) }}
+	</div>
+	<!-- / Page background -->
+
+	<!-- Container -->
+	<div class="signup-container">
+		<!-- Header -->
+		<div class="signup-header">
+			<a href="/" class="logo">
+				Start Up Dashboard
+			</a> <!-- / .logo -->
+			<div class="slogan">
+				Simple. Flexible. Powerful.
+			</div> <!-- / .slogan -->
+		</div>
+		<!-- / Header -->
+
+		<!-- Form -->
+		<div class="signup-form">
+			{{ Form::open(array('route' => 'auth.signup', 'id' => 'signup-form_id' )) }}				
+				<div class="signup-text">
+					<span>Create an account</span>
 				</div>
 
-				<div class="form-group @if ($errors->first('password')) has-error @endif">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="icon fa fa-lock"></i></span>
-						{{ Form::password('password', array('placeholder' => 'Password', 'class' => 'form-control')) }}
-					</div>
-					<p class="help-block">
-						@if ($errors->first('password'))
-						{{ $errors->first('password') }}
-						@endif
-					</p>
+				<div class="form-group w-icon">
+					{{ Form::text('email', Input::old('email'), array('placeholder' => 'Email@provider.com', 'class' => 'form-control input-lg', 'id' => 'email_id')) }}
+					<span class="fa fa-envelope signup-form-icon"></span>
 				</div>
 
-				<div class="text-center">
+				<div class="form-group w-icon">
+					{{ Form::password('password', array('placeholder' => 'Password', 'class' => 'form-control input-lg', 'id' => 'password_id')) }}
+					<span class="fa fa-lock signup-form-icon"></span>
+				</div>
+
+				<div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
+					<label class="checkbox-inline">
+						<input type="checkbox" name="signup_confirm" class="px" id="confirm_id">
+						<span class="lbl">I agree with the <a href="#" target="_blank">Terms and Conditions</a></span>
+					</label>
+				</div>
+
+				<div class="form-actions">
 					{{ Form::submit('Submit!' , array(
 						'id' => 'id_submit',
-						'class' => 'btn btn-primary btn-lg btn-flat')) }}
-					</div>
-
-				{{ Form::close() }}
-
-				<div class="text-center padding-xs-vr footer-copyright">
-					<a href="#">&copy; 2014 Start Up Dashboard</a>
+						'class' => 'signup-btn bg-primary')) }}
 				</div>
-			</div>
+			{{ Form::close() }}
 		</div>
+		<!-- / Form -->
+	</div>
+	<!-- / Container -->
+
+	<div class="have-account">
+		Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign In</a>
 	</div>
 
+</body>
 @stop
 
+@section('pageScripts')
+
+<script type="text/javascript">
+	// Resize BG
+	init.push(function () {
+		var $ph  = $('#page-signup-bg'),
+		    $img = $ph.find('> img');
+
+		$(window).on('resize', function () {
+			$img.attr('style', '');
+			if ($img.height() < $ph.height()) {
+				$img.css({
+					height: '100%',
+					width: 'auto'
+				});
+			}
+		});	
+	});
+
+</script>
+
+@stop

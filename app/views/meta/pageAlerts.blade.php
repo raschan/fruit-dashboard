@@ -1,16 +1,25 @@
 @if ($errors)
   @foreach ($errors->all() as $error)
-    <div class="pa-page-alerts-box">
-      <div class="alert pa_page_alerts_default" data-animate="true" style="">
-        <button type="button" class="close">×</button><strong>Warning!</strong> {{ $error }}
-      </div>
-    </div>
+    <script type="text/javascript">
+      init.push(function () {
+        $.growl.error({
+          message: "{{ $error }}",
+          size: "large",
+          duration: 5000
+        });
+      });
+    </script>
   @endforeach
 @endif
+
 @if (Session::get('error'))
-    <div class="pa-page-alerts-box">
-      <div class="alert pa_page_alerts_default" data-animate="true" style="">
-        <button type="button" class="close">×</button><strong>{{ Session::get('error')}}</strong>
-      </div>
-    </div>
+  <script type="text/javascript">
+    init.push(function () {
+      $.growl.error({
+        message: "{{ Session::get('error')}}",
+        size: "large",
+        duration: 5000
+      });
+    });
+  </script>
 @endif
