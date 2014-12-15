@@ -1,4 +1,8 @@
 <?php
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Auth\Openid\PPOpenIdSession;
+use PayPal\Rest\ApiContext;
+
 /*
 A Controller for testing stuff
 */
@@ -22,7 +26,7 @@ class HelloController extends BaseController
     public function showStripe()
     {
         Auth::user()->buildMrr();
-        # trying to acquire Stripe
+        // trying to acquire Stripe
         return View::make(
             'dev.stripe',
             array(
@@ -30,6 +34,41 @@ class HelloController extends BaseController
                 //'charges' => Auth::user()->getCharges(),
                 //'mrr' => Auth::user()->getMrr(),
                 //'events' => Auth::user()->getEvents(),
+            )
+        );
+    }
+
+    /*
+    |====================================================
+    | <GET> | showPaypal: renders the paypal testing page
+    |====================================================
+    */
+    public function showPaypal()
+    {
+        // setting api codes
+        $clientId = "AY1PlRC0yK6SExlx8aRDW-hF2REkl90Qmza0Ak5LUacd-LFAczGmXfanQYK-";
+        $clientSecret = "EBXUZxD6PobEUtc-WldtZgbG8eUzl4IkOFAeMxpAGhNDt-mESoj3a3QRRIGw";
+
+
+        /** @var \Paypal\Rest\ApiContext $apiContext */
+        $apiContext = $this->getApiContext($clientId, $clientSecret);
+
+        // building up redirect url
+        $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
+            'http://sholepictures.no-ip.org/~risa/handlePP/',
+            array('profile', 'email', 'phone'),
+            null,
+            null,
+            null,
+            $apiContext
+        );
+
+        // making view
+        return View::make(
+            'dev.paypal',
+            array(
+                'test' => "test",
+                'redirect_url' => $redirectUrl
             )
         );
     }
@@ -64,4 +103,37 @@ class HelloController extends BaseController
         Log::info("ready");
         return "test";
     }
+
+    /**
+     * Helper method for getting an APIContext for all calls
+     *
+     * @return PayPal\Rest\ApiContext
+     */
+    function getApiContext($clientId, $clientSecret)
+    {
+        // getting the ApiContext from oauth
+        $apiContext = new ApiContext(
+            new OAuthTokenCredential(
+                $clientId,
+                $clientSecret
+            )
+        );
+
+        // setting api context
+        $apiContext->setConfig(
+            array(
+                'mode'                   => 'sandbox',
+                'http.ConnectionTimeOut' => 30,
+                'log.LogEnabled'         => true,
+                'log.FileName'           => '../PayPal.log',
+                'log.LogLevel'           => 'FINE',
+                'validation.level'       => 'log',
+                'cache.enabled'          => 'true'
+            )
+        );
+
+        // returning api context
+        return $apiContext;
+    }
+
 }

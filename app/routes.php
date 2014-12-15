@@ -21,6 +21,12 @@ Route::post('/stripe', array(
     'uses' => 'HelloController@ajaxGetMrr'
 ));
 
+Route::get('/paypal', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.paypal',
+    'uses' => 'HelloController@showPaypal'
+));
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
