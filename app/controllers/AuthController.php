@@ -225,7 +225,7 @@ class AuthController extends BaseController
 
         // building up redirect url
         $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
-            route('dev.buildToken'),
+            route('paypal.buildToken'),
             array('profile', 'email', 'phone'),
             null,
             null,

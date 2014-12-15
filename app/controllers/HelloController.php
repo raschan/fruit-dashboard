@@ -5,6 +5,7 @@ use PayPal\Rest\ApiContext;
 
 use PayPal\Auth\Openid\PPOpenIdTokeninfo;
 use PayPal\Exception\PPConnectionException;
+use PayPal\Auth\Openid\PPOpenIdUserinfo;
 
 
 /*
@@ -59,7 +60,7 @@ class HelloController extends BaseController
 
         // building up redirect url
         $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
-            route('dev.buildToken'),
+            route('paypal.buildToken'),
             array('profile', 'email', 'phone'),
             null,
             null,
@@ -72,18 +73,18 @@ class HelloController extends BaseController
         $refreshToken = $user->paypal_key;
 
         try {
-
+        
             $tokenInfo = new PPOpenIdTokeninfo();
             $tokenInfo = $tokenInfo->createFromRefreshToken(array('refresh_token' => $refreshToken), $apiContext);
-
+        
             $params = array('access_token' => $tokenInfo->getAccessToken());
             $userInfo = PPOpenIdUserinfo::getUserinfo($params, $apiContext);
             print "User Information".var_dump($userInfo);
-
+        
         } catch (Exception $ex) {
             print "no pp key";
         }
-
+        
 
         // making view
         return View::make(
@@ -172,7 +173,7 @@ class HelloController extends BaseController
         /** @var \Paypal\Rest\ApiContext $apiContext */
         $apiContext = $this->getApiContext($clientId, $clientSecret);
         $code = $_GET['code'];
-
+    
         try {
             // Obtain Authorization Code from Code, Client ID and Client Secret
             $accessToken = PPOpenIdTokeninfo::createFromAuthorizationCode(array('code' => $code), null, null, $apiContext);
@@ -185,10 +186,10 @@ class HelloController extends BaseController
         $user = Auth::user();
 
         $user->paypal_key = $accessToken->getRefreshToken();
-
+        
         // saving user
         $user->save();
-
+        
         // redirect
         return Redirect::route('dev.paypal');
    }

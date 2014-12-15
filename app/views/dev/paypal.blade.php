@@ -9,8 +9,8 @@
 </head>
 <body>
     <!-- Page Content -->
-    <div class="container">
-    HELLO PayPal
+    <div class="container"><br>
+    To refresh your token
     <a href="{{ $redirect_url }}">Click here</a>
     <!-- /.container -->
     </body>

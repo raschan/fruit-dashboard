@@ -3,6 +3,7 @@ use PayPal\Rest\ApiContext;
 
 use PayPal\Exception\PPConnectionException;
 use PayPal\Auth\Openid\PPOpenIdUserinfo;
+use PayPal\Auth\Openid\PPOpenIdTokeninfo;
 
 class PaypalController extends BaseController
 {
@@ -30,10 +31,11 @@ class PaypalController extends BaseController
     | <GET> | createRefreshTokenfromAuthToken: renders the paypal testing page
     |====================================================
     */
-    public function createRefreshTokenfromAuthToken()
+    public function createRefreshToken()
     {
+        Log::info("we've reached this point");
         // checking if we have code
-        if isset($_GET['code']) {
+        if (isset($_GET['code'])) {
             $code = $_GET['code'];
         } else {
             return "error";
@@ -54,6 +56,8 @@ class PaypalController extends BaseController
 
         //saving refresh token
         $user->paypal_key = $accessToken->getRefreshToken();
+
+        Log::info($user->paypal_key);
 
         // saving user
         $user->save();
