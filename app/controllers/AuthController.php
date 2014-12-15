@@ -1,4 +1,5 @@
 <?php
+use PayPal\Auth\Openid\PPOpenIdSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,7 +219,25 @@ class AuthController extends BaseController
     */
     public function showConnect()
     {
-        return View::make('auth.connect');
+        // getting paypal api context
+
+        $apiContext = PayPalHelper::getApiContext();
+
+        // building up redirect url
+        $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
+            route('dev.buildToken'),
+            array('profile', 'email', 'phone'),
+            null,
+            null,
+            null,
+            $apiContext
+        );
+
+        return View::make('auth.connect',
+            array(
+                'redirect_url' => $redirectUrl
+            )
+        );
     }
 
 

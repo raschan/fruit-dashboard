@@ -18,31 +18,13 @@
               </div> <!-- /. connect-description -->
 
               <div class="col-md-8 connect-form">
-                {{ Form::open(array(
-                  'route'=>'auth.connect',
-                  'method' => 'post',
-                  'id' => 'form-settings',
-                  'class' => 'horizontal-form',
-                  'role' => 'form',
-                  'class' => 'panel-padding settings-form' )) }}
-
-                    <div class="form-group">
-                      {{ Form::label('id_paypal', 'Paypal key:', array(
-                        'class' => 'col-xs-4 control-label')) }}
-                      <div class="col-xs-8">
-                        {{ Form::text('paypal', '', array(
-                          'id' => 'id_paypal',
-                          'class' => 'form-control')) }}
-                      </div>
-                    </div> <!-- / .form-group -->
-
-                    <div class="col-xs-2 col-xs-offset-10 padding-xs-vr">
-                      {{ Form::submit('Connect', array(
-                          'id' => 'id_submit',
-                          'class' => 'btn btn-success btn-lg btn-flat pull-right')) }}
-                    </div>
-
-                {{ Form::close() }}
+              <a href="{{ $redirect_url }}">
+                  <div class="col-xs-2 col-xs-offset-10 padding-xs-vr">
+                    {{ Form::submit('Connect', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-success btn-lg btn-flat pull-right')) }}
+                  </div>
+                </a>
               </div> <!-- /. connect-form -->
             </div> <!-- /. row -->
             <!-- /PayPal connect-->
@@ -94,14 +76,14 @@
   @section('pageScripts')
 
     <script type="text/javascript">
-      
+
     </script>
 
   @stop
 
   @section('intercomScript')
   <script>
-     
+
   </script>
   {{ HTML::script('js/intercom_io.js'); }}
   @stop
