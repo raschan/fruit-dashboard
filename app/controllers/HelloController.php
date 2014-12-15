@@ -55,7 +55,7 @@ class HelloController extends BaseController
 
         // building up redirect url
         $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
-            'http://sholepictures.no-ip.org/~risa/handlePP/',
+            'http://balmadi.sytes.net/~risa/handlePP/',
             array('profile', 'email', 'phone'),
             null,
             null,

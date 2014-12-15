@@ -25,7 +25,7 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(array(
-   'development' => array('precise64','homestead'),
+   'development' => array('precise64','homestead','andy94.koding.io'),
    /* precise64: Vagrant dev virtualhost */
    'production' => array('server.abfinformatika.hu',)
    /*
