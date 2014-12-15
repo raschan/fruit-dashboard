@@ -59,7 +59,7 @@
     <script type="text/javascript">
       Chart.defaults.global.responsive = true;
       var data = {
-    labels: ["", "", "", "", "", "", ""],
+    labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
     datasets: [
         {
             label: "My First dataset",
@@ -69,7 +69,7 @@
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
+            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
         },
         {
             label: "My Second dataset",
@@ -79,7 +79,7 @@
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
+            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
         }
     ]
 };
@@ -94,7 +94,7 @@
 
   @section('intercomScript')
   <script>
-     
+
   </script>
   {{ HTML::script('js/intercom_io.js'); }}
   @stop

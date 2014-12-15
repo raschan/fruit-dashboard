@@ -26,10 +26,10 @@ class HelloController extends BaseController
         return View::make(
             'dev.stripe',
             array(
-                'balance' => Auth::user()->balance,
-                'charges' => Auth::user()->getCharges(),
-                'mrr' => Auth::user()->getMrr(),
-                'events' => Auth::user()->getEvents(),
+                //'balance' => Auth::user()->balance,
+                //'charges' => Auth::user()->getCharges(),
+                //'mrr' => Auth::user()->getMrr(),
+                //'events' => Auth::user()->getEvents(),
             )
         );
     }

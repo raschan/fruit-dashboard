@@ -109,9 +109,9 @@ class User extends Eloquent implements UserInterface
                     if (isset($event['data']['object']['id'])) {
                         $out_events[$event['id']] =
                             array(
-                                'created' => $event['created'],
-                                'type'    => $event['type'],
-                                'event_id'  => $event['data']['object']['id']
+                                'created'  => $event['created'],
+                                'type'     => $event['type'],
+                                'object' => $event['data']['object']
                             );
                         $last_obj = $event['id'];
                     }
@@ -279,6 +279,7 @@ class User extends Eloquent implements UserInterface
 
         foreach ($current_subscriptions as $subscription) {
             // getting the plan
+
             // checking for previous
             if (isset($plan_subscriptions[$subscription['plan_id']])) {
                 // has previous data
@@ -305,12 +306,48 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
+     * Adding event to mrr
+     * Description: checks the day before and the events during the day
+     * !!!NOT YET GENERALIZED!!!
+     * @return int
+    */
+    private function addToMrr($mrr, $event)
+    {
+        // initializing new mrr
+        $new_mrr = $mrr;
+
+        // we only care about subscriptions here
+        if (strstr($event['type'], 'subscription')) {
+            // three possible events
+            if (strstr($event['type'], 'create')) {
+                // create :)
+
+                // adding to mrr
+                $new_mrr += $event['object']['plan']['amount'];
+
+            } else if (strstr($event['type'], 'update')) {
+                // update :|
+
+            } else if (strstr($event['type'], 'delete')) {
+                // delete :(
+
+                // removing from mrr
+                $new_mrr -= $event['object']['plan']['amount'];
+            }
+
+        }
+
+        // returning new mrr
+        return $new_mrr;
+    }
+
+    /**
      * Getting the Mrr for a timestamp (must be within 30 days in the past)
      * Description: checks the day before and the events during the day
      *
      * @return void
     */
-    public function buildMrrOnDay($timestamp, $events)
+    private function buildMrrOnDay($timestamp, $events)
     {
         // building up yesterday date
         $yesterday_ts = $timestamp - 86400;
@@ -318,27 +355,54 @@ class User extends Eloquent implements UserInterface
 
         $current_day = date('Y-m-d', $timestamp);
 
-        // selecting mrr for the user on this day
-        $yesterday_mrr = DB::table('mrr')
-            ->where('date', $yesterday)
+        // checking if we already have data
+        $current_day_mrr = DB::table('mrr')
+            ->where('date', $current_day)
             ->where('user', Auth::user()->id)
             ->get();
 
-        // now see the changes
+        if (!$current_day_mrr) {
 
-        // selecting the relevant events
-        // building up the range
-        $range_start = strtotime($current_day);
-        $range_stop = $range_start + 86400;
+            // selecting mrr for the user on yesterday
+            $yesterday_mrr = DB::table('mrr')
+                ->where('date', $yesterday)
+                ->where('user', Auth::user()->id)
+                ->get();
 
-        // building the mrr
-        foreach ($events as $event) {
-            // checking if created is in the range
-            if ($event['created'] > $range_start and $event['created'] < $range_stop) {
-                $this->addToMrr($mrr, $event);
+            // making sure we are not trying to add NULL to database
+            if (!$yesterday_mrr) {
+                $mrr = 0;
+            } else {
+                $mrr = $yesterday_mrr[0]->value;
             }
+
+            // building up the range
+            $range_start = strtotime($current_day);
+            $range_stop = $range_start + 86400;
+
+            // now check the changes
+
+
+            // building the mrr
+
+            // selecting the relevant events
+            foreach ($events as $event) {
+                // checking if created is in the range
+                if ($event['created'] > $range_start and
+                    $event['created'] < $range_stop) {
+
+                    $mrr = $this->addToMrr($mrr, $event);
+                }
+            }
+            // saving mrr to db if we don't have previous data
+            DB::table('mrr')->insert(
+                array(
+                    'value' => $mrr,
+                    'user'  => Auth::user()->id,
+                    'date'  => $current_day
+                )
+            );
         }
-        Log::info($events);
     }
 
     /**
@@ -351,7 +415,13 @@ class User extends Eloquent implements UserInterface
     {
         // getting the events
         $events = $this->getEvents();
-        $this->buildMrrOnDay(1418014821, $events);
+
+        $current_time = time();
+        // building mrr array
+        for ($i = $current_time-30*86400; $i < $current_time; $i+=86400) {
+            $this->buildMrrOnDay($i, $events);
+        }
+
 
     }
 }
