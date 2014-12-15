@@ -273,8 +273,7 @@ class AuthController extends BaseController
             } else {
                 return Redirect::back()->withErrors(
                     array(
-                        'stripe' => "At least one of the fields are required!",
-                        'paypal' => "At least one of the fields are required!"
+                        'stripe' => "This field is required",
                     )
                 );
             }

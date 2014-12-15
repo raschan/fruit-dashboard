@@ -27,6 +27,12 @@ Route::get('/paypal', array(
     'uses' => 'HelloController@showPaypal'
 ));
 
+Route::get('/paypal/buildToken', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.buildToken',
+    'uses' => 'HelloController@createRefreshTokenfromAuthToken'
+));
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes

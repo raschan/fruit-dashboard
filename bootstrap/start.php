@@ -25,13 +25,12 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(array(
-   'development' => array('precise64','homestead','andy94.koding.io'),
+   'development' => array('precise64','homestead','andy94'),
    /* precise64: Vagrant dev virtualhost */
    'production' => array('server.abfinformatika.hu',)
    /*
     * server.abfinformatika.hu: the actual server name */
 ));
-
 /*
 |--------------------------------------------------------------------------
 | Bind Paths
