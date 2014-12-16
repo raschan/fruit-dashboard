@@ -26,6 +26,7 @@ class User extends Eloquent implements UserInterface
             Stripe::setApiKey($this->stripe_key);
 
             // getting the charges
+            // https://stripe.com/docs/api/php#charges
             $returned_object = Stripe_Charge::all();
 
             // extractin json (this is not the best approach)
@@ -34,6 +35,18 @@ class User extends Eloquent implements UserInterface
             // getting relevant fields
             foreach ($charges['data'] as $charge) {
                 // updating array
+
+                /*
+                id                      - string
+                created                 - timestamp
+                amount                  - non negative integer
+                currency                - string, 3 letter ISO currency code
+                paid                    - boolean
+                captured                - boolean
+                description             - string
+                statement_description   - string
+                failure_code            - string (see https://stripe.com/docs/api#errors for a list of codes)
+                */
                 $out_charges[$charge['id']] =
                     array(
                         'created'               => $charge['created'],
@@ -81,6 +94,7 @@ class User extends Eloquent implements UserInterface
                 Stripe::setApiKey($this->stripe_key);
 
                 // getting the events
+                // https://stripe.com/docs/api/php#events
                 // pagination....
                 if ($last_obj) {
                     // we have last obj -> starting from there
@@ -106,6 +120,13 @@ class User extends Eloquent implements UserInterface
                 foreach ($events['data'] as $event) {
 
                     // updating array
+
+                    /*
+                    created     - timestamp
+                    type        - string, see https://stripe.com/docs/api/php#event_types
+                    object      - hash map (assoc array)
+                    */
+                    
                     if (isset($event['data']['object']['id'])) {
                         $out_events[$event['id']] =
                             array(
@@ -311,7 +332,7 @@ class User extends Eloquent implements UserInterface
      * !!!NOT YET GENERALIZED!!!
      * @return int
     */
-    private function addToMrr($mrr, $event)
+    private function addToMRR($mrr, $event)
     {
         // initializing new mrr
         $new_mrr = $mrr;
@@ -347,7 +368,7 @@ class User extends Eloquent implements UserInterface
      *
      * @return void
     */
-    private function buildMrrOnDay($timestamp, $events)
+    private function buildMRROnDay($timestamp, $events)
     {
         // building up yesterday date
         $yesterday_ts = $timestamp - 86400;
@@ -391,7 +412,7 @@ class User extends Eloquent implements UserInterface
                 if ($event['created'] > $range_start and
                     $event['created'] < $range_stop) {
 
-                    $mrr = $this->addToMrr($mrr, $event);
+                    $mrr = $this->addToMRR($mrr, $event);
                 }
             }
             // saving mrr to db if we don't have previous data
@@ -411,7 +432,7 @@ class User extends Eloquent implements UserInterface
      *
      * @return a bigint with the MRR in it
     */
-    public function buildMrr()
+    public function buildMRR()
     {
         // getting the events
         $events = $this->getEvents();
@@ -419,7 +440,7 @@ class User extends Eloquent implements UserInterface
         $current_time = time();
         // building mrr array
         for ($i = $current_time-30*86400; $i < $current_time; $i+=86400) {
-            $this->buildMrrOnDay($i, $events);
+            $this->buildMRROnDay($i, $events);
         }
 
 
