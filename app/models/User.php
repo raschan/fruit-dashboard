@@ -15,7 +15,7 @@ class User extends Eloquent implements UserInterface
     public function isPayPalConnected()
     {
         // at this point validation like this is all right
-        if ((strlen($this->paypal_key) > 16) {
+        if (strlen($this->paypal_key) > 16) {
             // refreshtoken is longer longer than 16
             return True;
         }
@@ -47,7 +47,7 @@ class User extends Eloquent implements UserInterface
     public function isConnected()
     {
         if ($this->isStripeConnected() ||
-           ($this->isPayPalConnected() {
+            $this->isPayPalConnected()) {
             // connected
             return True;
         }

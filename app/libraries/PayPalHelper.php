@@ -13,20 +13,20 @@ class PayPalHelper {
     */
     public static function getApiContext() {
         // setting api codes
-        $clientId = "AY1PlRC0yK6SExlx8aRDW-hF2REkl90Qmza0Ak5LUacd-LFAczGmXfanQYK-";
-        $clientSecret = "EBXUZxD6PobEUtc-WldtZgbG8eUzl4IkOFAeMxpAGhNDt-mESoj3a3QRRIGw";
+        $client_id = "AY1PlRC0yK6SExlx8aRDW-hF2REkl90Qmza0Ak5LUacd-LFAczGmXfanQYK-";
+        $client_secret = "EBXUZxD6PobEUtc-WldtZgbG8eUzl4IkOFAeMxpAGhNDt-mESoj3a3QRRIGw";
 
 
         // getting the ApiContext from oauth
-        $apiContext = new ApiContext(
+        $api_context = new ApiContext(
             new OAuthTokenCredential(
-                $clientId,
-                $clientSecret
+                $client_id,
+                $client_secret
             )
         );
 
         // setting api context
-        $apiContext->setConfig(
+        $api_context->setConfig(
             array(
                 'mode'                   => 'sandbox',
                 'http.ConnectionTimeOut' => 30,
@@ -39,7 +39,7 @@ class PayPalHelper {
         );
 
         // returning api context
-        return $apiContext;
+        return $api_context;
     }
 
     /**
@@ -49,19 +49,18 @@ class PayPalHelper {
      *
      * @return String/boolean
     */
-    public static function generateAccessTokenFromRefreshToken($user)
+    public static function generateAccessTokenFromRefreshToken($refresh_token)
     {
         // if the user is not connected to PP, our job is done here
         if (!$user->isPayPalConnected()) {
             return false;
         }
 
-        $refreshToken = $user->paypal_key;
 
         try {
             // getting token info
-            $tokenInfo = new PPOpenIdTokeninfo();
-            $tokenInfo = $tokenInfo->createFromRefreshToken(array('refresh_token' => $refreshToken), $apiContext);
+            $token_info = new PPOpenIdTokeninfo();
+            $token_info = $token_info->createFromRefreshToken(array('refresh_token' => $refresh_token), $api_context);
 
         } catch (Exception $ex) {
             // something went wrong
@@ -70,7 +69,7 @@ class PayPalHelper {
         }
 
         // everything's fine, returning accessToken
-        return $tokenInfo->getAccessToken();
+        return $token_info->getAccessToken();
 
     }
 }
