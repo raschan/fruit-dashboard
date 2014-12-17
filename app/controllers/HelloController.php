@@ -50,11 +50,14 @@ class HelloController extends BaseController
     */
     public function showPaypal()
     {
-        $user = PPOpenIdUserinfo::getUserinfo(
-            array(
-                'access_token' => PayPalHelper::generateAccessTokenFromRefreshToken($user->paypal_key)
-            )
-        );
+        $api_context = PayPalHelper::getApiContext();
+
+        try {
+            $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
+            $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
+        } catch (Exception $ex) {
+            print "no pp key";
+        }
         // making view
         return View::make(
             'dev.paypal',

@@ -10,6 +10,7 @@
 <body>
     <!-- Page Content -->
     <div class="container"><br>
+    hello
     {{ var_dump($user) }}
     <!-- /.container -->
     </body>

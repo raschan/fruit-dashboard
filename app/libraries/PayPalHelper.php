@@ -51,18 +51,14 @@ class PayPalHelper {
     */
     public static function generateAccessTokenFromRefreshToken($refresh_token)
     {
-        // if the user is not connected to PP, our job is done here
-        if (!$user->isPayPalConnected()) {
-            return false;
-        }
-
-
+        $api_context = PayPalHelper::getApiContext();
         try {
             // getting token info
             $token_info = new PPOpenIdTokeninfo();
             $token_info = $token_info->createFromRefreshToken(array('refresh_token' => $refresh_token), $api_context);
-
+            
         } catch (Exception $ex) {
+            Log::info($ex);
             // something went wrong
             // redirect to 500
             exit(1);

@@ -52,10 +52,12 @@ class PaypalController extends BaseController
 
         // updating the user
         $user = Auth::user();
-
+    
+        Log::info(strlen($accessToken->getRefreshToken()));
         //saving refresh token
         $user->paypal_key = $accessToken->getRefreshToken();
 
+        Log::info(strlen($user->paypal_key));
         // saving user
         $user->save();
 
