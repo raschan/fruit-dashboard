@@ -33,7 +33,6 @@ class PaypalController extends BaseController
     */
     public function createRefreshToken()
     {
-        Log::info("we've reached this point");
         // checking if we have code
         if (isset($_GET['code'])) {
             $code = $_GET['code'];
@@ -57,12 +56,10 @@ class PaypalController extends BaseController
         //saving refresh token
         $user->paypal_key = $accessToken->getRefreshToken();
 
-        Log::info($user->paypal_key);
-
         // saving user
         $user->save();
 
         // redirect
-        return Redirect::route('dev.paypal');
+        return Redirect::route('auth.dashboard');
    }
 }
