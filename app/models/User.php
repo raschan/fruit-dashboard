@@ -8,6 +8,22 @@ class User extends Eloquent implements UserInterface
     use UserTrait;
 
     /**
+     * Testing if the user has a valid connected account
+     *
+     * @return boolean
+    */
+    public function isConnected()
+    {
+        // at this point validation like this is all right
+        if ((strlen($this->stripe_key) > 16) ||
+            (strlen($this->paypal_key) > 16)) {
+            // at one of the keys length is over 16
+            return True;
+        }
+        // no key is given
+        return False;
+    }
+    /**
      * Getting all the charges for the user
      *
      * @return an array with the charges

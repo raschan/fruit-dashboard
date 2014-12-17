@@ -2,6 +2,11 @@
 
   @section('pageContent')
     <div id="content-wrapper">
+      <div class="alert alert-warning">
+      @if (!Auth::user()->isConnected())
+        No key is provided! You are currently viewing the site in demo mode! <a href="{{ URL::route('auth.dashboard') }}" class="pull-right"> Continue in demo</a>
+      @endif
+      </div>
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-success panel-dark">
           <div class="panel-heading">

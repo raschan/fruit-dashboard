@@ -51,13 +51,13 @@ class AuthController extends BaseController
             // attempt to do the login
             if (Auth::attempt($credentials)) {
                 // auth successful!
-                // check for homecoming action
 
-                // please note: the user will never see this action
-                // since it will be triggered automatically right after login
-
-
-                return Redirect::route('auth.dashboard')->with('success', 'You have been signed in.');
+                // check if already connected
+                if (Auth::user()->isConnected()) {
+                    return Redirect::route('auth.dashboard')->with('success', 'You have been signed in.');
+                } else {
+                    return Redirect::route('auth.connect')->with('success', 'You have been signed in.');
+                }
             } else {
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')
