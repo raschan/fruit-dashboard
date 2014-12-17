@@ -5,10 +5,10 @@
 | Dev routes (these routes are for testing API-s only)
 |--------------------------------------------------------------------------
 */
-Route::get('/', array(
-    'as' => 'hello',
-    'uses' => 'HelloController@showHello'
-));
+Route::get('/', function()
+{
+    return Redirect::route('auth.dashboard');
+});
 
 Route::get('/stripe', array(
     'before' => 'auth|api_key',

@@ -6,8 +6,15 @@ use PayPal\Rest\ApiContext;
 use PayPal\Auth\Openid\PPOpenIdTokeninfo;
 use PayPal\Exception\PPConnectionException;
 use PayPal\Auth\Openid\PPOpenIdUserinfo;
+use PayPal\Api\Plan;
 
 
+
+
+use PayPal\Api\PaymentDefinition;
+use PayPal\Api\MerchantPreferences;
+use PayPal\Api\Currency;
+use PayPal\Api\ChargeModel;
 /*
 A Controller for testing stuff
 */
@@ -16,11 +23,7 @@ class HelloController extends BaseController
 {
     public function showHello()
     {
-        if (Auth::check()) {
-            return View::make('hello');
-        } else {
-            return Redirect::route('auth.signin');
-        }
+        
     }
 
     /*
@@ -51,18 +54,79 @@ class HelloController extends BaseController
     public function showPaypal()
     {
         $api_context = PayPalHelper::getApiContext();
-
         try {
             $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
             $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
         } catch (Exception $ex) {
             print "no pp key";
         }
-        // making view
+
+
+        // Create a new instance of Plan object
+        $plan = new Plan();
+        
+        // # Basic Information
+        // Fill up the basic information that is required for the plan
+        $plan->setName('H13 water service')
+            ->setDescription('Providing fresh cold water every day.')
+            ->setType('fixed');
+        
+        // # Payment definitions for this billing plan.
+        $paymentDefinition = new PaymentDefinition();
+        
+        // The possible values for such setters are mentioned in the setter method documentation.
+        // Just open the class file. e.g. lib/PayPal/Api/PaymentDefinition.php and look for setFrequency method.
+        // You should be able to see the acceptable values in the comments.
+        $paymentDefinition->setName('Regular Payments')
+            ->setType('REGULAR')
+            ->setFrequency('Month')
+            ->setFrequencyInterval("1")
+            ->setCycles("12")
+            ->setAmount(new Currency(array('value' => 1290, 'currency' => 'USD')));
+        /*
+        // Charge Models    
+        $chargeModel = new ChargeModel();
+        $chargeModel->setType('SHIPPING')
+            ->setAmount(new Currency(array('value' => 50, 'currency' => 'USD')));
+        
+        $paymentDefinition->setChargeModels(array($chargeModel));
+        $merchantPreferences = new MerchantPreferences();
+
+        $merchantPreferences->setReturnUrl(route('auth.dashboard'))
+            ->setCancelUrl(route('auth.dashboard'))
+            ->setAutoBillAmount("yes")
+            ->setInitialFailAmountAction("CONTINUE")
+            ->setMaxFailAttempts("0")
+            ->setSetupFee(new Currency(array('value' => 1, 'currency' => 'USD')));
+        
+        $plan->setPaymentDefinitions(array($paymentDefinition));
+        $plan->setMerchantPreferences($merchantPreferences);
+
+        // For Sample Purposes Only.
+        $request = clone $plan;
+        
+        // ### Create Plan
+        try {
+            $output = $plan->create($api_context);
+        } catch (Exception $ex) {
+            Log::info($ex);
+            exit(1);
+        }*/
+
+        try {
+            $params = array('page_size' => '2');
+            $planList = Plan::all($params, $api_context);
+        } catch (Exception $ex) {
+            Log::info($ex);
+            exit(1);
+        }
+        Log::info($planList); 
+
         return View::make(
             'dev.paypal',
-            array('user' => $user)
+            array('user' => "hello")
         );
+        
     }
 
 
