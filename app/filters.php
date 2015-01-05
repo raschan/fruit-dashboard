@@ -56,7 +56,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('api_key', function()
 {
-    if ((strlen(Auth::user()->stripe_key) < 16) && (strlen(Auth::user()->paypal_key) < 16))
+    if (!Auth::user()->isConnected())
     {
         // no valid key
         return Redirect::route('auth.connect');

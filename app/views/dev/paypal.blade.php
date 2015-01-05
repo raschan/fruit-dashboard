@@ -10,8 +10,8 @@
 <body>
     <!-- Page Content -->
     <div class="container"><br>
-    To refresh your token
-    <a href="{{ $redirect_url }}">Click here</a>
+    hello
+    {{ var_dump($user) }}
     <!-- /.container -->
     </body>
 </html>
