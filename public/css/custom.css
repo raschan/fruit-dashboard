@@ -55,8 +55,12 @@
 }
 
 .chart-box {
+	padding-bottom: 15px;
+}
+
+.chart-wrapper {
 	background-color: #fff;
-	padding: 10px;
+	padding: 5px;
 }
 
 .feed-box .list-group-item > .badge {
@@ -97,3 +101,6 @@
 }
 
 
+canvas {
+	width: 100% !important;
+}
