@@ -4,11 +4,11 @@
 }
 
 .theme-signout .pa_page_alerts_default {
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 
 .pa-page-alerts-box .alert {
-	border-radius: 0px;
+	border-radius: 0;
 }
 
 .theme-signout #main-navbar {
@@ -81,8 +81,16 @@
 	color: #000;
 }
 
+/* Navbar */
 
-/*Utility*/
+@media (min-width: 992px) {
+	.navbar {
+		padding: 0 60px 0 60px;
+		background: #333;
+	}
+}
+
+/* Utility */
 
 .service-icon .fa {
 	font-size: 10em;
