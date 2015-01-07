@@ -14,6 +14,12 @@
           <div class="col-sm-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
+              <div class="chart-text-left">
+                $1234,45
+              </div>
+              <div class="chart-text-right">
+                <i class="fa fa-angle-up"></i> 55% 
+              </div>
               <a href=""><h4 class="text-default text-center">Monthly recurring revenue</h4></a>
             </div>
           </div>
@@ -21,6 +27,12 @@
           <div class="col-sm-4 chart-box">
           <div class="chart-wrapper">            
               <canvas></canvas>
+              <div class="chart-text-left">
+                $1234,45
+              </div>
+              <div class="chart-text-right">
+                <i class="fa fa-angle-up"></i> 55% 
+              </div>
               <h4 class="text-center">Net revenue</h4>
             </div>
           </div>
@@ -28,6 +40,12 @@
           <div class="col-sm-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
+              <div class="chart-text-left">
+                $1234,45
+              </div>
+              <div class="chart-text-right">
+                <i class="fa fa-angle-up"></i> 55% 
+              </div>
               <h4 class="text-center">User churn</h4>
             </div>
           </div>

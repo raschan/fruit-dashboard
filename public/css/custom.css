@@ -54,15 +54,6 @@
 	text-decoration: underline;
 }
 
-.chart-box {
-	padding-bottom: 15px;
-}
-
-.chart-wrapper {
-	background-color: #fff;
-	padding: 5px;
-}
-
 .feed-box .list-group-item > .badge {
 	float: right;
 }
@@ -85,6 +76,8 @@
 	color: #000;
 }
 
+/* ALL PAGES */
+
 /* Navbar */
 
 @media (min-width: 992px) {
@@ -92,6 +85,34 @@
 		padding: 0 60px 0 60px;
 		background: #333;
 	}
+}
+
+
+/* DASHBOARD */
+
+.chart-box {
+	padding-bottom: 15px;
+}
+
+.chart-wrapper {
+	background-color: #fff;
+	padding: 5px;
+}
+
+.chart-text-left {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	padding: 3em 0 0 3em;
+}
+
+.chart-text-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 1;
+	padding: 3em 3em 0 0;
 }
 
 /* Utility */
