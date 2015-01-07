@@ -95,6 +95,7 @@ class User extends Eloquent implements UserInterface
                 statement_description   - string
                 failure_code            - string (see https://stripe.com/docs/api#errors for a list of codes)
                 */
+
                 $out_charges[$charge['id']] =
                     array(
                         'created'               => $charge['created'],
@@ -227,6 +228,19 @@ class User extends Eloquent implements UserInterface
             // getting relevant fields
             foreach ($plans['data'] as $plan) {
                 // updating array
+
+                /*
+                interval        - string, one of 'day', 'week', 'month' or 'year'. 
+                                    The frequency with which a subscription should be billed.
+                name            - name of the plan
+                interval_count  - pos int, with the property 'interval' specifies how frequent is the billing,
+                                    ex: interval = 'month', interval_count = 3 => billing every 3 month
+                amount          - pos int, the price of plan, in cents
+                currency        - currency in which the plan is charged (e.g "usd")
+                created         - timestamp
+                name            - name of plan
+                */
+
                 $out_plans[$plan['id']] =
                     array(
                         'interval'       => $plan['interval'],
@@ -270,6 +284,12 @@ class User extends Eloquent implements UserInterface
             // setting the data to our own format
             foreach ($customers['data'] as $customer) {
                 // updating array
+
+                /*
+                livemode        - valid customer
+                subscriptions   - all the subscription a user has
+                */
+
                 $out_customers[$customer['id']] =
                     array(
                         'zombie'        => $customer['livemode'],
@@ -302,7 +322,7 @@ class User extends Eloquent implements UserInterface
 
             // stripe
 
-            // getting the active subsciprionts for a customer
+            // getting the active subscriptions for a customer
             foreach ($customers as $customer) {
 
                 // going through each subscription if any
@@ -311,6 +331,20 @@ class User extends Eloquent implements UserInterface
                     foreach ($customer['subscriptions']['data'] as
                              $subscription) {
                         // updating array
+
+                        /*
+                        plan
+                            id - string
+                        start       - timestamp, subscription start date
+                        status      - string, possible values are: 
+                                        'trialing'
+                                        'active'
+                                        'past_due'
+                                        'canceled'
+                                        'unpaid'
+                        quantity    - int
+                        */
+
                         $active_subscriptions[$subscription['id']] =
                             array(
                                 'plan_id'  => $subscription['plan']['id'],
@@ -375,7 +409,7 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
-     * Adding event to mrr
+     * Adding event to MRR
      * Description: checks the day before and the events during the day
      * !!!NOT YET GENERALIZED!!!
      * @return int
@@ -411,7 +445,7 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
-     * Getting the Mrr for a timestamp (must be within 30 days in the past)
+     * Getting the MRR for a timestamp (must be within 30 days in the past)
      * Description: checks the day before and the events during the day
      *
      * @return void
