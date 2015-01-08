@@ -21,7 +21,7 @@
                   <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
                 </div>
 
-                <a class="chart-wrapper" href="{{ URL::route('auth.dashboard') }}">
+                <a class="chart-wrapper" href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
@@ -155,6 +155,34 @@
       pointDot: false
     };
 
+/*  data forreal
+    var data = {
+    labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
+        }
+    ]
+  };*/
+
+// data for dev
       var data = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
