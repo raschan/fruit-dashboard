@@ -20,7 +20,7 @@
               <div class="chart-text-right">
                 <i class="fa fa-angle-up"></i> 55% 
               </div>
-              <a href=""><h4 class="text-default text-center">Monthly recurring revenue</h4></a>
+              <a href="{{ URL::route('auth.dashboard') }}"><h4 class="text-default text-center">Monthly recurring revenue</h4></a>
             </div>
           </div>
 
