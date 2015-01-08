@@ -155,7 +155,7 @@ class HelloController extends BaseController
     */
     public function ajaxGetMrr()
     {
-        $mrr = Auth::user()->getMrr();
+        $mrr = Auth::user()->getMRR();
         Log::info("ready");
         return "test";
     }
