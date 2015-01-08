@@ -180,7 +180,7 @@
     <script type="text/javascript">
     var options = {
       responsive: true,
-       maintainAspectRatio: false,
+      maintainAspectRatio: false,
       bezierCurveTension : 0.1
     };
 

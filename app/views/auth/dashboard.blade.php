@@ -8,48 +8,61 @@
         <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (quick view)</h1>
       </div> <!-- / .page-header -->
 
-      <div class="row panel-padding">
+      <div class="row">
 
         <div class="col-sm-8 quickstats-box no-padding-hr">
           <div class="col-sm-4 chart-box">
             <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                $1234,45
-              </div>
-              <div class="chart-text-right">
-                <i class="fa fa-angle-up"></i> 55% 
-              </div>
-              <a href="{{ URL::route('auth.dashboard') }}"><h4 class="text-default text-center">Monthly recurring revenue</h4></a>
-            </div>
-          </div>
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
 
-          <div class="col-sm-4 chart-box">
-          <div class="chart-wrapper">            
-              <canvas></canvas>
-              <div class="chart-text-left">
-                $1234,45
-              </div>
-              <div class="chart-text-right">
-                <i class="fa fa-angle-up"></i> 55% 
-              </div>
-              <h4 class="text-center">Net revenue</h4>
+                <a class="chart-wrapper" href="{{ URL::route('auth.dashboard') }}">
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+              </a>
+                <h4 class="text-center">Monthly recurring revenue</h4>
             </div>
           </div>
 
           <div class="col-sm-4 chart-box">
             <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                $1234,45
-              </div>
-              <div class="chart-text-right">
-                <i class="fa fa-angle-up"></i> 55% 
-              </div>
-              <h4 class="text-center">User churn</h4>
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+                <h4 class="text-center">Monthly recurring revenue</h4>
             </div>
           </div>
-        </div> <!-- /. col-md-8 -->
+
+          <div class="col-sm-4 chart-box">
+            <div class="chart-wrapper">
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+                <h4 class="text-center">Monthly recurring revenue</h4>
+            </div>
+          </div>
+
+        </div> <!-- /. col-sm-8 -->
 
         <div class="col-sm-4 feed-box">
           <ul class="list-group">
@@ -70,9 +83,62 @@
             </li> <!-- / .list-group-item -->
           </ul>
 
-        </div> <!-- /. col-md-4 -->
+        </div> <!-- /. col-sm-4 -->
 
       </div> <!-- /.row -->
+
+      <div class="row">
+
+        <div class="col-sm-8 quickstats-box no-padding-hr">
+          <div class="col-sm-4 chart-box">
+            <div class="chart-wrapper">
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+                <h4 class="text-center">Monthly recurring revenue</h4>
+            </div>
+          </div>
+
+          <div class="col-sm-4 chart-box">
+            <div class="chart-wrapper">
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+                <h4 class="text-center">Monthly recurring revenue</h4>
+            </div>
+          </div>
+
+          <div class="col-sm-4 chart-box">
+            <div class="chart-wrapper">
+                <canvas></canvas>
+                <div class="chart-text-left">
+                  <span class="text-money up">$1234,45</span>
+                </div>
+                <div class="chart-text-right">
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                </div>
+                <div class="chart-overlay">
+                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                </div>
+                <h4 class="text-center">Monthly recurring revenue</h4>
+            </div>
+          </div>
+          
+        </div> <!-- /. col-sm-12 -->
 
     </div>  <!-- / #content-wrapper -->
 
@@ -83,6 +149,7 @@
     <script type="text/javascript">
     var options = {
       responsive: true,
+      maintainAspectRatio: false,
       showScale: false,
       showTooltips: false,
       pointDot: false
@@ -94,7 +161,7 @@
         {
             label: "My Second dataset",
             fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
+            strokeColor: "rgba(151,187,205,0.4)",
             pointColor: "rgba(151,187,205,1)",
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",

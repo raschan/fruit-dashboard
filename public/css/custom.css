@@ -99,12 +99,58 @@
 	padding: 5px;
 }
 
+.chart-wrapper canvas {
+	height: 100px !important;
+}
+
+.chart-overlay {
+	text-align: center;
+	position: absolute;
+	background: rgba(36,46,53,0.2);
+	z-index: 3;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-transition-property: opacity;
+	transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	transition-duration: 1s;
+	opacity: 0;
+	margin: 0 11px 15px 11px;
+}
+
+.chart-overlay:hover,
+.chart-overlay:focus {
+	opacity: 1;
+}
+
+.chart-overlay .text-overlay {
+	padding: 0 3px 3px 3px;
+	color: white;
+	font-weight: bold;
+	background: rgba(44,62,80,0.5);
+	position: relative;
+	top: 0px;
+	font-size: 18px;
+	font-weight: 300;
+	-webkit-transition-property: top;
+	transition-property: top;
+	-webkit-transition-duration: 0.5s;
+	transition-duration: 0.5s;
+}
+
+.chart-overlay:hover .text-overlay,
+.chart-overlay:focus .text-overlay {
+	top: 0;
+}
+
 .chart-text-left {
 	position: absolute;
 	z-index: 1;
 	top: 0;
 	left: 0;
-	padding: 3em 0 0 3em;
+	padding: 4.5em 0 0 3em;
 }
 
 .chart-text-right {
@@ -112,7 +158,12 @@
 	top: 0;
 	right: 0;
 	z-index: 1;
-	padding: 3em 3em 0 0;
+	padding: 4.5em 3em 0 0;
+}
+
+.chart-text-right .text-money,
+.chart-text-left .text-money {
+	font-size: 24px;
 }
 
 /* SINGLE STATISTICS PAGE */
@@ -136,9 +187,13 @@
 	font-size: 12px;
 }
 
-.text-money {
+.stat-growth-box .text-money,
+.stat-description-box .text-money {
 	font-size: 36px;
-	font-weight: 600;
+}
+
+.text-money {
+	font-weight: 700;
 }
 
 .text-money.up {
