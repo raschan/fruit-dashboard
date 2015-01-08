@@ -55,12 +55,22 @@
               <h4>Connect a service</h4>
               <div class="services-row">
                 <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-paypal fa-2x"></i></a>
-                <span class="text-success">&nbsp;&nbsp;is connected. </span><a href="{{ URL::route('auth.connect') }}">View settings.</a>
+                @if($paypal_connected)
+                <span class="text-success">&nbsp;&nbsp;is connected. </span>
+                @else
+                <span class="text-danger">&nbsp;&nbsp;is not connected. </span>
+                <a href="{{ URL::route('auth.connect') }}">Connect it now!</a>                @endif
               </div>
+
               <div class="services-row">
                 <a href="{{ URL::route('auth.connect') }}"><i class="fa icon fa-cc-stripe fa-2x"></i></a>
-                <span class="text-danger">&nbsp;&nbsp;is not yet connected. </span><a href="{{ URL::route('auth.connect') }}">Connect it now!</a>
+                @if($stripe_connected)
+                <span class="text-success">&nbsp;&nbsp;is connected. </span>
+                @else
+                <span class="text-danger">&nbsp;&nbsp;is not connected. </span>
+                <a href="{{ URL::route('auth.connect') }}">Connect it now!</a>                @endif
               </div>
+
             </div> <!-- /. connect-form -->
           	</div> <!-- /. settings-description -->
             

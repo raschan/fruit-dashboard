@@ -160,7 +160,16 @@ class AuthController extends BaseController
     */
     public function showSettings()
     {
-        return View::make('auth.settings');
+        // checking connections for the logged in user
+        $user = Auth::user();
+
+        return View::make(
+            'auth.settings',
+            array(
+                'paypal_connected' => $user->isPayPalConnected(),
+                'stripe_connected' => $user->isStripeConnected()
+            )
+        );
     }
 
 
@@ -250,8 +259,7 @@ class AuthController extends BaseController
     {
         // Validation
         $rules = array(
-            'stripe' => 'min:16|max:64',
-            'paypal' => 'min:16|max:64',
+            'stripe' => 'min:16|max:64|required',
         );
 
         // run the validation rules on the inputs
@@ -264,41 +272,32 @@ class AuthController extends BaseController
                 ->withInput(); // sending back data
         } else {
             // validator success
-            if (Input::get('stripe')) {
-                try {
-                    // trying to login with this key
-                    Stripe::setApiKey(Input::get('stripe'));
-                    $balance = Stripe_Balance::retrieve(); // catchable line
-                    // success
-                    $returned_object = json_decode(strstr($balance, '{'), true);
+            try {
+                
+                // trying to login with this key
+                Stripe::setApiKey(Input::get('stripe'));
+                $balance = Stripe_Balance::retrieve(); // catchable line
+                // success
+                $returned_object = json_decode(strstr($balance, '{'), true);
 
-                    // updating the user
-                    $user = Auth::user();
+                // updating the user
+                $user = Auth::user();
 
-                    $user->stripe_key = Input::get('stripe');
-                    $user->balance = $returned_object['available'][0]['amount'];
+                $user->stripe_key = Input::get('stripe');
+                $user->balance = $returned_object['available'][0]['amount'];
 
-                    // saving user
-                    $user->save();
+                // saving user
+                $user->save();
 
-                } catch(Stripe_AuthenticationError $e) {
-                    // code was invalid
-                    return Redirect::back()->withErrors(
-                        array('stripe' => "Authentication unsuccessful!")
-                    );
-                }
-            } else if (Input::get('paypal')) {
-
-            } else {
+            } catch(Stripe_AuthenticationError $e) {
+                // code was invalid
                 return Redirect::back()->withErrors(
-                    array(
-                        'stripe' => "This field is required",
-                    )
+                    array('stripe' => "Authentication unsuccessful!")
                 );
             }
 
-            // redirect to stripe page
-            return Redirect::route('dev.stripe');
+        // redirect to get stripe 
+        return Redirect::route('auth.dashboard');
 
         }
     }

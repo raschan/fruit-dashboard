@@ -64,6 +64,7 @@ class User extends Eloquent implements UserInterface
     {
         $out_charges = array();
 
+
         // paypal/stripe decision
 
         if ($this->stripe_key) {
@@ -465,6 +466,7 @@ class User extends Eloquent implements UserInterface
             ->get();
 
         if (!$current_day_mrr) {
+            // no previous reco
 
             // selecting mrr for the user on yesterday
             $yesterday_mrr = DB::table('mrr')
@@ -482,8 +484,6 @@ class User extends Eloquent implements UserInterface
             // building up the range
             $range_start = strtotime($current_day);
             $range_stop = $range_start + 86400;
-
-            // now check the changes
 
 
             // building the mrr
