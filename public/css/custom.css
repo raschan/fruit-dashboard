@@ -4,11 +4,11 @@
 }
 
 .theme-signout .pa_page_alerts_default {
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 
 .pa-page-alerts-box .alert {
-	border-radius: 0px;
+	border-radius: 0;
 }
 
 .theme-signout #main-navbar {
@@ -54,11 +54,6 @@
 	text-decoration: underline;
 }
 
-.chart-box {
-	background-color: #fff;
-	padding: 10px;
-}
-
 .feed-box .list-group-item > .badge {
 	float: right;
 }
@@ -81,11 +76,141 @@
 	color: #000;
 }
 
+/* ALL PAGES */
 
-/*Utility*/
+/* Navbar */
+
+@media (min-width: 992px) {
+	.navbar {
+		padding: 0 60px 0 60px;
+		background: #333;
+	}
+}
+
+
+/* DASHBOARD */
+
+.chart-box {
+	padding-bottom: 15px;
+}
+
+.chart-wrapper {
+	background-color: #fff;
+	padding: 5px;
+}
+
+.chart-wrapper canvas {
+	height: 100px !important;
+}
+
+.chart-overlay {
+	text-align: center;
+	position: absolute;
+	background: rgba(36,46,53,0.2);
+	z-index: 3;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-transition-property: opacity;
+	transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	transition-duration: 1s;
+	opacity: 0;
+	margin: 0 11px 15px 11px;
+}
+
+.chart-overlay:hover,
+.chart-overlay:focus {
+	opacity: 1;
+}
+
+.chart-overlay .text-overlay {
+	padding: 0 3px 3px 3px;
+	color: white;
+	font-weight: bold;
+	background: rgba(44,62,80,0.5);
+	position: relative;
+	top: 0px;
+	font-size: 18px;
+	font-weight: 300;
+	-webkit-transition-property: top;
+	transition-property: top;
+	-webkit-transition-duration: 0.5s;
+	transition-duration: 0.5s;
+}
+
+.chart-overlay:hover .text-overlay,
+.chart-overlay:focus .text-overlay {
+	top: 0;
+}
+
+.chart-text-left {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	padding: 4.5em 0 0 3em;
+}
+
+.chart-text-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 1;
+	padding: 4.5em 3em 0 0;
+}
+
+.chart-text-right .text-money,
+.chart-text-left .text-money {
+	font-size: 24px;
+}
+
+/* SINGLE STATISTICS PAGE */
+
+.single-statistic-wrapper {
+	height: 250px;;
+}
+
+.stat-description-box {
+	text-align: center;
+	padding: 5px 0 15px 0;
+}
+
+.stat-growth-box {
+	text-align: center;
+	padding: 5px 0 15px 0;
+}
+
+.text-date {
+	color: #2c3e50;
+	font-size: 12px;
+}
+
+.stat-growth-box .text-money,
+.stat-description-box .text-money {
+	font-size: 36px;
+}
+
+.text-money {
+	font-weight: 700;
+}
+
+.text-money.up {
+	color: #27ae60;
+}
+.text-money.down {
+	color: #c0392b;
+}
+
+
+/* Utility */
 
 .service-icon .fa {
 	font-size: 10em;
 }
 
 
+canvas {
+	width: 100% !important;
+}

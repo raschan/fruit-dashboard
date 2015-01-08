@@ -42,58 +42,7 @@
 						* 'nav-icon-btn-warning'
 						* 'nav-icon-btn-danger' 
 -->
-						<li class="nav-icon-btn nav-icon-btn-danger dropdown">
-							<a href="#notifications" class="dropdown-toggle" data-toggle="dropdown">
-								<span class="label">5</span>
-								<i class="nav-icon fa fa-bullhorn"></i>
-								<span class="small-screen-text">Notifications</span>
-							</a>
-
-							<!-- NOTIFICATIONS -->
-							
-
-							<div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
-								<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><div class="notifications-list" id="main-navbar-notifications" style="overflow: hidden; width: auto; height: 250px;">
-
-									<div class="notification">
-										<div class="notification-title text-danger">SYSTEM</div>
-										<div class="notification-description"><strong>Error 500</strong>: Syntax error in index.php at line <strong>461</strong>.</div>
-										<div class="notification-ago">12h ago</div>
-										<div class="notification-icon fa fa-hdd-o bg-danger"></div>
-									</div> <!-- / .notification -->
-
-									<div class="notification">
-										<div class="notification-title text-info">STORE</div>
-										<div class="notification-description">You have <strong>9</strong> new orders.</div>
-										<div class="notification-ago">12h ago</div>
-										<div class="notification-icon fa fa-truck bg-info"></div>
-									</div> <!-- / .notification -->
-
-									<div class="notification">
-										<div class="notification-title text-default">CRON DAEMON</div>
-										<div class="notification-description">Job <strong>"Clean DB"</strong> has been completed.</div>
-										<div class="notification-ago">12h ago</div>
-										<div class="notification-icon fa fa-clock-o bg-default"></div>
-									</div> <!-- / .notification -->
-
-									<div class="notification">
-										<div class="notification-title text-success">SYSTEM</div>
-										<div class="notification-description">Server <strong>up</strong>.</div>
-										<div class="notification-ago">12h ago</div>
-										<div class="notification-icon fa fa-hdd-o bg-success"></div>
-									</div> <!-- / .notification -->
-
-									<div class="notification">
-										<div class="notification-title text-warning">SYSTEM</div>
-										<div class="notification-description"><strong>Warning</strong>: Processor load <strong>92%</strong>.</div>
-										<div class="notification-ago">12h ago</div>
-										<div class="notification-icon fa fa-hdd-o bg-warning"></div>
-									</div> <!-- / .notification -->
-
-								</div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div> <!-- / .notifications-list -->
-								<a href="#" class="notifications-link">MORE NOTIFICATIONS</a>
-							</div> <!-- / .dropdown-menu -->
-						</li>
+						
 						
 <!-- /3. $END_NAVBAR_ICON_BUTTONS -->
 						<li>

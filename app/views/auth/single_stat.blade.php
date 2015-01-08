@@ -3,9 +3,9 @@
   @section('pageContent')
     <div id="content-wrapper">
 
-      <div class="page-header">
+      <!-- <div class="page-header">
         <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (single view)</h1>
-      </div> <!-- / .page-header -->
+      </div> -->
 
       <div class="row panel-padding">
         <div class="panel invoice">
@@ -27,16 +27,63 @@
               February 21, 2013
             </div>
           </div> <!-- / .invoice-header -->
-          <div class="single-statistic">
-            <canvas class="center-block"></canvas>
+          <div class="single-statistic-wrapper">
+            <canvas></canvas>
           </div>
-          <div class="statistic-description padding-sm-vr">
-            <div class="note note-info">
-              <h4 class="note-title">Info note title</h4>
-              Info note text here.
-            </div>
-          </div>
+          <div class="statistic-description">
+            <div class="row">
+              <div class="col-md-3 stat-description-box">
+                <span class="text-date"><h4>Current</h4></span>
+                <span class="text-money up">$23,444</span>
+              </div>
+              <div class="col-md-3 stat-description-box">
+                <span class="text-date"><h4>30 days ago</h4></span>
+                <span class="text-money up">$23,444</span>
+              </div>
+              <div class="col-md-3 stat-description-box">
+                <span class="text-date"><h4>6 months ago</h4></span>
+                <span class="text-money up">$23,444</span>
+              </div>
+              <div class="col-md-3 stat-description-box">
+                <span class="text-date"><h4>1 year ago</h4></span>
+                <span class="text-money up">$23,444</span>
+              </div>
+            </div> <!-- /.row -->
+          </div> <!-- /.statistic-description  -->
         </div> <!-- /.invoice -->
+      </div> <!-- /.row -->
+
+      <div class="row panel-padding">
+        <div class="panel">
+          <div class="statistic-description">
+            <div class="row">
+              <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>30 days growth</h4></span>
+                <span class="text-money down"><i class="fa fa-angle-down"></i> 5%</span>
+              </div>
+              <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>60 days growth</h4></span>
+                <span class="text-money down"><i class="fa fa-angle-down"></i> 5%</span>
+              </div>
+              <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>3 month growth</h4></span>
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 10%</span>
+              </div>
+              <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>6 month growth</h4></span>
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+              </div>
+                <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>9 month growth</h4></span>
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 178%</span>
+              </div>
+              <div class="col-md-2 stat-growth-box">
+                <span class="text-date"><h4>1 year growth</h4></span>
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 1%</span>
+              </div>
+            </div> <!-- /.row -->
+          </div> <!-- /.statistic-description  -->
+        </div> <!-- /.panel -->
       </div> <!-- /.row -->
 
       <div class="row panel-padding">
@@ -131,9 +178,13 @@
   @section('pageScripts')
 
     <script type="text/javascript">
-      Chart.defaults.global.responsive = true;
+    var options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      bezierCurveTension : 0.1
+    };
 
-      var data = {
+    var data = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
         {
@@ -161,7 +212,7 @@
 
       $('canvas').each( function () {
         var ctx = $(this).get(0).getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data);
+        var myNewChart = new Chart(ctx).Line(data, options);
       });
     </script>
 
