@@ -8,13 +8,12 @@ use PayPal\Exception\PPConnectionException;
 use PayPal\Auth\Openid\PPOpenIdUserinfo;
 use PayPal\Api\Plan;
 
-
-
-
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 use PayPal\Api\ChargeModel;
+
+use StripeHelper;
 /*
 A Controller for testing stuff
 */
@@ -39,8 +38,8 @@ class HelloController extends BaseController
             'dev.stripe',
             array(
                 //'balance' => Auth::user()->balance,
-                //'charges' => Auth::user()->getCharges(),
-                //'mrr' => Auth::user()->getMrr(),
+                'charges' => StripeHelper::getCharges(Auth::user()->stripe_key),
+                'mrr' => Auth::user()->getMrr(),
                 //'events' => Auth::user()->getEvents(),
             )
         );
