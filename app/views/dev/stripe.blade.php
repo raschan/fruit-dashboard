@@ -55,8 +55,13 @@ jQuery( document ).ready( function( $ ) {
 
     <!-- Page Content -->
     <div class="container">
-    <h2 id="mrr_here"></h2>
-
+    <h2 id="mrr_here">{{ $mrr }}</h2>
+    @foreach ($charges as $charge_array)
+        </br>
+        @foreach ($charge_array as $key => $value)
+            <p id="charges_from_stripe"> {{ $key }} => {{ $value }} </p>
+        @endforeach
+    @endforeach
     </div>
     <!-- /.container -->
     </body>
