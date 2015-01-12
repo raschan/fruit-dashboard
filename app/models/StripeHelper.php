@@ -2,22 +2,7 @@
 
 class StripeHelper
 {
-    /**
-     * Testing if the user has connected a stripe account
-     * @param stripe key
-     *
-     * @return boolean
-    */
-    public static function isConnected($key)
-    {
-        // at this point validation like this is all right
-        if (strlen($key) > 16) {
-            // long enough key
-            return True;
-        }
-        // no key is given
-        return False;
-    }
+
 
 
 	/**
