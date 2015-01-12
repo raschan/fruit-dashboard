@@ -105,7 +105,6 @@ class HelloController extends BaseController
         }
         */
         
-        /*
         try {
             $params = array('page_size' => '20');
             $planList = Plan::all($params, $api_context);
@@ -114,10 +113,9 @@ class HelloController extends BaseController
             exit(1);
         }
         Log::info($planList); 
-        */
-        
+
         try {
-            $plan = Plan::get("P-0TC427454077820453V6O7VI", $api_context);
+            $plan = Plan::get("P-0TA38541GG196850X3XYQ2KI", $api_context);
         } catch (PayPal\Exception\PPConnectionException $ex) {
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
