@@ -8,137 +8,171 @@
         <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (quick view)</h1>
       </div> <!-- / .page-header -->
 
-      <div class="row">
+      <!-- STATISTICS BOX -->
 
-        <div class="col-sm-8 quickstats-box no-padding-hr">
-          <div class="col-sm-4 chart-box">
+      <div class="col-lg-8 quickstats-box no-padding-hr">
+        <div class="row">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                </div>
-
-                <a class="chart-wrapper" href="{{ URL::route('auth.single_stat') }}">
+              <canvas></canvas>
+              <div class="chart-text-left">
+                <span class="text-money up">$1234,45</span>
+              </div>
+              <div class="chart-text-right">
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                <h6 class="no-margin">Previous 31 days</h6>
+              </div>
+              <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
               </a>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+              <h4 class="text-center">Monthly Recurring Revenue</h4>
             </div>
           </div>
 
-          <div class="col-sm-4 chart-box">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                </div>
+              <canvas></canvas>
+              <div class="chart-text-left">
+                <span class="text-money up">$1313,15</span>
+              </div>
+              <div class="chart-text-right">
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 155%</span>
+                <h6 class="no-margin">Previous 31 days</h6>
+              </div>
+              <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+              </a>
+              <h4 class="text-center">Net Revenue</h4>
             </div>
           </div>
 
-          <div class="col-sm-4 chart-box">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                </div>
+              <canvas></canvas>
+              <div class="chart-text-left">
+                <span class="text-money up">$866</span>
+              </div>
+              <div class="chart-text-right">
+                <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
+                <h6 class="no-margin">Previous 31 days</h6>
+              </div>
+              <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+              </a>
+              <h4 class="text-center">Fees</h4>
             </div>
           </div>
+        </div> <!-- / .row   -->
 
-        </div> <!-- /. col-sm-8 -->
+        <div class="row">
 
-        <div class="col-sm-4 feed-box">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <h4>Feed</h4>
-            </li>
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              Cras justo odio
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-danger">FAILED</span>
-              Dapibus ac facilisis in
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-info">Downgrade</span>
-              Morbi leo risus
-            </li> <!-- / .list-group-item -->
-          </ul>
-
-        </div> <!-- /. col-sm-4 -->
-
-      </div> <!-- /.row -->
-
-      <div class="row">
-
-        <div class="col-sm-8 quickstats-box no-padding-hr">
-          <div class="col-sm-4 chart-box">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
+                  <span class="text-money nochange">$0</span>
+                  <h6 class="no-margin">Previous 31 days</h6>
                 </div>
                 <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                  <span class="text-money nochange"> --</span>
                 </div>
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+                <a href="{{ URL::route('auth.single_stat') }}">
+                  <div class="chart-overlay">
+                    <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                  </div>
+                </a>
+                <h4 class="text-center">Other Revenue</h4>
             </div>
           </div>
 
-          <div class="col-sm-4 chart-box">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
+                  <span class="text-money up">$66</span>
                 </div>
                 <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                  <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
+                  <h6 class="no-margin">Previous 31 days</h6>
                 </div>
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+                <a href="{{ URL::route('auth.single_stat') }}">
+                  <div class="chart-overlay">
+                    <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                  </div>
+                </a>
+                <h4 class="text-center">Average Revenue Per User</h4>
             </div>
           </div>
 
-          <div class="col-sm-4 chart-box">
+          <div class="col-lg-4 chart-box">
             <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money up">$1234,45</span>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                </div>
+              <canvas></canvas>
+              <div class="chart-text-left">
+                <span class="text-money down">-$99</span>
+              </div>
+              <div class="chart-text-right">
+                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
+                <h6 class="no-margin">Previous 31 days</h6>
+              </div>
+              <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
-                <h4 class="text-center">Monthly recurring revenue</h4>
+              </a>
+              <h4 class="text-center">Annual Run Rate</h4>
             </div>
           </div>
-          
-        </div> <!-- /. col-sm-12 -->
+
+        </div> <!-- / .row -->
+      </div> <!-- / .col-sm-8 -->
+
+      <!-- /STATISTICS BOX -->
+
+      <!-- FEED BOX -->
+
+      <div class="col-lg-4 feed-box">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <h4>Transactions</h4>
+          </li>
+          <li class="list-group-item">
+            <span class="badge badge-success">Charged</span>
+            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-success">Charged</span>
+            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-success">Charged</span>
+            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-success">Charged</span>
+            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-success">Charged</span>
+            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-danger">FAILED</span>
+            <span class="text-money nochange">$55</span> Dapibus ac facilisis in <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+          <li class="list-group-item">
+            <span class="badge badge-info">Downgrade</span>
+            Morbi leo risus <span class="timestamp">20:44</span>
+          </li> <!-- / .list-group-item -->
+        </ul>
+      </div> <!-- / .col-sm-4 -->
+
+      <!-- /FEED BOX -->
 
     </div>  <!-- / #content-wrapper -->
 
