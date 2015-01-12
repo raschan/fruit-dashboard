@@ -13,7 +13,7 @@ class User extends Eloquent implements UserInterface
      *
      * @return boolean
     */
-    public static function isStripeConnected()
+    public function isStripeConnected()
     {
         // at this point validation like this is all right
         if (strlen($this->stripe_key) > 16) {
@@ -29,7 +29,7 @@ class User extends Eloquent implements UserInterface
      *
      * @return boolean
     */
-    public static function isPayPalConnected()
+    public function isPayPalConnected()
     {
         // at this point validation like this is all right
         if (strlen($this->paypal_key) > 16) {
