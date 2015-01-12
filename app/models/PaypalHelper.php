@@ -2,22 +2,7 @@
 
 class PaypalHelper
 {
-    /**
-     * Testing if the user has connected a paypal account
-     * @param paypal key
-     *
-     * @return boolean
-    */
-    public static function isConnected($key)
-    {
-        // at this point validation like this is all right
-        if (strlen($key) > 16) {
-            // refreshtoken is longer longer than 16
-            return True;
-        }
-        // no valid refreshtoken is stored
-        return False;
-    }
+   
 
 	/**
 	 * Getting all the charges for the user
