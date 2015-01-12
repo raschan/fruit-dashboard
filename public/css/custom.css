@@ -150,20 +150,27 @@
 	z-index: 1;
 	top: 0;
 	left: 0;
-	padding: 4.5em 0 0 3em;
+	padding: 2.5em 0 0 3em;
 }
 
 .chart-text-right {
+	text-align: right;
 	position: absolute;
 	top: 0;
 	right: 0;
 	z-index: 1;
-	padding: 4.5em 3em 0 0;
+	padding: 2.5em 3em 0 0;
+	text-transform: uppercase;
 }
 
 .chart-text-right .text-money,
 .chart-text-left .text-money {
 	font-size: 24px;
+}
+
+.timestamp {
+	color: #777;
+	font-size: 80%;
 }
 
 /* SINGLE STATISTICS PAGE */
@@ -201,6 +208,10 @@
 }
 .text-money.down {
 	color: #c0392b;
+}
+
+.text-money.nochange {
+	color: #3498db;
 }
 
 
