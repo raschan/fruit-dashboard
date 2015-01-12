@@ -10,7 +10,7 @@
 <body>
     <!-- Page Content -->
     <div class="container"><br>
-    {{ var_dump($plans) }}
+    {{ var_dump($output) }}
     <!-- /.container -->
     </body>
 </html>
