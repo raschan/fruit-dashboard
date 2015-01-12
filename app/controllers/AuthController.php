@@ -17,7 +17,7 @@ class AuthController extends BaseController
     public function showSignin()
     {
         if (Auth::check()) {
-            return Redirect::route('hello');
+            return Redirect::route('auth.dashboard');
         } else {
             return View::make('auth.signin');
         }
