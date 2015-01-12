@@ -186,7 +186,7 @@ class AuthController extends BaseController
             'email' => 'email'
         );
         // run the validation rules on the inputs
-        $validator = Validator::make(Input::all(), $rules, $messages);
+        $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
             return Redirect::route('auth.settings')
