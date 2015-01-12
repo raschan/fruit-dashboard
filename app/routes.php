@@ -33,6 +33,18 @@ Route::get('/paypal/buildToken', array(
     'uses' => 'PaypalController@createRefreshToken'
 ));
 
+Route::get('/paypal/createplan', array(
+    'before' => 'auth|api_key',
+    'as' => 'paypal.createPlan',
+    'uses' => 'PaypalController@showCreatePlan'
+));
+
+Route::post('/paypal/createplan', array(
+    'before' => 'auth|api_key',
+    'as' => 'paypal.createPlan',
+    'uses' => 'PaypalController@doCreatePlan'
+));
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
