@@ -8,12 +8,13 @@ use PayPal\Exception\PPConnectionException;
 use PayPal\Auth\Openid\PPOpenIdUserinfo;
 use PayPal\Api\Plan;
 
-
-
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 use PayPal\Api\ChargeModel;
+
+use Counter;
+
 /*
 A Controller for testing stuff
 */
@@ -32,17 +33,18 @@ class HelloController extends BaseController
     */
     public function showStripe()
     {
-        Auth::user()->buildMrr();
         // trying to acquire Stripe
         return View::make(
             'dev.stripe',
             array(
                 //'balance' => Auth::user()->balance,
                 //'charges' => StripeHelper::getCharges(Auth::user()->stripe_key),
-                'mrr' => Auth::user()->getMrr(),
+                //'mrr' => Auth::user()->getMRR(),
                 //'events' => Auth::user()->getEvents(),
-                'arr' => Auth::user()->getARR(),
-                'arrChange' => Auth::user()->buildARR()
+                //'arr' => Auth::user()->getARR(),
+                //'arrChange' => Auth::user()->buildARR(),
+                'activeUser' => Counter::getActiveCustomers(Auth::user()->stripe_key, Auth::user()->paypal_key),
+                'arpu' => Counter::getARPU(Auth::user()->stripe_key, Auth::user()->paypal_key)
             )
         );
     }
