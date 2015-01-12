@@ -87,7 +87,7 @@ class StripeHelper
             // pagination....
             if ($last_obj) {
                 // we have last obj -> starting from there
-                $returned_object = Event::all(
+                $returned_object = Stripe_Event::all(
                     array(
                         'limit'          => 100,
                         'starting_after' => $last_obj
@@ -95,7 +95,7 @@ class StripeHelper
                 );
             } else {
                 // starting from zero
-                $returned_object = Event::all(
+                $returned_object = Stripe_Event::all(
                     array(
                         'limit' => 100
                         )
