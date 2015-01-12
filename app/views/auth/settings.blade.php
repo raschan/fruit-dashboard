@@ -6,6 +6,13 @@
         <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
       </div> <!-- / .page-header -->
 
+    {{ $errors->first('email') }}
+         {{ var_dump($errors) }}
+        @foreach ($errors->all() as $error)
+        <div>hello</div>
+          <div>{{ $error }}</div>
+        
+        @endforeach
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-success panel-dark">
           <div class="panel-body">
@@ -19,8 +26,7 @@
                 'class' => 'horizontal-form',
                 'role' => 'form',
                 'class' => 'panel-padding settings-form' )) }}
-
-                  <div class="form-group">
+                  <div class="form-group @if ($errors->first('email')) has-error @endif">
                     {{ Form::label('id_email', 'Email', array(
                       'class' => 'col-xs-4 control-label')) }}
                     <div class="col-xs-8">
