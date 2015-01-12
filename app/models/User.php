@@ -8,7 +8,37 @@ use StripeHelper;
 class User extends Eloquent implements UserInterface
 {
     use UserTrait;
+    /**
+     * Testing if the user has connected a stripe account
+     *
+     * @return boolean
+    */
+    public static function isStripeConnected()
+    {
+        // at this point validation like this is all right
+        if (strlen($this->stripe_key) > 16) {
+            // long enough key
+            return True;
+        }
+        // no key is given
+        return False;
+    }
 
+     /**
+     * Testing if the user has connected a paypal account
+     *
+     * @return boolean
+    */
+    public static function isPayPalConnected()
+    {
+        // at this point validation like this is all right
+        if (strlen($this->paypal_key) > 16) {
+            // refreshtoken is longer longer than 16
+            return True;
+        }
+        // no valid refreshtoken is stored
+        return False;
+    }
 
     /**
      * Testing if the user has connected at least one account
@@ -17,8 +47,8 @@ class User extends Eloquent implements UserInterface
     */
     public function isConnected()
     {
-        if (StripeHelper::isConnected($this->stripe_key) 
-            || PaypalHelper::isConnected($this->paypal_key)) 
+        if ($this->isStripeConnected() 
+            || $this->isPayPalConnected()) 
         {
             // connected
             return True;
@@ -130,6 +160,19 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
+     * Getting the ARR based on MRR. High lvl function!
+     * Don't use paypal/stripe specific methods here
+     *
+     * @return a bigint with the ARR in it
+    */
+    public function getARR()
+    {
+        $mrr = $this->getMRR();
+
+        return $mrr*12;
+    }
+
+    /**
      * Adding event to MRR
      * Description: checks the day before and the events during the day
      * !!!NOT YET GENERALIZED!!!
@@ -166,7 +209,7 @@ class User extends Eloquent implements UserInterface
     }
 
     /**
-     * Getting the MRR for a timestamp (must be within 30 days in the past)
+     * Saving the MRR for a timestamp (must be within 30 days in the past)
      * Description: checks the day before and the events during the day
      *
      * @return void
@@ -232,17 +275,64 @@ class User extends Eloquent implements UserInterface
      * Building up the mrr histogram for the last 30 days
      * Stripe only!
      *
-     * @return a bigint with the MRR in it
+     * @return void
     */
     public function buildMRR()
     {
         // getting the events
-        $events = array();//StripeHelper::getEvents($this->stripe_key);
+        $events = StripeHelper::getEvents($this->stripe_key);
 
         $current_time = time();
         // building mrr array
         for ($i = $current_time-30*86400; $i < $current_time; $i+=86400) {
             $this->buildMRROnDay($i, $events);
         }
+    }
+
+    /**
+     * Getting the MRR for a timestamp (must be within 30 days in the past)
+     * Description: checks the day before and the events during the day
+     *
+     * @param timestamp
+     * 
+     * @return int or NULL if not available
+     */
+
+    private function getMRROnDay($timestamp)
+    {
+        $current_day = date('Y-m-d', $timestamp);
+
+        // checking if we have data
+        $current_day_mrr = DB::table('mrr')
+            ->where('date', $current_day)
+            ->where('user', Auth::user()->id)
+            ->get();
+
+        if ($current_day_mrr) {
+            return $current_day_mrr;
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+    * Building the ARR histogram for the last 30 days,
+    * from the MRR (ARR = MRR*12)
+    * 
+    * @return array of ints or NULLs
+    */
+    public function buildARR()
+    {
+        // return array
+        $arr = array();
+
+        $current_time = time();
+
+        $index = 0;
+        for ($i = $current_time-30*86400; $i < $current_time; $i+=86400) {
+           $arr[$index] = $this->getMRROnDay($i)*12;
+           $index++;
+        }
+        return $arr;
     }
 }

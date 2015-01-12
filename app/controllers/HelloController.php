@@ -38,9 +38,11 @@ class HelloController extends BaseController
             'dev.stripe',
             array(
                 //'balance' => Auth::user()->balance,
-                'charges' => StripeHelper::getCharges(Auth::user()->stripe_key),
-                'mrr' => Auth::user()->getMrr(),
+                //'charges' => StripeHelper::getCharges(Auth::user()->stripe_key),
+                //'mrr' => Auth::user()->getMrr(),
                 //'events' => Auth::user()->getEvents(),
+                'arr' => Auth::user()->getARR(),
+                'arrChange' => Auth::user()->buildARR()
             )
         );
     }
