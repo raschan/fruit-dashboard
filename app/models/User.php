@@ -295,7 +295,7 @@ class User extends Eloquent implements UserInterface
      *
      * @param timestamp
      * 
-     * @return int or NULL if not available
+     * @return int or 0 if not available
      */
 
     private function getMRROnDay($timestamp)
@@ -309,9 +309,9 @@ class User extends Eloquent implements UserInterface
             ->get();
 
         if ($current_day_mrr) {
-            return $current_day_mrr;
+            return $current_day_mrr[0]->value;
         } else {
-            return NULL;
+            return 0;
         }
     }
 
@@ -330,7 +330,7 @@ class User extends Eloquent implements UserInterface
 
         $index = 0;
         for ($i = $current_time-30*86400; $i < $current_time; $i+=86400) {
-           $arr[$index] = $this->getMRROnDay($i)*12;
+           $arr[$index] = $this->getMRROnDay($i) * 12;
            $index++;
         }
         return $arr;
