@@ -26,7 +26,7 @@
 		<!-- Header -->
 		<div class="signup-header">
 			<a href="/" class="logo">
-				Start Up Dashboard
+				Startup Dashboard
 			</a> <!-- / .logo -->
 			<div class="slogan">
 				Simple. Flexible. Powerful.

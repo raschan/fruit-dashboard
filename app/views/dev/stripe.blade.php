@@ -57,6 +57,7 @@ jQuery( document ).ready( function( $ ) {
     <div class="container">
         <h2> {{ $activeUser }} </h2>
         <h2> {{ $arpu }} </h2>
+        {{ $mrr }}
     </div>
     <!-- /.container -->
     </body>

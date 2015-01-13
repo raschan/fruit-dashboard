@@ -8,7 +8,7 @@
 
 			<!-- Logo -->
 			<a href="{{ URL::route('auth.dashboard') }}" class="navbar-brand">
-				Start Up Dashboard
+				Startup Dashboard
 			</a>
 
 			<!-- Main navbar toggle -->

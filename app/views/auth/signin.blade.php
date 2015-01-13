@@ -21,7 +21,7 @@
     <!-- Left side -->
     <div class="signin-info">
       <a href="/" class="logo">
-        Start Up Dashboard
+        Startup Dashboard
       </a> <!-- / .logo -->
       <div class="slogan">
         Simple. Flexible. Powerful.
