@@ -5,7 +5,7 @@
       </div> -->
     <div id="content-wrapper">
       <div class="page-header">
-        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Quick statistics</h1>
+        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Startup Dashboard</h1>
       </div> <!-- / .page-header -->
 
       <!-- STATISTICS BOX -->
@@ -20,7 +20,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -39,7 +39,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 155%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -58,7 +58,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -77,7 +77,7 @@
                 <canvas></canvas>
                 <div class="chart-text-left">
                   <span class="text-money nochange">$0</span>
-                  <h6 class="no-margin">Previous 31 days</h6>
+                  <h6 class="no-margin">Previous 30 days</h6>
                 </div>
                 <div class="chart-text-right">
                   <span class="text-money nochange"> --</span>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="chart-text-right">
                   <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                  <h6 class="no-margin">Previous 31 days</h6>
+                  <h6 class="no-margin">Previous 30 days</h6>
                 </div>
                 <a href="{{ URL::route('auth.single_stat') }}">
                   <div class="chart-overlay">
@@ -118,7 +118,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">

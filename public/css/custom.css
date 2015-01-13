@@ -87,6 +87,12 @@
 	}
 }
 
+/* Page header */
+
+.pagehead {
+	font-weight: 300;
+}
+
 
 /* DASHBOARD */
 
@@ -175,6 +181,23 @@
 	color: #777;
 	font-size: 80%;
 }
+
+/* SETTINGS */
+
+.account-form,
+.connect-form {
+	border: 1px solid #ddd;
+}
+
+.account-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.list-group-item {
+	border: none;
+	padding-bottom: 15px;
+}
+
 
 /* SINGLE STATISTICS PAGE */
 
