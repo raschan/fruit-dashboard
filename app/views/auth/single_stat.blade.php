@@ -11,20 +11,19 @@
         <div class="panel invoice">
           <div class="invoice-header">
             <h3>
-              <div class="invoice-logo demo-logo"></div>
               <div>
-                <small><strong>Pixel</strong>Admin</small><br>
-                STATISTIC #244
+                <small><strong>USERNAME</strong></small><br>
+                STATISTIC NAME
               </div>
             </h3>
             <address>
-              PixelAdmin Ltd.<br>
-              Los Angeles, Hoover Street, 32<br>
-              90080 CA, USA
+              DESCRIPTION OF STATISTIC (OPTIONAL)<br>
+              It can be done<br>
+              In multiple lines
             </address>
             <div class="invoice-date">
-              <small><strong>Date</strong></small><br>
-              February 21, 2013
+              <small><strong>DATE</strong></small><br>
+              February 11, 2012 - February 21, 2013
             </div>
           </div> <!-- / .invoice-header -->
           <div class="single-statistic-wrapper">
@@ -92,7 +91,7 @@
             <h3>
               <div class="invoice-logo demo-logo"></div>
               <div>
-                <small><strong>Pixel</strong>Admin</small><br>
+                <small><strong>USERNAME</strong></small><br>
                 INVOICE #244
               </div>
             </h3>

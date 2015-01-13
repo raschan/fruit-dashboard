@@ -5,14 +5,14 @@
       </div> -->
     <div id="content-wrapper">
       <div class="page-header">
-        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (quick view)</h1>
+        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Quick statistics</h1>
       </div> <!-- / .page-header -->
 
       <!-- STATISTICS BOX -->
 
-      <div class="col-lg-8 quickstats-box no-padding-hr">
+      <div class="col-md-8 quickstats-box no-padding-hr">
         <div class="row">
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -50,7 +50,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -72,7 +72,7 @@
 
         <div class="row">
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
@@ -91,7 +91,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
@@ -110,7 +110,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -136,7 +136,7 @@
 
       <!-- FEED BOX -->
 
-      <div class="col-lg-4 feed-box">
+      <div class="col-md-4 feed-box">
         <ul class="list-group">
           <li class="list-group-item">
             <h4>Transactions</h4>
@@ -186,44 +186,34 @@
       maintainAspectRatio: false,
       showScale: false,
       showTooltips: false,
-      pointDot: false
+      pointDot: false,
+      tooltipXOffset: 0
     };
-
-/*  data forreal
+/*
+  data forreal*/
     var data = {
     labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
     datasets: [
         {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
+            label: "Monthly Recurring Revenue",
+            fillColor: "rgba(151,187,205,0.4)",
+            strokeColor: "rgba(151,187,205,0.6)",
             pointColor: "rgba(151,187,205,1)",
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
             data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
         }
     ]
-  };*/
+  };
 
 // data for dev
-      var data = {
+   /*   var data = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
         {
             label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,0.4)",
+            fillColor: "rgba(151,187,205,0.4)",
+            strokeColor: "rgba(151,187,205,0.6)",
             pointColor: "rgba(151,187,205,1)",
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
@@ -232,7 +222,7 @@
         }
     ]
 };
-
+*/
       $('canvas').each( function () {
         var ctx = $(this).get(0).getContext("2d");
         var myNewChart = new Chart(ctx).Line(data, options);
