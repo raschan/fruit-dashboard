@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
-              <canvas></canvas>
+              <canvas id="mrr"></canvas>
               <div class="chart-text-left">
                 <span class="text-money up">$1234,45</span>
               </div>
@@ -181,6 +181,9 @@
   @section('pageScripts')
 
     <script type="text/javascript">
+
+    /*chart.js options*/
+
     var options = {
       responsive: true,
       maintainAspectRatio: false,
@@ -189,44 +192,27 @@
       pointDot: false,
       tooltipXOffset: 0
     };
-/*
-  data forreal*/
-    var data = {
-    labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
-    datasets: [
-        {
-            label: "Monthly Recurring Revenue",
-            fillColor: "rgba(151,187,205,0.4)",
-            strokeColor: "rgba(151,187,205,0.6)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
-        }
-    ]
-  };
 
-// data for dev
-   /*   var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.4)",
-            strokeColor: "rgba(151,187,205,0.6)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90, 75]
-        }
-    ]
-};
-*/
-      $('canvas').each( function () {
-        var ctx = $(this).get(0).getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data, options);
-      });
+    /*Monthly Recurring Revenue*/
+
+    var data = {
+      labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
+      datasets: [
+          {
+              label: "Monthly Recurring Revenue",
+              fillColor: "rgba(151,187,205,0.4)",
+              strokeColor: "rgba(151,187,205,0.6)",
+              pointColor: "rgba(151,187,205,1)",
+              pointStrokeColor: "#fff",
+              pointHighlightFill: "#fff",
+              data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
+          }
+      ]
+    };
+
+    var ctx = $('#mrr').get(0).getContext("2d");
+    var MRRChart = new Chart(ctx).Line(data, options);
+       
     </script>
 
   @stop
