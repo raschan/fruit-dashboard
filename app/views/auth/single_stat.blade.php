@@ -12,15 +12,9 @@
           <div class="invoice-header">
             <h3>
               <div>
-                <small><strong>USERNAME</strong></small><br>
                 STATISTIC NAME
               </div>
             </h3>
-            <address>
-              DESCRIPTION OF STATISTIC (OPTIONAL)<br>
-              It can be done<br>
-              In multiple lines
-            </address>
             <div class="invoice-date">
               <small><strong>DATE</strong></small><br>
               February 11, 2012 - February 21, 2013
@@ -89,20 +83,13 @@
         <div class="panel invoice">
           <div class="invoice-header">
             <h3>
-              <div class="invoice-logo demo-logo"></div>
               <div>
-                <small><strong>USERNAME</strong></small><br>
-                INVOICE #244
+                STATISTIC NAME DATATABLE
               </div>
             </h3>
-            <address>
-              PixelAdmin Ltd.<br>
-              Los Angeles, Hoover Street, 32<br>
-              90080 CA, USA
-            </address>
             <div class="invoice-date">
-              <small><strong>Date</strong></small><br>
-              February 21, 2013
+              <small><strong>DATE</strong></small><br>
+              February 11, 2012 - February 21, 2013
             </div>
           </div> <!-- / .invoice-header -->
           <div class="invoice-info">
@@ -118,56 +105,24 @@
           </div> <!-- / .invoice-info -->
           <hr>
           <div class="invoice-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>
-                    Task description
-                  </th>
-                  <th>
-                    Rate
-                  </th>
-                  <th>
-                    Hours
-                  </th>
-                  <th>
-                    Line total
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    Website design and development
-                    <div class="invoice-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</div>
-                  </td>
-                  <td>
-                    $50.00
-                  </td>
-                  <td>
-                    50
-                  </td>
-                  <td>
-                    $2,500.00
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Branding
-                    <div class="invoice-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</div>
-                  </td>
-                  <td>
-                    $47.95
-                  </td>
-                  <td>
-                    45
-                  </td>
-                  <td>
-                    $2,157.75
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table id="sortable-01" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th class="col-md-6">SOLD ITEM</th>
+                    <th>CUSTOMERS</th>
+                    <th>CURRENT MRR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>TOHOTOM</td>
+                    <td class="text-center">5</td>
+                    <td class="text-center text-money up">$711</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div> <!-- / .invoice-table -->
         </div> <!-- /. invoice -->
       </div> <!-- /. row -->
