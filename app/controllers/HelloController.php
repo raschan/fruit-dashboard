@@ -13,7 +13,6 @@ use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 use PayPal\Api\ChargeModel;
 
-use Counter;
 
 /*
 A Controller for testing stuff
@@ -44,7 +43,8 @@ class HelloController extends BaseController
                 //'arr' => Auth::user()->getARR(),
                 //'arrChange' => Auth::user()->buildARR(),
                 'activeUser' => Counter::getActiveCustomers(Auth::user()->stripe_key, Auth::user()->paypal_key),
-                'arpu' => Counter::getARPU(Auth::user()->stripe_key, Auth::user()->paypal_key)
+                'arpu' => Counter::getARPU(Auth::user()->stripe_key, Auth::user()->paypal_key),
+                'mrr' => Auth::user()->buildMRR()
             )
         );
     }
