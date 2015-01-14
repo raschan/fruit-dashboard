@@ -5,22 +5,22 @@
       </div> -->
     <div id="content-wrapper">
       <div class="page-header">
-        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (quick view)</h1>
+        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Startup Dashboard</h1>
       </div> <!-- / .page-header -->
 
       <!-- STATISTICS BOX -->
 
-      <div class="col-lg-8 quickstats-box no-padding-hr">
+      <div class="col-md-8 quickstats-box no-padding-hr">
         <div class="row">
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
-              <canvas></canvas>
+              <canvas id="mrr"></canvas>
               <div class="chart-text-left">
                 <span class="text-money up">$1234,45</span>
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -39,7 +39,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 155%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -50,7 +50,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -58,7 +58,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -72,12 +72,12 @@
 
         <div class="row">
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
                   <span class="text-money nochange">$0</span>
-                  <h6 class="no-margin">Previous 31 days</h6>
+                  <h6 class="no-margin">Previous 30 days</h6>
                 </div>
                 <div class="chart-text-right">
                   <span class="text-money nochange"> --</span>
@@ -91,7 +91,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
                 <canvas></canvas>
                 <div class="chart-text-left">
@@ -99,7 +99,7 @@
                 </div>
                 <div class="chart-text-right">
                   <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                  <h6 class="no-margin">Previous 31 days</h6>
+                  <h6 class="no-margin">Previous 30 days</h6>
                 </div>
                 <a href="{{ URL::route('auth.single_stat') }}">
                   <div class="chart-overlay">
@@ -110,7 +110,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 chart-box">
+          <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
               <canvas></canvas>
               <div class="chart-text-left">
@@ -118,7 +118,7 @@
               </div>
               <div class="chart-text-right">
                 <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 31 days</h6>
+                <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -136,7 +136,7 @@
 
       <!-- FEED BOX -->
 
-      <div class="col-lg-4 feed-box">
+      <div class="col-md-4 feed-box">
         <ul class="list-group">
           <li class="list-group-item">
             <h4>Transactions</h4>
@@ -181,62 +181,38 @@
   @section('pageScripts')
 
     <script type="text/javascript">
+
+    /*chart.js options*/
+
     var options = {
       responsive: true,
       maintainAspectRatio: false,
       showScale: false,
       showTooltips: false,
-      pointDot: false
+      pointDot: false,
+      tooltipXOffset: 0
     };
 
-/*  data forreal
+    /*Monthly Recurring Revenue*/
+
     var data = {
-    labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
-        }
-    ]
-  };*/
+      labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
+      datasets: [
+          {
+              label: "Monthly Recurring Revenue",
+              fillColor: "rgba(151,187,205,0.4)",
+              strokeColor: "rgba(151,187,205,0.6)",
+              pointColor: "rgba(151,187,205,1)",
+              pointStrokeColor: "#fff",
+              pointHighlightFill: "#fff",
+              data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
+          }
+      ]
+    };
 
-// data for dev
-      var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,0.4)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90, 75]
-        }
-    ]
-};
-
-      $('canvas').each( function () {
-        var ctx = $(this).get(0).getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data, options);
-      });
+    var ctx = $('#mrr').get(0).getContext("2d");
+    var MRRChart = new Chart(ctx).Line(data, options);
+       
     </script>
 
   @stop

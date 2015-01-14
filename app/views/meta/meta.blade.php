@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
-    <title>Start up Dashboard | 
+    <title>Startup Dashboard | 
       @section('pageTitle')
       @show
     </title>
