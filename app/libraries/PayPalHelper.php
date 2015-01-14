@@ -126,10 +126,9 @@ class PayPalHelper {
 
         try {
             // getting the list of plans
-            $params = array('page_size' => '20'); // needs paging !!!!
+            $params = array('page_size' => '20', 'status' => 'ACTIVE'); // needs paging !!!!
             $planlist = Plan::all($params, $api_context);
-        
-            
+
         } catch (PayPal\Exception\PPConnectionException $ex) {
             
             // error handling

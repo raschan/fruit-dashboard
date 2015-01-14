@@ -12,6 +12,18 @@ use PayPal\Api\Currency;
 
 use PayPalHelper;
 
+use PayPal\Api\Agreement;
+use PayPal\Api\Payer;
+use PayPal\Api\ShippingAddress;
+use PayPal\Api\PayerInfo;
+use PayPal\Api\CreditCard;
+use PayPal\Api\FundingInstrument;
+
+
+use PayPal\Api\PatchRequest;
+use PayPal\Api\Patch;
+use PayPal\Common\PPModel;
+
 class PaypalController extends BaseController
 {
     /**
@@ -166,7 +178,69 @@ class PaypalController extends BaseController
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
             }
+
+
+            try {
+                $patch = new Patch();
             
+                $value = new PPModel('{
+            	       "state":"ACTIVE"
+            	     }');
+            
+                $patch->setOp('replace')
+                    ->setPath('/')
+                    ->setValue($value);
+                $patchRequest = new PatchRequest();
+                $patchRequest->addPatch($patch);
+            
+                $plan->update($patchRequest, $api_context);
+            
+                $updated_plan = Plan::get($plan->getId(), $api_context);
+            
+            } catch (PayPal\Exception\PPConnectionException $ex) {
+                echo '<pre>';print_r(json_decode($ex->getData()));
+                exit(1);
+            }
+            
+
+            $agreement = new Agreement();
+            
+            $agreement->setName('Base Agreement')
+                ->setDescription('Basic Agreement')
+                ->setStartDate('2015-06-17T9:45:04Z');
+            
+            // Add Plan ID
+            // Please note that the plan Id should be only set in this case.
+            $new_plan = new Plan();
+            $new_plan->setId($updated_plan->getId());
+            $agreement->setPlan($new_plan);
+            
+            // Add Payer
+            $payer = new Payer();
+            $payer->setPaymentMethod('paypal');
+            $agreement->setPayer($payer);
+            
+            // Add Shipping Address
+            $shippingAddress = new ShippingAddress();
+            $shippingAddress->setLine1('111 First Street')
+                ->setCity('Saratoga')
+                ->setState('CA')
+                ->setPostalCode('95070')
+                ->setCountryCode('US');
+                
+            $agreement->setShippingAddress($shippingAddress);            
+
+            // ### Create Agreement
+            try {
+                // Please note that as the agreement has not yet activated, we wont be receiving the ID just yet.
+                $agreement = $agreement->create($api_context);
+            
+            } catch (PayPal\Exception\PPConnectionException $ex) {
+                echo '<pre>';print_r(json_decode($ex->getData()));
+                exit(1);
+            }
+            
+
             return Redirect::route('paypal.createPlan');
         }
     }    
