@@ -55,12 +55,9 @@ jQuery( document ).ready( function( $ ) {
 
     <!-- Page Content -->
     <div class="container">
-    <h2>{{ $arr }}</h2>
-    <p>
-        @foreach ($arrChange as $currentARR)
-            
-        @endforeach
-    </p>
+        <h2> {{ $activeUser }} </h2>
+        <h2> {{ $arpu }} </h2>
+        {{ $mrr }}
     </div>
     <!-- /.container -->
     </body>

@@ -3,7 +3,6 @@
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 
-use StripeHelper;
 
 class User extends Eloquent implements UserInterface
 {
