@@ -10,6 +10,8 @@ use PayPal\Api\PaymentDefinition;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 
+use PayPalHelper;
+
 class PaypalController extends BaseController
 {
     /**
@@ -81,46 +83,8 @@ class PaypalController extends BaseController
         // setting api context
         $api_context = PayPalHelper::getApiContext();
         
-        /*
-        try {
-            $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
-            $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
-        } catch (Exception $ex) {
-            print "no pp key";
-        }*/
-
-        // getting plans
-        try {
-            $params = array('page_size' => '20');
-            $raw_planlist = Plan::all($params, $api_context);
-        } catch (PayPal\Exception\PPConnectionException $ex) {
-            echo '<pre>';print_r(json_decode($ex->getData()));
-            exit(1);
-        }
-        
-        // building up the output array
-        $plans = array();
-        foreach ($raw_planlist->getPlans() as $raw_plan) {
-            // getting the plan 
-            $plan = Plan::get($raw_plan->getId(), $api_context);
-            
-            // decoding data
-            $json_plan = json_decode($plan->toJSON(), true);
-            
-            // initializing array to add
-            $plan_instance = array();
-            
-            // extracting data
-            $plan_instance['id'] = $json_plan['id'];
-            $plan_instance['name'] = $json_plan['name'];
-            $plan_instance['interval'] = $json_plan['payment_definitions'][0]['frequency'];
-            $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
-            $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
-            $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
-
-            // adding to array
-            array_push($plans, $plan_instance);
-        }
+        // getting the list of plans
+        $plans = PayPalHelper::getPlans($api_context);
 
         // returning view
         return View::make(

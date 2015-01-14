@@ -3,6 +3,12 @@ use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Auth\Openid\PPOpenIdTokeninfo;
 
+use PayPal\Api\Plan;
+use PayPal\Api\PaymentDefinition;
+use PayPal\Api\MerchantPreferences;
+use PayPal\Api\Currency;
+
+
 class PayPalHelper {
 
     /**
@@ -113,13 +119,47 @@ class PayPalHelper {
      * @return an array with the plans
     */
 
-    public static function getPlans($key)
+    public static function getPlans($api_context)
     {
+        // initializing output array
         $out_plans = array();
 
-        // tell paypal who we are
-        // get the plans from paypal
-        // build return array
+        try {
+            // getting the list of plans
+            $params = array('page_size' => '20'); // needs paging !!!!
+            $planlist = Plan::all($params, $api_context);
+        
+            
+        } catch (PayPal\Exception\PPConnectionException $ex) {
+            
+            // error handling
+            echo '<pre>';print_r(json_decode($ex->getData()));
+            exit(1);
+            
+        }
+        
+        // building up the output array
+        foreach ($planlist->getPlans() as $raw_plan) {
+            // getting the plan 
+            $plan = Plan::get($raw_plan->getId(), $api_context);
+            
+            // decoding data
+            $json_plan = json_decode($plan->toJSON(), true);
+            
+            // initializing array to add
+            $plan_instance = array();
+            
+            // extracting data
+            $plan_instance['id'] = $json_plan['id'];
+            $plan_instance['name'] = $json_plan['name'];
+            $plan_instance['interval'] = $json_plan['payment_definitions'][0]['frequency'];
+            $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
+            $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
+            $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
+
+            // adding to array
+            array_push($out_plans, $plan_instance);
+        }
 
         // returning object
         return $out_plans;
