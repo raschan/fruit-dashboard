@@ -44,10 +44,10 @@ class Counter
 		$activeCustomers = self::getActiveCustomers($stripeKey, $paypalKey);
 
 		// get MRR - TEMPORARY SOLUTION!!!
-		$mrr = Auth::user()->getMRR();
+		$mrr = self::getMRR();
 
 		// count and return the ARPU
-		$arpu = $mrr / $activeCustomers;
+		$arpu = round($mrr / $activeCustomers);
 		return $arpu;
 	}
 
@@ -71,6 +71,41 @@ class Counter
 	*
 	* @return int (cents)
 	*/
+
+	public static function getMRR()
+    {
+        // getting the plans
+        $plans = TailoredData::getPlans();
+
+        // getting current subscriptions (only active subscriptions)
+        $current_subscriptions = self::getCurrentSubscriptions();
+
+        // we'll store the relations here
+        $plan_subscriptions = array();
+
+        // dividing subscriptions among the plans and summing the mrr
+        $mrr = 0;
+
+        // getting each plan's count
+        foreach ($current_subscriptions as $subscription) {
+            // checking for previous data
+            if (isset($plan_subscriptions[$subscription['plan_id']])) {
+                // has previous data
+                $plan_subscriptions[$subscription['plan_id']]++;
+            } else {
+                // initializing data
+                $plan_subscriptions[$subscription['plan_id']] = 1;
+            }
+        }
+
+        // counting the mrr
+        foreach ($plan_subscriptions as $plan_id => $count) {
+            $mrr += $plans[$plan_id]['amount'] * $count;
+        }
+
+        // returning int
+        return $mrr;
+    }
 
 
 	/**
@@ -177,6 +212,7 @@ class Counter
 	* @return int (cents)
 	*/
 
+
 	/*
 	|--------------------------------------------------------------
 	| Derived functions (have dependecies on base functions)
@@ -256,4 +292,67 @@ class Counter
 	*
 	* @return int (percent)
 	*/
+
+
+	/*
+	|------------------------------------------------------------
+	| Other helper functions
+	|------------------------------------------------------------
+	*/
+
+
+	/**
+     * Getting all the subscriptions.
+     *
+     * @return an array with the active subscriptions
+    */
+    private static function getCurrentSubscriptions()
+    {
+        // intializing out array
+        $active_subscriptions = array();
+
+        // getting the customers
+            // add stripe customers
+        $customers = TailoredData::getCustomers();
+            // add paypal customers
+
+        // getting the active subscriptions for a customer
+        foreach ($customers as $customer) {
+
+            // going through each subscription if any
+            if ($customer['subscriptions']['total_count'] > 0) {
+                // there are some subs
+                foreach ($customer['subscriptions']['data'] as
+                         $subscription) {
+                    // updating array
+
+                    /*
+                    plan
+                        id - string
+                    start       - timestamp, subscription start date
+                    status      - string, possible values are: 
+                                    'trialing'
+                                    'active'
+                                    'past_due'
+                                    'canceled'
+                                    'unpaid'
+                    quantity    - int
+                    */
+
+                    // only count subscriptions, that are active
+                    if ($subscription['status'] == 'active')
+                    {
+	                    $active_subscriptions[$subscription['id']] =
+	                        array(
+	                            'plan_id'  => $subscription['plan']['id'],
+	                            'start'    => $subscription['start'],
+	                            'quantity' => $subscription['quantity']
+	                        );
+	                }
+                } // foreach suibscriptions
+            } // if subscriptions
+        } // foreach customer
+
+        return $active_subscriptions;
+    }
 }
