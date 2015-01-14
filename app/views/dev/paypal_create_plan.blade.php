@@ -21,10 +21,30 @@
       {{ Form::close() }}
     </div>
     <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Interval</td>
+            <td>Int. cnt</td>
+            <td>Currency</td>
+            <td>Amount</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
         @foreach ($plans as $plan)
-            {{ var_dump($plan) }}
-            <br>
+          <tr>
+            <td>{{ $plan['name'] }}</td>
+            <td>{{ $plan['interval'] }}</td>
+            <td>{{ $plan['interval_count'] }}</td>
+            <td>{{ $plan['currency'] }}</td>
+            <td>{{ $plan['amount'] }}</td>
+            <td><a href="{{ URL::route('paypal.deleteplan', $plan['id']) }}"><button>Delete</button></td>
+          </tr>
         @endforeach 
+        </tbody>
+      </table>
     </div>
     </body>
 </html>

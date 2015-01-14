@@ -45,6 +45,12 @@ Route::post('/paypal/createplan', array(
     'uses' => 'PaypalController@doCreatePlan'
 ));
 
+Route::get('/paypal/deleteplan/{id}', array(
+    'before' => 'auth|api_key',
+    'as' => 'paypal.deleteplan',
+    'uses' => 'PaypalController@doDeletePlan'
+));
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes

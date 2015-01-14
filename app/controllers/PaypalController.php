@@ -80,12 +80,14 @@ class PaypalController extends BaseController
     {
         // setting api context
         $api_context = PayPalHelper::getApiContext();
+        
+        /*
         try {
             $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
             $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
         } catch (Exception $ex) {
             print "no pp key";
-        }
+        }*/
 
         // getting plans
         try {
@@ -99,20 +101,28 @@ class PaypalController extends BaseController
         // building up the output array
         $plans = array();
         foreach ($raw_planlist->getPlans() as $raw_plan) {
-            // getting the data 
+            // getting the plan 
             $plan = Plan::get($raw_plan->getId(), $api_context);
+            
+            // decoding data
             $json_plan = json_decode($plan->toJSON(), true);
+            
+            // initializing array to add
             $plan_instance = array();
-            $plan_instance['name'] = $json_plan["name"];
-            $plan_instance['interval'] = $json_plan["payment_definitions"][0]["frequency"];
-            $plan_instance['interval_count'] = $json_plan["payment_definitions"][0]["frequency_interval"];
-            $plan_instance['currency'] = $json_plan["payment_definitions"][0]["amount"]["currency"];
-            $plan_instance['amount'] = $json_plan["payment_definitions"][0]["amount"]["value"];
+            
+            // extracting data
+            $plan_instance['id'] = $json_plan['id'];
+            $plan_instance['name'] = $json_plan['name'];
+            $plan_instance['interval'] = $json_plan['payment_definitions'][0]['frequency'];
+            $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
+            $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
+            $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
 
+            // adding to array
             array_push($plans, $plan_instance);
-            //print var_dump();
         }
 
+        // returning view
         return View::make(
             'dev.paypal_create_plan',
             array('plans' => $plans)
@@ -166,8 +176,6 @@ class PaypalController extends BaseController
             // Create a new instance of PaymentDefinition
             $paymentDefinition = new PaymentDefinition();
             
-            // The possible values for such setters are mentioned in the setter method documentation.
-            // Just open the class file. e.g. lib/PayPal/Api/PaymentDefinition.php and look for setFrequency method.
             // You should be able to see the acceptable values in the comments.
             $paymentDefinition->setName('Regular Payments')
                 ->setType('REGULAR')
@@ -197,6 +205,36 @@ class PaypalController extends BaseController
             
             return Redirect::route('paypal.createPlan');
         }
+    }    
+    
+    /*
+    |===================================================
+    | <GET> | doDeletePlan: Deletes a PP plan
+    |===================================================
+    */
+    public function doDeletePlan($id)
+    {
+        // setting API context
+        $api_context = PayPalHelper::getApiContext();
+        
+        // trying to delete the plan
+        try {
+            
+            // getting the plan by ID
+            $plan = Plan::get($id, $api_context);
+            
+            // delete the plan 
+            $result = $plan->delete($api_context);
+            
+            
+        } catch (PayPal\Exception\PPConnectionException $ex) {
+            // catching errors
+            echo '<pre>';print_r(json_decode($ex->getData()));
+            exit(1);
+        }
+        
+        // returning to createPlan
+        return Redirect::route('paypal.createPlan');
     }
     
 }
