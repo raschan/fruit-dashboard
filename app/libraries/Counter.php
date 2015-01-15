@@ -72,7 +72,13 @@ class Counter
 	* @return int (cents)
 	*/
 
-	public static function getMRR()
+	/**
+	* Retreive data relevant to MRR and calculate the current value
+	*
+	* @return int (cents)
+	*/
+
+	public static function retreiveAndCalculateMRR()
     {
         // getting the plans
         $plans = TailoredData::getPlans();
@@ -105,6 +111,58 @@ class Counter
 
         // returning int
         return $mrr;
+    }
+
+    /**
+    * Save the daily MRR in database
+    */
+
+    public static function saveMRR()
+    {
+    	$current_day = date('Y-m-d', time());
+
+        // checking if we already have data
+        $current_day_mrr = DB::table('mrr')
+            ->where('date', $current_day)
+            ->where('user', Auth::user()->id)
+            ->get();
+
+        if (!$current_day_mrr) {
+        	// no previous data
+    		$mrrValue = self::retreiveAndCalculateMRR();
+
+    		DB::table('mrr')->insert(
+                array(
+                    'value' => $mrrValue,
+                    'user'  => Auth::user()->id,
+                    'date'  => $current_day
+                )
+            );
+    	}
+    }
+
+    /**
+    * Get MRR on given day
+    *
+    * @param timestamp, current day timestamp
+    * 
+    * @return int (cents) or 0 if data not exist
+    */
+
+    public static function getMRROnDay($timestamp)
+    {
+    	$day = date('Y-m-d', $timestamp);
+
+    	$mrr = DB::table('mrr')
+    		->where('date',$day)
+    		->where('user', Auth::user()->id)
+    		->get();
+
+    	if($mrr){
+    		return $mrr[0]->value;
+    	} else {
+			return 0;
+    	}
     }
 
 
