@@ -17,7 +17,7 @@
 
         <!-- Account settings -->
 
-      	<div class="col-md-6 account-form-wrapper">
+      	<div class="col-sm-6 account-form-wrapper">
           <div class="panel-body account-form">
             <h4>Change your account settings</h4>
             {{ Form::open(array(
@@ -28,8 +28,8 @@
               'class' => 'panel-padding form-horizontal' )) }}
               <div class="form-group @if ($errors->first('email')) has-error @endif">
                 {{ Form::label('id_email', 'Email', array(
-                  'class' => 'col-xs-3 control-label')) }}
-                <div class="col-xs-9">
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
                   {{ Form::email('email', Auth::user()->email, array(
                     'id' => 'id_email',
                     'class' => 'form-control')) }}
@@ -38,15 +38,15 @@
 
               <div class="form-group">
                 {{ Form::label('id_password', 'Password', array(
-                  'class' => 'col-xs-3 control-label')) }}
-                <div class="col-xs-9">
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
                   {{ Form::password('password', array(
                     'id' => 'id_password',
                     'class' => 'form-control')) }}
                 </div>
               </div> <!-- / .form-group -->
 
-              <div class="col-xs-2 col-xs-offset-5 padding-xs-vr">
+              <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
                 {{ Form::submit('Save', array(
                     'id' => 'id_submit',
                     'class' => 'btn btn-success btn-lg btn-flat')) }}
@@ -60,7 +60,7 @@
 
         <!-- Connect a service  -->
 
-      	<div class="col-md-6">
+      	<div class="col-sm-6">
           <div class="panel-body connect-form">
             <h4>Select a service to connect</h4>
             <div class="list-group">

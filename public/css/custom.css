@@ -109,9 +109,13 @@
 	padding-bottom: 15px;
 }
 
-.stripe-form .form-horizontal .form-control,
-.stripe-form .form-horizontal .control-label {
-	margin: 5px 0 0 0; 
+.form-horizontal .form-control,
+.form-horizontal .control-label {
+	margin-top: 5px;
+}
+
+.form-control {
+	margin-bottom: 5px;
 }
 
 /* DASHBOARD */
