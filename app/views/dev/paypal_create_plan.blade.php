@@ -24,6 +24,7 @@
       <table>
         <thead>
           <tr>
+            <td>ID</td>
             <td>Name</td>
             <td>Interval</td>
             <td>Int. cnt</td>
@@ -35,6 +36,7 @@
         <tbody>
         @foreach ($plans as $plan)
           <tr>
+            <td>{{ $plan['id'] }}</td>
             <td>{{ $plan['name'] }}</td>
             <td>{{ $plan['interval'] }}</td>
             <td>{{ $plan['interval_count'] }}</td>
