@@ -10,19 +10,23 @@ use PayPal\Api\PaymentDefinition;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 
-use PayPalHelper;
 
 use PayPal\Api\Agreement;
 use PayPal\Api\Payer;
 use PayPal\Api\ShippingAddress;
 use PayPal\Api\PayerInfo;
-use PayPal\Api\CreditCard;
+use PayPal\Api\ChargeModel;
 use PayPal\Api\FundingInstrument;
 
 
 use PayPal\Api\PatchRequest;
 use PayPal\Api\Patch;
 use PayPal\Common\PPModel;
+
+
+use PayPal\Api\Payment;
+
+use PayPal\Api\Invoice;
 
 class PaypalController extends BaseController
 {
@@ -84,7 +88,7 @@ class PaypalController extends BaseController
         return Redirect::route('auth.dashboard');
    }
 
-    
+    //I-9XA8BL6KSYAT
     /*
     |====================================================
     | <GET> | showCreatePlan: renders create plan page
@@ -94,6 +98,27 @@ class PaypalController extends BaseController
     {
         // setting api context
         $api_context = PayPalHelper::getApiContext();
+        
+        
+        $params = array('count' => 10, 'start_index' => 5);
+        
+        
+        $payments = Payment::all($params, $api_context);
+        //echo '<pre>';print_r(var_dump($output));
+        //exit(1);
+        
+        try {
+
+            $params = array('count' => 10, 'start_index' => 5);
+        
+            //$payments = Payment::all($params, $api_context);            
+            //echo '<pre>';echo var_dump($payments);
+            //exit(1);
+            
+        } catch (PayPal\Exception\PPConnectionException $ex) {
+            echo '<pre>';print_r(json_decode($ex->getData()));
+            exit(1);
+        }
         
         // getting the list of plans
         $plans = PayPalHelper::getPlans($api_context);
@@ -136,8 +161,9 @@ class PaypalController extends BaseController
             try {
                 $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
                 $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
-            } catch (Exception $ex) {
-                print "no pp key";
+            } catch (PayPal\Exception\PPConnectionException $ex) {
+                echo '<pre>';print_r(json_decode($ex->getData()));
+                exit(1);
             }
     
             // Create a new instance of Plan object
@@ -159,6 +185,7 @@ class PaypalController extends BaseController
                 ->setFrequencyInterval(Input::get('interval_count'))
                 ->setCycles("12")
                 ->setAmount(new Currency(array('value' => Input::get('amount'), 'currency' => Input::get('currency'))));
+
 
             $merchantPreferences = new MerchantPreferences();
     
@@ -207,7 +234,7 @@ class PaypalController extends BaseController
             
             $agreement->setName('Base Agreement')
                 ->setDescription('Basic Agreement')
-                ->setStartDate('2015-06-17T9:45:04Z');
+                ->setStartDate('2015-01-15T13:15:04Z');
             
             // Add Plan ID
             // Please note that the plan Id should be only set in this case.
@@ -239,6 +266,9 @@ class PaypalController extends BaseController
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
             }
+            echo $agreement->getId();
+            echo "<br><pre>"; echo var_dump($agreement);
+            exit(1);
             
 
             return Redirect::route('paypal.createPlan');
