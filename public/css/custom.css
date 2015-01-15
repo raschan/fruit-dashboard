@@ -78,6 +78,12 @@
 
 /* ALL PAGES */
 
+/* Panel header */ 
+
+.panel-body > h4 {
+	padding-bottom: 8px;
+}
+
 /* Navbar */
 
 @media (min-width: 992px) {
@@ -92,7 +98,21 @@
 .pagehead {
 	font-weight: 300;
 }
+/* CONNECT PAGE */
 
+.stripe-form,
+.paypal-form {
+	border: 1px solid #ddd;
+}
+
+.paypal-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.stripe-form .form-horizontal .form-control,
+.stripe-form .form-horizontal .control-label {
+	margin: 5px 0 0 0; 
+}
 
 /* DASHBOARD */
 
@@ -250,10 +270,9 @@
 
 /* Utility */
 
-.service-icon .fa {
-	font-size: 10em;
+.text-left-always {
+	text-align: left !important;
 }
-
 
 canvas {
 	width: 100% !important;

@@ -3,7 +3,7 @@
   @section('pageContent')
     <div id="content-wrapper">
 
-      <!-- <div class="page-header">
+      <!-- <div class="page-header text-center">
         <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (single view)</h1>
       </div> -->
 
@@ -12,7 +12,7 @@
           <div class="invoice-header">
             <h3>
               <div>
-                STATISTIC NAME
+                <i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;STATISTIC NAME
               </div>
             </h3>
             <div class="invoice-date">
@@ -106,12 +106,13 @@
           <hr>
           <div class="invoice-table">
             <div class="table-responsive">
-              <table id="sortable-01" class="table table-bordered table-hover">
+              <table id="sortable" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th class="col-md-6">SOLD ITEM</th>
                     <th>CUSTOMERS</th>
                     <th>CURRENT MRR</th>
+                    <th>DATE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -119,6 +120,7 @@
                     <td>TOHOTOM</td>
                     <td class="text-center">5</td>
                     <td class="text-center text-money up">$711</td>
+                    <td class="timestamp">2015.01.01. 20:11</td>
                   </tr>
                 </tbody>
               </table>
@@ -130,6 +132,7 @@
   @stop
 
   @section('pageScripts')
+    {{ HTML::script('js/JQtable.js'); }}
 
     <script type="text/javascript">
     var options = {
