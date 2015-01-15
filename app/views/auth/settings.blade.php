@@ -49,7 +49,7 @@
               <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
                 {{ Form::submit('Save', array(
                     'id' => 'id_submit',
-                    'class' => 'btn btn-success btn-lg btn-flat')) }}
+                    'class' => 'btn btn-special btn-lg btn-flat')) }}
               </div>
 
             {{ Form::close() }}
@@ -69,9 +69,9 @@
                 <h4 class="list-group-item-heading">PayPal</h4>@if($paypal_connected)@else <span class="badge badge-info">Connect it now!</span>@endif
                 <p class="list-group-item-text">
                   @if($paypal_connected)
-                    <span class="text-success">Connected.</span>
+                    <span class="text-money up">Connected.</span>
                   @else 
-                    <span class="text-danger">Not connected.</span>
+                    <span class="text-money down">Not connected.</span>
                   @endif
                 </p>
               </a> <!-- / .list-group-item -->
@@ -80,9 +80,9 @@
                 <h4 class="list-group-item-heading">Stripe</h4>@if($stripe_connected)@else <span class="badge badge-info">Connect it now!</span>@endif
                 <p class="list-group-item-text">
                   @if($stripe_connected)
-                    <span class="text-success">Connected.</span>
+                    <span class="text-money up">Connected.</span>
                   @else
-                    <span class="text-danger">Not connected.</span>
+                    <span class="text-money down">Not connected.</span>
                   @endif
                 </p>
               </a> <!-- / .list-group-item -->

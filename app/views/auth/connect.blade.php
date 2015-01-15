@@ -33,7 +33,7 @@
                 <a href="{{ $redirect_url }}">
                     {{ Form::submit('Connect', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-success btn-lg btn-flat')) }}          
+                        'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}          
                 </a>
               </div> 
 
@@ -74,7 +74,7 @@
                       <div class="col-sm-2 text-center">
                       {{ Form::submit('Connect', array(
                           'id' => 'id_submit',
-                          'class' => 'btn btn-success btn-lg btn-flat')) }}
+                          'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
                       </div>
 
                     </div> <!-- / .form-group -->
