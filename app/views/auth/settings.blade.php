@@ -24,13 +24,12 @@
               'route'=>'auth.settings',
               'method' => 'post',
               'id' => 'form-settings',
-              'class' => 'horizontal-form',
               'role' => 'form',
-              'class' => 'panel-padding' )) }}
+              'class' => 'panel-padding form-horizontal' )) }}
               <div class="form-group @if ($errors->first('email')) has-error @endif">
                 {{ Form::label('id_email', 'Email', array(
-                  'class' => 'col-xs-4 control-label')) }}
-                <div class="col-xs-8">
+                  'class' => 'col-xs-3 control-label')) }}
+                <div class="col-xs-9">
                   {{ Form::email('email', Auth::user()->email, array(
                     'id' => 'id_email',
                     'class' => 'form-control')) }}
@@ -39,8 +38,8 @@
 
               <div class="form-group">
                 {{ Form::label('id_password', 'Password', array(
-                  'class' => 'col-xs-4 control-label')) }}
-                <div class="col-xs-8">
+                  'class' => 'col-xs-3 control-label')) }}
+                <div class="col-xs-9">
                   {{ Form::password('password', array(
                     'id' => 'id_password',
                     'class' => 'form-control')) }}
