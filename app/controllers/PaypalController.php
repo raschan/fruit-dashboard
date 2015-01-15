@@ -1,9 +1,9 @@
 <?php
 use PayPal\Rest\ApiContext;
 
-use PayPal\Exception\PPConnectionException;
-use PayPal\Auth\Openid\PPOpenIdUserinfo;
-use PayPal\Auth\Openid\PPOpenIdTokeninfo;
+use PayPal\Exception\PayPalConnectionException;
+use PayPal\Api\OpenIdUserinfo;
+use PayPal\Api\OpenIdTokeninfo;
 
 use PayPal\Api\Plan;
 use PayPal\Api\PaymentDefinition;
@@ -21,7 +21,7 @@ use PayPal\Api\FundingInstrument;
 
 use PayPal\Api\PatchRequest;
 use PayPal\Api\Patch;
-use PayPal\Common\PPModel;
+use PayPal\Common\PayPalModel;
 
 
 use PayPal\Api\Payment;
@@ -67,9 +67,9 @@ class PaypalController extends BaseController
 
         try {
             // Obtain Authorization Code from Code, Client ID and Client Secret
-            $accessToken = PPOpenIdTokeninfo::createFromAuthorizationCode(array('code' => $code), null, null, $this->apiContext);
-        } catch (PPConnectionException $ex) {
-            return "error";
+            $accessToken = OpenIdTokeninfo::createFromAuthorizationCode(array('code' => $code), null, null, $this->apiContext);
+        } catch (PayPalConnectionException $ex) {
+            echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
 
@@ -99,11 +99,18 @@ class PaypalController extends BaseController
         // setting api context
         $api_context = PayPalHelper::getApiContext();
         
-        
+        // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]
+        // $agreement = new Agreement();
+        // $agreement->execute("EC-08Y71958XX624761D", $api_context);
+        // $agreement = Agreement::get("I-F231FUFEPYG8", $api_context);
         $params = array('count' => 10, 'start_index' => 5);
         
+        $output = Payment::all($params, $api_context);
         
-        $payments = Payment::all($params, $api_context);
+        
+        echo "<pre>";
+        print_r(var_dump($output));
+        exit(1);
         //echo '<pre>';print_r(var_dump($output));
         //exit(1);
         
@@ -115,7 +122,7 @@ class PaypalController extends BaseController
             //echo '<pre>';echo var_dump($payments);
             //exit(1);
             
-        } catch (PayPal\Exception\PPConnectionException $ex) {
+        } catch (PayPal\Exception\PayPalConnectionException $ex) {
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
@@ -160,7 +167,7 @@ class PaypalController extends BaseController
             $api_context = PayPalHelper::getApiContext();
             try {
                 $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
-                $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
+                $user = OpenIdUserinfo::getUserinfo($params, $api_context);
             } catch (PayPal\Exception\PPConnectionException $ex) {
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
@@ -210,7 +217,7 @@ class PaypalController extends BaseController
             try {
                 $patch = new Patch();
             
-                $value = new PPModel('{
+                $value = new PayPalModel('{
             	       "state":"ACTIVE"
             	     }');
             
@@ -234,7 +241,7 @@ class PaypalController extends BaseController
             
             $agreement->setName('Base Agreement')
                 ->setDescription('Basic Agreement')
-                ->setStartDate('2015-01-15T13:15:04Z');
+                ->setStartDate('2015-01-15T15:10:04Z');
             
             // Add Plan ID
             // Please note that the plan Id should be only set in this case.

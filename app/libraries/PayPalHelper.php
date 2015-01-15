@@ -1,7 +1,7 @@
 <?php
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Auth\Openid\PPOpenIdTokeninfo;
+use PayPal\Api\OpenIdTokeninfo;
 
 use PayPal\Api\Plan;
 use PayPal\Api\PaymentDefinition;
@@ -58,9 +58,10 @@ class PayPalHelper {
     public static function generateAccessTokenFromRefreshToken($refresh_token)
     {
         $api_context = PayPalHelper::getApiContext();
+        
         try {
             // getting token info
-            $token_info = new PPOpenIdTokeninfo();
+            $token_info = new OpenIdTokeninfo();
             $token_info = $token_info->createFromRefreshToken(array('refresh_token' => $refresh_token), $api_context);
             
         } catch (Exception $ex) {
@@ -87,7 +88,7 @@ class PayPalHelper {
         // tell paypal who we are
         // get the charges from paypal
         // build return array
-
+        
         // return the object
         return $out_charges;
     }
