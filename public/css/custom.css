@@ -1,4 +1,8 @@
 /* Signin, signout page */
+.theme-asphalt {
+	background: #ecf0f1;
+}
+
 .theme-signout {
 	background-color: #27ae60;
 }
@@ -302,7 +306,7 @@ canvas {
 	background-repeat: repeat-x;
 }
 
-.btn-special {
+.btn-special, .btn-special:focus {
 	color: #ffffff;
 }
 
