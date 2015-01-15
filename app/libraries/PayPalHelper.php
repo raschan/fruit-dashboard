@@ -64,9 +64,8 @@ class PayPalHelper {
             $token_info = $token_info->createFromRefreshToken(array('refresh_token' => $refresh_token), $api_context);
             
         } catch (Exception $ex) {
-            Log::info($ex);
             // something went wrong
-            // redirect to 500
+            echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
 
