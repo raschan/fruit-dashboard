@@ -32,7 +32,7 @@ class User extends Eloquent implements UserInterface
     {
         // at this point validation like this is all right
         if (strlen($this->paypal_key) > 16) {
-            // refreshtoken is longer longer than 16
+            // refreshtoken is longer than 16
             return True;
         }
         // no valid refreshtoken is stored
@@ -56,107 +56,8 @@ class User extends Eloquent implements UserInterface
         return False;
     }
 
-    /**
-     * Getting all the subscriptions. PROBLEM WITH HISTORY!
-     * @param stripe key
-     * @param paypal key
-     *
-     * @return an array with the subscriptions
-    */
-    public function getCurrentSubscriptions($stripe_key, $paypal_key)
-    {
-        // intializing out array
-        $active_subscriptions = array();
+    
 
-        // getting the customers
-            // add stripe customers
-        $customers = StripeHelper::getCustomers($stripe_key);
-            // add paypal customers
-
-        // getting the active subscriptions for a customer
-        foreach ($customers as $customer) {
-
-            // going through each subscription if any
-            if ($customer['subscriptions']['total_count'] > 0) {
-                // there are some subs
-                foreach ($customer['subscriptions']['data'] as
-                         $subscription) {
-                    // updating array
-
-                    /*
-                    plan
-                        id - string
-                    start       - timestamp, subscription start date
-                    status      - string, possible values are: 
-                                    'trialing'
-                                    'active'
-                                    'past_due'
-                                    'canceled'
-                                    'unpaid'
-                    quantity    - int
-                    */
-
-                    $active_subscriptions[$subscription['id']] =
-                        array(
-                            'plan_id'  => $subscription['plan']['id'],
-                            'start'    => $subscription['start'],
-                            'status'   => $subscription['status'],
-                            'quantity' => $subscription['quantity']
-                        );
-                } // foreach suibscriptions
-            } // if subscriptions
-        } // foreach customer
-
-        return $active_subscriptions;
-    }
-
-    /**
-     * Getting the MRR based on the plans. High lvl function!
-     * Don't use paypal/stripe specific methods here
-     *
-     * @return a bigint with the MRR in it
-    */
-    public function getMRR()
-    {
-        // getting the plans
-        $plans = StripeHelper::getPlans($this->stripe_key);
-
-        // getting current subscriptions
-        $current_subscriptions = $this->getCurrentSubscriptions($this->stripe_key, $this->paypal_key);
-
-        // we'll store the relations here
-        $plan_subscriptions = array();
-
-        // dividing subscriptions among the plans and summing the mrr
-        $mrr = 0;
-
-        foreach ($current_subscriptions as $subscription) {
-            // getting the plan
-
-            // checking for previous
-            if (isset($plan_subscriptions[$subscription['plan_id']])) {
-                // has previous data
-                $plan_subscriptions[$subscription['plan_id']] += 1;
-            } else {
-                // initializing data
-                $plan_subscriptions[$subscription['plan_id']] = 1;
-            }
-        }
-
-        // counting the mrr
-        foreach ($plan_subscriptions as $plan_id => $count) {
-            // now this is obviously not enough
-
-            // checking interval
-            // checking now - trial_end
-            // canceled_at
-
-            $mrr += $plans[$plan_id]['amount']*$count;
-        }
-
-        // returning object
-        return $mrr;
-    }
 
     /**
      * Getting the ARR based on MRR. High lvl function!

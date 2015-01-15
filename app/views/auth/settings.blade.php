@@ -2,8 +2,8 @@
 
   @section('pageContent')
     <div id="content-wrapper">
-      <div class="page-header">
-        <h1 class="text-center"><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
+      <div class="page-header text-center">
+        <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
       </div> <!-- / .page-header -->
 <!-- 
     {{ $errors->first('email') }}
@@ -24,13 +24,12 @@
               'route'=>'auth.settings',
               'method' => 'post',
               'id' => 'form-settings',
-              'class' => 'horizontal-form',
               'role' => 'form',
-              'class' => 'panel-padding' )) }}
+              'class' => 'panel-padding form-horizontal' )) }}
               <div class="form-group @if ($errors->first('email')) has-error @endif">
                 {{ Form::label('id_email', 'Email', array(
-                  'class' => 'col-xs-4 control-label')) }}
-                <div class="col-xs-8">
+                  'class' => 'col-xs-3 control-label')) }}
+                <div class="col-xs-9">
                   {{ Form::email('email', Auth::user()->email, array(
                     'id' => 'id_email',
                     'class' => 'form-control')) }}
@@ -39,8 +38,8 @@
 
               <div class="form-group">
                 {{ Form::label('id_password', 'Password', array(
-                  'class' => 'col-xs-4 control-label')) }}
-                <div class="col-xs-8">
+                  'class' => 'col-xs-3 control-label')) }}
+                <div class="col-xs-9">
                   {{ Form::password('password', array(
                     'id' => 'id_password',
                     'class' => 'form-control')) }}
