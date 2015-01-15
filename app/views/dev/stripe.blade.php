@@ -55,8 +55,7 @@ jQuery( document ).ready( function( $ ) {
 
     <!-- Page Content -->
     <div class="container">
-        <p> MRR from database: {{ $mrr }} </p>
-        <p> MRR from Stripe and Paypal: {{ $mrr2 }} </p>
+        {{ $data['oneMonth'] }}
     </div>
     <!-- /.container -->
     </body>
