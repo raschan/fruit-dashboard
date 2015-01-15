@@ -31,24 +31,20 @@ class HelloController extends BaseController
     |====================================================
     */
     public function showStripe()
-    {
+    {   
+        //TEMPORARY SOLUTION!!!!
+        Counter::saveMRR();
+
         setlocale(LC_MONETARY,"en_US");
-        $formattedMRR = money_format('%n', Counter::getMRR()/100);
+        $formattedMRR = money_format('%n', Counter::getMRROnDay(time())/100);
+        $formattedMRR2 = money_format('%n', Counter::retreiveAndCalculateMRR()/100);
         
         // trying to acquire Stripe
         return View::make(
             'dev.stripe',
             array(
-                //'balance' => Auth::user()->balance,
-                //'charges' => StripeHelper::getCharges(Auth::user()->stripe_key),
-                //'mrr' => Auth::user()->getMRR(),
-                //'events' => Auth::user()->getEvents(),
-                //'arr' => Auth::user()->getARR(),
-                //'arrChange' => Auth::user()->buildARR(),
-                //'activeUser' => Counter::getActiveCustomers(Auth::user()->stripe_key, Auth::user()->paypal_key),
-                //'arpu' => Counter::getARPU(Auth::user()->stripe_key, Auth::user()->paypal_key),
-                //'mrrHistory' => Auth::user()->buildMRR(),
-                'mrr' => $formattedMRR
+                'mrr' => $formattedMRR,
+                'mrr2' =>$formattedMRR2
             )
         );
     }

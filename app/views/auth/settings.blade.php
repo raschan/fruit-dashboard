@@ -17,7 +17,7 @@
 
         <!-- Account settings -->
 
-      	<div class="col-md-6 account-form-wrapper">
+      	<div class="col-sm-6 account-form-wrapper">
           <div class="panel-body account-form">
             <h4>Change your account settings</h4>
             {{ Form::open(array(
@@ -28,8 +28,8 @@
               'class' => 'panel-padding form-horizontal' )) }}
               <div class="form-group @if ($errors->first('email')) has-error @endif">
                 {{ Form::label('id_email', 'Email', array(
-                  'class' => 'col-xs-3 control-label')) }}
-                <div class="col-xs-9">
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
                   {{ Form::email('email', Auth::user()->email, array(
                     'id' => 'id_email',
                     'class' => 'form-control')) }}
@@ -38,18 +38,18 @@
 
               <div class="form-group">
                 {{ Form::label('id_password', 'Password', array(
-                  'class' => 'col-xs-3 control-label')) }}
-                <div class="col-xs-9">
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
                   {{ Form::password('password', array(
                     'id' => 'id_password',
                     'class' => 'form-control')) }}
                 </div>
               </div> <!-- / .form-group -->
 
-              <div class="col-xs-2 col-xs-offset-5 padding-xs-vr">
+              <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
                 {{ Form::submit('Save', array(
                     'id' => 'id_submit',
-                    'class' => 'btn btn-success btn-lg btn-flat')) }}
+                    'class' => 'btn btn-special btn-lg btn-flat')) }}
               </div>
 
             {{ Form::close() }}
@@ -60,7 +60,7 @@
 
         <!-- Connect a service  -->
 
-      	<div class="col-md-6">
+      	<div class="col-sm-6">
           <div class="panel-body connect-form">
             <h4>Select a service to connect</h4>
             <div class="list-group">
@@ -69,9 +69,9 @@
                 <h4 class="list-group-item-heading">PayPal</h4>@if($paypal_connected)@else <span class="badge badge-info">Connect it now!</span>@endif
                 <p class="list-group-item-text">
                   @if($paypal_connected)
-                    <span class="text-success">Connected.</span>
+                    <span class="text-money up">Connected.</span>
                   @else 
-                    <span class="text-danger">Not connected.</span>
+                    <span class="text-money down">Not connected.</span>
                   @endif
                 </p>
               </a> <!-- / .list-group-item -->
@@ -80,9 +80,9 @@
                 <h4 class="list-group-item-heading">Stripe</h4>@if($stripe_connected)@else <span class="badge badge-info">Connect it now!</span>@endif
                 <p class="list-group-item-text">
                   @if($stripe_connected)
-                    <span class="text-success">Connected.</span>
+                    <span class="text-money up">Connected.</span>
                   @else
-                    <span class="text-danger">Not connected.</span>
+                    <span class="text-money down">Not connected.</span>
                   @endif
                 </p>
               </a> <!-- / .list-group-item -->
