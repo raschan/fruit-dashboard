@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS `dashboarddb`;
-CREATE DATABASE IF NOT EXISTS `dashboarddb`;
-GRANT ALL ON dashboarddb.* TO 'SUpDashboardRoot'@'localhost' IDENTIFIED BY 'SUpDashboardPassword';
+DROP DATABASE IF EXISTS `supdashboarddb`;
+CREATE DATABASE IF NOT EXISTS `supdashboarddb`;
+GRANT ALL ON supdashboarddb.* TO 'SUpDashboardRoot'@'localhost' IDENTIFIED BY 'SUpDashboardPassword';
