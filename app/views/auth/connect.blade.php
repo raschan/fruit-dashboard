@@ -21,24 +21,24 @@
             <div class="panel-body paypal-form">
               <h4>Connect PayPal</h4>
 
-              <div class="col-md-2 text-center">
+              <div class="col-sm-2 text-center">
                 <i class="fa icon fa-cc-paypal fa-4x"></i>
-              </div> <!-- /. col-md-2 -->
+              </div> <!-- /. col-sm-2 -->
 
-              <div class="col-md-8">
+              <div class="col-sm-8">
                 <p class="text-muted">Some help text abot what to do. Lorem ipsum</p>
-              </div> <!-- /. col-md-8 -->
+              </div> <!-- /. col-sm-8 -->
 
-              <div class="col-md-2">
+              <div class="col-sm-2 text-center">
                 <a href="{{ $redirect_url }}">
                     {{ Form::submit('Connect', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-success btn-lg btn-flat pull-right')) }}          
+                        'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}          
                 </a>
-              </div> <!-- /. col-md-2 -->
+              </div> 
 
-            </div> <!-- /. panel-body -->
-          </div> <!-- /. col-md-6 paypal-form-wrapper -->
+            </div> <!-- /. panel-body paypal-form -->
+          </div> <!-- /. col-sm-6 paypal-form-wrapper -->
         </div> <!-- /. row -->
 
         <!-- /PayPal connect-->
@@ -49,11 +49,11 @@
             <div class="panel-body stripe-form">
               <h4>Connect Stripe</h4>
 
-              <div class="col-md-2 text-center">
+              <div class="col-sm-2 text-center">
                 <i class="fa icon fa-cc-stripe fa-4x"></i>
               </div> <!-- /. connect-icon -->
 
-              <div class="col-md-10">
+              <div class="col-sm-10">
                 {{ Form::open(array(
                   'route'=>'auth.connect',
                   'method' => 'post',
@@ -62,31 +62,32 @@
                   'role' => 'form' )) }}
 
                     <div class="form-group">
+
                       {{ Form::label('id_stripe', 'Your Stripe key:', array(
-                        'class' => 'col-xs-3 control-label text-left-always')) }}
-                      <div class="col-xs-7">
+                        'class' => 'col-sm-3 control-label text-left-always')) }}
+                      <div class="col-sm-7">
                         {{ Form::text('stripe', '', array(
                           'id' => 'id_stripe',
-                          'class' => 'form-control')) }}
+                          'class' => 'form-control ')) }}
                       </div>
 
-                      <div class="col-xs-2">
+                      <div class="col-sm-2 text-center">
                       {{ Form::submit('Connect', array(
                           'id' => 'id_submit',
-                          'class' => 'btn btn-success btn-lg btn-flat pull-right')) }}
-                    </div>
+                          'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
+                      </div>
+
                     </div> <!-- / .form-group -->
 
-                    
-
                 {{ Form::close() }}
-              </div> <!-- /. connect-form -->
-            </div> <!-- /. panel-body -->
-          </div> <!-- /. col-md-6 stripe-form-wrapper -->
+
+              </div> <!-- /. col-sm-10 -->
+            </div> <!-- /. panel-body stripe-from -->
+          </div> <!-- /. col-sm-6 stripe-form-wrapper -->
         </div> <!-- /. row -->
         <!-- / Stripe connect -->
 
-      </div> <!-- /. col-md-10 -->
+      </div> <!-- /. col-md-10 col-md-offset-1 -->
     </div> <!-- / #content-wrapper -->
 
   @stop
