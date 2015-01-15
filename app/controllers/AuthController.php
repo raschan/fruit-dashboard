@@ -1,5 +1,5 @@
 <?php
-use PayPal\Auth\Openid\PPOpenIdSession;
+use PayPal\Api\OpenIdSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -233,7 +233,7 @@ class AuthController extends BaseController
         $apiContext = PayPalHelper::getApiContext();
 
         // building up redirect url
-        $redirectUrl = PPOpenIdSession::getAuthorizationUrl(
+        $redirectUrl = OpenIdSession::getAuthorizationUrl(
             route('paypal.buildToken'),
             array('profile', 'email', 'phone'),
             null,
