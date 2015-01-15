@@ -58,7 +58,7 @@
           {{ Form::submit('Submit!' , array(
             'id' => 'id_submit',
             'class' => 'signin-btn bg-primary')) }}
-          <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a>
+          <!-- <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a> -->
         </div> <!-- / .form-actions -->
       {{ Form::close() }}
       <!-- / Form -->

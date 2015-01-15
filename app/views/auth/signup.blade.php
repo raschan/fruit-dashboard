@@ -51,12 +51,12 @@
 					<span class="fa fa-lock signup-form-icon"></span>
 				</div>
 
-				<div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
+				<!-- <div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
 					<label class="checkbox-inline">
 						<input type="checkbox" name="signup_confirm" class="px" id="confirm_id">
 						<span class="lbl">I agree with the <a href="#" target="_blank">Terms and Conditions</a></span>
 					</label>
-				</div>
+				</div> -->
 
 				<div class="form-actions">
 					{{ Form::submit('Submit!' , array(
