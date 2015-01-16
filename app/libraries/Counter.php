@@ -266,6 +266,19 @@ class Counter
 				$mrrData['oneYearChange'] = null; 
 			}
 
+			// time interval for shown statistics
+			// right now, only last 30 days
+			$startDate = date('Y-m-d',$lastMonthTime);
+			$stopDate = date('Y-m-d',$currentDay);
+
+			$mrrData['dateInterval'] = array(
+				'startDate' => $startDate,
+				'stopDate' => $stopDate
+			);
+
+			// get all the plans details
+			$mrrData['detailData'] = self::getSubscriptionDetails();
+
     	}
 
     	return $mrrData;
@@ -475,9 +488,7 @@ class Counter
         $active_subscriptions = array();
 
         // getting the customers
-            // add stripe customers
         $customers = TailoredData::getCustomers();
-            // add paypal customers
 
         // getting the active subscriptions for a customer
         foreach ($customers as $customer) {
@@ -507,9 +518,7 @@ class Counter
                     {
 	                    $active_subscriptions[$subscription['id']] =
 	                        array(
-	                            'plan_id'  => $subscription['plan']['id'],
-	                            'start'    => $subscription['start'],
-	                            'quantity' => $subscription['quantity']
+	                            'plan_id'  => $subscription['plan']['id']
 	                        );
 	                }
                 } // foreach suibscriptions
@@ -517,5 +526,40 @@ class Counter
         } // foreach customer
 
         return $active_subscriptions;
+    }
+
+    private static function getSubscriptionDetails()
+    {
+    	// get all active subscriptions
+    	$currentSubscriptions = self::getCurrentSubscriptions();
+
+    	// get all plans
+    	$plans = TailoredData::getPlans();
+
+    	// we'll store the details here
+        $planDetails = array();
+
+        // getting plan details
+        foreach ($plans as $id => $plan) {
+        	$planDetails[$id] = array(
+        		'name' => $plan['name'],
+        		'amount' => $plan['amount'],
+        		'currency' => $plan['currency'],
+        		'interval' => $plan['interval'],
+        		'count' => 0,
+        		'mrr' => 0
+        	);
+        }
+        // getting each plan's count and mrr contribution
+        foreach ($currentSubscriptions as $subscription) {
+        	$planDetail = $planDetails[$subscription['plan_id']];
+            $planDetail['count']++;
+            $planDetail['mrr'] = $planDetail['amount'] * $planDetail['count'];
+
+            $planDetails[$subscription['plan_id']] = $planDetail;
+        }
+
+	    // returning int
+        return $planDetails;
     }
 }
