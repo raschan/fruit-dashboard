@@ -53,7 +53,7 @@
 
 						<li>
 							<a href="{{ URL::route('auth.signout') }}">
-								<i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out
+								<i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Sign out
 							</a>
 						</li>
 					</ul> <!-- / .navbar-nav -->
