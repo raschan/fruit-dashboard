@@ -329,6 +329,9 @@ class AuthController extends BaseController
                 if (strlen($user->name) == 0) {
                     $user->name = $returned_object['display_name'];
                 }
+                if (strlen($user->zoneinfo) == 0) {
+                    $user->zoneinfo = $returned_object['country'];
+                }
 
                 // saving user
                 $user->save();
