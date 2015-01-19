@@ -229,7 +229,6 @@ class AuthController extends BaseController
     public function showConnect()
     {
         // getting paypal api context
-
         $apiContext = PayPalHelper::getApiContext();
 
         // building up redirect url
@@ -242,9 +241,15 @@ class AuthController extends BaseController
             $apiContext
         );
 
+        // selecting logged in user
+        $user = Auth::user();
+    
+        // returning view
         return View::make('auth.connect',
             array(
-                'redirect_url' => $redirectUrl
+                'redirect_url' => $redirectUrl,
+                'paypal_connected' => $user->isPayPalConnected(),
+                'stripe_connected' => $user->isStripeConnected()
             )
         );
     }
@@ -252,7 +257,41 @@ class AuthController extends BaseController
 
     /*
     |===================================================
-    | <POST> | doConnect: updates user service data
+    | <GET> | doDisconnect: disconnects the active user
+    |===================================================
+    */
+    public function doDisconnect($service)
+    {   
+        // NOTE: should we also remove the colleced DB data?
+        
+        // selecting the logged in User
+        $user = Auth::user();
+        
+        if ($service == "stripe") {
+            // disconnecting stripe
+                
+            // removing stripe key
+            $user->stripe_key = "";
+
+        } else if ($service == "paypal") {
+            // disconnecting paypal 
+
+            // removing paypal refresh token
+            $user->paypal_key = "";
+            
+        }
+        
+        // saving modification on user
+        $user->save();
+
+        // redirect to connect
+        return Redirect::route('auth.connect');
+    }
+
+
+    /*
+    |===================================================
+    | <POST> | doConnect: updates user service data stripe only
     |===================================================
     */
     public function doConnect()
@@ -276,15 +315,23 @@ class AuthController extends BaseController
                 
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('stripe'));
-                $balance = Stripe_Balance::retrieve(); // catchable line
+                $account = Stripe_Account::retrieve(); // catchable line
                 // success
-                $returned_object = json_decode(strstr($balance, '{'), true);
+                $returned_object = json_decode(strstr($account, '{'), true);
 
                 // updating the user
                 $user = Auth::user();
 
+                // setting key
                 $user->stripe_key = Input::get('stripe');
-                $user->balance = $returned_object['available'][0]['amount'];
+                
+                // setting name if is null
+                if (strlen($user->name) == 0) {
+                    $user->name = $returned_object['display_name'];
+                }
+                if (strlen($user->zoneinfo) == 0) {
+                    $user->zoneinfo = $returned_object['country'];
+                }
 
                 // saving user
                 $user->save();

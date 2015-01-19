@@ -119,15 +119,15 @@ class Counter
 
     public static function saveMRR()
     {
-    	$current_day = date('Y-m-d', time());
+    	$currentDay = date('Y-m-d', time());
 
         // checking if we already have data
-        $current_day_mrr = DB::table('mrr')
-            ->where('date', $current_day)
+        $currentDayMRR = DB::table('mrr')
+            ->where('date', $currentDay)
             ->where('user', Auth::user()->id)
             ->get();
 
-        if (!$current_day_mrr) {
+        if (!$currentDayMRR) {
         	// no previous data
     		$mrrValue = self::retreiveAndCalculateMRR();
 
@@ -135,7 +135,7 @@ class Counter
                 array(
                     'value' => $mrrValue,
                     'user'  => Auth::user()->id,
-                    'date'  => $current_day
+                    'date'  => $currentDay
                 )
             );
     	}
@@ -146,7 +146,7 @@ class Counter
     *
     * @param timestamp, current day timestamp
     * 
-    * @return int (cents) or 0 if data not exist
+    * @return int (cents) or null if data not exist
     */
 
     public static function getMRROnDay($timestamp)
@@ -161,10 +161,128 @@ class Counter
     	if($mrr){
     		return $mrr[0]->value;
     	} else {
-			return 0;
+			return null;
     	}
     }
 
+    /**
+    * Prepare MRR for statistics
+    *
+    * @return array
+    */
+
+    public static function showMRR($fullDataNeeded = false)
+    {
+    	// helpers
+    	$currentDay = time();
+    	$lastMonthTime = $currentDay - 30*24*60*60;
+    	setlocale(LC_MONETARY,"en_US");
+
+    	// return array
+    	$mrrData = array();
+
+    	// simple MRR data
+    	// basics, what we are
+    	$mrrData['id'] = '#mrr';
+    	$mrrData['statName'] = 'Monthly Recurring Revenue';
+
+        // building mrr history array
+        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
+        	$date = date('Y-m-d',$i);
+            $mrrData['history'][$date] = self::getMRROnDay($i);
+        }
+
+        // current value, formatted for money
+        $mrrData['currentValue'] = money_format('%n',self::getMRROnDay($currentDay));
+
+        // change in timeframe
+        $lastMonthValue = self::getMRROnDay($lastMonthTime);
+        // check if data is available, so we don't divide by null
+        if ($lastMonthValue) {
+			$changeInPercent = (self::getMRROnDay($currentDay) / $lastMonthValue * 100) - 100;
+			$mrrData['oneMonthChange'] = $changeInPercent . '%';
+        } else {
+	        $mrrData['oneMonthChange'] = null;
+	    }	
+
+	    // full MRR data
+    	if ($fullDataNeeded){
+    		//timestamps
+    		$twoMonthTime = $currentDay - 2*30*24*60*60;
+    		$threeMonthTime = $currentDay - 3*30*24*60*60;
+	    	$sixMonthTime = $currentDay - 6*30*24*60*60;
+	    	$nineMonthTime = $currentDay - 9*30*24*60*60;
+	    	$lastYearTime = $currentDay - 365*24*60*60;
+			
+			// past values (null if not available)		    
+			$twoMonthValue = self::getMRROnDay($twoMonthTime);
+			$threeMonthValue = self::getMRROnDay($threeMonthTime);
+			$sixMonthValue = self::getMRROnDay($sixMonthTime);
+			$nineMonthValue = self::getMRROnDay($nineMonthTime);
+			$oneYearValue = self::getMRROnDay($lastYearTime);
+	
+		    // MRR 30 days ago
+		    $mrrData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
+		    // MRR 6 months ago
+		    $mrrData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+			// MRR 1 year ago
+			$mrrData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
+
+			// check if data is available, so we don't divide by null
+			// we have 30 days change
+			
+			if ($twoMonthValue) {
+				$changeInPercent = (self::getMRROnDay($currentDay) / $twoMonthValue * 100) - 100;
+				$mrrData['twoMonthChange'] = $changeInPercent . '%';
+			} else {
+				$mrrData['twoMonthChange'] = null; 
+			}
+
+			if ($threeMonthValue) {
+				$changeInPercent = (self::getMRROnDay($currentDay) / $threeMonthValue * 100) - 100;
+				$mrrData['threeMonthChange'] = $changeInPercent . '%';
+			} else {
+				$mrrData['threeMonthChange'] = null; 
+			}
+
+			if ($sixMonthValue) {
+				$changeInPercent = (self::getMRROnDay($currentDay) / $sixMonthValue * 100) - 100;
+				$mrrData['sixMonthChange'] = $changeInPercent . '%';
+			} else {
+				$mrrData['sixMonthChange'] = null; 
+			}
+
+			if ($nineMonthValue) {
+				$changeInPercent = (self::getMRROnDay($currentDay) / $nineMonthValue * 100) - 100;
+				$mrrData['nineMonthChange'] = $changeInPercent . '%';
+			} else {
+				$mrrData['nineMonthChange'] = null; 
+			}
+
+			if ($oneYearValue) {
+				$changeInPercent = (self::getMRROnDay($currentDay) / $oneYearValue * 100) - 100;
+				$mrrData['oneYearChange'] = $changeInPercent . '%';
+			} else {
+				$mrrData['oneYearChange'] = null; 
+			}
+
+			// time interval for shown statistics
+			// right now, only last 30 days
+			$startDate = date('Y-m-d',$lastMonthTime);
+			$stopDate = date('Y-m-d',$currentDay);
+
+			$mrrData['dateInterval'] = array(
+				'startDate' => $startDate,
+				'stopDate' => $stopDate
+			);
+
+			// get all the plans details
+			$mrrData['detailData'] = self::getSubscriptionDetails();
+
+    	}
+
+    	return $mrrData;
+    }
 
 	/**
 	* OR - Other Revenues
@@ -370,9 +488,7 @@ class Counter
         $active_subscriptions = array();
 
         // getting the customers
-            // add stripe customers
         $customers = TailoredData::getCustomers();
-            // add paypal customers
 
         // getting the active subscriptions for a customer
         foreach ($customers as $customer) {
@@ -402,9 +518,7 @@ class Counter
                     {
 	                    $active_subscriptions[$subscription['id']] =
 	                        array(
-	                            'plan_id'  => $subscription['plan']['id'],
-	                            'start'    => $subscription['start'],
-	                            'quantity' => $subscription['quantity']
+	                            'plan_id'  => $subscription['plan']['id']
 	                        );
 	                }
                 } // foreach suibscriptions
@@ -412,5 +526,40 @@ class Counter
         } // foreach customer
 
         return $active_subscriptions;
+    }
+
+    private static function getSubscriptionDetails()
+    {
+    	// get all active subscriptions
+    	$currentSubscriptions = self::getCurrentSubscriptions();
+
+    	// get all plans
+    	$plans = TailoredData::getPlans();
+
+    	// we'll store the details here
+        $planDetails = array();
+
+        // getting plan details
+        foreach ($plans as $id => $plan) {
+        	$planDetails[$id] = array(
+        		'name' => $plan['name'],
+        		'amount' => $plan['amount'],
+        		'currency' => $plan['currency'],
+        		'interval' => $plan['interval'],
+        		'count' => 0,
+        		'mrr' => 0
+        	);
+        }
+        // getting each plan's count and mrr contribution
+        foreach ($currentSubscriptions as $subscription) {
+        	$planDetail = $planDetails[$subscription['plan_id']];
+            $planDetail['count']++;
+            $planDetail['mrr'] = $planDetail['amount'] * $planDetail['count'];
+
+            $planDetails[$subscription['plan_id']] = $planDetail;
+        }
+
+	    // returning int
+        return $planDetails;
     }
 }

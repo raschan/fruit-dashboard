@@ -51,6 +51,7 @@ Route::get('/paypal/deleteplan/{id}', array(
     'uses' => 'PaypalController@doDeletePlan'
 ));
 
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
@@ -118,6 +119,13 @@ Route::post('connect', array(
     'before' => 'auth',
     'as' => 'auth.connect',
     'uses' => 'AuthController@doConnect'
+));
+
+// disconnect
+Route::get('/disconnect/{service}', array(
+    'before' => 'auth|api_key',
+    'as' => 'auth.disconnect',
+    'uses' => 'AuthController@doDisconnect'
 ));
 
 // single_stat route
