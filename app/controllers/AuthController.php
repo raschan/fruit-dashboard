@@ -291,7 +291,7 @@ class AuthController extends BaseController
 
     /*
     |===================================================
-    | <POST> | doConnect: updates user service data
+    | <POST> | doConnect: updates user service data stripe only
     |===================================================
     */
     public function doConnect()
@@ -315,15 +315,20 @@ class AuthController extends BaseController
                 
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('stripe'));
-                $balance = Stripe_Balance::retrieve(); // catchable line
+                $account = Stripe_Account::retrieve(); // catchable line
                 // success
-                $returned_object = json_decode(strstr($balance, '{'), true);
+                $returned_object = json_decode(strstr($account, '{'), true);
 
                 // updating the user
                 $user = Auth::user();
 
+                // setting key
                 $user->stripe_key = Input::get('stripe');
-                $user->balance = $returned_object['available'][0]['amount'];
+                
+                // setting name if is null
+                if (strlen($user->name) == 0) {
+                    $user->name = $returned_object['display_name'];
+                }
 
                 // saving user
                 $user->save();
