@@ -36,15 +36,11 @@ class HelloController extends BaseController
         Counter::saveMRR();
 
         setlocale(LC_MONETARY,"en_US");
-        $formattedMRR = money_format('%n', Counter::getMRROnDay(time())/100);
-        $formattedMRR2 = money_format('%n', Counter::retreiveAndCalculateMRR()/100);
         
-        // trying to acquire Stripe
         return View::make(
             'dev.stripe',
             array(
-                'mrr' => $formattedMRR,
-                'mrr2' =>$formattedMRR2
+                'data' => Counter::showMRR(true)
             )
         );
     }
