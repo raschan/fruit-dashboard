@@ -8,7 +8,7 @@
 
       @if (!Auth::user()->isConnected())
       <div class="alert alert-warning">
-        No key is provided! You are currently viewing the site in demo mode! <a href="{{ URL::route('auth.dashboard') }}" class="pull-right"> Continue in demo</a>
+        You didn't connect any service yet! This is only a demo site! <a href="{{ URL::route('auth.dashboard') }}" class="pull-right"> Continue in demo</a>
       </div>
       @endif
 
@@ -30,11 +30,17 @@
               </div> <!-- /. col-sm-8 -->
 
               <div class="col-sm-2 text-center">
+                @if ($paypal_connected)
+                <a href="{{ URL::route('auth.disconnect', 'paypal') }}">
+                <button class='btn btn-special btn-lg btn-flat sm-pull-right'>Disconnect</button>
+                </a>
+                @else
                 <a href="{{ $redirect_url }}">
                     {{ Form::submit('Connect', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}          
+                        'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
                 </a>
+                @endif
               </div> 
 
             </div> <!-- /. panel-body paypal-form -->
@@ -54,6 +60,10 @@
               </div> <!-- /. connect-icon -->
 
               <div class="col-sm-10">
+                @if ($stripe_connected)
+                <a href="{{ URL::route('auth.disconnect', 'stripe') }}">
+                <button class='btn btn-special btn-lg btn-flat sm-pull-right'>Disconnect</button>
+                @else
                 {{ Form::open(array(
                   'route'=>'auth.connect',
                   'method' => 'post',
@@ -80,6 +90,8 @@
                     </div> <!-- / .form-group -->
 
                 {{ Form::close() }}
+                
+                @endif
 
               </div> <!-- /. col-sm-10 -->
             </div> <!-- /. panel-body stripe-from -->

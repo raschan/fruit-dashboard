@@ -229,7 +229,6 @@ class AuthController extends BaseController
     public function showConnect()
     {
         // getting paypal api context
-
         $apiContext = PayPalHelper::getApiContext();
 
         // building up redirect url
@@ -242,11 +241,51 @@ class AuthController extends BaseController
             $apiContext
         );
 
+        // selecting logged in user
+        $user = Auth::user();
+    
+        // returning view
         return View::make('auth.connect',
             array(
-                'redirect_url' => $redirectUrl
+                'redirect_url' => $redirectUrl,
+                'paypal_connected' => $user->isPayPalConnected(),
+                'stripe_connected' => $user->isStripeConnected()
             )
         );
+    }
+
+
+    /*
+    |===================================================
+    | <GET> | doDisconnect: disconnects the active user
+    |===================================================
+    */
+    public function doDisconnect($service)
+    {   
+        // NOTE: should we also remove the colleced DB data?
+        
+        // selecting the logged in User
+        $user = Auth::user();
+        
+        if ($service == "stripe") {
+            // disconnecting stripe
+                
+            // removing stripe key
+            $user->stripe_key = "";
+
+        } else if ($service == "paypal") {
+            // disconnecting paypal 
+
+            // removing paypal refresh token
+            $user->paypal_key = "";
+            
+        }
+        
+        // saving modification on user
+        $user->save();
+
+        // redirect to connect
+        return Redirect::route('auth.connect');
     }
 
 

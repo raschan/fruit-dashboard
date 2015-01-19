@@ -107,10 +107,10 @@ class PaypalController extends BaseController
         
         $output = Payment::all($params, $api_context);
         
-        
+        /*
         echo "<pre>";
         print_r(var_dump($output));
-        exit(1);
+        exit(1);*/
         //echo '<pre>';print_r(var_dump($output));
         //exit(1);
         
