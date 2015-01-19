@@ -76,11 +76,62 @@ class PaypalController extends BaseController
         // updating the user
         $user = Auth::user();
     
-        Log::info(strlen($accessToken->getRefreshToken()));
         //saving refresh token
         $user->paypal_key = $accessToken->getRefreshToken();
 
-        Log::info(strlen($user->paypal_key));
+
+        // getting user data also testing refreshtoken
+        
+        // setting api context
+        $api_context = PayPalHelper::getApiContext();
+        
+        // need a new acces token 
+        $tokenInfo = new OpenIdTokeninfo();
+        $tokenInfo = $tokenInfo->createFromRefreshToken(array('refresh_token' => $user->paypal_key), $api_context);
+        
+        // setting params
+        $params = array('access_token' => $tokenInfo->getAccessToken());
+    
+        // getting user info
+        try {
+            $userInfo = OpenIdUserinfo::getUserinfo($params, $api_context);
+        } catch (PayPal\Exception\PayPalConnectionException $ex) {
+            echo '<pre>';
+            print_r(json_decode($ex->getData()));
+            exit(1);
+        }
+        // updating user fields if they're empty
+
+        // name
+        if (strlen($user->name) == 0) {
+            $user->name = $userInfo->getName();
+        }
+        // birthday
+        if (strlen($user->birthday) == 0) {
+            $user->birthday = $userInfo->getBirthday();
+        }
+        // language
+        if (strlen($user->language) == 0) {
+            $user->language = $userInfo->getLanguage();
+        }
+        // phone_number
+        if (strlen($user->phone_number) == 0) {
+            $user->phone_number = $userInfo->getPhoneNumber();
+        }
+        // locale
+        if (strlen($user->locale) == 0) {
+            $user->locale = $userInfo->getLocale();
+        }
+        // zoneinfo
+        if (strlen($user->zoneinfo) == 0) {
+            $user->zoneinfo = $userInfo->getZoneinfo();
+        }
+        // gender
+        if (strlen($user->gender) == 0) {
+            $user->gender = $userInfo->getGender();
+        }
+        
+
         // saving user
         $user->save();
 
@@ -98,6 +149,7 @@ class PaypalController extends BaseController
     {
         // setting api context
         $api_context = PayPalHelper::getApiContext();
+    
         
         // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]
         // $agreement = new Agreement();
