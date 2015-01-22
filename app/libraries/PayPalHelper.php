@@ -8,6 +8,8 @@ use PayPal\Api\PaymentDefinition;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Currency;
 
+use PayPal\Api\Agreement;
+
 
 class PayPalHelper {
 
@@ -114,7 +116,7 @@ class PayPalHelper {
 
     /**
      * Getting all the plans for the user
-     * @param paypal key
+     * @param paypal api_context
      *
      * @return an array with the plans
     */
@@ -166,20 +168,43 @@ class PayPalHelper {
 
      /**
      * Getting all the customers for the user
-     * @param stripe key
+     * @param paypal api_context
      *
      * @return an array with the subscriptions
     */
     
-    public static function getCustomers($key)
+    public static function getCustomers($apiContext)
     {
-        $out_customers = array();
+        // retrieving the subscriptions
+        // !!! Currently unavailable !!! 
+        // subscription_ids = getSubscriptions()
+        
+        $subscriptionIds = array("I-F231FUFEPYG8", "I-9XA8BL6KSYAT", "I-WFTN8BULD984", "I-YSRV6BDEPBLG");
+        
+        // initializing the buyer 
+        // initializing subscr array
+        $subscriptions = array();
+        
+        // going through the ids 
+        foreach ($subscriptionIds as $subId) {
+            // trying to get the agreements one by one
+            try {
+                
+                // getting the agreement
+                $agreement = Agreement::get($subId, $apiContext);
 
-        // tell paypal who we are
-        // get the customers from paypal
-        // build return array
+            } catch (PayPal\Exception\PayPalConnectionException $ex) {
+                // an error occoured
+                echo '<pre>';print_r(json_decode($ex->getData()));
+                exit(1);
+            }
+            
+            // appending to the array
+            array_push($subscriptions, $agreement);
 
+        }
+        
         // returning object
-        return $out_customers;
+        return $subscriptions;
     }
 }

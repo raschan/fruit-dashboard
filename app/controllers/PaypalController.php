@@ -149,7 +149,11 @@ class PaypalController extends BaseController
     {
         // setting api context
         $api_context = PayPalHelper::getApiContext();
-    
+        
+        
+        echo "<pre>";
+        var_dump(print_r(PayPalHelper::getCustomers($api_context)));
+        exit(1);
         
         // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]
         // $agreement = new Agreement();
@@ -170,7 +174,7 @@ class PaypalController extends BaseController
 
             $params = array('count' => 10, 'start_index' => 5);
         
-            //$payments = Payment::all($params, $api_context);            
+            //$payments = Payment::all($params, $api_context);
             //echo '<pre>';echo var_dump($payments);
             //exit(1);
             
@@ -314,7 +318,8 @@ class PaypalController extends BaseController
                 ->setPostalCode('95070')
                 ->setCountryCode('US');
                 
-            $agreement->setShippingAddress($shippingAddress);            
+            $agreement->setShippingAddress($shippingAddress);
+            
 
             // ### Create Agreement
             try {

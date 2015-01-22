@@ -10,6 +10,12 @@ Route::get('/', function()
     return Redirect::route('auth.dashboard');
 });
 
+Route::get('/users', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.users',
+    'uses' => 'HelloController@showUsers'
+));
+
 Route::get('/stripe', array(
     'before' => 'auth|api_key',
     'as' => 'dev.stripe',
