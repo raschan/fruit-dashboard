@@ -44,6 +44,21 @@ class HelloController extends BaseController
             )
         );
     }
+    /*
+    |====================================================
+    | <GET> | showUsers: showing the current users
+    |====================================================
+    */
+    public function showUsers()
+    {   
+        // returning the current users
+        return View::make(
+            'dev.users',
+            array(
+                'users' => User::all()
+            )
+        );
+    }
 
     /*
     |====================================================
