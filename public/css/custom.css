@@ -257,10 +257,10 @@
 	font-weight: 700;
 }
 
-.text-money.up {
+.up {
 	color: #27ae60;
 }
-.text-money.down {
+.down {
 	color: #c0392b;
 }
 
@@ -295,6 +295,11 @@ canvas {
 
 .btn-special.btn-flat {
 	background: #37b69f;
+}
+
+.badge.badge-special {
+	background: #37b69f;
+	border: 1px solid #37b69f;
 }
 
 .btn-special, .btn-special:focus {
