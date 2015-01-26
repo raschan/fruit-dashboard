@@ -26,6 +26,23 @@
               'id' => 'form-settings',
               'role' => 'form',
               'class' => 'panel-padding form-horizontal' )) }}
+
+              <div class="form-group @if ($errors->first('email')) has-error @endif">
+                {{ Form::label('id_name', 'Name', array(
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{ Auth::user()->name }}</p>
+                </div>
+              </div> <!-- / .form-group -->
+
+              <div class="form-group @if ($errors->first('email')) has-error @endif">
+                {{ Form::label('id_country', 'Country', array(
+                  'class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{ Auth::user()->zoneinfo }}</p>
+                </div>
+              </div> <!-- / .form-group -->
+
               <div class="form-group @if ($errors->first('email')) has-error @endif">
                 {{ Form::label('id_email', 'Email', array(
                   'class' => 'col-sm-3 control-label')) }}
