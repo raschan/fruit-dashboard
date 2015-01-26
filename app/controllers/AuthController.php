@@ -344,7 +344,11 @@ class AuthController extends BaseController
     */
     public function showSinglestat()
     {
-        return View::make('auth.single_stat');
+        return View::make('auth.single_stat',
+            array(
+                'mrrData' => Counter::showMRR(true)
+            )
+        );
     }
 
 }
