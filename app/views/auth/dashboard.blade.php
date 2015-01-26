@@ -16,12 +16,34 @@
         <div class="row">
           <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
-              <canvas id="mrr"></canvas>
-              <div class="chart-text-left">
-                <span class="text-money up">$1234,45</span>
+              <canvas id="{{ $mrrData['id'] }}"></canvas>
+              <div class="chart-text-left"> 
+                @if($mrrData['currentValue'])
+                  @if($mrrData['currentValue']>0)
+                    <span class="text-money up">
+                  @else
+                    <span class="text-money down">
+                  @endif
+                  {{ $mrrData['currentValue'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="chart-text-right">
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                @if($mrrData['oneMonthChange'])
+                  @if($mrrData['oneMonthChange']>0)
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['oneMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
                 <h6 class="no-margin">Previous 30 days</h6>
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
@@ -29,7 +51,7 @@
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
               </a>
-              <h4 class="text-center">Monthly Recurring Revenue</h4>
+              <h4 class="text-center">{{ $mrrData['statName'] }}</h4>
             </div>
           </div>
 
@@ -417,13 +439,13 @@
     /* Monthly Recurring Revenue */
 
     data = {
-      labels: [@foreach ($mrr_history as $mrr)"", @endforeach],
+      labels: [@foreach ($mrrData['history'] as $mrr)"", @endforeach],
       datasets: [
           {
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($mrr_history as $mrr){{$mrr}}, @endforeach]
+              data: [@foreach ($mrrData['history'] as $mrr){{$mrr}}, @endforeach]
           }
       ]
     };

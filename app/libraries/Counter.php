@@ -183,7 +183,7 @@ class Counter
 
     	// simple MRR data
     	// basics, what we are
-    	$mrrData['id'] = '#mrr';
+    	$mrrData['id'] = 'mrr';
     	$mrrData['statName'] = 'Monthly Recurring Revenue';
 
         // building mrr history array
