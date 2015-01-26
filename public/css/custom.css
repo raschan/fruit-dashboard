@@ -113,8 +113,8 @@
 	padding-bottom: 15px;
 }
 
-.form-horizontal .form-control,
-.form-horizontal .control-label {
+.stripe-form .form-horizontal .form-control,
+.stripe-form .form-horizontal .control-label {
 	margin-top: 5px;
 }
 
