@@ -19,7 +19,7 @@
               <canvas id="{{ $mrrData['id'] }}"></canvas>
               <div class="chart-text-left"> 
                 @if($mrrData['currentValue'])
-                  @if($mrrData['currentValue']>0)
+                  @if(!str_contains($mrrData['currentValue'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
@@ -33,7 +33,7 @@
               </div>
               <div class="chart-text-right">
                 @if($mrrData['oneMonthChange'])
-                  @if($mrrData['oneMonthChange']>0)
+                  @if(!str_contains($mrrData['oneMonthChange'],'-'))
                     <span class="text-money up"><i class="fa fa-angle-up"></i>
                   @else
                     <span class="text-money down"><i class="fa fa-angle-down"></i>
@@ -439,13 +439,13 @@
     /* Monthly Recurring Revenue */
 
     data = {
-      labels: [@foreach ($mrrData['history'] as $mrr)"", @endforeach],
+      labels: [@foreach ($mrrData['history'] as $date => $value)"", @endforeach],
       datasets: [
           {
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($mrrData['history'] as $mrr){{$mrr}}, @endforeach]
+              data: [@foreach ($mrrData['history'] as $date => $value){{ $value }}, @endforeach]
           }
       ]
     };

@@ -31,7 +31,13 @@
                 {{ Form::label('id_name', 'Name', array(
                   'class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
-                  <p class="form-control-static">{{ Auth::user()->name }}</p>
+                  <p class="form-control-static">
+                    @if(Auth::user()->name)
+                    {{ Auth::user()->name }}
+                    @else 
+                    N/A
+                    @endif
+                  </p>
                 </div>
               </div> <!-- / .form-group -->
 
@@ -39,7 +45,13 @@
                 {{ Form::label('id_country', 'Country', array(
                   'class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
-                  <p class="form-control-static">{{ Auth::user()->zoneinfo }}</p>
+                  <p class="form-control-static">
+                    @if(Auth::user()->zoneinfo)
+                    {{ Auth::user()->zoneinfo }}
+                    @else 
+                    N/A
+                    @endif
+                  </p>
                 </div>
               </div> <!-- / .form-group -->
 

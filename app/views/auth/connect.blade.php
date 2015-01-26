@@ -32,7 +32,7 @@
               <div class="col-sm-2 text-center">
                 @if ($paypal_connected)
                 <a href="{{ URL::route('auth.disconnect', 'paypal') }}">
-                <button class='btn btn-special btn-lg btn-flat sm-pull-right'>Disconnect</button>
+                <button class='btn btn-warning btn-lg btn-flat sm-pull-right'>Disconnect</button>
                 </a>
                 @else
                 <a href="{{ $redirect_url }}">

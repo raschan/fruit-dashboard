@@ -543,20 +543,26 @@ class Counter
         foreach ($plans as $id => $plan) {
         	$planDetails[$id] = array(
         		'name' => $plan['name'],
-        		'amount' => $plan['amount'],
+        		'price' => $plan['amount'],
         		'currency' => $plan['currency'],
         		'interval' => $plan['interval'],
         		'count' => 0,
         		'mrr' => 0
         	);
+        	Log::info($id);
         }
         // getting each plan's count and mrr contribution
         foreach ($currentSubscriptions as $subscription) {
         	$planDetail = $planDetails[$subscription['plan_id']];
             $planDetail['count']++;
-            $planDetail['mrr'] = $planDetail['amount'] * $planDetail['count'];
-
+            $planDetail['mrr'] = $planDetail['price'] * $planDetail['count'];
             $planDetails[$subscription['plan_id']] = $planDetail;
+        }
+
+        //converting price and mrr to money format
+        foreach ($planDetails as $id => $planDetail) {
+        	$planDetails[$id]['price'] = money_format('%n', $planDetail['price']);
+            $planDetails[$id]['mrr'] = money_format('%n', $planDetail['mrr']);
         }
 
 	    // returning int

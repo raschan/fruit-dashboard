@@ -12,12 +12,12 @@
           <div class="invoice-header">
             <h3>
               <div>
-                <i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;STATISTIC NAME
+                <i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;{{ $mrrData['statName'] }} 
               </div>
             </h3>
             <div class="invoice-date">
-              <small><strong>DATE</strong></small><br>
-              February 11, 2012 - February 21, 2013
+              <small><strong>Date</strong></small><br>
+              {{ $mrrData['dateInterval']['startDate'] }} - {{ $mrrData['dateInterval']['stopDate'] }}
             </div>
           </div> <!-- / .invoice-header -->
           <div class="single-statistic-wrapper">
@@ -27,19 +27,63 @@
             <div class="row">
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>Current</h4></span>
-                <span class="text-money up">$23,444</span>
+                @if($mrrData['currentValue'])
+                  @if(!str_contains($mrrData['currentValue'],'-'))
+                    <span class="text-money up">
+                  @else
+                    <span class="text-money down">
+                  @endif
+                  {{ $mrrData['currentValue'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>30 days ago</h4></span>
-                <span class="text-money up">$23,444</span>
+                @if($mrrData['oneMonth'])
+                  @if(!str_contains($mrrData['oneMonth'],'-'))
+                    <span class="text-money up">
+                  @else
+                    <span class="text-money down">
+                  @endif
+                  {{ $mrrData['oneMonth'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>6 months ago</h4></span>
-                <span class="text-money up">$23,444</span>
+                @if($mrrData['sixMonth'])
+                  @if(!str_contains($mrrData['sixMonth'],'-'))
+                    <span class="text-money up">
+                  @else
+                    <span class="text-money down">
+                  @endif
+                  {{ $mrrData['sixMonth'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>1 year ago</h4></span>
-                <span class="text-money up">$23,444</span>
+                @if($mrrData['oneYear'])
+                  @if(!str_contains($mrrData['oneYear'],'-'))
+                    <span class="text-money up">
+                  @else
+                    <span class="text-money down">
+                  @endif
+                  {{ $mrrData['oneYear'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
             </div> <!-- /.row -->
           </div> <!-- /.statistic-description  -->
@@ -52,27 +96,93 @@
             <div class="row">
               <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>30 days growth</h4></span>
-                <span class="text-money down"><i class="fa fa-angle-down"></i> 5%</span>
+                @if($mrrData['oneMonthChange'])
+                  @if(!str_contains($mrrData['oneMonthChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['oneMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>60 days growth</h4></span>
-                <span class="text-money down"><i class="fa fa-angle-down"></i> 5%</span>
+                @if($mrrData['twoMonthChange'])
+                  @if(!str_contains($mrrData['twoMonthChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['twoMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>3 month growth</h4></span>
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 10%</span>
+                @if($mrrData['threeMonthChange'])
+                  @if(!str_contains($mrrData['threeMonthChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['threeMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>6 month growth</h4></span>
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 55%</span>
+                @if($mrrData['sixMonthChange'])
+                  @if(!str_contains($mrrData['sixMonthChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['sixMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
                 <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>9 month growth</h4></span>
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 178%</span>
+                @if($mrrData['nineMonthChange'])
+                  @if(!str_contains($mrrData['nineMonthChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['nineMonthChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
               <div class="col-md-2 stat-growth-box">
                 <span class="text-date"><h4>1 year growth</h4></span>
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 1%</span>
+                @if($mrrData['oneYearChange'])
+                  @if(!str_contains($mrrData['oneYearChange'],'-'))
+                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @else
+                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                  @endif
+                  {{ $mrrData['oneYearChange'] }}
+                @else
+                  <span class="text-money down">
+                  N/A
+                @endif
+                </span>
               </div>
             </div> <!-- /.row -->
           </div> <!-- /.statistic-description  -->
@@ -84,23 +194,32 @@
           <div class="invoice-header">
             <h3>
               <div>
-                STATISTIC NAME DATATABLE
+                {{ $mrrData['statName'] }} datatable
               </div>
             </h3>
             <div class="invoice-date">
-              <small><strong>DATE</strong></small><br>
-              February 11, 2012 - February 21, 2013
+              <small><strong>Date</strong></small><br>
+              {{ $mrrData['dateInterval']['startDate'] }} - {{ $mrrData['dateInterval']['stopDate'] }}
             </div>
           </div> <!-- / .invoice-header -->
           <div class="invoice-info">
             <div class="invoice-recipient">
-              <strong>Mr. John Smith</strong><br>
-              New York, Pass Avenue, 109<br>
-              10012 NY, USA
+              <strong>
+                @if(Auth::user()->name)
+                {{ Auth::user()->name }}
+                @else
+                N/A
+                @endif
+              </strong><br>
+              @if(Auth::user()->zoneinfo)
+              {{ Auth::user()->zoneinfo }}
+              @else
+              N/A
+              @endif<br>
             </div> <!-- / .invoice-recipient -->
             <div class="invoice-total">
-              TOTAL:
-              <span>$4,657.75</span>
+              CURRENT:
+              <span>{{ $mrrData['currentValue'] }}</span>
             </div> <!-- / .invoice-total -->
           </div> <!-- / .invoice-info -->
           <hr>
@@ -112,16 +231,18 @@
                     <th class="col-md-6">SOLD ITEM</th>
                     <th>CUSTOMERS</th>
                     <th>CURRENT MRR</th>
-                    <th>DATE</th>
                   </tr>
                 </thead>
                 <tbody>
+                  
+                  @foreach ($mrrData['detailData'] as $details)
                   <tr>
-                    <td>TOHOTOM</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center text-money up">$711</td>
-                    <td class="timestamp">2015.01.01. 20:11</td>
+                  <td>{{$details['name']}} {{ $details['price'] }}</td>
+                  <td class="text-center">{{ $details['count'] }}</td>
+                  <td class="text-center text-money up"> {{$details['mrr']}} </td>
                   </tr>
+                  @endforeach
+                  
                 </tbody>
               </table>
             </div>
@@ -142,30 +263,16 @@
     };
 
     var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
-        }
-    ]
-};
+      labels: [@foreach ($mrrData['history'] as $date => $value)"", @endforeach],
+      datasets: [
+          {
+              label: "Monthly Recurring Revenue",
+              fillColor: "rgba(151,187,205,0.4)",
+              strokeColor: "rgba(151,187,205,0.6)",
+              data: [@foreach ($mrrData['history'] as $date => $value){{$value}}, @endforeach]
+          }
+      ]
+    };
 
       $('canvas').each( function () {
         var ctx = $(this).get(0).getContext("2d");
