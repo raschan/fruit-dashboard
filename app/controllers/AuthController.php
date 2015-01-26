@@ -134,21 +134,10 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
-        // getting mrr history
-        $mrr_history = DB::table('mrr')
-            ->where('user', Auth::user()->id)
-            ->get();
-
-        // initializing array
-        $mrr_data = array();
-        foreach ($mrr_history as $mrr_element) {
-            array_push($mrr_data, $mrr_element->value);
-        }
-        Log::info($mrr_data);
         return View::make(
             'auth.dashboard',
             array(
-                'mrr_history' => $mrr_data
+                'mrrData' => Counter::showMRR(false)
             )
         );
     }
