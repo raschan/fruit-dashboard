@@ -5,13 +5,13 @@
   <body class="theme-asphalt main-menu-animated page-invoice main-navbar-fixed main-menu-fixed no-main-menu">
   	<div id="main-wrapper">
 
-			@section ('pageAlert')
-				@include('meta.pageAlerts-desktop')
-			@show
-
 		  @section('navbar')
 				@include('meta.navbar')
 		  @show
+
+		  @section ('pageAlert')
+				@include('meta.pageAlerts')
+			@show
 
 		  @section('pageContent')
 		  @show
