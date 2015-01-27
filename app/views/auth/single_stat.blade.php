@@ -12,10 +12,9 @@
 
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A STATISTIC:</strong></small><br>
-              <select class="form-control stat-input">
-                <option>{{ $Data['statName'] }}</option>
-                <option>{{ $Data['statName'] }}</option>
-                <option>{{ $Data['statName'] }}</option>
+              <select class="form-control stat-input" onChange="window.location.href=this.value">
+                <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
+                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
               </select>
           </div>
                   
@@ -23,13 +22,13 @@
             <small><strong>DATE</strong></small><br>
             <form class="form-inline">
               <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="startDateStat" value="{{ $Data['dateInterval']['startDate'] }}">
+                <input type="text" class="form-control stat-input" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
               </div>
               <div class="form-group dash">
                 -
               </div>
               <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="stopDateStat" value="{{ $Data['dateInterval']['stopDate'] }}">
+                <input type="text" class="form-control stat-input" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
               </div>
             </form>
           </div>
@@ -45,13 +44,13 @@
             <div class="row">
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>Current</h4></span>
-                @if($Data['currentValue'])
-                  @if(!str_contains($Data['currentValue'],'-'))
+                @if($data['currentValue'])
+                  @if(!str_contains($data['currentValue'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $Data['currentValue'] }}
+                  {{ $data['currentValue'] }}
                 @else
                   <span class="text-money down">
                   N/A
@@ -60,13 +59,13 @@
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>30 days ago</h4></span>
-                @if($Data['oneMonth'])
-                  @if(!str_contains($Data['oneMonth'],'-'))
+                @if($data['oneMonth'])
+                  @if(!str_contains($data['oneMonth'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $Data['oneMonth'] }}
+                  {{ $data['oneMonth'] }}
                 @else
                   <span class="text-money down">
                   N/A
@@ -75,13 +74,13 @@
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>6 months ago</h4></span>
-                @if($Data['sixMonth'])
-                  @if(!str_contains($Data['sixMonth'],'-'))
+                @if($data['sixMonth'])
+                  @if(!str_contains($data['sixMonth'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $Data['sixMonth'] }}
+                  {{ $data['sixMonth'] }}
                 @else
                   <span class="text-money down">
                   N/A
@@ -90,13 +89,13 @@
               </div>
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>1 year ago</h4></span>
-                @if($Data['oneYear'])
-                  @if(!str_contains($Data['oneYear'],'-'))
+                @if($data['oneYear'])
+                  @if(!str_contains($data['oneYear'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $Data['oneYear'] }}
+                  {{ $data['oneYear'] }}
                 @else
                   <span class="text-money down">
                   N/A
@@ -114,13 +113,13 @@
               <div class="row">
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>30 days growth</h4></span>
-                  @if($Data['oneMonthChange'])
-                    @if(!str_contains($Data['oneMonthChange'],'-'))
+                  @if($data['oneMonthChange'])
+                    @if(!str_contains($data['oneMonthChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['oneMonthChange'] }}
+                    {{ $data['oneMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -129,13 +128,13 @@
                 </div>
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>60 days growth</h4></span>
-                  @if($Data['twoMonthChange'])
-                    @if(!str_contains($Data['twoMonthChange'],'-'))
+                  @if($data['twoMonthChange'])
+                    @if(!str_contains($data['twoMonthChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['twoMonthChange'] }}
+                    {{ $data['twoMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -144,13 +143,13 @@
                 </div>
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>3 month growth</h4></span>
-                  @if($Data['threeMonthChange'])
-                    @if(!str_contains($Data['threeMonthChange'],'-'))
+                  @if($data['threeMonthChange'])
+                    @if(!str_contains($data['threeMonthChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['threeMonthChange'] }}
+                    {{ $data['threeMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -159,13 +158,13 @@
                 </div>
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>6 month growth</h4></span>
-                  @if($Data['sixMonthChange'])
-                    @if(!str_contains($Data['sixMonthChange'],'-'))
+                  @if($data['sixMonthChange'])
+                    @if(!str_contains($data['sixMonthChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['sixMonthChange'] }}
+                    {{ $data['sixMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -174,13 +173,13 @@
                 </div>
                   <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>9 month growth</h4></span>
-                  @if($Data['nineMonthChange'])
-                    @if(!str_contains($Data['nineMonthChange'],'-'))
+                  @if($data['nineMonthChange'])
+                    @if(!str_contains($data['nineMonthChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['nineMonthChange'] }}
+                    {{ $data['nineMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -189,13 +188,13 @@
                 </div>
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>1 year growth</h4></span>
-                  @if($Data['oneYearChange'])
-                    @if(!str_contains($Data['oneYearChange'],'-'))
+                  @if($data['oneYearChange'])
+                    @if(!str_contains($data['oneYearChange'],'-'))
                       <span class="text-money up"><i class="fa fa-angle-up"></i>
                     @else
                       <span class="text-money down"><i class="fa fa-angle-down"></i>
                     @endif
-                    {{ $Data['oneYearChange'] }}
+                    {{ $data['oneYearChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -212,7 +211,7 @@
           <div class="col-md-4 col-lg-5">
             <div>
               <h3>
-              {{ $Data['statName'] }} datatable
+              {{ $data['statName'] }} datatable
               </h3>
             </div>
           </div>
@@ -221,13 +220,13 @@
             <small><strong>DATE</strong></small><br>
             <form class="form-inline">
               <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="startDatetable" value="{{ $Data['dateInterval']['startDate'] }}">
+                <input type="text" class="form-control stat-input" id="startDatetable" value="{{ $data['dateInterval']['startDate'] }}">
               </div>
               <div class="form-group dash">
                 -
               </div>
               <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="stopDatetable" value="{{ $Data['dateInterval']['stopDate'] }}">
+                <input type="text" class="form-control stat-input" id="stopDatetable" value="{{ $data['dateInterval']['stopDate'] }}">
               </div>
             </form>
           </div> 
@@ -252,7 +251,7 @@
             </div> <!-- / .invoice-recipient -->
             <div class="invoice-total">
               CURRENT:
-              <span>{{ $Data['currentValue'] }}</span>
+              <span>{{ $data['currentValue'] }}</span>
             </div> <!-- / .invoice-total -->
           </div> <!-- / .invoice-info -->
           <hr>
@@ -268,7 +267,7 @@
                 </thead>
                 <tbody>
                   
-                  @foreach ($Data['detailData'] as $details)
+                  @foreach ($data['detailData'] as $details)
                   <tr>
                   <td>{{$details['name']}} {{ $details['price'] }}</td>
                   <td class="text-center">{{ $details['count'] }}</td>
@@ -318,13 +317,13 @@
     };
 
     var data = {
-      labels: [@foreach ($Data['history'] as $date => $value)"{{ $date }}", @endforeach],
+      labels: [@foreach ($data['history'] as $date => $value)"{{ $date }}", @endforeach],
       datasets: [
           {
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($Data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+              data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
           }
       ]
     };
