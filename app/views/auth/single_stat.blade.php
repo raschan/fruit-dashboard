@@ -14,6 +14,7 @@
               <small><strong>CHOOSE A STATISTIC:</strong></small><br>
               <select class="form-control stat-input" onChange="window.location.href=this.value">
                 <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
+                <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
                 <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
               </select>
           </div>

@@ -139,7 +139,8 @@ class AuthController extends BaseController
             array(
                 'allFunctions' => array(
                     Counter::showMRR(false),
-                    Counter::showActiveUsers(false)
+                    Counter::showActiveUsers(false),
+                    Counter::showARR(false)
                 )
             )
         );
@@ -365,6 +366,12 @@ class AuthController extends BaseController
             return View::make('auth.single_stat',
                 array(
                     'data' => Counter::showActiveUsers(true)
+                )
+            );
+            case 'arr': 
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showARR(true)
                 )
             );
             default:
