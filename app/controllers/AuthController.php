@@ -169,7 +169,6 @@ class AuthController extends BaseController
     */
     public function doSettings()
     {
-        Log::info(Input::all());
         // Validation rules
         $rules = array(
             'email' => 'email'
@@ -342,13 +341,29 @@ class AuthController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat()
+    public function showSinglestat($statID = 'mainPage')
     {
-        return View::make('auth.single_stat',
-            array(
-                'Data' => Counter::showMRR(true)
-            )
-        );
+        Log::info($statID);
+        switch($statID){
+            case 'mainPage':
+            return View::make('auth.single_stat',
+                array(
+                    'Data' => Counter::showMRR(true)
+                )
+            );
+            case 'mrr': 
+            return View::make('auth.single_stat',
+                array(
+                    'Data' => Counter::showMRR(true)
+                )
+            );
+            break;
+            default:
+                return Redirect::route('auth.dashboard')
+                ->with('error', 'Statistic does not exist.');
+            break;
+        }
+        
     }
 
 }

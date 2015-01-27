@@ -549,7 +549,6 @@ class Counter
         		'count' => 0,
         		'mrr' => 0
         	);
-        	Log::info($id);
         }
         // getting each plan's count and mrr contribution
         foreach ($currentSubscriptions as $subscription) {
