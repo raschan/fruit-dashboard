@@ -78,7 +78,7 @@
               <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
                 {{ Form::submit('Save', array(
                     'id' => 'id_submit',
-                    'class' => 'btn btn-special btn-lg btn-flat')) }}
+                    'class' => 'btn btn-primary btn-lg btn-flat')) }}
               </div>
 
             {{ Form::close() }}
@@ -95,7 +95,7 @@
             <div class="list-group">
               <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                 <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
-                <h4 class="list-group-item-heading">PayPal</h4>@if($paypal_connected)@else <span class="badge badge-special">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
+                <h4 class="list-group-item-heading">PayPal</h4>@if($paypal_connected)@else <span class="badge badge-primary">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
                 <p class="list-group-item-text">
                   @if($paypal_connected)
                     <span class="up">Connected.</span>
@@ -106,7 +106,7 @@
               </a> <!-- / .list-group-item -->
               <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                 <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
-                <h4 class="list-group-item-heading">Stripe</h4>@if($stripe_connected)@else <span class="badge badge-special">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
+                <h4 class="list-group-item-heading">Stripe</h4>@if($stripe_connected)@else <span class="badge badge-primary">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
                 <p class="list-group-item-text">
                   @if($stripe_connected)
                     <span class="up">Connected.</span>
