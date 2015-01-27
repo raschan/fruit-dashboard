@@ -10,22 +10,24 @@
 
       <!-- STATISTICS BOX -->
 
-      <!-- Monthly Recurring Revenue -->
-
       <div class="col-md-8 quickstats-box no-padding-hr">
+
+      @for ($i = 0; $i< count($allFunctions); $i++)
+        @if($i == 0 || $i % 3 == 0)
         <div class="row">
-          @foreach ($allFunctions as $data)
+        <!-- {{ $allFunctions[$i]['statName'] }} -->
+        @endif
           <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
-              <canvas id="{{ $data['id'] }}"></canvas>
+              <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
               <div class="chart-text-left"> 
-                @if($data['currentValue'])
-                  @if(!str_contains($data['currentValue'],'-'))
+                @if($allFunctions[$i]['currentValue'])
+                  @if(!str_contains($allFunctions[$i]['currentValue'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $data['currentValue'] }}
+                  {{ $allFunctions[$i]['currentValue'] }}
                 @else
                   <span class="text-money nochange">
                   --
@@ -33,13 +35,13 @@
                 </span>
               </div>
               <div class="chart-text-right">
-                @if($data['oneMonthChange'])
-                  @if(!str_contains($data['oneMonthChange'],'-'))
+                @if($allFunctions[$i]['oneMonthChange'])
+                  @if(!str_contains($allFunctions[$i]['oneMonthChange'],'-'))
                     <span class="text-money up"><i class="fa fa-angle-up"></i>
                   @else
                     <span class="text-money down"><i class="fa fa-angle-down"></i>
                   @endif
-                  {{ $data['oneMonthChange'] }}
+                  {{ $allFunctions[$i]['oneMonthChange'] }}
                   </span>
                 <h6 class="no-margin">Previous 30 days</h6>
                 @else
@@ -49,332 +51,20 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat', '$data[id]') }}">
+              <a href="{{ URL::route('auth.single_stat', '$allFunctions[$i][id]') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
               </a>
-              <h4 class="text-center">{{ $data['statName'] }}</h4>
-            </div>
-          </div>
-          @endforeach
-
-          <!-- /Monthly Recurring Revenue -->
-
-          <!-- Net Revenue -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money up">$1313,15</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 155%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Net Revenue</h4>
-            </div>
-          </div>
-
-          <!-- /Net Revenue -->
-
-          <!-- Fees -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money up">$866</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Fees</h4>
-            </div>
-          </div>
-
-          <!-- /Fees -->
-
-        </div> <!-- / .row   -->
-
-        <div class="row">
-
-          <!-- Other Revenue -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money nochange">$0</span>
-                  <h6 class="no-margin">Previous 30 days</h6>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money nochange"> --</span>
-                </div>
-                <a href="{{ URL::route('auth.single_stat') }}">
-                  <div class="chart-overlay">
-                    <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                  </div>
-                </a>
-                <h4 class="text-center">Other Revenue</h4>
-            </div>
-          </div>
-
-          <!-- /Other Revenue -->
-
-          <!-- Average Revenue Per User -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-                <canvas></canvas>
-                <div class="chart-text-left">
-                  <span class="text-money up">$66</span>
-                </div>
-                <div class="chart-text-right">
-                  <span class="text-money up"><i class="fa fa-angle-up"></i> 0.2%</span>
-                  <h6 class="no-margin">Previous 30 days</h6>
-                </div>
-                <a href="{{ URL::route('auth.single_stat') }}">
-                  <div class="chart-overlay">
-                    <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                  </div>
-                </a>
-                <h4 class="text-center">Average Revenue Per User</h4>
-            </div>
-          </div>
-
-          <!-- /Average Revenue Per User -->
-
-          <!-- Annual Run Rate -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">$99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Annual Run Rate</h4>
-            </div>
-          </div>
-
-        </div> <!-- / .row   -->
-
-        <div class="row">
-
-          <!-- Lifetime Value -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">$99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Lifetime Value</h4>
-            </div>
-          </div>
-
-          <!-- /Lifetime Value -->
-
-          <!-- User Churn -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">99%</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">User Churn</h4>
-            </div>
-          </div>
-
-          <!-- /User Churn -->
-
-          <!-- Revenue Churn -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">99%</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Revenue Churn</h4>
-            </div>
-          </div>
-
-          <!-- /Revenue Churn -->
-
-        </div> <!-- / .row   -->
-
-        <div class="row">
-
-          <!-- Customers -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Customers</h4>
-            </div>
-          </div>
-
-          <!-- /Customers -->
-
-          <!-- Upgrades -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Upgrades</h4>
-            </div>
-          </div>
-
-          <!-- /Upgrades -->
-
-          <!-- Coupons -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">$99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Coupons</h4>
-            </div>
-          </div>
-
-          <!-- /Coupons -->
-
-        </div> <!-- / .row   -->
-
-        <div class="row">
-
-          <!-- Failed Charges -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Failed Charges</h4>
-            </div>
-          </div>
-
-          <!-- /Failed Charges -->
-
-          <!-- Refunds -->
-
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
-              <canvas></canvas>
-              <div class="chart-text-left">
-                <span class="text-money down">$99</span>
-              </div>
-              <div class="chart-text-right">
-                <span class="text-money down"><i class="fa fa-angle-down"></i> -133%</span>
-                <h6 class="no-margin">Previous 30 days</h6>
-              </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
-                </div>
-              </a>
-              <h4 class="text-center">Refunds</h4>
-            </div>
-          </div>
-
-          <!-- /Refunds -->
-
+              <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+            </div> <!-- / .chart-wrapper -->
+          </div> <!-- / .chart-box -->
+        @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
         </div> <!-- / .row -->
+        @endif
+        <!-- /{{ $allFunctions[$i]['statName'] }} -->
+      @endfor
+
       </div> <!-- / .col-sm-8 -->
 
       <!-- /STATISTICS BOX -->
@@ -442,7 +132,22 @@
 
     /* Monthly Recurring Revenue */
 
+    @for ($i = 0; $i< count($allFunctions); $i++)
+    data = {
+      labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
+      datasets: [
+          {
+              label: "Monthly Recurring Revenue",
+              fillColor: "rgba(151,187,205,0.4)",
+              strokeColor: "rgba(151,187,205,0.6)",
+              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+          }
+      ]
+    };
 
+    ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
+    var {{$allFunctions[$i]['id']}}Chart = new Chart(ctx).Line(data, options);
+    @endfor
 
        
     </script>
