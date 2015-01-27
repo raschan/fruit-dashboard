@@ -268,8 +268,8 @@ class Counter
 
 			// time interval for shown statistics
 			// right now, only last 30 days
-			$startDate = date('Y-m-d',$lastMonthTime);
-			$stopDate = date('Y-m-d',$currentDay);
+			$startDate = date('d-m-Y',$lastMonthTime);
+			$stopDate = date('d-m-Y',$currentDay);
 
 			$mrrData['dateInterval'] = array(
 				'startDate' => $startDate,

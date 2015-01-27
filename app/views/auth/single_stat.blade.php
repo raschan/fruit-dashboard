@@ -13,19 +13,19 @@
             <h3>
               <small><strong>CHOOSE A STATISTIC:</strong></small><br>
               <select class="form-control stat-select">
-                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
-                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
-                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
+                <option>{{ $mrrData['statName'] }}</option>
+                <option>{{ $mrrData['statName'] }}</option>
+                <option>{{ $mrrData['statName'] }}</option>
               </select>
             </h3>
             <div class="invoice-date">
               <small><strong>DATE</strong></small><br>
               <form class="form-inline">
-                <div class="form-group">
+                <div class="form-group date">
                   <input type="email" class="form-control" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
                 </div>
                 <span class="dash">-</span>
-                <div class="form-group">
+                <div class="form-group date">
                   <input type="email" class="form-control" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
                 </div>
               </form>
@@ -267,6 +267,24 @@
     {{ HTML::script('js/JQtable.js'); }}
 
     <script type="text/javascript">
+
+    init.push(function () {
+       $('#startDateStat').datepicker({
+           format: "dd-mm-yyyy",
+           todayHighlight: true,
+           autoclose: true
+       });
+       $('#stopDateStat').datepicker({
+           format: "dd-mm-yyyy",
+           todayHighlight: true,
+           autoclose: true
+       });
+     });
+
+    /*for later, event fire catching
+    $('yourpickerid').on('changeDate', function(ev){
+      $(this).datepicker('hide');
+    });*/
     
     var options = {
       responsive: true,
