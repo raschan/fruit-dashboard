@@ -138,8 +138,8 @@ class AuthController extends BaseController
             'auth.dashboard',
             array(
                 'allFunctions' => array(
-                    'mrrData' => Counter::showMRR(false),
-                    'AUData' => Counter::showActiveUsers(false)
+                    Counter::showMRR(false),
+                    Counter::showActiveUsers(false)
                 )
             )
         );
