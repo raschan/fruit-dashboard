@@ -3,32 +3,6 @@
 
 class Counter
 {
-	/**
-	* Gets the active customers from all the customers
-	*
-	* @param Stripe key
-	* @param PayPal key
-	*
-	* @return int - active customers
-	*/
-
-	public static function getActiveCustomers($stripeKey, $paypalKey)
-	{
-		// get all the customers
-		$allCustomers = TailoredData::getCustomers($stripeKey, $paypalKey);
-
-		// return int
-		$activeCustomers = 0;
-
-		// count all, that have at least one subscription
-		foreach ($allCustomers as $customer) {
-			if ($customer['subscriptions']['total_count'] > 0){
-				$activeCustomers++;
-			}
-		}
-
-		return $activeCustomers;
-	}
 
 	/**
 	* Gets the Average Revenue Per active Users
@@ -141,34 +115,7 @@ class Counter
     	}
     }
 
-    /**
-    * Save the daily Active Users number in database
-    */
-
-    public static function saveAU()
-    {
-    	$currentDay = date('Y-m-d', time());
-
-        // checking if we already have data
-        $currentDayAU = DB::table('au')
-            ->where('date', $currentDay)
-            ->where('user', Auth::user()->id)
-            ->get();
-
-        if (!$currentDayAU) {
-        	// no previous data
-    		$AUValue = count(self::getCurrentSubscriptions())+1;
-
-    		DB::table('AU')->insert(
-                array(
-                    'value' => $AUValue,
-                    'user'  => Auth::user()->id,
-                    'date'  => $currentDay
-                )
-            );
-    	}
-    }
-
+    
     /**
     * Prepare MRR for statistics
     *
@@ -321,6 +268,54 @@ class Counter
 	* @return pos. int (heads)
 	*/
 
+	public static function getActiveCustomers()
+	{
+		// get all the customers
+		$allCustomers = TailoredData::getCustomers();
+
+		// return int
+		$activeCustomers = 0;
+
+		// count all, that have at least one subscription
+		foreach ($allCustomers as $customer) {
+			if ($customer['subscriptions']['total_count'] > 0){
+				$activeCustomers++;
+			}
+		}
+
+		return $activeCustomers;
+	}
+
+	/**
+    * Save the daily Active Users number in database
+    */
+
+    public static function saveAU()
+    {
+    	$currentDay = date('Y-m-d', time());
+
+        // checking if we already have data
+        $currentDayAU = DB::table('au')
+            ->where('date', $currentDay)
+            ->where('user', Auth::user()->id)
+            ->get();
+
+        if (!$currentDayAU) {
+        	// no previous data
+    		$AUValue = self::getActiveCustomers();
+
+    		DB::table('AU')->insert(
+                array(
+                    'value' => $AUValue,
+                    'user'  => Auth::user()->id,
+                    'date'  => $currentDay
+                )
+            );
+    	}
+    }
+
+
+
     public static function showActiveUsers($fullDataNeeded = false) {
 	// helpers
 	$currentDay = time();
@@ -328,12 +323,12 @@ class Counter
 	setlocale(LC_MONETARY,"en_US");
 
 	// return array
-	$auData = array();
+	$AUData = array();
 
 	// simple AU data
 	// basics, what we are
-	$auData['id'] = 'au';
-	$auData['statName'] = 'Active Users';
+	$AUData['id'] = 'au';
+	$AUData['statName'] = 'Active Users';
 
     // building AU history array
     for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
@@ -342,7 +337,7 @@ class Counter
     }
 
     // current value, formatted for money
-    $AUData['currentValue'] = money_format('%n',self::getAUOnDay($currentDay));
+    $AUData['currentValue'] = self::getAUOnDay($currentDay);
 
     // change in timeframe
     $lastMonthValue = self::getAUOnDay($lastMonthTime);
@@ -371,11 +366,11 @@ class Counter
 		$oneYearValue = self::getAUOnDay($lastYearTime);
 
 	    // AU 30 days ago
-	    $AUData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
+	    $AUData['oneMonth'] = ($lastMonthValue) ?  $lastMonthValue : null;
 	    // AU 6 months ago
-	    $AUData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+	    $AUData['sixMonth'] = ($sixMonthValue) ? $sixMonthValue : null; 
 		// AU 1 year ago
-		$AUData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
+		$AUData['oneYear'] = ($oneYearValue) ? $oneYearValue : null;
 
 		// check if data is available, so we don't divide by null
 		// we have 30 days change
@@ -426,7 +421,7 @@ class Counter
 		);
 
 		// get all the plans details
-		$AUData['detailData'] = self::getAUDetails();
+		$AUData['detailData'] = self::getSubscriptionDetails();
 
 		}
 

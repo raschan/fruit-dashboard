@@ -14,17 +14,18 @@
 
       <div class="col-md-8 quickstats-box no-padding-hr">
         <div class="row">
+          @foreach ($allFunctions as $data)
           <div class="col-md-4 chart-box">
             <div class="chart-wrapper">
-              <canvas id="{{ $mrrData['id'] }}"></canvas>
+              <canvas id="{{ $data['id'] }}"></canvas>
               <div class="chart-text-left"> 
-                @if($mrrData['currentValue'])
-                  @if(!str_contains($mrrData['currentValue'],'-'))
+                @if($data['currentValue'])
+                  @if(!str_contains($data['currentValue'],'-'))
                     <span class="text-money up">
                   @else
                     <span class="text-money down">
                   @endif
-                  {{ $mrrData['currentValue'] }}
+                  {{ $data['currentValue'] }}
                 @else
                   <span class="text-money nochange">
                   --
@@ -32,13 +33,13 @@
                 </span>
               </div>
               <div class="chart-text-right">
-                @if($mrrData['oneMonthChange'])
-                  @if(!str_contains($mrrData['oneMonthChange'],'-'))
+                @if($data['oneMonthChange'])
+                  @if(!str_contains($data['oneMonthChange'],'-'))
                     <span class="text-money up"><i class="fa fa-angle-up"></i>
                   @else
                     <span class="text-money down"><i class="fa fa-angle-down"></i>
                   @endif
-                  {{ $mrrData['oneMonthChange'] }}
+                  {{ $data['oneMonthChange'] }}
                   </span>
                 <h6 class="no-margin">Previous 30 days</h6>
                 @else
@@ -48,14 +49,15 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat', '{{ $mrrData['id'] }}') }}">
+              <a href="{{ URL::route('auth.single_stat', '$data[id]') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
               </a>
-              <h4 class="text-center">{{ $mrrData['statName'] }}</h4>
+              <h4 class="text-center">{{ $data['statName'] }}</h4>
             </div>
           </div>
+          @endforeach
 
           <!-- /Monthly Recurring Revenue -->
 
@@ -440,20 +442,6 @@
 
     /* Monthly Recurring Revenue */
 
-    data = {
-      labels: [@foreach ($mrrData['history'] as $date => $value)"", @endforeach],
-      datasets: [
-          {
-              label: "Monthly Recurring Revenue",
-              fillColor: "rgba(151,187,205,0.4)",
-              strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($mrrData['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
-          }
-      ]
-    };
-
-    ctx = $('#mrr').get(0).getContext("2d");
-    var MRRChart = new Chart(ctx).Line(data, options);
 
 
        

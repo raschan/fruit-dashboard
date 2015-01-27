@@ -137,7 +137,10 @@ class AuthController extends BaseController
         return View::make(
             'auth.dashboard',
             array(
-                'mrrData' => Counter::showMRR(false)
+                'allFunctions' => array(
+                    'mrrData' => Counter::showMRR(false),
+                    'AUData' => Counter::showActiveUsers(false)
+                )
             )
         );
     }
@@ -348,16 +351,22 @@ class AuthController extends BaseController
             case 'mainPage':
             return View::make('auth.single_stat',
                 array(
-                    'Data' => Counter::showMRR(true)
+                    'data' => Counter::showMRR(true)
                 )
             );
             case 'mrr': 
             return View::make('auth.single_stat',
                 array(
-                    'Data' => Counter::showMRR(true)
+                    'data' => Counter::showMRR(true)
                 )
             );
             break;
+            case 'au':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showActiveUsers(true)
+                )
+            );
             default:
                 return Redirect::route('auth.dashboard')
                 ->with('error', 'Statistic does not exist.');
