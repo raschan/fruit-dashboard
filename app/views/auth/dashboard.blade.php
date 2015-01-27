@@ -26,8 +26,8 @@
                   @endif
                   {{ $mrrData['currentValue'] }}
                 @else
-                  <span class="text-money down">
-                  N/A
+                  <span class="text-money nochange">
+                  --
                 @endif
                 </span>
               </div>
@@ -39,12 +39,14 @@
                     <span class="text-money down"><i class="fa fa-angle-down"></i>
                   @endif
                   {{ $mrrData['oneMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
+                  </span>
                 <h6 class="no-margin">Previous 30 days</h6>
+                @else
+                  <span class="text-money nochange">
+                  --
+                  </span>
+                <h6 class="no-margin">Not enough data</h6>
+                @endif
               </div>
               <a href="{{ URL::route('auth.single_stat') }}">
                 <div class="chart-overlay">
@@ -445,7 +447,7 @@
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($mrrData['history'] as $date => $value){{ $value }}, @endforeach]
+              data: [@foreach ($mrrData['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
           }
       ]
     };
