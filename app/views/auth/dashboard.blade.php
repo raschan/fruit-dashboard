@@ -48,7 +48,7 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat') }}">
+              <a href="{{ URL::route('auth.single_stat', '{{ $mrrData['id'] }}') }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>

@@ -142,26 +142,30 @@ class Counter
     }
 
     /**
-    * Get MRR on given day
-    *
-    * @param timestamp, current day timestamp
-    * 
-    * @return int (cents) or null if data not exist
+    * Save the daily Active Users number in database
     */
 
-    public static function getMRROnDay($timestamp)
+    public static function saveAU()
     {
-    	$day = date('Y-m-d', $timestamp);
+    	$currentDay = date('Y-m-d', time());
 
-    	$mrr = DB::table('mrr')
-    		->where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->get();
+        // checking if we already have data
+        $currentDayAU = DB::table('au')
+            ->where('date', $currentDay)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-    	if($mrr){
-    		return $mrr[0]->value;
-    	} else {
-			return null;
+        if (!$currentDayAU) {
+        	// no previous data
+    		$AUValue = count(self::getCurrentSubscriptions())+1;
+
+    		DB::table('AU')->insert(
+                array(
+                    'value' => $AUValue,
+                    'user'  => Auth::user()->id,
+                    'date'  => $currentDay
+                )
+            );
     	}
     }
 
@@ -316,6 +320,118 @@ class Counter
 	*
 	* @return pos. int (heads)
 	*/
+
+    public static function showActiveUsers($fullDataNeeded = false) {
+	// helpers
+	$currentDay = time();
+	$lastMonthTime = $currentDay - 30*24*60*60;
+	setlocale(LC_MONETARY,"en_US");
+
+	// return array
+	$auData = array();
+
+	// simple AU data
+	// basics, what we are
+	$auData['id'] = 'au';
+	$auData['statName'] = 'Active Users';
+
+    // building AU history array
+    for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
+    	$date = date('Y-m-d',$i);
+        $AUData['history'][$date] = self::getAUOnDay($i);
+    }
+
+    // current value, formatted for money
+    $AUData['currentValue'] = money_format('%n',self::getAUOnDay($currentDay));
+
+    // change in timeframe
+    $lastMonthValue = self::getAUOnDay($lastMonthTime);
+    // check if data is available, so we don't divide by null
+    if ($lastMonthValue) {
+		$changeInPercent = (self::getAUOnDay($currentDay) / $lastMonthValue * 100) - 100;
+		$AUData['oneMonthChange'] = $changeInPercent . '%';
+    } else {
+        $AUData['oneMonthChange'] = null;
+    }	
+
+    // full AU data
+	if ($fullDataNeeded){
+		//timestamps
+		$twoMonthTime = $currentDay - 2*30*24*60*60;
+		$threeMonthTime = $currentDay - 3*30*24*60*60;
+    	$sixMonthTime = $currentDay - 6*30*24*60*60;
+    	$nineMonthTime = $currentDay - 9*30*24*60*60;
+    	$lastYearTime = $currentDay - 365*24*60*60;
+		
+		// past values (null if not available)		    
+		$twoMonthValue = self::getAUOnDay($twoMonthTime);
+		$threeMonthValue = self::getAUOnDay($threeMonthTime);
+		$sixMonthValue = self::getAUOnDay($sixMonthTime);
+		$nineMonthValue = self::getAUOnDay($nineMonthTime);
+		$oneYearValue = self::getAUOnDay($lastYearTime);
+
+	    // AU 30 days ago
+	    $AUData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
+	    // AU 6 months ago
+	    $AUData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+		// AU 1 year ago
+		$AUData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
+
+		// check if data is available, so we don't divide by null
+		// we have 30 days change
+		
+		if ($twoMonthValue) {
+			$changeInPercent = (self::getAUOnDay($currentDay) / $twoMonthValue * 100) - 100;
+			$AUData['twoMonthChange'] = $changeInPercent . '%';
+		} else {
+			$AUData['twoMonthChange'] = null; 
+		}
+
+		if ($threeMonthValue) {
+			$changeInPercent = (self::getAUOnDay($currentDay) / $threeMonthValue * 100) - 100;
+			$AUData['threeMonthChange'] = $changeInPercent . '%';
+		} else {
+			$AUData['threeMonthChange'] = null; 
+		}
+
+		if ($sixMonthValue) {
+			$changeInPercent = (self::getAUOnDay($currentDay) / $sixMonthValue * 100) - 100;
+			$AUData['sixMonthChange'] = $changeInPercent . '%';
+		} else {
+			$AUData['sixMonthChange'] = null; 
+		}
+
+		if ($nineMonthValue) {
+			$changeInPercent = (self::getAUOnDay($currentDay) / $nineMonthValue * 100) - 100;
+			$AUData['nineMonthChange'] = $changeInPercent . '%';
+		} else {
+			$AUData['nineMonthChange'] = null; 
+		}
+
+		if ($oneYearValue) {
+			$changeInPercent = (self::getAUOnDay($currentDay) / $oneYearValue * 100) - 100;
+			$AUData['oneYearChange'] = $changeInPercent . '%';
+		} else {
+			$AUData['oneYearChange'] = null; 
+		}
+
+		// time interval for shown statistics
+		// right now, only last 30 days
+		$startDate = date('d-m-Y',$lastMonthTime);
+		$stopDate = date('d-m-Y',$currentDay);
+
+		$AUData['dateInterval'] = array(
+			'startDate' => $startDate,
+			'stopDate' => $stopDate
+		);
+
+		// get all the plans details
+		$AUData['detailData'] = self::getAUDetails();
+
+		}
+
+	return $AUData;
+	}
 
 
 	/**
@@ -476,6 +592,76 @@ class Counter
 	|------------------------------------------------------------
 	*/
 
+	/**
+    * Get Active User details
+    *
+    * 
+    * @return array
+    */
+
+    private static function getAUDetails()
+    {
+    	$day = date('Y-m-d', $timestamp);
+
+    	$au = DB::table('au')
+    		->where('date',$day)
+    		->where('user', Auth::user()->id)
+    		->get();
+
+    	if($au){
+    		return $au[0]->value;
+    	} else {
+			return null;
+    	}
+    }
+
+	/**
+    * Get Active Users on given day
+    *
+    * @param timestamp, current day timestamp
+    * 
+    * @return int (cents) or null if data not exist
+    */
+
+    private static function getAUOnDay($timestamp)
+    {
+    	$day = date('Y-m-d', $timestamp);
+
+    	$au = DB::table('au')
+    		->where('date',$day)
+    		->where('user', Auth::user()->id)
+    		->get();
+
+    	if($au){
+    		return $au[0]->value;
+    	} else {
+			return null;
+    	}
+    }
+
+	/**
+    * Get MRR on given day
+    *
+    * @param timestamp, current day timestamp
+    * 
+    * @return int (cents) or null if data not exist
+    */
+
+    private static function getMRROnDay($timestamp)
+    {
+    	$day = date('Y-m-d', $timestamp);
+
+    	$mrr = DB::table('mrr')
+    		->where('date',$day)
+    		->where('user', Auth::user()->id)
+    		->get();
+
+    	if($mrr){
+    		return $mrr[0]->value;
+    	} else {
+			return null;
+    	}
+    }
 
 	/**
      * Getting all the subscriptions.
@@ -521,7 +707,7 @@ class Counter
 	                            'plan_id'  => $subscription['plan']['id']
 	                        );
 	                }
-                } // foreach suibscriptions
+                } // foreach subscriptions
             } // if subscriptions
         } // foreach customer
 
