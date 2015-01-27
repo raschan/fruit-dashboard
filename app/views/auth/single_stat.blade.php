@@ -20,7 +20,15 @@
             </h3>
             <div class="invoice-date">
               <small><strong>DATE</strong></small><br>
-              {{ $mrrData['dateInterval']['startDate'] }} - {{ $mrrData['dateInterval']['stopDate'] }}
+              <form class="form-inline">
+                <div class="form-group">
+                  <input type="email" class="form-control" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
+                </div>
+                <span class="dash">-</span>
+                <div class="form-group">
+                  <input type="email" class="form-control" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
+                </div>
+              </form>
             </div>
           </div> <!-- / .invoice-header -->
           <div class="single-statistic-wrapper">
