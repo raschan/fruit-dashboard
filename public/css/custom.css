@@ -268,45 +268,33 @@
 	font-size: 36px;
 }
 
-.stat-select {
+.stat-input {
 	font-size: 19px;
 	height: 40px;
 	margin-top: 5px;
 }
 
-.invoice-date {
-	padding-top: 11px;
-}
-
-.invoice-header {
-	padding: 15px 15px 35px 15px !important;
-}
-
 .stat-header {
-	padding: 5px !important;
+	background: #f7f7f7;
+	border-bottom: 8px solid #f1f1f1;
+}
+
+.stat-header .dash {
+	font-size: 19px;
+	height: 40px;
+	padding-top: 5px;
 }
 
 @media (max-width: 844px) {
-	.stat-header {
-		margin: 0 !important;
-		padding: 0 !important;
-	}
-	.datatable-header {
-		margin: 0 !important;
-		padding: 0 !important;
-	}
-	.invoice-header .dash {
+
+	.stat-header .dash {
 		display: none;
 	}
-	.invoice-date {
-		padding-top: 15px;
-	}
+
 }
 
 @media (min-width: 845px) {
-	.datatable-header {
-		padding: 40px 18px 18px 18px !important;
-	}
+
 }
 
 

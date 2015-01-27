@@ -6,31 +6,38 @@
       <!-- <div class="page-header text-center">
         <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (single view)</h1>
       </div> -->
+      <div class="col-md-12">
 
-      <div class="row panel-padding">
-        <div class="panel invoice">
-          <div class="invoice-header">
-            <h3 class="stat-header">
+        <div class="row no-margin-hr panel-padding stat-header">
+
+          <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A STATISTIC:</strong></small><br>
-              <select class="form-control stat-select">
+              <select class="form-control stat-input">
                 <option>{{ $mrrData['statName'] }}</option>
                 <option>{{ $mrrData['statName'] }}</option>
                 <option>{{ $mrrData['statName'] }}</option>
               </select>
-            </h3>
-            <div class="invoice-date">
-              <small><strong>DATE</strong></small><br>
-              <form class="form-inline">
-                <div class="form-group date">
-                  <input type="text" class="form-control" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
-                </div>
-                <span class="dash">-</span>
-                <div class="form-group date">
-                  <input type="text" class="form-control" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
-                </div>
-              </form>
-            </div>
-          </div> <!-- / .invoice-header -->
+          </div>
+                  
+          <div class="col-md-8 col-lg-6 col-lg-offset-1">
+            <small><strong>DATE</strong></small><br>
+            <form class="form-inline">
+              <div class="form-group date">
+                <input type="text" class="form-control stat-input" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
+              </div>
+              <div class="form-group dash">
+                -
+              </div>
+              <div class="form-group date">
+                <input type="text" class="form-control stat-input" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
+              </div>
+            </form>
+          </div>
+
+        </div> <!-- / .stat-header -->
+
+          
+        <div class="row panel-body">
           <div class="single-statistic-wrapper">
             <canvas></canvas>
           </div>
@@ -96,131 +103,138 @@
                 @endif
                 </span>
               </div>
-            </div> <!-- /.row -->
-          </div> <!-- /.statistic-description  -->
-        </div> <!-- /.invoice -->
-      </div> <!-- /.row -->
+            </div> <!-- / .row -->
+          </div> <!-- / .statistic-description -->
+        </div> <!-- / .row .panel-body -->
+           
 
-      <div class="row panel-padding">
-        <div class="panel">
-          <div class="statistic-description">
-            <div class="row">
-              <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>30 days growth</h4></span>
-                @if($mrrData['oneMonthChange'])
-                  @if(!str_contains($mrrData['oneMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
-                  @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
-                  @endif
-                  {{ $mrrData['oneMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
-              <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>60 days growth</h4></span>
-                @if($mrrData['twoMonthChange'])
-                  @if(!str_contains($mrrData['twoMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
-                  @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
-                  @endif
-                  {{ $mrrData['twoMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
-              <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>3 month growth</h4></span>
-                @if($mrrData['threeMonthChange'])
-                  @if(!str_contains($mrrData['threeMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
-                  @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
-                  @endif
-                  {{ $mrrData['threeMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
-              <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>6 month growth</h4></span>
-                @if($mrrData['sixMonthChange'])
-                  @if(!str_contains($mrrData['sixMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
-                  @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
-                  @endif
-                  {{ $mrrData['sixMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
+        <div class="row panel-padding">
+          <div class="panel">
+            <div class="statistic-description">
+              <div class="row">
                 <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>9 month growth</h4></span>
-                @if($mrrData['nineMonthChange'])
-                  @if(!str_contains($mrrData['nineMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  <span class="text-date"><h4>30 days growth</h4></span>
+                  @if($mrrData['oneMonthChange'])
+                    @if(!str_contains($mrrData['oneMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['oneMonthChange'] }}
                   @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    <span class="text-money down">
+                    N/A
                   @endif
-                  {{ $mrrData['nineMonthChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
-              <div class="col-md-2 stat-growth-box">
-                <span class="text-date"><h4>1 year growth</h4></span>
-                @if($mrrData['oneYearChange'])
-                  @if(!str_contains($mrrData['oneYearChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  </span>
+                </div>
+                <div class="col-md-2 stat-growth-box">
+                  <span class="text-date"><h4>60 days growth</h4></span>
+                  @if($mrrData['twoMonthChange'])
+                    @if(!str_contains($mrrData['twoMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['twoMonthChange'] }}
                   @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    <span class="text-money down">
+                    N/A
                   @endif
-                  {{ $mrrData['oneYearChange'] }}
-                @else
-                  <span class="text-money down">
-                  N/A
-                @endif
-                </span>
-              </div>
-            </div> <!-- /.row -->
-          </div> <!-- /.statistic-description  -->
-        </div> <!-- /.panel -->
-      </div> <!-- /.row -->
+                  </span>
+                </div>
+                <div class="col-md-2 stat-growth-box">
+                  <span class="text-date"><h4>3 month growth</h4></span>
+                  @if($mrrData['threeMonthChange'])
+                    @if(!str_contains($mrrData['threeMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['threeMonthChange'] }}
+                  @else
+                    <span class="text-money down">
+                    N/A
+                  @endif
+                  </span>
+                </div>
+                <div class="col-md-2 stat-growth-box">
+                  <span class="text-date"><h4>6 month growth</h4></span>
+                  @if($mrrData['sixMonthChange'])
+                    @if(!str_contains($mrrData['sixMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['sixMonthChange'] }}
+                  @else
+                    <span class="text-money down">
+                    N/A
+                  @endif
+                  </span>
+                </div>
+                  <div class="col-md-2 stat-growth-box">
+                  <span class="text-date"><h4>9 month growth</h4></span>
+                  @if($mrrData['nineMonthChange'])
+                    @if(!str_contains($mrrData['nineMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['nineMonthChange'] }}
+                  @else
+                    <span class="text-money down">
+                    N/A
+                  @endif
+                  </span>
+                </div>
+                <div class="col-md-2 stat-growth-box">
+                  <span class="text-date"><h4>1 year growth</h4></span>
+                  @if($mrrData['oneYearChange'])
+                    @if(!str_contains($mrrData['oneYearChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
+                    {{ $mrrData['oneYearChange'] }}
+                  @else
+                    <span class="text-money down">
+                    N/A
+                  @endif
+                  </span>
+                </div>
+              </div> <!-- /.row -->
+            </div> <!-- /.statistic-description  -->
+          </div> <!-- /.panel -->
+        </div> <!-- /.row -->
 
-      <div class="row panel-padding">
-        <div class="panel invoice">
-          <div class="invoice-header">
-            <h3 class="datatable-header">
-              <div>
-                {{ $mrrData['statName'] }} datatable
-              </div>
-            </h3>
-            <div class="invoice-date">
-              <small><strong>DATE</strong></small><br>
-              <form class="form-inline">
-                <div class="form-group date">
-                  <input type="text" class="form-control" id="startDatetable" value="{{ $mrrData['dateInterval']['startDate'] }}">
-                </div>
-                <span class="dash">-</span>
-                <div class="form-group date">
-                  <input type="text" class="form-control" id="stopDatetable" value="{{ $mrrData['dateInterval']['stopDate'] }}">
-                </div>
-              </form>
+        <div class="row no-margin-hr panel-padding stat-header">
+
+          <div class="col-md-4 col-lg-5">
+            <div>
+              <h3>
+              {{ $mrrData['statName'] }} datatable
+              </h3>
             </div>
-          </div> <!-- / .invoice-header -->
+          </div>
+
+          <div class="col-md-8 col-lg-6 col-lg-offset-1">
+            <small><strong>DATE</strong></small><br>
+            <form class="form-inline">
+              <div class="form-group date">
+                <input type="text" class="form-control stat-input" id="startDatetable" value="{{ $mrrData['dateInterval']['startDate'] }}">
+              </div>
+              <div class="form-group dash">
+                -
+              </div>
+              <div class="form-group date">
+                <input type="text" class="form-control stat-input" id="stopDatetable" value="{{ $mrrData['dateInterval']['stopDate'] }}">
+              </div>
+            </form>
+          </div> 
+
+        </div> <!-- / .row .stat-header   -->
+
+        <div class="row panel-body">
           <div class="invoice-info">
             <div class="invoice-recipient">
               <strong>
@@ -266,8 +280,8 @@
               </table>
             </div>
           </div> <!-- / .invoice-table -->
-        </div> <!-- /. invoice -->
-      </div> <!-- /. row -->
+        </div> <!-- /. row -->
+      </div> /<!-- . col-md-12 -->
     </div> <!-- / #content-wrapper -->
   @stop
 
