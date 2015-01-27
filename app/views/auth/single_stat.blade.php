@@ -10,7 +10,7 @@
       <div class="row panel-padding">
         <div class="panel invoice">
           <div class="invoice-header">
-            <h3>
+            <h3 class="stat-header">
               <small><strong>CHOOSE A STATISTIC:</strong></small><br>
               <select class="form-control stat-select">
                 <option>{{ $mrrData['statName'] }}</option>
@@ -22,11 +22,11 @@
               <small><strong>DATE</strong></small><br>
               <form class="form-inline">
                 <div class="form-group date">
-                  <input type="email" class="form-control" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
+                  <input type="text" class="form-control" id="startDateStat" value="{{ $mrrData['dateInterval']['startDate'] }}">
                 </div>
                 <span class="dash">-</span>
                 <div class="form-group date">
-                  <input type="email" class="form-control" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
+                  <input type="text" class="form-control" id="stopDateStat" value="{{ $mrrData['dateInterval']['stopDate'] }}">
                 </div>
               </form>
             </div>
@@ -203,14 +203,22 @@
       <div class="row panel-padding">
         <div class="panel invoice">
           <div class="invoice-header">
-            <h3>
+            <h3 class="datatable-header">
               <div>
                 {{ $mrrData['statName'] }} datatable
               </div>
             </h3>
             <div class="invoice-date">
-              <small><strong>Date</strong></small><br>
-              {{ $mrrData['dateInterval']['startDate'] }} - {{ $mrrData['dateInterval']['stopDate'] }}
+              <small><strong>DATE</strong></small><br>
+              <form class="form-inline">
+                <div class="form-group date">
+                  <input type="text" class="form-control" id="startDatetable" value="{{ $mrrData['dateInterval']['startDate'] }}">
+                </div>
+                <span class="dash">-</span>
+                <div class="form-group date">
+                  <input type="text" class="form-control" id="stopDatetable" value="{{ $mrrData['dateInterval']['stopDate'] }}">
+                </div>
+              </form>
             </div>
           </div> <!-- / .invoice-header -->
           <div class="invoice-info">
@@ -293,7 +301,7 @@
     };
 
     var data = {
-      labels: [@foreach ($mrrData['history'] as $date => $value)"{{ $value }}", @endforeach],
+      labels: [@foreach ($mrrData['history'] as $date => $value)"{{ $date }}", @endforeach],
       datasets: [
           {
               label: "Monthly Recurring Revenue",
