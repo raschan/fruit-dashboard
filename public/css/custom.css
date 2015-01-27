@@ -282,12 +282,16 @@
 	padding: 15px 15px 35px 15px !important;
 }
 
-.invoice-header > h3 {
+.stat-header {
 	padding: 5px !important;
 }
 
-@media (max-width: 845px) {
-	.invoice-header > h3 {
+@media (max-width: 844px) {
+	.stat-header {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.datatable-header {
 		margin: 0 !important;
 		padding: 0 !important;
 	}
@@ -295,7 +299,13 @@
 		display: none;
 	}
 	.invoice-date {
-		padding-top: 25px;
+		padding-top: 15px;
+	}
+}
+
+@media (min-width: 845px) {
+	.datatable-header {
+		padding: 40px 18px 18px 18px !important;
 	}
 }
 
