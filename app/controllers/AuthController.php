@@ -274,7 +274,7 @@ class AuthController extends BaseController
         $user->save();
 
         // redirect to connect
-        return Redirect::route('auth.connect');
+        return Redirect::route('auth.connect')->with('success', 'Disconnected from ' . $service . '.');;
     }
 
 
