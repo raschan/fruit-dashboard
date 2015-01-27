@@ -11,12 +11,15 @@
         <div class="panel invoice">
           <div class="invoice-header">
             <h3>
-              <div>
-                <i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;{{ $mrrData['statName'] }} 
-              </div>
+              <small><strong>CHOOSE A STATISTIC:</strong></small><br>
+              <select class="form-control stat-select">
+                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
+                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
+                <option>{{ $mrrData['statName'] }}<i class="fa fa-bar-chart-o"></i></option>
+              </select>
             </h3>
             <div class="invoice-date">
-              <small><strong>Date</strong></small><br>
+              <small><strong>DATE</strong></small><br>
               {{ $mrrData['dateInterval']['startDate'] }} - {{ $mrrData['dateInterval']['stopDate'] }}
             </div>
           </div> <!-- / .invoice-header -->
@@ -256,6 +259,7 @@
     {{ HTML::script('js/JQtable.js'); }}
 
     <script type="text/javascript">
+    
     var options = {
       responsive: true,
       maintainAspectRatio: false,
@@ -263,13 +267,13 @@
     };
 
     var data = {
-      labels: [@foreach ($mrrData['history'] as $date => $value)"", @endforeach],
+      labels: [@foreach ($mrrData['history'] as $date => $value)"{{ $value }}", @endforeach],
       datasets: [
           {
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($mrrData['history'] as $date => $value){{$value}}, @endforeach]
+              data: [@foreach ($mrrData['history'] as $date => $value){{ $value }}, @endforeach]
           }
       ]
     };
