@@ -124,7 +124,7 @@ class AuthController extends BaseController
     public function doSignout()
     {
         Auth::logout();
-        return Redirect::route('auth.signin')->with('success', 'Sing out was successfull.');
+        return Redirect::route('auth.signin')->with('success', 'Sign out was successful.');
     }
 
     /*
