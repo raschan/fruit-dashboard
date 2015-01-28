@@ -16,6 +16,7 @@
                 <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
                 <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
                 <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
+                <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
               </select>
           </div>
                   
@@ -270,7 +271,7 @@
                   
                   @foreach ($data['detailData'] as $details)
                   <tr>
-                  <td>{{$details['name']}} {{ $details['price'] }}</td>
+                  <td>{{$details['name']}} <span class="badge">{{ $details['price'] }}</span></td>
                   <td class="text-center">{{ $details['count'] }}</td>
                   <td class="text-center text-money up"> {{$details['mrr']}} </td>
                   </tr>

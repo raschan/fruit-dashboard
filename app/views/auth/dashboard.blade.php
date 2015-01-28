@@ -51,7 +51,7 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat', '$allFunctions[$i][id]') }}">
+              <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
@@ -70,43 +70,43 @@
       <!-- /STATISTICS BOX -->
 
       <!-- FEED BOX -->
-
-      <div class="col-md-4 feed-box">
-        <ul class="list-group">
-          <li class="list-group-item">
-            <h4>Transactions</h4>
-          </li>
-          <li class="list-group-item">
-            <span class="badge badge-success">Charged</span>
-            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-success">Charged</span>
-            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-success">Charged</span>
-            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-success">Charged</span>
-            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-success">Charged</span>
-            <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-danger">FAILED</span>
-            <span class="text-money nochange">$55</span> Dapibus ac facilisis in <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-          <li class="list-group-item">
-            <span class="badge badge-info">Downgrade</span>
-            Morbi leo risus <span class="timestamp">20:44</span>
-          </li> <!-- / .list-group-item -->
-        </ul>
-      </div> <!-- / .col-sm-4 -->
-
+      <div class="row">
+        <div class="col-md-4 feed-box">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <h4>Transactions</h4>
+            </li>
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-success">Charged</span>
+              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-danger">FAILED</span>
+              <span class="text-money nochange">$55</span> Dapibus ac facilisis in <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+            <li class="list-group-item">
+              <span class="badge badge-info">Downgrade</span>
+              Morbi leo risus <span class="timestamp">20:44</span>
+            </li> <!-- / .list-group-item -->
+          </ul>
+        </div> <!-- / .col-sm-4 -->
+      </div>
       <!-- /FEED BOX -->
 
     </div>  <!-- / #content-wrapper -->
