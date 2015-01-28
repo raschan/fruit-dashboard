@@ -143,6 +143,10 @@
 	padding-bottom: 15px;
 }
 
+.feed-box > ul {
+	border: 1px solid #ddd;
+}
+
 .chart-wrapper {
 	border-radius: 2px;
 	background-color: #fff;

@@ -667,6 +667,126 @@ class Counter
 	* @return int (cents)
 	*/
 
+	public static function showARPU($fullDataNeeded = false)
+    {
+    	// helpers
+    	$currentDay = time();
+    	$lastMonthTime = $currentDay - 30*24*60*60;
+    	setlocale(LC_MONETARY,"en_US");
+
+    	// return array
+    	$arpuData = array();
+
+    	// simple arpu data
+    	// basics, what we are
+    	$arpuData['id'] = 'arpu';
+    	$arpuData['statName'] = 'Average Revenue Per User';
+
+        // building arpu history array
+        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
+        	$date = date('Y-m-d',$i);
+            $arpuData['history'][$date] = self::getarpuOnDay($i);
+        }
+
+        // current value, formatted for money
+        $arpuData['currentValue'] = money_format('%n',self::getarpuOnDay($currentDay));
+
+        // change in timeframe
+        $lastMonthValue = self::getarpuOnDay($lastMonthTime);
+        // check if data is available, so we don't divide by null
+        if ($lastMonthValue) {
+			$changeInPercent = (self::getarpuOnDay($currentDay) / $lastMonthValue * 100) - 100;
+			$arpuData['oneMonthChange'] = $changeInPercent . '%';
+        } else {
+	        $arpuData['oneMonthChange'] = null;
+	    }	
+
+	    // full arpu data
+    	if ($fullDataNeeded){
+    		//timestamps
+    		$twoMonthTime = $currentDay - 2*30*24*60*60;
+    		$threeMonthTime = $currentDay - 3*30*24*60*60;
+	    	$sixMonthTime = $currentDay - 6*30*24*60*60;
+	    	$nineMonthTime = $currentDay - 9*30*24*60*60;
+	    	$lastYearTime = $currentDay - 365*24*60*60;
+			
+			// past values (null if not available)		    
+			$twoMonthValue = self::getarpuOnDay($twoMonthTime);
+			$threeMonthValue = self::getarpuOnDay($threeMonthTime);
+			$sixMonthValue = self::getarpuOnDay($sixMonthTime);
+			$nineMonthValue = self::getarpuOnDay($nineMonthTime);
+			$oneYearValue = self::getarpuOnDay($lastYearTime);
+	
+		    // arpu 30 days ago
+		    $arpuData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
+		    // arpu 6 months ago
+		    $arpuData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+			// arpu 1 year ago
+			$arpuData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
+
+			// check if data is available, so we don't divide by null
+			// we have 30 days change
+			
+			if ($twoMonthValue) {
+				$changeInPercent = (self::getarpuOnDay($currentDay) / $twoMonthValue * 100) - 100;
+				$arpuData['twoMonthChange'] = $changeInPercent . '%';
+			} else {
+				$arpuData['twoMonthChange'] = null; 
+			}
+
+			if ($threeMonthValue) {
+				$changeInPercent = (self::getarpuOnDay($currentDay) / $threeMonthValue * 100) - 100;
+				$arpuData['threeMonthChange'] = $changeInPercent . '%';
+			} else {
+				$arpuData['threeMonthChange'] = null; 
+			}
+
+			if ($sixMonthValue) {
+				$changeInPercent = (self::getarpuOnDay($currentDay) / $sixMonthValue * 100) - 100;
+				$arpuData['sixMonthChange'] = $changeInPercent . '%';
+			} else {
+				$arpuData['sixMonthChange'] = null; 
+			}
+
+			if ($nineMonthValue) {
+				$changeInPercent = (self::getarpuOnDay($currentDay) / $nineMonthValue * 100) - 100;
+				$arpuData['nineMonthChange'] = $changeInPercent . '%';
+			} else {
+				$arpuData['nineMonthChange'] = null; 
+			}
+
+			if ($oneYearValue) {
+				$changeInPercent = (self::getarpuOnDay($currentDay) / $oneYearValue * 100) - 100;
+				$arpuData['oneYearChange'] = $changeInPercent . '%';
+			} else {
+				$arpuData['oneYearChange'] = null; 
+			}
+
+			// time interval for shown statistics
+			// right now, only last 30 days
+			$startDate = date('d-m-Y',$lastMonthTime);
+			$stopDate = date('d-m-Y',$currentDay);
+
+			$arpuData['dateInterval'] = array(
+				'startDate' => $startDate,
+				'stopDate' => $stopDate
+			);
+
+			// get all the plans details
+			$arpuData['detailData'] = self::getSubscriptionDetails();
+
+			//converting price and arpu to money format
+        	foreach ($arpuData['detailData'] as $id => $planDetail) {
+	        	$arpuData['detailData'][$id]['price'] = money_format('%n', $planDetail['price']);
+	            $arpuData['detailData'][$id]['mrr'] = money_format('%n', $planDetail['mrr']);
+        	}
+
+
+    	}
+
+    	return $arpuData;
+    }
+
 
 	/**
 	* UC - User Churn
@@ -711,6 +831,25 @@ class Counter
 	| Other helper functions
 	|------------------------------------------------------------
 	*/
+
+	/**
+    * Get Average Revenue Per Users on given day
+    *
+    * @param timestamp, current day timestamp
+    * 
+    * @return int (cents) or null if data not exist
+    */
+
+	private static function getarpuOnDay($timestamp)
+    {
+    	if (self::getAUOnDay($timestamp)){
+    		return self::getMRROnDay($timestamp) / self::getAUOnDay($timestamp);
+    	}
+    	else {
+    		return null;
+    	}
+    	
+    }
 
 	/**
     * Get Active User details
