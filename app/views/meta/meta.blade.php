@@ -72,12 +72,7 @@
     <script type="text/javascript">
       $(document).ready(function(){
 
-        setTimeout(function() {
-            $('.pa-page-alerts-box').fadeTo(500, 0).slideUp(500, function(){
-              $(this).remove(); 
-            });
-          }, 5000);
-        });
+      });
     </script>
     <!-- /Pagealert timeout -->
 

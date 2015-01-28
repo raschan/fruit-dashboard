@@ -8,6 +8,13 @@ class MrrTableSeeder extends Seeder
         DB::table('mrr')->delete();
         DB::table('mrr')->insert(
             array(
+                'value' => 10323,
+                'user'  => 1,
+                'date'  => '2013-01-01'
+            )
+        );
+        DB::table('mrr')->insert(
+            array(
                 'value' => 10343,
                 'user'  => 1,
                 'date'  => '2015-01-01'
