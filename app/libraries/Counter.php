@@ -156,8 +156,19 @@ class Counter
 	        $mrrData['oneMonthChange'] = null;
 	    }	
 
-	    // full MRR data
     	if ($fullDataNeeded){
+    		
+    		// building full mrr history array
+    		$firstDay = DB::table('mrr')->orderBy('date', 'asc')->first();
+    		
+    		$firstDay = strtotime($firstDay->date);
+			$mrrData['firstDay'] = date('d-m-Y',$firstDay);	
+
+	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
+	        	$date = date('Y-m-d',$i);
+	            $mrrData['fullHistory'][$date] = self::getMRROnDay($i);
+	        }
+
     		//timestamps
     		$twoMonthTime = $currentDay - 2*30*24*60*60;
     		$threeMonthTime = $currentDay - 3*30*24*60*60;

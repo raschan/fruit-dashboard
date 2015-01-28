@@ -40,7 +40,7 @@
           
         <div class="row panel-body">
           <div class="single-statistic-wrapper">
-            <canvas></canvas>
+            <canvas id="singleStat"></canvas>
           </div>
           <div class="statistic-description">
             <div class="row">
@@ -290,50 +290,175 @@
     {{ HTML::script('js/JQtable.js'); }}
 
     <script type="text/javascript">
-
+    // datepicker start
     init.push(function () {
-       $('#startDateStat').datepicker({
-           format: "dd-mm-yyyy",
-           todayHighlight: true,
-           autoclose: true
-       });
-       $('#stopDateStat').datepicker({
-           format: "dd-mm-yyyy",
-           todayHighlight: true,
-           autoclose: true
-       });
-     });
-
-    /*for later, event fire catching
-    $('yourpickerid').on('changeDate', function(ev){
-      $(this).datepicker('hide');
-    });*/
-    
-    var options = {
-      scaleShowHorizontalLines: true,
-      scaleShowVerticalLines: false,
-      scaleFontFamily: "'Arial', sans-serif",
-      responsive: true,
-      maintainAspectRatio: false,
-      bezierCurveTension : 0.1    
-    };
-
-    var data = {
-      labels: [@foreach ($data['history'] as $date => $value)"{{ $date }}", @endforeach],
-      datasets: [
-          {
-              label: "Monthly Recurring Revenue",
-              fillColor: "rgba(151,187,205,0.4)",
-              strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
-          }
-      ]
-    };
-
-      $('canvas').each( function () {
-        var ctx = $(this).get(0).getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data, options);
+      $('#startDateStat').datepicker({
+          endDate: "{{ $data['dateInterval']['stopDate'] }}",
+          startDate: "{{ $data['firstDay'] }}",
+          format: "dd-mm-yyyy",
+          forceParse: true,
+          todayHighlight: true,
+          autoclose: true
       });
+      $('#stopDateStat').datepicker({
+          endDate: "{{ $data['dateInterval']['stopDate'] }}",
+          startDate: "{{ $data['firstDay'] }}",
+          format: "dd-mm-yyyy",
+          forceParse: true,
+          todayHighlight: true,
+          autoclose: true
+      });
+
+      
+      var start = $('#startDateStat');
+      var stop = $('#stopDateStat');
+      var selectedStartDate, selectedStopDate,arrayStartKey, arrayStopKey;
+
+      // datepicker event listeners, needs work, methods doesnt work
+      $('#startDateStat').datepicker()
+    .on("changeDate", function(e){
+        // getting the input
+        selectedStartDate = start.val();
+        selectedStopDate = stop.val();
+        
+        // formatting for array keys
+        arrayStartKey = getFormattedDate(selectedStartDate);
+        arrayStopKey = getFormattedDate (selectedStopDate);
+
+        //updating end dates and comparing values
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
+          $(this).val(selectedStopDate);
+          $.growl.warning({
+            message: "The starting date must be before the ending date.",
+            size: "large",
+            duration: 5000
+          });
+        }
+        else {
+          stop.datepicker('setStartDate', selectedStartDate);
+          createNewChart(arrayStartKey, arrayStopKey);
+          console.log('wat');
+        }
+
+      });
+
+      $('#stopDateStat').datepicker()
+    .on("changeDate", function(e){
+        selectedStartDate = start.val();
+        selectedStopDate = stop.val();
+        
+        // formatting for array keys
+        arrayStartKey = getFormattedDate(selectedStartDate);
+        arrayStopKey = getFormattedDate (selectedStopDate);
+
+        //updating end dates and comparing values
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
+          $(this).val(selectedStartDate);
+          $.growl.warning({
+            message: "The ending date must be after the starting date.",
+            size: "large",
+            duration: 5000
+          });
+
+        }
+        else {
+          start.datepicker('setEndDate', selectedStopDate);
+          createNewChart(arrayStartKey, arrayStopKey);
+          console.log('wat');
+        }
+      });
+      
+      //chart.js
+      //options
+      var options = {
+        scaleShowHorizontalLines: true,
+        scaleShowVerticalLines: false,
+        scaleFontFamily: "'Arial', sans-serif",
+        responsive: true,
+        maintainAspectRatio: false,
+        bezierCurveTension : 0.1    
+      };
+      var ctx = $('#singleStat').get(0).getContext("2d");
+      // all labels
+      var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
+      // all data value
+      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
+
+      // for default view
+      var data30 = {
+        labels: [@foreach ($data['history'] as $date => $value)"{{ $date }}", @endforeach],
+        datasets: [
+            {
+                label: "{{$data['statName']}}",
+                fillColor: "rgba(151,187,205,0.4)",
+                strokeColor: "rgba(151,187,205,0.6)",
+                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+            }
+        ]
+      };
+
+      // drawing default chart.js
+      var singleStat = new Chart(ctx).Line(data30, options);
+
+      function createNewChart(arrayStart, arrayStop){
+        for (var i in labels){
+          if (arrayStart == labels[i]){
+            arrayStart = i;
+          }
+          if (arrayStop == labels[i]){
+            arrayStop = i;
+            break;
+          }
+        }
+        
+ 
+        var newLabel = [];
+        var newData = [];
+        
+        for(i = arrayStart;i<=arrayStop;i++){
+          newLabel.push(labels[i]);  
+        }
+
+        for(i = arrayStart;i<=arrayStop;i++){
+          newData.push(data[i]);  
+        }
+        
+        console.log(newLabel);
+        console.log(newData);
+
+        for(i in singleStat.datasets[0].points){
+          singleStat.removeData();
+        }
+
+        for(i in newLabel){
+          singleStat.addData(newData[i], 'ot');
+        }
+
+        singleStat.update();
+      }
+
+      function getFormattedDate(date,format){
+        var formattedDate, d, m, y;
+
+        if (format == "unix"){
+          formattedDate = new Date(date);
+          d = formattedDate.getDate();
+          m =  formattedDate.getMonth();
+          m += 1;  // JavaScript months are 0-11
+          y = formattedDate.getFullYear();
+          formattedDate = Date.UTC(y,m,d);
+        }
+
+        else {
+          formattedDate = date.split('-');
+          formattedDate = formattedDate.reverse().join('-');
+        }
+
+        return formattedDate;
+      }
+
+    });
+
     </script>
 
   @stop
