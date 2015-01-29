@@ -142,6 +142,12 @@ Route::get('statistics', array(
     'uses' => 'AuthController@showSinglestat'
 ));
 
+Route::get('statistics/{statID}', array(
+    'before' => 'auth',
+    'as' => 'auth.single_stat',
+    'uses' => 'AuthController@showSinglestat'
+));
+
 
 // adding a key to a user
 Route::get('addkey', array(

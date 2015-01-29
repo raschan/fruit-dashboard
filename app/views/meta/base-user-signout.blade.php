@@ -6,6 +6,10 @@
 			@include('meta.navbar')
 	  @show
 
+	  @section ('pageAlert')
+			@include('meta.pageAlerts')
+		@show
+
 	  @section('pageContent')
 	  @show
 

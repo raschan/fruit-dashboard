@@ -4,7 +4,6 @@
 @stop
 
 @section('pageContent')
-  @include('meta.pageAlerts')
 
 <body class="theme-asphalt page-signin" style="">
   <!-- Page background -->
