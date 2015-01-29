@@ -186,7 +186,6 @@ class AuthController extends BaseController
                 ->withErrors($validator) // send back errors
                 ->withInput(); // sending back data
         } else {
-            // Log::info($validator);
             // validator success -> edit_profile
             // selecting logged in user
             $user = Auth::user();
@@ -348,7 +347,6 @@ class AuthController extends BaseController
     */
     public function showSinglestat($statID = 'mainPage')
     {
-        Log::info($statID);
         switch($statID){
             case 'mainPage':
             return View::make('auth.single_stat',

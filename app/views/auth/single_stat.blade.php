@@ -289,30 +289,27 @@
     // datepicker start
     init.push(function () {
       $('#startDateStat').datepicker({
-          endDate: "{{ $data['dateInterval']['stopDate'] }}",
-          startDate: "{{ $data['firstDay'] }}",
-          format: "dd-mm-yyyy",
-          autoclose: true
+        startDate: "{{ $data['firstDay'] }}",
+        endDate: "{{ $data['dateInterval']['stopDate'] }}", 
+        format: "dd-mm-yyyy",
+        autoclose: true
       });
       $('#stopDateStat').datepicker({
-          endDate: "{{ $data['dateInterval']['stopDate'] }}",
-          startDate: "{{ $data['firstDay'] }}",
-          format: "dd-mm-yyyy",
-          forceParse: true,
-          todayHighlight: true,
-          autoclose: true
+        startDate: "{{ $data['firstDay'] }}",
+        endDate: "{{ $data['dateInterval']['stopDate'] }}",
+        format: "dd-mm-yyyy",
+        forceParse: true,
+        todayHighlight: true,
+        autoclose: true
       });
 
-      
-      var start = $('#startDateStat');
-      var stop = $('#stopDateStat');
       var selectedStartDate, selectedStopDate,arrayStartKey, arrayStopKey;
 
       // datepicker event listeners, needs work, methods doesnt work
       $('#startDateStat').datepicker().on("changeDate", function(e){
         // getting the input
-        selectedStartDate = start.prop("value");
-        selectedStopDate = stop.prop("value");
+        selectedStartDate = $('#startDateStat').prop("value");
+        selectedStopDate = $('#stopDateStat').prop("value");
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
@@ -335,7 +332,7 @@
         else {
           //METHOD DOESNT WORK, WHY?
           // update end datepicker first selectable value to start datepicker value
-          stop.datepicker('setStartDate', selectedStartDate);
+          $('#stopDateStat').datepicker('setStartDate', selectedStartDate);
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
         }
@@ -343,9 +340,9 @@
       });
 
       $('#stopDateStat').datepicker().on("changeDate", function(e){
-        selectedStartDate = start.prop("value");
-        selectedStopDate = stop.prop("value");
-        
+        selectedStartDate = $('#startDateStat').prop("value");
+        selectedStopDate = $('#stopDateStat').prop("value");
+
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
         arrayStopKey = getFormattedDate (selectedStopDate);
@@ -371,7 +368,7 @@
         else {
           //METHOD DOESNT WORK, WHY?
           // update start datepicker last selectable value to end datepicker value
-          start.datepicker('setEndDate', selectedStopDate);
+          $('#startDateStat').datepicker('setEndDate', selectedStopDate);
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
         }
