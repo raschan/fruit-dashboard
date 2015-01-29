@@ -292,8 +292,6 @@
           endDate: "{{ $data['dateInterval']['stopDate'] }}",
           startDate: "{{ $data['firstDay'] }}",
           format: "dd-mm-yyyy",
-          forceParse: true,
-          todayHighlight: true,
           autoclose: true
       });
       $('#stopDateStat').datepicker({
@@ -311,17 +309,19 @@
       var selectedStartDate, selectedStopDate,arrayStartKey, arrayStopKey;
 
       // datepicker event listeners, needs work, methods doesnt work
-      $('#startDateStat').datepicker().on("hide", function(e){
+      $('#startDateStat').datepicker().on("changeDate", function(e){
         // getting the input
-        selectedStartDate = start.val();
-        selectedStopDate = stop.val();
+        selectedStartDate = start.prop("value");
+        selectedStopDate = stop.prop("value");
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
         arrayStopKey = getFormattedDate (selectedStopDate);
+        console.log(selectedStartDate, selectedStopDate, arrayStartKey, arrayStartKey);
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
+          console.log("are we here?");
           // update start datepicker to end datepicker value
           $(this).prop("value",selectedStopDate);
           // growl
@@ -333,6 +333,7 @@
         }
         // if start date is valid
         else {
+          //METHOD DOESNT WORK, WHY?
           // update end datepicker first selectable value to start datepicker value
           stop.datepicker('setStartDate', selectedStartDate);
           // create new chart
@@ -341,9 +342,9 @@
 
       });
 
-      $('#stopDateStat').datepicker().on("hide", function(e){
-        selectedStartDate = start.val();
-        selectedStopDate = stop.val();
+      $('#stopDateStat').datepicker().on("changeDate", function(e){
+        selectedStartDate = start.prop("value");
+        selectedStopDate = stop.prop("value");
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
@@ -368,14 +369,36 @@
         }
         // if end date is valid
         else {
+          //METHOD DOESNT WORK, WHY?
           // update start datepicker last selectable value to end datepicker value
           start.datepicker('setEndDate', selectedStopDate);
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
         }
       });
+
+      // datepicker bugfix
+
+      // Save date picked
+      $('#startDateStat').on('show', function () {
+          previousDate = $(this).val();
+      })
+      $('#stopDateStat').on('show', function () {
+          previousDate = $(this).val();
+      })
+      // Replace with previous date if no date is picked or if same date is picked to avoide toggle error
+      $('#startDateStat').on('hide', function () {
+          if ($(this).val() === '' || $(this).val() === null) {
+              $(this).val(previousDate).datepicker('update');
+          }
+      });
+      $('#stopDateStat').on('hide', function () {
+          if ($(this).val() === '' || $(this).val() === null) {
+              $(this).val(previousDate).datepicker('update');
+          }
+      });
       
-      //chart.js
+      // CHART.JS
       //options
       var options = {
         scaleShowHorizontalLines: true,
@@ -409,46 +432,48 @@
 
       // creating new chart
       function createNewChart(arrayStart, arrayStop){
-      // search all labels for selected data interval's start and end index value in array
-        for (var i in labels){
-          if (arrayStart == labels[i]){
-            arrayStart = i;
+      if (arrayStart && arrayStop){
+          // search all labels for selected data interval's start and end index value in array
+          for (var i in labels){
+            if (arrayStart == labels[i]){
+              arrayStart = i;
+            }
+            if (arrayStop == labels[i]){
+              arrayStop = i;
+              break;
+            }
           }
-          if (arrayStop == labels[i]){
-            arrayStop = i;
-            break;
+          
+          var newLabel = [];
+          var newData = [];
+          
+          // updating label array with selected index array value
+          for(i = arrayStart;i<=arrayStop;i++){
+            newLabel.push(labels[i]);  
           }
-        }
-        
-        var newLabel = [];
-        var newData = [];
-        
-        // updating label array with selected index array value
-        for(i = arrayStart;i<=arrayStop;i++){
-          newLabel.push(labels[i]);  
-        }
-        // updating data array with selected index array value
-        for(i = arrayStart;i<=arrayStop;i++){
-          newData.push(data[i]);  
-        }
-        
-        // destroying stat
-        singleStat.destroy();
+          // updating data array with selected index array value
+          for(i = arrayStart;i<=arrayStop;i++){
+            newData.push(data[i]);  
+          }
+          
+          // destroying stat
+          singleStat.destroy();
 
-        // for updated view
-        var dataNew = {
-          labels: newLabel,
-          datasets: [
-              {
-                  fillColor: "rgba(151,187,205,0.4)",
-                  strokeColor: "rgba(151,187,205,0.6)",
-                  data: newData
-              }
-          ]
-        };
-        // creating updated stat
-        ctx = $('#singleStat').get(0).getContext("2d");
-        singleStat = new Chart(ctx).Line(dataNew, options);
+          // for updated view
+          var dataNew = {
+            labels: newLabel,
+            datasets: [
+                {
+                    fillColor: "rgba(151,187,205,0.4)",
+                    strokeColor: "rgba(151,187,205,0.6)",
+                    data: newData
+                }
+            ]
+          };
+          // creating updated stat
+          ctx = $('#singleStat').get(0).getContext("2d");
+          singleStat = new Chart(ctx).Line(dataNew, options);
+        }
       }
 
       function getFormattedDate(date,format){
