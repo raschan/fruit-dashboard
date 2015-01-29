@@ -124,7 +124,7 @@ class AuthController extends BaseController
     public function doSignout()
     {
         Auth::logout();
-        return Redirect::route('auth.signin');
+        return Redirect::route('auth.signin')->with('success', 'Sign out was successful.');
     }
 
     /*
@@ -134,21 +134,14 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
-        // getting mrr history
-        $mrr_history = DB::table('mrr')
-            ->where('user', Auth::user()->id)
-            ->get();
-
-        // initializing array
-        $mrr_data = array();
-        foreach ($mrr_history as $mrr_element) {
-            array_push($mrr_data, $mrr_element->value);
-        }
-        Log::info($mrr_data);
         return View::make(
             'auth.dashboard',
             array(
-                'mrr_history' => $mrr_data
+                'allFunctions' => array(
+                    Counter::showMRR(false),
+                    Counter::showActiveUsers(false),
+                    Counter::showARR(false)
+                )
             )
         );
     }
@@ -180,7 +173,6 @@ class AuthController extends BaseController
     */
     public function doSettings()
     {
-        Log::info(Input::all());
         // Validation rules
         $rules = array(
             'email' => 'email'
@@ -285,7 +277,7 @@ class AuthController extends BaseController
         $user->save();
 
         // redirect to connect
-        return Redirect::route('auth.connect');
+        return Redirect::route('auth.connect')->with('success', 'Disconnected from ' . $service . '.');;
     }
 
 
@@ -344,7 +336,7 @@ class AuthController extends BaseController
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard');
+        return Redirect::route('auth.connect')->with('success', 'Stripe connected.');
 
         }
     }
@@ -353,9 +345,41 @@ class AuthController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat()
+    public function showSinglestat($statID = 'mainPage')
     {
-        return View::make('auth.single_stat');
+        Log::info($statID);
+        switch($statID){
+            case 'mainPage':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showMRR(true)
+                )
+            );
+            case 'mrr':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showMRR(true)
+                )
+            );
+            break;
+            case 'au':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showActiveUsers(true)
+                )
+            );
+            case 'arr':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => Counter::showARR(true)
+                )
+            );
+            default:
+                return Redirect::route('auth.dashboard')
+                ->with('error', 'Statistic does not exist.');
+            break;
+        }
+
     }
 
 }

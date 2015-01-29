@@ -23,7 +23,7 @@
 						<a href="{{ URL::route('auth.dashboard') }}"><i class="dropdown-icon fa fa-home"></i>&nbsp;&nbsp;Home</a>
 					</li>
 					<li>
-						<a href="{{ URL::route('auth.single_stat') }}"><i class="dropdown-icon fa fa-bar-chart-o"></i>&nbsp;&nbsp;Statistics</a>
+						<a href="{{ URL::route('auth.single_stat', 'mrr') }}"><i class="dropdown-icon fa fa-bar-chart-o"></i>&nbsp;&nbsp;Statistics</a>
 					</li>
 				</ul> <!-- / .navbar-nav -->
 

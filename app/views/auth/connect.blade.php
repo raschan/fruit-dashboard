@@ -6,12 +6,6 @@
         <h1><i class="fa fa-link page-header-icon"></i>&nbsp;&nbsp;Connect a service</h1>
       </div> <!-- / .page-header -->
 
-      @if (!Auth::user()->isConnected())
-      <div class="alert alert-warning">
-        You didn't connect any service yet! This is only a demo site! <a href="{{ URL::route('auth.dashboard') }}" class="pull-right"> Continue in demo</a>
-      </div>
-      @endif
-
       <div class="col-md-10 col-md-offset-1">
 
         <!-- PayPal connect-->
@@ -32,13 +26,13 @@
               <div class="col-sm-2 text-center">
                 @if ($paypal_connected)
                 <a href="{{ URL::route('auth.disconnect', 'paypal') }}">
-                <button class='btn btn-special btn-lg btn-flat sm-pull-right'>Disconnect</button>
+                <button class='btn btn-warning btn-xs btn-flat sm-pull-right'>Disconnect</button>
                 </a>
                 @else
                 <a href="{{ $redirect_url }}">
                     {{ Form::submit('Connect', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
+                        'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right')) }}
                 </a>
                 @endif
               </div>
@@ -53,7 +47,7 @@
         <div class="row">
           <div class="stripe-form-wrapper">
             <div class="panel-body stripe-form">
-              <h4>Connect Stripe</h4>
+              <h4>Connect stripe</h4>
 
               <div class="col-sm-2 text-center">
                 <i class="fa icon fa-cc-stripe fa-4x"></i>
@@ -61,8 +55,24 @@
 
               <div class="col-sm-10">
                 @if ($stripe_connected)
-                <a href="{{ URL::route('auth.disconnect', 'stripe') }}">
-                <button class='btn btn-special btn-lg btn-flat sm-pull-right'>Disconnect</button>
+                  <!-- Modal box -->
+                  <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Warning</h4>
+                        </div>
+                        <div class="modal-body">Are you sure you want to disconnect stripe from your account? After disconnecting we will not receive any more data from stripe.</div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <a href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                      </div>
+                      </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                  </div>
+                  <!-- /Modal box -->
+                <button class="btn btn-warning btn-xs btn-flat sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
                 @else
                 {{ Form::open(array(
                   'route'=>'auth.connect',
@@ -84,7 +94,7 @@
                       <div class="col-sm-2 text-center">
                       {{ Form::submit('Connect', array(
                           'id' => 'id_submit',
-                          'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
+                          'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right')) }}
                       </div>
 
                     </div> <!-- / .form-group -->
