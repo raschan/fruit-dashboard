@@ -368,6 +368,15 @@ class Counter
 
     // full AU data
 	if ($fullDataNeeded){
+		// building full AU history
+		$firstDay = self::getFirstDay();
+		$AUData['firstDay'] = date('d-m-Y',$firstDay);
+		
+
+        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
+        	$date = date('Y-m-d',$i);
+            $AUData['fullHistory'][$date] = self::getAUOnDay($i);
+        }
 		//timestamps
 		$twoMonthTime = $currentDay - 2*30*24*60*60;
 		$threeMonthTime = $currentDay - 3*30*24*60*60;
@@ -557,7 +566,7 @@ class Counter
     	// return array
     	$arrData = array();
 
-    	// simple MRR data
+    	// simple ARR data
     	// basics, what we are
     	$arrData['id'] = 'arr';
     	$arrData['statName'] = 'Annual Run Rate';
@@ -581,8 +590,17 @@ class Counter
 	        $arrData['oneMonthChange'] = null;
 	    }	
 
-	    // full MRR data
+	    // full ARR data
     	if ($fullDataNeeded){
+    		// building full arr history
+    		$firstDay = self::getFirstDay();
+			$arrData['firstDay'] = date('d-m-Y',$firstDay);
+			
+
+	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
+	        	$date = date('Y-m-d',$i);
+	            $arrData['fullHistory'][$date] = self::getMRROnDay($i) * 12;
+	        }
     		//timestamps
     		$twoMonthTime = $currentDay - 2*30*24*60*60;
     		$threeMonthTime = $currentDay - 3*30*24*60*60;
@@ -713,6 +731,15 @@ class Counter
 
 	    // full arpu data
     	if ($fullDataNeeded){
+    		// building full arpu history
+    		$firstDay = self::getFirstDay();
+			$arpuData['firstDay'] = date('d-m-Y',$firstDay);
+			
+
+	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
+	        	$date = date('Y-m-d',$i);
+	            $arpuData['fullHistory'][$date] = self::getarpuOnDay($i);
+	        }
     		//timestamps
     		$twoMonthTime = $currentDay - 2*30*24*60*60;
     		$threeMonthTime = $currentDay - 3*30*24*60*60;
