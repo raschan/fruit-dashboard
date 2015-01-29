@@ -109,10 +109,8 @@
         </div> <!-- / .row .panel-body -->
            
 
-        <div class="row panel-padding">
-          <div class="panel">
+        <div class="row panel-body margin-vr-sm">
             <div class="statistic-description">
-              <div class="row">
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>30 days growth</h4></span>
                   @if($data['oneMonthChange'])
@@ -203,9 +201,7 @@
                   @endif
                   </span>
                 </div>
-              </div> <!-- /.row -->
             </div> <!-- /.statistic-description  -->
-          </div> <!-- /.panel -->
         </div> <!-- /.row -->
 
         <div class="row no-margin-hr panel-padding stat-header">
@@ -315,8 +311,7 @@
       var selectedStartDate, selectedStopDate,arrayStartKey, arrayStopKey;
 
       // datepicker event listeners, needs work, methods doesnt work
-      $('#startDateStat').datepicker()
-    .on("changeDate", function(e){
+      $('#startDateStat').datepicker().on("hide", function(e){
         // getting the input
         selectedStartDate = start.val();
         selectedStopDate = stop.val();
@@ -325,25 +320,28 @@
         arrayStartKey = getFormattedDate(selectedStartDate);
         arrayStopKey = getFormattedDate (selectedStopDate);
 
-        //updating end dates and comparing values
+        // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          $(this).val(selectedStopDate);
+          // update start datepicker to end datepicker value
+          $(this).prop("value",selectedStopDate);
+          // growl
           $.growl.warning({
             message: "The starting date must be before the ending date.",
             size: "large",
             duration: 5000
           });
         }
+        // if start date is valid
         else {
+          // update end datepicker first selectable value to start datepicker value
           stop.datepicker('setStartDate', selectedStartDate);
+          // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
-          console.log('wat');
         }
 
       });
 
-      $('#stopDateStat').datepicker()
-    .on("changeDate", function(e){
+      $('#stopDateStat').datepicker().on("hide", function(e){
         selectedStartDate = start.val();
         selectedStopDate = stop.val();
         
@@ -351,9 +349,16 @@
         arrayStartKey = getFormattedDate(selectedStartDate);
         arrayStopKey = getFormattedDate (selectedStopDate);
 
-        //updating end dates and comparing values
+        // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          $(this).val(selectedStartDate);
+          console.log(selectedStartDate);
+          console.log(arrayStartKey);
+          console.log(selectedStopDate);
+          console.log(arrayStopKey);
+          // update end datepicker to start datepicker value
+          
+          $(this).prop("value",selectedStartDate);
+          // growl
           $.growl.warning({
             message: "The ending date must be after the starting date.",
             size: "large",
@@ -361,10 +366,12 @@
           });
 
         }
+        // if end date is valid
         else {
+          // update start datepicker last selectable value to end datepicker value
           start.datepicker('setEndDate', selectedStopDate);
+          // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
-          console.log('wat');
         }
       });
       
@@ -400,7 +407,9 @@
       // drawing default chart.js
       var singleStat = new Chart(ctx).Line(data30, options);
 
+      // creating new chart
       function createNewChart(arrayStart, arrayStop){
+      // search all labels for selected data interval's start and end index value in array
         for (var i in labels){
           if (arrayStart == labels[i]){
             arrayStart = i;
@@ -411,30 +420,35 @@
           }
         }
         
- 
         var newLabel = [];
         var newData = [];
         
+        // updating label array with selected index array value
         for(i = arrayStart;i<=arrayStop;i++){
           newLabel.push(labels[i]);  
         }
-
+        // updating data array with selected index array value
         for(i = arrayStart;i<=arrayStop;i++){
           newData.push(data[i]);  
         }
         
-        console.log(newLabel);
-        console.log(newData);
+        // destroying stat
+        singleStat.destroy();
 
-        for(i in singleStat.datasets[0].points){
-          singleStat.removeData();
-        }
-
-        for(i in newLabel){
-          singleStat.addData(newData[i], 'ot');
-        }
-
-        singleStat.update();
+        // for updated view
+        var dataNew = {
+          labels: newLabel,
+          datasets: [
+              {
+                  fillColor: "rgba(151,187,205,0.4)",
+                  strokeColor: "rgba(151,187,205,0.6)",
+                  data: newData
+              }
+          ]
+        };
+        // creating updated stat
+        ctx = $('#singleStat').get(0).getContext("2d");
+        singleStat = new Chart(ctx).Line(dataNew, options);
       }
 
       function getFormattedDate(date,format){
