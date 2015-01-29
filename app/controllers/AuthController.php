@@ -243,7 +243,7 @@ class AuthController extends BaseController
 
         // selecting logged in user
         $user = Auth::user();
-    
+
         // returning view
         return View::make('auth.connect',
             array(
@@ -261,26 +261,26 @@ class AuthController extends BaseController
     |===================================================
     */
     public function doDisconnect($service)
-    {   
+    {
         // NOTE: should we also remove the colleced DB data?
-        
+
         // selecting the logged in User
         $user = Auth::user();
-        
+
         if ($service == "stripe") {
             // disconnecting stripe
-                
+
             // removing stripe key
             $user->stripe_key = "";
 
         } else if ($service == "paypal") {
-            // disconnecting paypal 
+            // disconnecting paypal
 
             // removing paypal refresh token
             $user->paypal_key = "";
-            
+
         }
-        
+
         // saving modification on user
         $user->save();
 
@@ -312,7 +312,7 @@ class AuthController extends BaseController
         } else {
             // validator success
             try {
-                
+
                 // trying to login with this key
                 Stripe::setApiKey(Input::get('stripe'));
                 $account = Stripe_Account::retrieve(); // catchable line
@@ -324,7 +324,7 @@ class AuthController extends BaseController
 
                 // setting key
                 $user->stripe_key = Input::get('stripe');
-                
+
                 // setting name if is null
                 if (strlen($user->name) == 0) {
                     $user->name = $returned_object['display_name'];
@@ -343,7 +343,7 @@ class AuthController extends BaseController
                 );
             }
 
-        // redirect to get stripe 
+        // redirect to get stripe
         return Redirect::route('auth.dashboard');
 
         }

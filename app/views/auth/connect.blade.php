@@ -41,7 +41,7 @@
                         'class' => 'btn btn-special btn-lg btn-flat sm-pull-right')) }}
                 </a>
                 @endif
-              </div> 
+              </div>
 
             </div> <!-- /. panel-body paypal-form -->
           </div> <!-- /. col-sm-6 paypal-form-wrapper -->
@@ -51,7 +51,7 @@
 
         <!-- Stripe connect -->
         <div class="row">
-          <div class="stripe-form-wrapper">          
+          <div class="stripe-form-wrapper">
             <div class="panel-body stripe-form">
               <h4>Connect Stripe</h4>
 
@@ -90,7 +90,7 @@
                     </div> <!-- / .form-group -->
 
                 {{ Form::close() }}
-                
+
                 @endif
 
               </div> <!-- /. col-sm-10 -->
