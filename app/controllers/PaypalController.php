@@ -75,23 +75,23 @@ class PaypalController extends BaseController
 
         // updating the user
         $user = Auth::user();
-    
+
         //saving refresh token
         $user->paypal_key = $accessToken->getRefreshToken();
 
 
         // getting user data also testing refreshtoken
-        
+
         // setting api context
         $api_context = PayPalHelper::getApiContext();
-        
-        // need a new acces token 
+
+        // need a new acces token
         $tokenInfo = new OpenIdTokeninfo();
         $tokenInfo = $tokenInfo->createFromRefreshToken(array('refresh_token' => $user->paypal_key), $api_context);
-        
+
         // setting params
         $params = array('access_token' => $tokenInfo->getAccessToken());
-    
+
         // getting user info
         try {
             $userInfo = OpenIdUserinfo::getUserinfo($params, $api_context);
@@ -130,7 +130,7 @@ class PaypalController extends BaseController
         if (strlen($user->gender) == 0) {
             $user->gender = $userInfo->getGender();
         }
-        
+
 
         // saving user
         $user->save();
@@ -149,40 +149,40 @@ class PaypalController extends BaseController
     {
         // setting api context
         $api_context = PayPalHelper::getApiContext();
-        
-        
+
+
         echo "<pre>";
         var_dump(print_r(PayPalHelper::getCustomers($api_context)));
         exit(1);
-        
+
         // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]
         // $agreement = new Agreement();
         // $agreement->execute("EC-08Y71958XX624761D", $api_context);
         // $agreement = Agreement::get("I-F231FUFEPYG8", $api_context);
         $params = array('count' => 10, 'start_index' => 5);
-        
+
         $output = Payment::all($params, $api_context);
-        
+
         /*
         echo "<pre>";
         print_r(var_dump($output));
         exit(1);*/
         //echo '<pre>';print_r(var_dump($output));
         //exit(1);
-        
+
         try {
 
             $params = array('count' => 10, 'start_index' => 5);
-        
+
             //$payments = Payment::all($params, $api_context);
             //echo '<pre>';echo var_dump($payments);
             //exit(1);
-            
+
         } catch (PayPal\Exception\PayPalConnectionException $ex) {
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
-        
+
         // getting the list of plans
         $plans = PayPalHelper::getPlans($api_context);
 
@@ -191,8 +191,8 @@ class PaypalController extends BaseController
             'dev.paypal_create_plan',
             array('plans' => $plans)
         );
-        
-    }    
+
+    }
     /*
     |===================================================
     | <POST> | doCreatePlan: Creates a PP plan for a user
@@ -228,19 +228,19 @@ class PaypalController extends BaseController
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
             }
-    
+
             // Create a new instance of Plan object
             $plan = new Plan();
-            
+
             // # Basic Information
             // Fill up the basic information that is required for the plan
             $plan->setName(Input::get('name'))
                 ->setDescription('not yet implemented')
-                ->setType('fixed'); // <-- what's this ?? 
-    
+                ->setType('fixed'); // <-- what's this ??
+
             // Create a new instance of PaymentDefinition
             $paymentDefinition = new PaymentDefinition();
-            
+
             // You should be able to see the acceptable values in the comments.
             $paymentDefinition->setName('Regular Payments')
                 ->setType('REGULAR')
@@ -251,7 +251,7 @@ class PaypalController extends BaseController
 
 
             $merchantPreferences = new MerchantPreferences();
-    
+
             $merchantPreferences->setReturnUrl(route('auth.dashboard'))
                 ->setCancelUrl(route('auth.dashboard'))
                 ->setAutoBillAmount("yes")
@@ -272,44 +272,44 @@ class PaypalController extends BaseController
 
             try {
                 $patch = new Patch();
-            
+
                 $value = new PayPalModel('{
             	       "state":"ACTIVE"
             	     }');
-            
+
                 $patch->setOp('replace')
                     ->setPath('/')
                     ->setValue($value);
                 $patchRequest = new PatchRequest();
                 $patchRequest->addPatch($patch);
-            
+
                 $plan->update($patchRequest, $api_context);
-            
+
                 $updated_plan = Plan::get($plan->getId(), $api_context);
-            
+
             } catch (PayPal\Exception\PPConnectionException $ex) {
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
             }
-            
+
 
             $agreement = new Agreement();
-            
+
             $agreement->setName('Base Agreement')
                 ->setDescription('Basic Agreement')
                 ->setStartDate('2015-01-15T15:10:04Z');
-            
+
             // Add Plan ID
             // Please note that the plan Id should be only set in this case.
             $new_plan = new Plan();
             $new_plan->setId($updated_plan->getId());
             $agreement->setPlan($new_plan);
-            
+
             // Add Payer
             $payer = new Payer();
             $payer->setPaymentMethod('paypal');
             $agreement->setPayer($payer);
-            
+
             // Add Shipping Address
             $shippingAddress = new ShippingAddress();
             $shippingAddress->setLine1('111 First Street')
@@ -317,15 +317,15 @@ class PaypalController extends BaseController
                 ->setState('CA')
                 ->setPostalCode('95070')
                 ->setCountryCode('US');
-                
+
             $agreement->setShippingAddress($shippingAddress);
-            
+
 
             // ### Create Agreement
             try {
                 // Please note that as the agreement has not yet activated, we wont be receiving the ID just yet.
                 $agreement = $agreement->create($api_context);
-            
+
             } catch (PayPal\Exception\PPConnectionException $ex) {
                 echo '<pre>';print_r(json_decode($ex->getData()));
                 exit(1);
@@ -333,12 +333,12 @@ class PaypalController extends BaseController
             echo $agreement->getId();
             echo "<br><pre>"; echo var_dump($agreement);
             exit(1);
-            
+
 
             return Redirect::route('paypal.createPlan');
         }
-    }    
-    
+    }
+
     /*
     |===================================================
     | <GET> | doDeletePlan: Deletes a PP plan
@@ -348,25 +348,25 @@ class PaypalController extends BaseController
     {
         // setting API context
         $api_context = PayPalHelper::getApiContext();
-        
+
         // trying to delete the plan
         try {
-            
+
             // getting the plan by ID
             $plan = Plan::get($id, $api_context);
-            
-            // delete the plan 
+
+            // delete the plan
             $result = $plan->delete($api_context);
-            
-            
+
+
         } catch (PayPal\Exception\PPConnectionException $ex) {
             // catching errors
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
-        
+
         // returning to createPlan
         return Redirect::route('paypal.createPlan');
     }
-    
+
 }
