@@ -267,7 +267,7 @@
                   
                   @foreach ($data['detailData'] as $details)
                   <tr>
-                  <td>{{$details['name']}} <span class="badge">{{ $details['price'] }}</span></td>
+                  <td>{{$details['name']}} <span class="badge">{{ $details['price'] }}&nbsp;/&nbsp;{{ $details['interval'] }}</span></td>
                   <td class="text-center">{{ $details['count'] }}</td>
                   <td class="text-center text-money up"> {{$details['mrr']}} </td>
                   </tr>
@@ -403,7 +403,8 @@
         scaleFontFamily: "'Arial', sans-serif",
         responsive: true,
         maintainAspectRatio: false,
-        bezierCurveTension : 0.1    
+        bezierCurveTension : 0.1,
+        pointHitDetectionRadius : 5 
       };
       var ctx = $('#singleStat').get(0).getContext("2d");
       // all labels
@@ -451,6 +452,16 @@
           // updating data array with selected index array value
           for(i = arrayStart;i<=arrayStop;i++){
             newData.push(data[i]);  
+          }
+
+          var modulus = Math.round((newLabel.length) / 30);
+
+          i=0;
+
+          for(i in newLabel){
+            if (i !== 0 && i % modulus !== 0){
+              newLabel[i]="";
+            }
           }
           
           // destroying stat

@@ -63,7 +63,9 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Warning</h4>
                         </div>
-                        <div class="modal-body">Are you sure you want to disconnect stripe from your account? After disconnecting we will not receive any more data from stripe.</div>
+                        <div class="modal-body">
+                          Are you sure you want to disconnect stripe from your account? <br>
+                          After disconnecting we will not receive any more data from stripe.</div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <a href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
