@@ -322,3 +322,8 @@
 .single-statistic-wrapper canvas {
 	
 }
+
+.margin-vr-sm {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}

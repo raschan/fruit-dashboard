@@ -158,11 +158,10 @@ class Counter
 
     	if ($fullDataNeeded){
     		
-    		// building full mrr history array
-    		$firstDay = DB::table('mrr')->orderBy('date', 'asc')->first();
-    		
-    		$firstDay = strtotime($firstDay->date);
-			$mrrData['firstDay'] = date('d-m-Y',$firstDay);	
+    		// building full mrr history
+    		$firstDay = self::getFirstDay();
+			$mrrData['firstDay'] = date('d-m-Y',$firstDay);
+			
 
 	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
 	        	$date = date('Y-m-d',$i);
@@ -842,6 +841,19 @@ class Counter
 	| Other helper functions
 	|------------------------------------------------------------
 	*/
+	/**
+    * Get day of first recorded data
+    * 
+    * @return string with date
+    */
+
+	private static function getFirstDay(){
+
+		$firstDay = DB::table('mrr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
+		$firstDay = strtotime($firstDay->date);
+
+		return $firstDay;
+    }
 
 	/**
     * Get Average Revenue Per Users on given day
