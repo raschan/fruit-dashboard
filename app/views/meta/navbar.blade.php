@@ -1,4 +1,4 @@
-<div id="main-navbar" class="navbar navbar-inverse" role="navigation">
+<div id="main-navbar" class="navbar" role="navigation">
 	<!-- Main menu toggle -->
 	<button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
 	
