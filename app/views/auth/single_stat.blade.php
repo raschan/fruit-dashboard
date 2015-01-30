@@ -8,10 +8,10 @@
       </div> -->
       <div class="col-md-12">
 
-        <div class="row no-margin-hr panel-padding stat-header">
+        <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
-              <small><strong>CHOOSE A STATISTIC:</strong></small><br>
+              <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control stat-input" onChange="window.location.href=this.value">
                 <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
                 <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
@@ -38,7 +38,7 @@
         </div> <!-- / .stat-header -->
 
           
-        <div class="row panel-body">
+        <div class="row panel-body bordered">
           <div class="single-statistic-wrapper">
             <canvas id="singleStat"></canvas>
           </div>
@@ -109,7 +109,7 @@
         </div> <!-- / .row .panel-body -->
            
 
-        <div class="row panel-body margin-vr-sm">
+        <div class="row panel-body margin-vr-sm bordered">
             <div class="statistic-description">
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>30 days growth</h4></span>
@@ -204,7 +204,7 @@
             </div> <!-- /.statistic-description  -->
         </div> <!-- /.row -->
 
-        <div class="row no-margin-hr panel-padding stat-header">
+        <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
             <div>
@@ -231,7 +231,7 @@
 
         </div> <!-- / .row .stat-header   -->
 
-        <div class="row panel-body">
+        <div class="row panel-body bordered">
           <div class="invoice-info">
             <div class="invoice-recipient">
               <strong>
@@ -320,7 +320,8 @@
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
           console.log("are we here?");
           // update start datepicker to end datepicker value
-          $(this).prop("value",selectedStopDate);
+          $(this).datepicker('update', selectedStopDate);
+          //$(this).prop("value",selectedStopDate);
           // growl
           $.growl.warning({
             message: "The starting date must be before the ending date.",
@@ -354,8 +355,8 @@
           console.log(selectedStopDate);
           console.log(arrayStopKey);
           // update end datepicker to start datepicker value
-          
-          $(this).prop("value",selectedStartDate);
+          $(this).datepicker('update', selectedStartDate);
+          //$(this).prop("value",selectedStartDate);
           // growl
           $.growl.warning({
             message: "The ending date must be after the starting date.",
@@ -376,24 +377,7 @@
 
       // datepicker bugfix
 
-      // Save date picked
-      $('#startDateStat').on('show', function () {
-          previousDate = $(this).val();
-      })
-      $('#stopDateStat').on('show', function () {
-          previousDate = $(this).val();
-      })
-      // Replace with previous date if no date is picked or if same date is picked to avoide toggle error
-      $('#startDateStat').on('hide', function () {
-          if ($(this).val() === '' || $(this).val() === null) {
-              $(this).val(previousDate).datepicker('update');
-          }
-      });
-      $('#stopDateStat').on('hide', function () {
-          if ($(this).val() === '' || $(this).val() === null) {
-              $(this).val(previousDate).datepicker('update');
-          }
-      });
+      
       
       // CHART.JS
       //options

@@ -18,7 +18,7 @@
         <!-- {{ $allFunctions[$i]['statName'] }} -->
         @endif
           <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
+            <div class="chart-wrapper bordered">
               <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
               <div class="chart-text-left"> 
                 @if($allFunctions[$i]['currentValue'])
@@ -72,7 +72,7 @@
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
-          <ul class="list-group">
+          <ul class="list-group bordered">
             <li class="list-group-item">
               <h4>Transactions</h4>
             </li>

@@ -12,7 +12,7 @@
 
         <div class="row">
           <div class="paypal-form-wrapper">
-            <div class="panel-body paypal-form">
+            <div class="panel-body paypal-form bordered">
               <h4>Connect PayPal</h4>
 
               <div class="col-sm-2 text-center">
@@ -45,7 +45,7 @@
 
         <!-- Stripe connect -->
         <div class="row">
-          <div class="stripe-form-wrapper">
+          <div class="stripe-form-wrapper bordered">
             <div class="panel-body stripe-form">
               <h4>Connect stripe</h4>
 
@@ -74,7 +74,7 @@
                     </div> <!-- / .modal-dialog -->
                   </div>
                   <!-- /Modal box -->
-                <button class="btn btn-warning btn-xs btn-flat sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
                 @else
                 {{ Form::open(array(
                   'route'=>'auth.connect',
