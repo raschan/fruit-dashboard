@@ -130,9 +130,12 @@
 
     var data, ctx;
 
-    /* Monthly Recurring Revenue */
+    
 
     @for ($i = 0; $i< count($allFunctions); $i++)
+
+    /* {{ $allFunctions[$i]['statName'] }} */
+
     data = {
       labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
       datasets: [
@@ -147,6 +150,9 @@
 
     ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
     var {{$allFunctions[$i]['id']}}Chart = new Chart(ctx).Line(data, options);
+
+    /* / {{ $allFunctions[$i]['statName'] }} */
+
     @endfor
 
        
