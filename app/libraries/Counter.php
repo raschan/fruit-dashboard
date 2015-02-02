@@ -4,28 +4,6 @@
 class Counter
 {
 
-	/**
-	* Gets the Average Revenue Per active Users
-	*
-	* @param Stripe key
-	* @param PayPal key
-	*
-	* @return int
-	*/
-	public static function getARPU($stripeKey, $paypalKey)
-	{
-		// get active customer count
-		$activeCustomers = self::getActiveCustomers($stripeKey, $paypalKey);
-
-		// get MRR - TEMPORARY SOLUTION!!!
-		$mrr = self::getMRR();
-
-		// count and return the ARPU
-		$arpu = round($mrr / $activeCustomers);
-		return $arpu;
-	}
-
-
 	/*
 	|--------------------------------------------------------------
 	| Base functions (depend only on data from Stripe/Paypal/Other)
