@@ -26,6 +26,13 @@ class Counter
 	*/
 
 	/**
+	* Format events for dashboard transactions live feed
+	*
+	* @return array
+	*/
+
+
+	/**
 	* Retreive data relevant to MRR and calculate the current value
 	*
 	* @return array (provider => mrr)
@@ -343,7 +350,6 @@ class Counter
 	| Other helper functions
 	|------------------------------------------------------------
 	*/
-
 
 	/**
     * Get Active User details
