@@ -509,6 +509,7 @@ class Counter
 
     public static function saveEvents()
     {
+    	$savedObjects = 0;
     	$eventsToSave = TailoredData::getEvents();
     	foreach ($eventsToSave as $id => $event) {
     		$hasEvent = DB::table('events')
@@ -519,17 +520,19 @@ class Counter
     		// if we dont already have that event
     		if(!$hasEvent)
     		{    		
+    			$savedObjects++;
 	    		DB::table('events')->insert(
 	                array(
 	                    'created' 	=> date('Y-m-d', $event['created']),
 	                    'user'  	=> Auth::user()->id,
 	                    'provider' 	=> $event['provider'],
 	                    'eventID'	=> $id,
+	                    'type'		=> $event['type'],
 	                    'object'	=> json_encode($event['object'])
 	                )
 	            );
 	    	}
 		}
-
+		return $savedObjects;
     } 
 }
