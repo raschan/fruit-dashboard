@@ -12,7 +12,7 @@ class CreateAuTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('au', function(Blueprint $table)
+		Schema::create('au', function($table)
         {
             // value
             $table->bigInteger('value')->unsigned();
@@ -30,7 +30,7 @@ class CreateAuTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('mrr');
+		Schema::dropIfExists('au');
 	}
 
 }

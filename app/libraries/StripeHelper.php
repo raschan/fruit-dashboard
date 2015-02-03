@@ -119,9 +119,10 @@ class StripeHelper
                 if (isset($event['data']['object']['id'])) {
                     $out_events[$event['id']] =
                         array(
-                            'created'  => $event['created'],
-                            'type'     => $event['type'],
-                            'object' => $event['data']['object']
+                            'created'   => $event['created'],
+                            'type'      => $event['type'],
+                            'object'    => $event['data']['object'],
+                            'provider'  => 'stripe'
                         );
                     $last_obj = $event['id'];
                 }
@@ -187,7 +188,8 @@ class StripeHelper
                     'created'        => $plan['created'],
                     'amount'         => $plan['amount'],
                     'currency'       => $plan['currency'],
-                    'interval_count' => $plan['interval_count']
+                    'interval_count' => $plan['interval_count'],
+                    'provider'       => 'stripe'
                 );
         } //foreach
 

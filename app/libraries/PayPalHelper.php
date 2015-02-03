@@ -158,6 +158,7 @@ class PayPalHelper {
             $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
             $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
             $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
+            $plan_instance['provider'] = 'paypal';
 
             // adding to array
             array_push($out_plans, $plan_instance);
