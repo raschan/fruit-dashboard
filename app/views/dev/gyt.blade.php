@@ -10,10 +10,15 @@
 <body>
 
 NOW WHAT
+<div class="row">
+<div id="appendmrr" class="col-md-6">
 
-<div id="appendhere" class="col-md-12">
+</div>
+<div id="appendau" class="col-md-6">
 
-    </div>  <!-- / #content-wrapper -->
+</div> 
+</div>
+<!-- / #content-wrapper -->
     {{ HTML::script('js/jquery.js'); }}
     <script type="text/javascript">
 
@@ -26,26 +31,40 @@ NOW WHAT
       var actualDate = '2014-01-01';
       var activeUsers = [];
       var mrrDaily;
-    function generateMRR(){
+    function generateAll(){
 	    for(var i = 0; i < date.length; i++){
-	        if(Date.parse(date[i]) > Date.parse(actualDate)){    
-	          //append mrr
-	          $('#appendhere').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");
+	        if(Date.parse(date[i]) > Date.parse(actualDate)){
+	        		//append au
+		          $('#appendau').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");    
+		          //append mrr
+		          $('#appendmrr').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");
+	        	var isItFriday = new Date(actualDate).getDay();
+	        	if (isItFriday == 5){
+	        		
+		          actualDate = new Date(actualDate);
+		          actualDate.setDate(actualDate.getDate() + 1);
+		          var dt = new Date(actualDate);
+							var str = dt.toYMD();
+		          // saturday
+		          //append au
+		          $('#appendau').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");    
+		          //append mrr
+		          $('#appendmrr').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");
+		          actualDate = new Date(actualDate);
+		          actualDate.setDate(actualDate.getDate() + 1);
+		          dt = new Date(actualDate);
+							str = dt.toYMD();
+		          // sunday
+		          //append au
+		          $('#appendau').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");    
+		          //append mrr
+		          $('#appendmrr').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");
+		        }
 	          mrrDaily = 0;
 	          actualDate = date[i];
 	        }
 	        else if (amount[i] > 0){
-	          mrrDaily += amount[i] / 12;
-	        }
-	    }
-  	}
-
-  	function generateAU(){
-	    for(var i = 0; i < date.length; i++){
-	        if(Date.parse(date[i]) > Date.parse(actualDate)){    
-	          //append mrr
-	          $('#appendhere').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");
-	          actualDate = date[i];
+	          mrrDaily += (amount[i] / 12) * activeUsers.length;
 	        }
 	        // if activeUsers does not contain actual user id
 	        else if (!($.inArray(userID[i], activeUsers) > -1)){
@@ -53,6 +72,23 @@ NOW WHAT
 	        }
 	    }
   	}
+
+  	(function() {
+    Date.prototype.toYMD = Date_toYMD;
+    function Date_toYMD() {
+        var year, month, day;
+        year = String(this.getFullYear());
+        month = String(this.getMonth() + 1);
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        day = String(this.getDate());
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        return year + "-" + month + "-" + day;
+    }
+})();
 
    </script>
 </body>
