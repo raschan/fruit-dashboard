@@ -209,10 +209,9 @@ class BaseStat
     public static function getFirstDay(){
 
         $firstDay = DB::table(self::$statID)->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
-        $firstDay = strtotime($firstDay->date);
 
         if ($firstDay){
-            return $firstDay;
+            return strtotime($firstDay->date);
         }
         else {
             return null;
