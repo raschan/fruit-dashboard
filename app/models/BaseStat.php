@@ -153,22 +153,23 @@ class BaseStat
     /**
     * Convert data to money format 
     *
-    * @param array
+    * @param array, every data needed
+    * @param bool, if full stat is needed
     *
     * @return array
     */
 
     public static function toMoneyFormat($data, $fullDataNeeded){
         setlocale(LC_MONETARY,"en_US");
-        $data['currentValue'] = money_format('%n',$data['currentValue']);
+        $data['currentValue'] = money_format('%n',$data['currentValue'] / 100);
 
         if ($fullDataNeeded){
             // 30 days ago
-            $data['oneMonth'] = $data['oneMonth'] ? money_format('%n', $data['oneMonth']) : null;
+            $data['oneMonth'] = $data['oneMonth'] ? money_format('%n', $data['oneMonth'] / 100) : null;
             // 6 months ago
-            $data['sixMonth'] = $data['sixMonth'] ? money_format('%n', $data['sixMonth']) : null; 
+            $data['sixMonth'] = $data['sixMonth'] ? money_format('%n', $data['sixMonth'] / 100) : null; 
             // 1 year ago
-            $data['oneYear'] = $data['oneYear'] ? money_format('%n', $data['oneYear']) : null;
+            $data['oneYear'] = $data['oneYear'] ? money_format('%n', $data['oneYear'] / 100) : null;
         }
 
         return $data;
@@ -186,13 +187,17 @@ class BaseStat
     {
     	$day = date('Y-m-d', $timeStamp);
 
-    	$stat = DB::table(self::$statID)
+    	$stats = DB::table(self::$statID)
     		->where('date',$day)
     		->where('user', Auth::user()->id)
     		->get();
 
-    	if($stat){
-    		return $stat[0]->value;
+    	if($stats){
+            $statValue = 0;
+            foreach ($stats as $stat) {
+                $statValue += $stat->value;
+            }
+    		return $statValue;
     	} else {
 			return null;
     	}

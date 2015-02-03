@@ -32,8 +32,8 @@ class MrrStat extends BaseStat {
 
 			//converting price and mrr to money format
         	foreach ($mrrData['detailData'] as $id => $planDetail) {
-	        	$mrrData['detailData'][$id]['price'] = money_format('%n', $planDetail['price']);
-	            $mrrData['detailData'][$id]['mrr'] = money_format('%n', $planDetail['mrr']);
+	        	$mrrData['detailData'][$id]['price'] = money_format('%n', $planDetail['price'] / 100);
+	            $mrrData['detailData'][$id]['mrr'] = money_format('%n', $planDetail['mrr'] / 100);
         	}
 
         // converting to money format

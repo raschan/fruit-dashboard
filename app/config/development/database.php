@@ -22,7 +22,7 @@ return array(
        'mysql' => array(
         'driver'    => 'mysql',
         'host'      => 'localhost',
-        'database'  => 'dashboarddb',
+        'database'  => 'supdashboarddb',
         'username'  => 'SUpDashboardRoot',
         'password'  => 'SUpDashboardPassword',
         'charset'   => 'utf8',

@@ -5,10 +5,11 @@
 | Dev routes (these routes are for testing API-s only)
 |--------------------------------------------------------------------------
 */
-Route::get('/', function()
-{
-    return Redirect::route('auth.dashboard');
-});
+Route::get('/rashan', array(
+    'before' => 'auth|api_key',
+    'as' => 'dev.rashan',
+    'uses' => 'HelloController@showRashan'
+));
 
 Route::get('/users', array(
     'before' => 'auth|api_key',
@@ -63,6 +64,10 @@ Route::get('/paypal/deleteplan/{id}', array(
 | Auth Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/', function()
+{
+    return Redirect::route('auth.dashboard');
+});
 
 // sign up routes
 Route::get('signup', array(

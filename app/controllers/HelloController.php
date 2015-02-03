@@ -160,6 +160,21 @@ class HelloController extends BaseController
 
         return Response::json($charges);
     }
+
+    /*
+    |====================================================
+    | <GET> | showRashan: renders the testing page
+    |====================================================
+    */
+    public function showRashan()
+    {
+        Counter::saveEvents();
+        return View::make('dev.rashan',array(
+                'name' => 'Rashan'
+            )
+        );
+    }
+
     /*
     |========================================================
     | <AJAX/POST> | ajaxGetMrr: gets the logged in user's mrr

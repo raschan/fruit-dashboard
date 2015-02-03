@@ -28,7 +28,7 @@ class Counter
 	/**
 	* Retreive data relevant to MRR and calculate the current value
 	*
-	* @return int (cents)
+	* @return array (provider => mrr)
 	*/
 
 	public static function retreiveAndCalculateMRR()
@@ -43,7 +43,7 @@ class Counter
         $plan_subscriptions = array();
 
         // dividing subscriptions among the plans and summing the mrr
-        $mrr = 0;
+        $mrr = array();
 
         // getting each plan's count
         foreach ($current_subscriptions as $subscription) {
@@ -59,7 +59,13 @@ class Counter
 
         // counting the mrr
         foreach ($plan_subscriptions as $plan_id => $count) {
-            $mrr += $plans[$plan_id]['amount'] * $count;
+        	if (isset($mrr[$plans[$plan_id]['provider']])){
+        		// we already met this provider
+   	        	$mrr[$plans[$plan_id]['provider']] += $plans[$plan_id]['amount'] * $count;
+   	        } else {
+   	        	// this is a new provider
+   	        	$mrr[$plans[$plan_id]['provider']] = $plans[$plan_id]['amount'] * $count;
+   	        }
         }
 
         // returning int
@@ -84,13 +90,16 @@ class Counter
         	// no previous data
     		$mrrValue = self::retreiveAndCalculateMRR();
 
-    		DB::table('mrr')->insert(
-                array(
-                    'value' => $mrrValue,
-                    'user'  => Auth::user()->id,
-                    'date'  => $currentDay
-                )
-            );
+    		foreach ($mrrValue as $provider => $value) {
+	    		DB::table('mrr')->insert(
+	                array(
+	                	'provider' 	=> $provider,
+	                    'value' 	=> $value,
+	                    'user'  	=> Auth::user()->id,
+	                    'date'  	=> $currentDay
+	                )
+	            );
+    		}
     	}
     }
 
@@ -491,4 +500,30 @@ class Counter
 	    // returning int
         return $planDetails;
     }
+
+    public static function saveEvents()
+    {
+    	$eventsToSave = TailoredData::getEvents();
+    	foreach ($eventsToSave as $id => $event) {
+    		$hasEvent = DB::table('events')
+    		->where('eventID',$id)
+    		->where('user', Auth::user()->id)
+    		->get();
+
+    		// if we dont already have that event
+    		if(!$hasEvent)
+    		{    		
+	    		DB::table('events')->insert(
+	                array(
+	                    'created' 	=> date('Y-m-d', $event['created']),
+	                    'user'  	=> Auth::user()->id,
+	                    'provider' 	=> $event['provider'],
+	                    'eventID'	=> $id,
+	                    'object'	=> json_encode($event['object'])
+	                )
+	            );
+	    	}
+		}
+
+    } 
 }
