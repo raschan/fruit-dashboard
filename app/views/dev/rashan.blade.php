@@ -10,7 +10,8 @@
 
     <!-- Page Content -->
     <div class="container">
-        <h1>Hello {{ $name }} </h1>
+        <h1>Hello {{ $name }}</h1>
+        <p>I saved {{$count}} events.<br/>You're welcome.</p>
     </div>
 </body>
 </html>

@@ -21,6 +21,7 @@ class CreateEventTable extends Migration {
 			$newTable->date('created');
 			$newTable->string('eventID');
 			$newTable->string('object');
+			$newTable->string('type');
 
 			$newTable->string('provider');
 			$newTable->timestamps();
