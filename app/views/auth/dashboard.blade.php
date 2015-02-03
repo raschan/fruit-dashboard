@@ -86,6 +86,8 @@
       </div>
       <!-- /FEED BOX -->
 
+    <div id="#appendhere" class="col-md-12">
+
     </div>  <!-- / #content-wrapper -->
 
   @stop

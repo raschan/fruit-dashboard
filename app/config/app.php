@@ -120,8 +120,7 @@ return array(
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
-		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Maatwebsite\Excel\ExcelServiceProvider'
+		'Illuminate\Workbench\WorkbenchServiceProvider'
 	),
 
 	/*
@@ -163,7 +162,6 @@ return array(
 		'DB'                => 'Illuminate\Support\Facades\DB',
 		'Eloquent'          => 'Illuminate\Database\Eloquent\Model',
 		'Event'             => 'Illuminate\Support\Facades\Event',
-		'Excel' 			=> 'Maatwebsite\Excel\Facades\Excel',
 		'File'              => 'Illuminate\Support\Facades\File',
 		'Form'              => 'Illuminate\Support\Facades\Form',
 		'Hash'              => 'Illuminate\Support\Facades\Hash',
