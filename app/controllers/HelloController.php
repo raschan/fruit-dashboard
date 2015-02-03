@@ -44,6 +44,18 @@ class HelloController extends BaseController
             )
         );
     }
+
+    /*
+    |====================================================
+    | <GET> | showGYT: imports xls to database
+    |====================================================
+    */
+    public function showGYT()
+    {   
+        Counter::seedGYT();
+        
+        return View::make('dev.gyt');
+    }
     /*
     |====================================================
     | <GET> | showUsers: showing the current users

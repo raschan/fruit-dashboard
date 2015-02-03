@@ -26,6 +26,13 @@ class Counter
 	*/
 
 	/**
+	* Format events for dashboard transactions live feed
+	*
+	* @return array
+	*/
+
+
+	/**
 	* Retreive data relevant to MRR and calculate the current value
 	*
 	* @return int (cents)
@@ -334,6 +341,72 @@ class Counter
 	| Other helper functions
 	|------------------------------------------------------------
 	*/
+
+	/**
+    * Seed xls data to database
+    *
+    * 
+    * 
+    */
+
+    public static function seedGYT()
+    {
+    	$userID = array();
+    	$userCount;
+    	$mrrUser;
+    	$excel = App::make('excel');
+
+    	Excel::load('gyt2.xlsx', function($reader) {
+    		// Loop through all sheets
+		    $reader->each(function($sheet) {
+
+			    // Loop through all rows
+			    $sheet->each(function($row) {
+			    	$date = 0;
+			    	$mrrDaily = 0;
+			    	$selector = $row->datum;
+			    	$dateNew = strtotime($selector);
+			    	if ($dateNew > $date || $date == 0){
+			    		self::putItInDatabase($date, $mrrDaily);
+			    		$date = $dateNew;
+			    		$mrrDaily = 0;
+			    		Log::info($date);
+			    		Log::info($row->datum);
+			    	}
+			    	else {
+			    		if ($row->Amount > 0){
+			    			Log::info($row->Amount);
+			    			Log::info($mrrDaily);
+			    			$mrrDaily += $row->Amount / 12;
+			    		}
+			    	}
+			    });
+
+			});
+
+		});
+
+
+}
+
+public static function putItInDatabase($date, $mrrDaily){
+			
+			if ($date != 0) {
+			$day = date('Y-m-d', $date);
+		
+	 
+        	// no previous data
+    		$mrrValue = $mrrDaily;
+
+    		DB::table('mrr')->insert(
+                array(
+                    'value' => $mrrDaily,
+                    'user'  => Auth::user()->id,
+                    'date'  => $day
+                )
+            );
+            }	
+    }
 
 
 	/**
