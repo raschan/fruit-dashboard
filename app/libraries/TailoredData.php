@@ -81,15 +81,15 @@ class TailoredData
 
 	public static function getEvents(){
 		// return array
-		$allCharges = array();
+		$allEvents = array();
 
-		$stripeCharges = array();
-		$paypalCharges = array();
+		$stripeEvents = array();
+		$paypalEvents = array();
 
 		// get charges from Stripe if connected
 		if (Auth::user()->isStripeConnected())
 		{
-			$stripeCharges = StripeHelper::getEvents(Auth::user()->stripe_key);
+			$stripeEvents = StripeHelper::getEvents(Auth::user()->stripe_key);
 		}
 
 		// get plans from Paypal if connected
