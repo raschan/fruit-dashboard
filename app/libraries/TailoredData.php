@@ -72,4 +72,35 @@ class TailoredData
 
 		return $allPlans;
 	}
+
+	/**
+	* Unify charges from PayPal and Stripe
+	*
+	* @return array of all customers
+	*/
+
+	public static function getEvents(){
+		// return array
+		$allCharges = array();
+
+		$stripeCharges = array();
+		$paypalCharges = array();
+
+		// get charges from Stripe if connected
+		if (Auth::user()->isStripeConnected())
+		{
+			$stripeCharges = StripeHelper::getEvents(Auth::user()->stripe_key);
+		}
+
+		// get plans from Paypal if connected
+		if (Auth::user()->isPayPalConnected())
+		{
+			$paypalCharges = PayPalHelper::getEvents(Auth::user()->paypal_key);
+		}
+
+		// merge the 2 arrays
+		$allEvents = array_merge($stripeCharges, $paypalCharges);
+
+		return $allEvents;
+	}
 }
