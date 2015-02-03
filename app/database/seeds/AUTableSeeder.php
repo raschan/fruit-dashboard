@@ -241,7 +241,7 @@ class AUTableSeeder extends Seeder
         //gyt data
         DB::table('au')->insert(
 array(
-'value' => 22,
+'value' => 0,
 'user' => 4,
 'date' => '2014-01-02'
 )
@@ -249,7 +249,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 54,
+'value' => 6,
 'user' => 4,
 'date' => '2014-01-03'
 )
@@ -257,7 +257,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 94,
+'value' => 6,
+'user' => 4,
+'date' => '2014-01-04'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 6,
+'user' => 4,
+'date' => '2014-01-05'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 13,
 'user' => 4,
 'date' => '2014-01-06'
 )
@@ -265,7 +281,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 108,
+'value' => 14,
 'user' => 4,
 'date' => '2014-01-07'
 )
@@ -273,7 +289,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 122,
+'value' => 14,
 'user' => 4,
 'date' => '2014-01-08'
 )
@@ -281,7 +297,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 144,
+'value' => 15,
 'user' => 4,
 'date' => '2014-01-09'
 )
@@ -289,7 +305,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 165,
+'value' => 17,
 'user' => 4,
 'date' => '2014-01-10'
 )
@@ -297,7 +313,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 196,
+'value' => 17,
+'user' => 4,
+'date' => '2014-01-11'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 17,
+'user' => 4,
+'date' => '2014-01-12'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 27,
 'user' => 4,
 'date' => '2014-01-13'
 )
@@ -305,7 +337,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 212,
+'value' => 27,
 'user' => 4,
 'date' => '2014-01-14'
 )
@@ -313,7 +345,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 242,
+'value' => 33,
 'user' => 4,
 'date' => '2014-01-15'
 )
@@ -321,7 +353,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 263,
+'value' => 35,
 'user' => 4,
 'date' => '2014-01-16'
 )
@@ -329,7 +361,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 280,
+'value' => 38,
 'user' => 4,
 'date' => '2014-01-17'
 )
@@ -337,7 +369,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 307,
+'value' => 38,
+'user' => 4,
+'date' => '2014-01-18'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 38,
+'user' => 4,
+'date' => '2014-01-19'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 40,
 'user' => 4,
 'date' => '2014-01-20'
 )
@@ -345,7 +393,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 331,
+'value' => 43,
 'user' => 4,
 'date' => '2014-01-21'
 )
@@ -353,7 +401,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 346,
+'value' => 43,
 'user' => 4,
 'date' => '2014-01-22'
 )
@@ -361,7 +409,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 372,
+'value' => 44,
 'user' => 4,
 'date' => '2014-01-23'
 )
@@ -369,7 +417,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 380,
+'value' => 45,
 'user' => 4,
 'date' => '2014-01-24'
 )
@@ -377,7 +425,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 408,
+'value' => 45,
+'user' => 4,
+'date' => '2014-01-25'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 45,
+'user' => 4,
+'date' => '2014-01-26'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 47,
 'user' => 4,
 'date' => '2014-01-27'
 )
@@ -385,7 +449,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 434,
+'value' => 48,
 'user' => 4,
 'date' => '2014-01-28'
 )
@@ -393,7 +457,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 449,
+'value' => 48,
 'user' => 4,
 'date' => '2014-01-29'
 )
@@ -401,7 +465,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 460,
+'value' => 49,
 'user' => 4,
 'date' => '2014-01-30'
 )
@@ -409,7 +473,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 472,
+'value' => 55,
 'user' => 4,
 'date' => '2014-01-31'
 )
@@ -417,7 +481,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 502,
+'value' => 55,
+'user' => 4,
+'date' => '2014-02-01'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 55,
+'user' => 4,
+'date' => '2014-02-02'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 58,
 'user' => 4,
 'date' => '2014-02-03'
 )
@@ -425,7 +505,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 522,
+'value' => 59,
 'user' => 4,
 'date' => '2014-02-04'
 )
@@ -433,7 +513,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 548,
+'value' => 69,
 'user' => 4,
 'date' => '2014-02-05'
 )
@@ -441,7 +521,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 552,
+'value' => 69,
 'user' => 4,
 'date' => '2014-02-06'
 )
@@ -449,7 +529,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 567,
+'value' => 70,
 'user' => 4,
 'date' => '2014-02-07'
 )
@@ -457,7 +537,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 595,
+'value' => 70,
+'user' => 4,
+'date' => '2014-02-08'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 70,
+'user' => 4,
+'date' => '2014-02-09'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 73,
 'user' => 4,
 'date' => '2014-02-10'
 )
@@ -465,7 +561,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 612,
+'value' => 77,
 'user' => 4,
 'date' => '2014-02-11'
 )
@@ -473,7 +569,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 634,
+'value' => 83,
 'user' => 4,
 'date' => '2014-02-12'
 )
@@ -481,7 +577,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 657,
+'value' => 83,
 'user' => 4,
 'date' => '2014-02-13'
 )
@@ -489,7 +585,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 672,
+'value' => 83,
 'user' => 4,
 'date' => '2014-02-14'
 )
@@ -497,7 +593,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 696,
+'value' => 83,
+'user' => 4,
+'date' => '2014-02-15'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 83,
+'user' => 4,
+'date' => '2014-02-16'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 88,
 'user' => 4,
 'date' => '2014-02-17'
 )
@@ -505,7 +617,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 713,
+'value' => 90,
 'user' => 4,
 'date' => '2014-02-18'
 )
@@ -513,7 +625,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 737,
+'value' => 90,
 'user' => 4,
 'date' => '2014-02-19'
 )
@@ -521,7 +633,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 766,
+'value' => 93,
 'user' => 4,
 'date' => '2014-02-20'
 )
@@ -529,7 +641,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 775,
+'value' => 93,
 'user' => 4,
 'date' => '2014-02-21'
 )
@@ -537,7 +649,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 799,
+'value' => 93,
+'user' => 4,
+'date' => '2014-02-22'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 93,
+'user' => 4,
+'date' => '2014-02-23'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 99,
 'user' => 4,
 'date' => '2014-02-24'
 )
@@ -545,7 +673,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 811,
+'value' => 101,
 'user' => 4,
 'date' => '2014-02-25'
 )
@@ -553,7 +681,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 827,
+'value' => 104,
 'user' => 4,
 'date' => '2014-02-26'
 )
@@ -561,7 +689,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 840,
+'value' => 104,
 'user' => 4,
 'date' => '2014-02-27'
 )
@@ -569,7 +697,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 852,
+'value' => 107,
 'user' => 4,
 'date' => '2014-02-28'
 )
@@ -577,7 +705,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 883,
+'value' => 107,
+'user' => 4,
+'date' => '2014-03-01'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 107,
+'user' => 4,
+'date' => '2014-03-02'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 108,
 'user' => 4,
 'date' => '2014-03-03'
 )
@@ -585,7 +729,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 899,
+'value' => 111,
 'user' => 4,
 'date' => '2014-03-04'
 )
@@ -593,7 +737,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 925,
+'value' => 119,
 'user' => 4,
 'date' => '2014-03-05'
 )
@@ -601,7 +745,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 939,
+'value' => 120,
 'user' => 4,
 'date' => '2014-03-06'
 )
@@ -609,7 +753,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 961,
+'value' => 122,
 'user' => 4,
 'date' => '2014-03-07'
 )
@@ -617,7 +761,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 976,
+'value' => 122,
+'user' => 4,
+'date' => '2014-03-08'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 122,
+'user' => 4,
+'date' => '2014-03-09'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 124,
 'user' => 4,
 'date' => '2014-03-10'
 )
@@ -625,7 +785,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 992,
+'value' => 125,
 'user' => 4,
 'date' => '2014-03-11'
 )
@@ -633,7 +793,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1018,
+'value' => 134,
 'user' => 4,
 'date' => '2014-03-12'
 )
@@ -641,7 +801,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1027,
+'value' => 134,
 'user' => 4,
 'date' => '2014-03-13'
 )
@@ -649,7 +809,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1049,
+'value' => 136,
 'user' => 4,
 'date' => '2014-03-14'
 )
@@ -657,7 +817,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1072,
+'value' => 136,
+'user' => 4,
+'date' => '2014-03-15'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 136,
+'user' => 4,
+'date' => '2014-03-16'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 138,
 'user' => 4,
 'date' => '2014-03-17'
 )
@@ -665,7 +841,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1089,
+'value' => 147,
 'user' => 4,
 'date' => '2014-03-18'
 )
@@ -673,7 +849,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1094,
+'value' => 147,
 'user' => 4,
 'date' => '2014-03-19'
 )
@@ -681,7 +857,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1110,
+'value' => 150,
 'user' => 4,
 'date' => '2014-03-20'
 )
@@ -689,7 +865,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1125,
+'value' => 150,
 'user' => 4,
 'date' => '2014-03-21'
 )
@@ -697,7 +873,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1147,
+'value' => 150,
+'user' => 4,
+'date' => '2014-03-22'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 150,
+'user' => 4,
+'date' => '2014-03-23'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 153,
 'user' => 4,
 'date' => '2014-03-24'
 )
@@ -705,7 +897,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1169,
+'value' => 154,
 'user' => 4,
 'date' => '2014-03-25'
 )
@@ -713,7 +905,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1176,
+'value' => 154,
 'user' => 4,
 'date' => '2014-03-26'
 )
@@ -721,7 +913,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1185,
+'value' => 154,
 'user' => 4,
 'date' => '2014-03-27'
 )
@@ -729,7 +921,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1210,
+'value' => 165,
 'user' => 4,
 'date' => '2014-03-28'
 )
@@ -737,7 +929,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1229,
+'value' => 165,
+'user' => 4,
+'date' => '2014-03-29'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 165,
+'user' => 4,
+'date' => '2014-03-30'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 167,
 'user' => 4,
 'date' => '2014-03-31'
 )
@@ -745,7 +953,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1244,
+'value' => 169,
 'user' => 4,
 'date' => '2014-04-01'
 )
@@ -753,7 +961,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1257,
+'value' => 169,
 'user' => 4,
 'date' => '2014-04-02'
 )
@@ -761,7 +969,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1278,
+'value' => 171,
 'user' => 4,
 'date' => '2014-04-03'
 )
@@ -769,7 +977,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1297,
+'value' => 178,
 'user' => 4,
 'date' => '2014-04-04'
 )
@@ -777,7 +985,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1321,
+'value' => 178,
+'user' => 4,
+'date' => '2014-04-05'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 178,
+'user' => 4,
+'date' => '2014-04-06'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 184,
 'user' => 4,
 'date' => '2014-04-07'
 )
@@ -785,7 +1009,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1340,
+'value' => 184,
 'user' => 4,
 'date' => '2014-04-08'
 )
@@ -793,7 +1017,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1352,
+'value' => 187,
 'user' => 4,
 'date' => '2014-04-09'
 )
@@ -801,7 +1025,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1360,
+'value' => 188,
 'user' => 4,
 'date' => '2014-04-10'
 )
@@ -809,7 +1033,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1377,
+'value' => 197,
 'user' => 4,
 'date' => '2014-04-11'
 )
@@ -817,7 +1041,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1396,
+'value' => 197,
+'user' => 4,
+'date' => '2014-04-12'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 197,
+'user' => 4,
+'date' => '2014-04-13'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 199,
 'user' => 4,
 'date' => '2014-04-14'
 )
@@ -825,7 +1065,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1409,
+'value' => 200,
 'user' => 4,
 'date' => '2014-04-15'
 )
@@ -833,7 +1073,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1419,
+'value' => 200,
 'user' => 4,
 'date' => '2014-04-16'
 )
@@ -841,7 +1081,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1427,
+'value' => 203,
 'user' => 4,
 'date' => '2014-04-17'
 )
@@ -849,7 +1089,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1445,
+'value' => 205,
 'user' => 4,
 'date' => '2014-04-18'
 )
@@ -857,7 +1097,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1462,
+'value' => 205,
+'user' => 4,
+'date' => '2014-04-19'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 205,
+'user' => 4,
+'date' => '2014-04-20'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 207,
 'user' => 4,
 'date' => '2014-04-22'
 )
@@ -865,7 +1121,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1479,
+'value' => 211,
 'user' => 4,
 'date' => '2014-04-23'
 )
@@ -873,7 +1129,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1490,
+'value' => 214,
 'user' => 4,
 'date' => '2014-04-24'
 )
@@ -881,7 +1137,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1493,
+'value' => 214,
 'user' => 4,
 'date' => '2014-04-25'
 )
@@ -889,7 +1145,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1510,
+'value' => 214,
+'user' => 4,
+'date' => '2014-04-26'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 214,
+'user' => 4,
+'date' => '2014-04-27'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 218,
 'user' => 4,
 'date' => '2014-04-28'
 )
@@ -897,7 +1169,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1525,
+'value' => 218,
 'user' => 4,
 'date' => '2014-04-29'
 )
@@ -905,7 +1177,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1537,
+'value' => 221,
 'user' => 4,
 'date' => '2014-04-30'
 )
@@ -913,7 +1185,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1560,
+'value' => 234,
 'user' => 4,
 'date' => '2014-05-05'
 )
@@ -921,7 +1193,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1569,
+'value' => 234,
 'user' => 4,
 'date' => '2014-05-06'
 )
@@ -929,7 +1201,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1579,
+'value' => 237,
 'user' => 4,
 'date' => '2014-05-07'
 )
@@ -937,7 +1209,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1586,
+'value' => 238,
 'user' => 4,
 'date' => '2014-05-08'
 )
@@ -945,7 +1217,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1602,
+'value' => 240,
 'user' => 4,
 'date' => '2014-05-09'
 )
@@ -953,7 +1225,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1602,
+'value' => 240,
 'user' => 4,
 'date' => '2014-05-10'
 )
@@ -961,7 +1233,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1624,
+'value' => 240,
+'user' => 4,
+'date' => '2014-05-11'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 241,
+'user' => 4,
+'date' => '2014-05-10'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 251,
 'user' => 4,
 'date' => '2014-05-12'
 )
@@ -969,7 +1257,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1637,
+'value' => 252,
 'user' => 4,
 'date' => '2014-05-13'
 )
@@ -977,7 +1265,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1661,
+'value' => 254,
 'user' => 4,
 'date' => '2014-05-14'
 )
@@ -985,7 +1273,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1677,
+'value' => 254,
 'user' => 4,
 'date' => '2014-05-15'
 )
@@ -993,7 +1281,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1692,
+'value' => 254,
 'user' => 4,
 'date' => '2014-05-16'
 )
@@ -1001,7 +1289,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1728,
+'value' => 254,
+'user' => 4,
+'date' => '2014-05-17'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 254,
+'user' => 4,
+'date' => '2014-05-18'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 265,
 'user' => 4,
 'date' => '2014-05-19'
 )
@@ -1009,7 +1313,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1738,
+'value' => 265,
 'user' => 4,
 'date' => '2014-05-20'
 )
@@ -1017,7 +1321,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1751,
+'value' => 268,
 'user' => 4,
 'date' => '2014-05-21'
 )
@@ -1025,7 +1329,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1768,
+'value' => 268,
 'user' => 4,
 'date' => '2014-05-22'
 )
@@ -1033,7 +1337,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1784,
+'value' => 269,
 'user' => 4,
 'date' => '2014-05-23'
 )
@@ -1041,7 +1345,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1808,
+'value' => 269,
+'user' => 4,
+'date' => '2014-05-24'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 269,
+'user' => 4,
+'date' => '2014-05-25'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 275,
 'user' => 4,
 'date' => '2014-05-26'
 )
@@ -1049,7 +1369,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1824,
+'value' => 277,
 'user' => 4,
 'date' => '2014-05-27'
 )
@@ -1057,7 +1377,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1837,
+'value' => 282,
 'user' => 4,
 'date' => '2014-05-28'
 )
@@ -1065,7 +1385,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1849,
+'value' => 284,
 'user' => 4,
 'date' => '2014-05-29'
 )
@@ -1073,7 +1393,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1864,
+'value' => 286,
 'user' => 4,
 'date' => '2014-05-30'
 )
@@ -1081,7 +1401,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1883,
+'value' => 286,
+'user' => 4,
+'date' => '2014-05-31'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 286,
+'user' => 4,
+'date' => '2014-06-01'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 289,
 'user' => 4,
 'date' => '2014-06-02'
 )
@@ -1089,7 +1425,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1896,
+'value' => 291,
 'user' => 4,
 'date' => '2014-06-03'
 )
@@ -1097,7 +1433,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1919,
+'value' => 293,
 'user' => 4,
 'date' => '2014-06-04'
 )
@@ -1105,7 +1441,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1946,
+'value' => 303,
 'user' => 4,
 'date' => '2014-06-05'
 )
@@ -1113,7 +1449,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1961,
+'value' => 303,
 'user' => 4,
 'date' => '2014-06-06'
 )
@@ -1121,7 +1457,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1984,
+'value' => 303,
+'user' => 4,
+'date' => '2014-06-07'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 303,
+'user' => 4,
+'date' => '2014-06-08'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 306,
 'user' => 4,
 'date' => '2014-06-10'
 )
@@ -1129,7 +1481,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 1997,
+'value' => 307,
 'user' => 4,
 'date' => '2014-06-11'
 )
@@ -1137,7 +1489,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2010,
+'value' => 314,
 'user' => 4,
 'date' => '2014-06-12'
 )
@@ -1145,7 +1497,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2022,
+'value' => 315,
 'user' => 4,
 'date' => '2014-06-13'
 )
@@ -1153,7 +1505,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2037,
+'value' => 315,
+'user' => 4,
+'date' => '2014-06-14'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 315,
+'user' => 4,
+'date' => '2014-06-15'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 319,
 'user' => 4,
 'date' => '2014-06-16'
 )
@@ -1161,7 +1529,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2055,
+'value' => 322,
 'user' => 4,
 'date' => '2014-06-17'
 )
@@ -1169,7 +1537,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2064,
+'value' => 322,
 'user' => 4,
 'date' => '2014-06-18'
 )
@@ -1177,7 +1545,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2071,
+'value' => 322,
 'user' => 4,
 'date' => '2014-06-19'
 )
@@ -1185,7 +1553,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2080,
+'value' => 322,
 'user' => 4,
 'date' => '2014-06-20'
 )
@@ -1193,7 +1561,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2096,
+'value' => 322,
+'user' => 4,
+'date' => '2014-06-21'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 322,
+'user' => 4,
+'date' => '2014-06-22'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 322,
 'user' => 4,
 'date' => '2014-06-23'
 )
@@ -1201,7 +1585,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2110,
+'value' => 325,
 'user' => 4,
 'date' => '2014-06-24'
 )
@@ -1209,7 +1593,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2117,
+'value' => 326,
 'user' => 4,
 'date' => '2014-06-25'
 )
@@ -1217,7 +1601,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2123,
+'value' => 326,
 'user' => 4,
 'date' => '2014-06-26'
 )
@@ -1225,7 +1609,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2127,
+'value' => 326,
 'user' => 4,
 'date' => '2014-06-27'
 )
@@ -1233,7 +1617,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2145,
+'value' => 326,
+'user' => 4,
+'date' => '2014-06-28'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 326,
+'user' => 4,
+'date' => '2014-06-29'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 334,
 'user' => 4,
 'date' => '2014-06-30'
 )
@@ -1241,7 +1641,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2156,
+'value' => 335,
 'user' => 4,
 'date' => '2014-07-01'
 )
@@ -1249,7 +1649,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2167,
+'value' => 336,
 'user' => 4,
 'date' => '2014-07-02'
 )
@@ -1257,7 +1657,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2177,
+'value' => 338,
 'user' => 4,
 'date' => '2014-07-03'
 )
@@ -1265,7 +1665,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2190,
+'value' => 345,
 'user' => 4,
 'date' => '2014-07-04'
 )
@@ -1273,7 +1673,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2203,
+'value' => 345,
+'user' => 4,
+'date' => '2014-07-05'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 345,
+'user' => 4,
+'date' => '2014-07-06'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 348,
 'user' => 4,
 'date' => '2014-07-07'
 )
@@ -1281,7 +1697,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2215,
+'value' => 351,
 'user' => 4,
 'date' => '2014-07-08'
 )
@@ -1289,7 +1705,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2226,
+'value' => 351,
 'user' => 4,
 'date' => '2014-07-09'
 )
@@ -1297,7 +1713,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2233,
+'value' => 352,
 'user' => 4,
 'date' => '2014-07-10'
 )
@@ -1305,7 +1721,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2240,
+'value' => 353,
 'user' => 4,
 'date' => '2014-07-11'
 )
@@ -1313,7 +1729,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2267,
+'value' => 353,
+'user' => 4,
+'date' => '2014-07-12'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 353,
+'user' => 4,
+'date' => '2014-07-13'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 364,
 'user' => 4,
 'date' => '2014-07-14'
 )
@@ -1321,7 +1753,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2271,
+'value' => 367,
 'user' => 4,
 'date' => '2014-07-15'
 )
@@ -1329,7 +1761,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2280,
+'value' => 370,
 'user' => 4,
 'date' => '2014-07-16'
 )
@@ -1337,7 +1769,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2292,
+'value' => 372,
 'user' => 4,
 'date' => '2014-07-17'
 )
@@ -1345,7 +1777,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2303,
+'value' => 374,
 'user' => 4,
 'date' => '2014-07-18'
 )
@@ -1353,7 +1785,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2312,
+'value' => 374,
+'user' => 4,
+'date' => '2014-07-19'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 374,
+'user' => 4,
+'date' => '2014-07-20'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 377,
 'user' => 4,
 'date' => '2014-07-21'
 )
@@ -1361,7 +1809,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2318,
+'value' => 377,
 'user' => 4,
 'date' => '2014-07-22'
 )
@@ -1369,7 +1817,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2328,
+'value' => 378,
 'user' => 4,
 'date' => '2014-07-23'
 )
@@ -1377,7 +1825,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2340,
+'value' => 379,
 'user' => 4,
 'date' => '2014-07-24'
 )
@@ -1385,7 +1833,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2350,
+'value' => 380,
 'user' => 4,
 'date' => '2014-07-25'
 )
@@ -1393,7 +1841,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2363,
+'value' => 380,
+'user' => 4,
+'date' => '2014-07-26'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 380,
+'user' => 4,
+'date' => '2014-07-27'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 388,
 'user' => 4,
 'date' => '2014-07-28'
 )
@@ -1401,7 +1865,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2371,
+'value' => 388,
 'user' => 4,
 'date' => '2014-07-29'
 )
@@ -1409,7 +1873,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2381,
+'value' => 388,
 'user' => 4,
 'date' => '2014-07-30'
 )
@@ -1417,7 +1881,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2392,
+'value' => 391,
 'user' => 4,
 'date' => '2014-07-31'
 )
@@ -1425,7 +1889,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2394,
+'value' => 391,
 'user' => 4,
 'date' => '2014-08-01'
 )
@@ -1433,7 +1897,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2410,
+'value' => 391,
+'user' => 4,
+'date' => '2014-08-02'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 391,
+'user' => 4,
+'date' => '2014-08-03'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 398,
 'user' => 4,
 'date' => '2014-08-04'
 )
@@ -1441,7 +1921,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2428,
+'value' => 408,
 'user' => 4,
 'date' => '2014-08-05'
 )
@@ -1449,7 +1929,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2428,
+'value' => 408,
 'user' => 4,
 'date' => '2014-08-06'
 )
@@ -1457,7 +1937,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2438,
+'value' => 408,
 'user' => 4,
 'date' => '2014-08-07'
 )
@@ -1465,7 +1945,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2442,
+'value' => 408,
 'user' => 4,
 'date' => '2014-08-08'
 )
@@ -1473,7 +1953,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2469,
+'value' => 408,
+'user' => 4,
+'date' => '2014-08-09'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 408,
+'user' => 4,
+'date' => '2014-08-10'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 423,
 'user' => 4,
 'date' => '2014-08-11'
 )
@@ -1481,7 +1977,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2476,
+'value' => 425,
 'user' => 4,
 'date' => '2014-08-12'
 )
@@ -1489,7 +1985,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2482,
+'value' => 425,
 'user' => 4,
 'date' => '2014-08-13'
 )
@@ -1497,7 +1993,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2483,
+'value' => 425,
 'user' => 4,
 'date' => '2014-08-14'
 )
@@ -1505,7 +2001,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2493,
+'value' => 425,
 'user' => 4,
 'date' => '2014-08-15'
 )
@@ -1513,7 +2009,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2507,
+'value' => 425,
+'user' => 4,
+'date' => '2014-08-16'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 425,
+'user' => 4,
+'date' => '2014-08-17'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 428,
 'user' => 4,
 'date' => '2014-08-18'
 )
@@ -1521,7 +2033,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2516,
+'value' => 428,
 'user' => 4,
 'date' => '2014-08-19'
 )
@@ -1529,7 +2041,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2526,
+'value' => 428,
 'user' => 4,
 'date' => '2014-08-21'
 )
@@ -1537,7 +2049,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2533,
+'value' => 429,
 'user' => 4,
 'date' => '2014-08-22'
 )
@@ -1545,7 +2057,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2549,
+'value' => 429,
+'user' => 4,
+'date' => '2014-08-23'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 429,
+'user' => 4,
+'date' => '2014-08-24'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 432,
 'user' => 4,
 'date' => '2014-08-25'
 )
@@ -1553,7 +2081,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2558,
+'value' => 432,
 'user' => 4,
 'date' => '2014-08-26'
 )
@@ -1561,7 +2089,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2565,
+'value' => 432,
 'user' => 4,
 'date' => '2014-08-27'
 )
@@ -1569,7 +2097,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2576,
+'value' => 434,
 'user' => 4,
 'date' => '2014-08-28'
 )
@@ -1577,7 +2105,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2585,
+'value' => 437,
 'user' => 4,
 'date' => '2014-08-29'
 )
@@ -1585,7 +2113,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2599,
+'value' => 437,
+'user' => 4,
+'date' => '2014-08-30'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 437,
+'user' => 4,
+'date' => '2014-08-31'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 439,
 'user' => 4,
 'date' => '2014-09-01'
 )
@@ -1593,7 +2137,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2608,
+'value' => 442,
 'user' => 4,
 'date' => '2014-09-02'
 )
@@ -1601,7 +2145,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2615,
+'value' => 443,
 'user' => 4,
 'date' => '2014-09-03'
 )
@@ -1609,7 +2153,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2624,
+'value' => 443,
 'user' => 4,
 'date' => '2014-09-04'
 )
@@ -1617,7 +2161,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2634,
+'value' => 451,
 'user' => 4,
 'date' => '2014-09-05'
 )
@@ -1625,7 +2169,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2649,
+'value' => 451,
+'user' => 4,
+'date' => '2014-09-06'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 451,
+'user' => 4,
+'date' => '2014-09-07'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 452,
 'user' => 4,
 'date' => '2014-09-08'
 )
@@ -1633,7 +2193,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2662,
+'value' => 455,
 'user' => 4,
 'date' => '2014-09-09'
 )
@@ -1641,7 +2201,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2674,
+'value' => 456,
 'user' => 4,
 'date' => '2014-09-10'
 )
@@ -1649,7 +2209,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2685,
+'value' => 458,
 'user' => 4,
 'date' => '2014-09-11'
 )
@@ -1657,7 +2217,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2700,
+'value' => 465,
 'user' => 4,
 'date' => '2014-09-12'
 )
@@ -1665,7 +2225,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2711,
+'value' => 465,
+'user' => 4,
+'date' => '2014-09-13'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 465,
+'user' => 4,
+'date' => '2014-09-14'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 465,
 'user' => 4,
 'date' => '2014-09-15'
 )
@@ -1673,7 +2249,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2721,
+'value' => 465,
 'user' => 4,
 'date' => '2014-09-16'
 )
@@ -1681,7 +2257,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2723,
+'value' => 467,
 'user' => 4,
 'date' => '2014-09-17'
 )
@@ -1689,7 +2265,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2728,
+'value' => 468,
 'user' => 4,
 'date' => '2014-09-18'
 )
@@ -1697,7 +2273,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2743,
+'value' => 468,
 'user' => 4,
 'date' => '2014-09-19'
 )
@@ -1705,7 +2281,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2751,
+'value' => 468,
+'user' => 4,
+'date' => '2014-09-20'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 468,
+'user' => 4,
+'date' => '2014-09-21'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 471,
 'user' => 4,
 'date' => '2014-09-22'
 )
@@ -1713,7 +2305,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2759,
+'value' => 471,
 'user' => 4,
 'date' => '2014-09-23'
 )
@@ -1721,7 +2313,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2767,
+'value' => 472,
 'user' => 4,
 'date' => '2014-09-24'
 )
@@ -1729,7 +2321,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2773,
+'value' => 474,
 'user' => 4,
 'date' => '2014-09-25'
 )
@@ -1737,7 +2329,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2777,
+'value' => 474,
 'user' => 4,
 'date' => '2014-09-26'
 )
@@ -1745,7 +2337,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2796,
+'value' => 474,
+'user' => 4,
+'date' => '2014-09-27'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 474,
+'user' => 4,
+'date' => '2014-09-28'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 475,
 'user' => 4,
 'date' => '2014-09-29'
 )
@@ -1753,7 +2361,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2807,
+'value' => 483,
 'user' => 4,
 'date' => '2014-09-30'
 )
@@ -1761,7 +2369,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2814,
+'value' => 484,
 'user' => 4,
 'date' => '2014-10-01'
 )
@@ -1769,7 +2377,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2825,
+'value' => 486,
 'user' => 4,
 'date' => '2014-10-02'
 )
@@ -1777,7 +2385,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2831,
+'value' => 487,
 'user' => 4,
 'date' => '2014-10-03'
 )
@@ -1785,7 +2393,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2849,
+'value' => 487,
+'user' => 4,
+'date' => '2014-10-04'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 487,
+'user' => 4,
+'date' => '2014-10-05'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 495,
 'user' => 4,
 'date' => '2014-10-06'
 )
@@ -1793,7 +2417,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2860,
+'value' => 495,
 'user' => 4,
 'date' => '2014-10-07'
 )
@@ -1801,7 +2425,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2880,
+'value' => 496,
 'user' => 4,
 'date' => '2014-10-08'
 )
@@ -1809,7 +2433,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2887,
+'value' => 496,
 'user' => 4,
 'date' => '2014-10-09'
 )
@@ -1817,7 +2441,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2891,
+'value' => 498,
 'user' => 4,
 'date' => '2014-10-10'
 )
@@ -1825,7 +2449,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2902,
+'value' => 498,
+'user' => 4,
+'date' => '2014-10-11'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 498,
+'user' => 4,
+'date' => '2014-10-12'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 499,
 'user' => 4,
 'date' => '2014-10-13'
 )
@@ -1833,7 +2473,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2921,
+'value' => 507,
 'user' => 4,
 'date' => '2014-10-14'
 )
@@ -1841,7 +2481,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2925,
+'value' => 507,
 'user' => 4,
 'date' => '2014-10-15'
 )
@@ -1849,7 +2489,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2938,
+'value' => 512,
 'user' => 4,
 'date' => '2014-10-16'
 )
@@ -1857,7 +2497,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2941,
+'value' => 513,
 'user' => 4,
 'date' => '2014-10-17'
 )
@@ -1865,7 +2505,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2943,
+'value' => 513,
 'user' => 4,
 'date' => '2014-10-18'
 )
@@ -1873,7 +2513,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2961,
+'value' => 513,
+'user' => 4,
+'date' => '2014-10-19'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 513,
+'user' => 4,
+'date' => '2014-10-18'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 514,
 'user' => 4,
 'date' => '2014-10-20'
 )
@@ -1881,7 +2537,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2971,
+'value' => 517,
 'user' => 4,
 'date' => '2014-10-21'
 )
@@ -1889,7 +2545,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 2979,
+'value' => 518,
 'user' => 4,
 'date' => '2014-10-22'
 )
@@ -1897,7 +2553,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3000,
+'value' => 523,
 'user' => 4,
 'date' => '2014-10-27'
 )
@@ -1905,7 +2561,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3005,
+'value' => 523,
 'user' => 4,
 'date' => '2014-10-28'
 )
@@ -1913,7 +2569,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3012,
+'value' => 523,
 'user' => 4,
 'date' => '2014-10-29'
 )
@@ -1921,7 +2577,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3026,
+'value' => 524,
 'user' => 4,
 'date' => '2014-10-30'
 )
@@ -1929,7 +2585,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3034,
+'value' => 528,
 'user' => 4,
 'date' => '2014-10-31'
 )
@@ -1937,7 +2593,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3044,
+'value' => 528,
+'user' => 4,
+'date' => '2014-11-01'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 528,
+'user' => 4,
+'date' => '2014-11-02'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 528,
 'user' => 4,
 'date' => '2014-11-03'
 )
@@ -1945,7 +2617,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3054,
+'value' => 532,
 'user' => 4,
 'date' => '2014-11-04'
 )
@@ -1953,7 +2625,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3062,
+'value' => 537,
 'user' => 4,
 'date' => '2014-11-05'
 )
@@ -1961,7 +2633,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3073,
+'value' => 537,
 'user' => 4,
 'date' => '2014-11-06'
 )
@@ -1969,7 +2641,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3087,
+'value' => 539,
 'user' => 4,
 'date' => '2014-11-07'
 )
@@ -1977,7 +2649,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3100,
+'value' => 539,
+'user' => 4,
+'date' => '2014-11-08'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 539,
+'user' => 4,
+'date' => '2014-11-09'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 540,
 'user' => 4,
 'date' => '2014-11-10'
 )
@@ -1985,7 +2673,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3112,
+'value' => 549,
 'user' => 4,
 'date' => '2014-11-11'
 )
@@ -1993,7 +2681,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3124,
+'value' => 549,
 'user' => 4,
 'date' => '2014-11-12'
 )
@@ -2001,7 +2689,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3136,
+'value' => 552,
 'user' => 4,
 'date' => '2014-11-13'
 )
@@ -2009,7 +2697,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3146,
+'value' => 553,
 'user' => 4,
 'date' => '2014-11-14'
 )
@@ -2017,7 +2705,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3161,
+'value' => 553,
+'user' => 4,
+'date' => '2014-11-15'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 553,
+'user' => 4,
+'date' => '2014-11-16'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 553,
 'user' => 4,
 'date' => '2014-11-17'
 )
@@ -2025,7 +2729,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3165,
+'value' => 554,
 'user' => 4,
 'date' => '2014-11-18'
 )
@@ -2033,7 +2737,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3172,
+'value' => 555,
 'user' => 4,
 'date' => '2014-11-19'
 )
@@ -2041,7 +2745,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3179,
+'value' => 555,
 'user' => 4,
 'date' => '2014-11-20'
 )
@@ -2049,7 +2753,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3188,
+'value' => 555,
 'user' => 4,
 'date' => '2014-11-21'
 )
@@ -2057,7 +2761,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3203,
+'value' => 555,
+'user' => 4,
+'date' => '2014-11-22'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 555,
+'user' => 4,
+'date' => '2014-11-23'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 559,
 'user' => 4,
 'date' => '2014-11-24'
 )
@@ -2065,7 +2785,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 559,
 'user' => 4,
 'date' => '2014-11-25'
 )
@@ -2073,7 +2793,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-11-26'
 )
@@ -2081,7 +2801,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-11-27'
 )
@@ -2089,7 +2809,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-11-28'
 )
@@ -2097,7 +2817,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
+'user' => 4,
+'date' => '2014-11-29'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
+'user' => 4,
+'date' => '2014-11-30'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-01'
 )
@@ -2105,7 +2841,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-02'
 )
@@ -2113,7 +2849,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-03'
 )
@@ -2121,7 +2857,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-04'
 )
@@ -2129,7 +2865,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-05'
 )
@@ -2137,7 +2873,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-06'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-07'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-08'
 )
@@ -2145,7 +2897,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-09'
 )
@@ -2153,7 +2905,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-10'
 )
@@ -2161,7 +2913,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-11'
 )
@@ -2169,7 +2921,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-12'
 )
@@ -2177,7 +2929,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-13'
 )
@@ -2185,7 +2937,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-14'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-13'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-15'
 )
@@ -2193,7 +2961,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-16'
 )
@@ -2201,7 +2969,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-17'
 )
@@ -2209,7 +2977,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-18'
 )
@@ -2217,7 +2985,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-19'
 )
@@ -2225,7 +2993,23 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-20'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
+'user' => 4,
+'date' => '2014-12-21'
+)
+);
+
+DB::table('au')->insert(
+array(
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-22'
 )
@@ -2233,7 +3017,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-23'
 )
@@ -2241,7 +3025,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-24'
 )
@@ -2249,7 +3033,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-29'
 )
@@ -2257,7 +3041,7 @@ array(
 
 DB::table('au')->insert(
 array(
-'value' => 3211,
+'value' => 560,
 'user' => 4,
 'date' => '2014-12-30'
 )
