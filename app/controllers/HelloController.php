@@ -51,9 +51,7 @@ class HelloController extends BaseController
     |====================================================
     */
     public function showGYT()
-    {   
-        Counter::seedGYT();
-        
+    {           
         return View::make('dev.gyt');
     }
     /*

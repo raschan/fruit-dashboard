@@ -22,6 +22,11 @@ class UserTableSeeder extends Seeder
             'email'    => 'dev@null',
             'password' => Hash::make('1234'),
         ));
+        User::create(array(
+            'id'       => '4',
+            'email'    => 'gyt@gyt.hu',
+            'password' => Hash::make('1234'),
+        ));
     }
 
 }
