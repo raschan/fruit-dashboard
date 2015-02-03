@@ -214,7 +214,7 @@ class BaseStat
             return strtotime($firstDay->date);
         }
         else {
-            return null;
+            return date('Y-m-d', '2013-12-31');
         }
     }
 

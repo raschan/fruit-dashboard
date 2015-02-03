@@ -30,7 +30,7 @@ NOW WHAT
 	    for(var i = 0; i < date.length; i++){
 	        if(Date.parse(date[i]) > Date.parse(actualDate)){    
 	          //append mrr
-	          $('#appendhere').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => "+ actualDate + "<br>&#09;)<br>);");
+	          $('#appendhere').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");
 	          mrrDaily = 0;
 	          actualDate = date[i];
 	        }
@@ -44,7 +44,7 @@ NOW WHAT
 	    for(var i = 0; i < date.length; i++){
 	        if(Date.parse(date[i]) > Date.parse(actualDate)){    
 	          //append mrr
-	          $('#appendhere').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => "+ actualDate + "<br>&#09;)<br>);");
+	          $('#appendhere').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ actualDate + "'<br>&#09;)<br>);");
 	          actualDate = date[i];
 	        }
 	        // if activeUsers does not contain actual user id
