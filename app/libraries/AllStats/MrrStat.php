@@ -40,7 +40,6 @@ class MrrStat extends BaseStat {
         $mrrData = self::toMoneyFormat($mrrData, $fullDataNeeded);
 
     	}
-
     	return $mrrData;
     }
 

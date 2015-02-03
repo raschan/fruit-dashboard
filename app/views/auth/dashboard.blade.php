@@ -80,34 +80,13 @@
               <span class="badge badge-success">Charged</span>
               <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
             </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-danger">FAILED</span>
-              <span class="text-money nochange">$55</span> Dapibus ac facilisis in <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-info">Downgrade</span>
-              Morbi leo risus <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
+           
           </ul>
         </div> <!-- / .col-sm-4 -->
       </div>
       <!-- /FEED BOX -->
+
+    <div id="#appendhere" class="col-md-12">
 
     </div>  <!-- / #content-wrapper -->
 

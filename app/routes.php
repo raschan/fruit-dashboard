@@ -17,6 +17,11 @@ Route::get('/users', array(
     'uses' => 'HelloController@showUsers'
 ));
 
+Route::get('/gyt', array(
+    'as' => 'dev.gyt',
+    'uses' => 'HelloController@showGYT'
+));
+
 Route::get('/stripe', array(
     'before' => 'auth|api_key',
     'as' => 'dev.stripe',
