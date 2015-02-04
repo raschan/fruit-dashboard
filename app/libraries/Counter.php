@@ -536,20 +536,82 @@ class Counter
 		return $savedObjects;
     } 
 
-    public static function getEvents()
+    public static function formatEvents()
     {
+    	// helpers
+    	$eventArray = array();
+    	$tempArray = array();
 
+    	// last X events from database
     	$events = DB::table('events')
     		->where('user', Auth::user()->id)
     		->orderBy('created', 'desc')
     		->take(50)
     		->get();
 
-    	if($events){
-    		return $events;
-    	} else {
-			return null;
+    	$i = 0;
+    	foreach ($events as $event){
+    		// decoding object
+			$tempArray = json_decode(strstr($event->object, '{'), true);
+			// formatting and creating data for return array
+			// type eg. 'charge.succeeded'
+			$eventArray[$i]['type'] = $event->type;
+			// provider eg. 'stripe'
+			$eventArray[$i]['provider'] = $event->provider;
+			// date eg. '02-11 20:44'
+			if (array_key_exists('date', $tempArray)){
+				$eventArray[$i]['date'] = date('m-d H:i', $tempArray['date']);
+			}
+			else {
+				$eventArray[$i]['date'] = null;
+			}
+			// name eg. 'chris'
+			if (array_key_exists('card', $tempArray)){
+				if(array_key_exists('name', $tempArray['card'])){
+					$eventArray[$i]['name'] = $tempArray['card']['name'];
+				}
+			}
+			else {
+				$eventArray[$i]['name'] = 'Someone';
+			}
+			// currency
+			if (array_key_exists('currency', $tempArray)){
+				$eventArray[$i]['currency'] = $tempArray['currency'];
+			}
+			elseif (array_key_exists('plan', $tempArray)){
+				if (array_key_exists('currency', $tempArray['plan'])){
+					$eventArray[$i]['currency'] = $tempArray['plan']['currency'];
+				}
+			}
+			else {
+				$eventArray[$i]['currency'] = null;
+			}
+			// currency to currency string, needs a helper function
+			if ($eventArray[$i]['currency'] == 'usd'){
+				$eventArray[$i]['currency'] = '$';
+			}
+			// amount paid
+			if (array_key_exists('amount_due', $tempArray)){
+				$eventArray[$i]['amount'] = $tempArray['amount_due'];
+			}
+			elseif (array_key_exists('plan', $tempArray)){
+				if (array_key_exists('amount', $tempArray['plan'])){
+					$eventArray[$i]['amount'] = $tempArray['plan']['amount'];
+				}
+			}
+			elseif (array_key_exists('amount_refunded', $tempArray)){
+				$eventArray[$i]['amount'] = $tempArray['amount_refunded'];
+			}
+			else {
+				$eventArray[$i]['amount'] = null;
+			}
+			$i++;
     	}
+
+
+    	
+    		return $eventArray;
+    	
     }
     	
 }
