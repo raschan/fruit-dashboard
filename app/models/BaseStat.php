@@ -219,6 +219,7 @@ class BaseStat
             return strtotime($firstDay->date);
         }
         else {
+            // needs review, so it can handle null with new users too
             return date('Y-m-d', '2013-12-31');
         }
     }
