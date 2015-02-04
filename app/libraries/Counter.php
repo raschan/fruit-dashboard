@@ -532,4 +532,21 @@ class Counter
 		}
 
     } 
+
+    public static function getEvents()
+    {
+
+    	$events = DB::table('events')
+    		->where('user', Auth::user()->id)
+    		->orderBy('created', 'desc')
+    		->take(50)
+    		->get();
+
+    	if($events){
+    		return $events;
+    	} else {
+			return null;
+    	}
+    }
+    	
 }

@@ -80,7 +80,7 @@
               <span class="badge badge-success">Charged</span>
               <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
             </li> <!-- / .list-group-item -->
-           
+          
           </ul>
         </div> <!-- / .col-sm-4 -->
       </div>
