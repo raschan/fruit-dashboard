@@ -178,9 +178,10 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
-        Counter::saveEvents();
+        $savedObjects = Counter::saveEvents();
         return View::make('dev.rashan',array(
-                'name' => 'Rashan'
+                'name' => 'Rashan',
+                'count' => $savedObjects
             )
         );
     }
