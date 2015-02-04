@@ -80,7 +80,66 @@
               <span class="badge badge-success">Charged</span>
               <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
             </li> <!-- / .list-group-item -->
-          
+            @if($events)
+              @for ($i = 0; $i< count($events); $i++)
+
+                @if ($event[$i]['type'] = 'charge.succeded')
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      Charged
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from {{ $events[$i]['name'] }}
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($event[$i]['type'] = 'charge.failed')
+                  <li class="list-group-item">
+                    <span class="badge badge-danger">
+                      Failed
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from {{ $events[$i]['name'] }}
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($event[$i]['type'] = 'charge.refunded')
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Refunded
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from {{ $events[$i]['name'] }}
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif 
+
+              @endfor
+            @else
+            <li class="list-group-item">
+             No current data available.
+            </li> <!-- / .list-group-item -->
+            @endif
           </ul>
         </div> <!-- / .col-sm-4 -->
       </div>
