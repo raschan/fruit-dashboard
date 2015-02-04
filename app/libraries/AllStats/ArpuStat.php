@@ -74,10 +74,15 @@ class ArpuStat extends BaseStat {
 
     public static function getFirstDay(){
 
-        $firstDay = DB::table('mArr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
-        $firstDay = strtotime($firstDay->date);
-
-        return $firstDay;
+        $firstDay = DB::table('mrr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
+        
+        if ($firstDay){
+            return strtotime($firstDay->date);
+        }
+        else {
+            // needs review, so it can handle null with new users too
+            return date('Y-m-d', '2013-12-31');
+        }
     }
 
 }
