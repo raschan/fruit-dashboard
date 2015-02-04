@@ -20,7 +20,7 @@ class CreateEventTable extends Migration {
 			
 			$newTable->date('created');
 			$newTable->string('eventID');
-			$newTable->string('object', 2048);
+			$newTable->longText('object');
 			$newTable->string('type');
 
 			$newTable->string('provider');
