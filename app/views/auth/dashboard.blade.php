@@ -80,7 +80,17 @@
               <span class="badge badge-success">Charged</span>
               <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
             </li> <!-- / .list-group-item -->
-          
+            @if($events)
+            {{ var_dump($events); exit;}}
+              @foreach ($events as $event)
+                <li class="list-group-item">
+                  <span class="badge badge-success">Charged</span>
+                  <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">{{ $event->created }}</span>
+                </li> <!-- / .list-group-item -->
+              @endforeach
+            @else
+            NO CURRENT DATA
+            @endif
           </ul>
         </div> <!-- / .col-sm-4 -->
       </div>

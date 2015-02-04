@@ -52,13 +52,17 @@ class ArrStat extends BaseStat {
     {
         $day = date('Y-m-d', $timeStamp);
 
-        $stat = DB::table('mrr')
+        $stats = DB::table('mrr')
             ->where('date',$day)
             ->where('user', Auth::user()->id)
             ->get();
 
-        if($stat){
-            return $stat[0]->value * 12;
+        if($stats){
+            $statValue = 0;
+            foreach ($stats as $stat) {
+                $statValue += $stat->value;
+            }
+            return $statValue * 12;
         } else {
             return null;
         }
