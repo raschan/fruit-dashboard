@@ -605,6 +605,18 @@ class Counter
 			else {
 				$eventArray[$i]['amount'] = null;
 			}
+			// plan name
+			if (array_key_exists('plan', $tempArray)){
+				if (array_key_exists('name', $tempArray['plan'])){
+					$eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
+				}
+			}
+			// plan interval
+			if (array_key_exists('plan', $tempArray)){
+				if (array_key_exists('interval', $tempArray['plan'])){
+					$eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
+				}
+			}
 			$i++;
     	}
 

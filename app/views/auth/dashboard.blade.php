@@ -76,14 +76,14 @@
             <li class="list-group-item">
               <h4>Transactions</h4>
             </li>
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
+            
             @if($events)
+
               @for ($i = 0; $i< count($events); $i++)
 
-                @if ($event[$i]['type'] = 'charge.succeded')
+                <!-- Charge events -->
+
+                @if ($events[$i]['type'] == 'charge.succeeded')
                   <li class="list-group-item">
                     <span class="badge badge-success">
                       Charged
@@ -100,7 +100,7 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
-                @if ($event[$i]['type'] = 'charge.failed')
+                @if ($events[$i]['type'] == 'charge.failed')
                   <li class="list-group-item">
                     <span class="badge badge-danger">
                       Failed
@@ -117,7 +117,7 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
-                @if ($event[$i]['type'] = 'charge.refunded')
+                @if ($events[$i]['type'] == 'charge.refunded')
                   <li class="list-group-item">
                     <span class="badge badge-warning">
                       Refunded
@@ -133,6 +133,44 @@
                     @endif
                   </li> <!-- / .list-group-item -->
                 @endif 
+
+                <!-- / Charge events -->
+
+                <!-- Subscription events -->
+
+                @if ($events[$i]['type'] == 'customer.subscription.created')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      New subscription
+                    </span>         
+                    {{ $events[$i]['name'] }}
+                    subscribed to 
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}).
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.subscription.updated')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Updated
+                    </span>         
+                    {{ $events[$i]['name'] }}
+                    updated to 
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}).
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif   
+
+                <!-- / Subscription events -->
 
               @endfor
             @else
