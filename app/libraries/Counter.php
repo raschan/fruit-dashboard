@@ -630,7 +630,6 @@ class Counter
 				}
 				// plan interval
 				if (array_key_exists('plan', $tempArray)){
-					if (array_key_exists('interval', $tempArray['plan'])){
 						if ($tempArray['plan']['interval'] == 'day'){
 							$eventArray[$i]['plan_interval'] = 'daily';
 						}
@@ -643,7 +642,7 @@ class Counter
 						else {
 							$eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
 						}
-					}
+					
 				}
 				
 			}
