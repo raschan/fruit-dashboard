@@ -48,8 +48,7 @@ NOW WHAT
 		          // saturday
 		          //append au
 		          $('#appendau').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");    
-		          //append mrr
-		          $('#appendmrr').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");
+		          
 		          actualDate = new Date(actualDate);
 		          actualDate.setDate(actualDate.getDate() + 1);
 		          dt = new Date(actualDate);
@@ -57,8 +56,7 @@ NOW WHAT
 		          // sunday
 		          //append au
 		          $('#appendau').append("<p>DB::table('au')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + activeUsers.length +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");    
-		          //append mrr
-		          $('#appendmrr').append("<p>DB::table('mrr')->insert(<br>&#09;array(<br>&#09;&#09;'value' => " + Math.round(mrrDaily) +",<br>&#09;&#09;'user'  => 4,<br>&#09;&#09;'date'  => '"+ str + "'<br>&#09;)<br>);");
+		         
 		        }
 	          mrrDaily = 0;
 	          actualDate = date[i];
