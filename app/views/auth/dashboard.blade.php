@@ -91,7 +91,7 @@
                     <span class="text-money up">
                       {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
                     </span>
-                    from {{ $events[$i]['name'] }}
+                    from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -108,7 +108,7 @@
                     <span class="text-money up">
                       {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
                     </span>
-                    from {{ $events[$i]['name'] }}
+                    from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -125,7 +125,7 @@
                     <span class="text-money up">
                       {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
                     </span>
-                    from {{ $events[$i]['name'] }}
+                    from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -143,9 +143,9 @@
                     <span class="badge badge-info">
                       New subscription
                     </span>         
-                    {{ $events[$i]['name'] }}
+                    <b>{{ $events[$i]['name'] }}</b>
                     subscribed to 
-                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}).
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -159,9 +159,9 @@
                     <span class="badge badge-info">
                       Updated
                     </span>         
-                    {{ $events[$i]['name'] }}
+                    <b>{{ $events[$i]['name'] }}</b>
                     updated to 
-                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}).
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}

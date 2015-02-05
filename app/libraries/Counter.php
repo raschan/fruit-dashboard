@@ -543,85 +543,116 @@ class Counter
     	$tempArray = array();
 
     	// last X events from database
+    	// select only those event types, which we show on dashboard
     	$events = DB::table('events')
     		->where('user', Auth::user()->id)
+    		->whereIn('type', ['charge.succeeded', 'charge.failed', 'charge.refunded', 'customer.subscription.created','customer.subscription.updated'])
     		->orderBy('created', 'desc')
-    		->take(50)
+    		->take(20)
     		->get();
+    	
 
     	$i = 0;
     	foreach ($events as $event){
-    		// decoding object
-			$tempArray = json_decode(strstr($event->object, '{'), true);
-			// formatting and creating data for return array
-			// type eg. 'charge.succeeded'
-			$eventArray[$i]['type'] = $event->type;
-			// provider eg. 'stripe'
-			$eventArray[$i]['provider'] = $event->provider;
-			// date eg. '02-11 20:44'
-			if (array_key_exists('date', $tempArray)){
-				$eventArray[$i]['date'] = date('m-d H:i', $tempArray['date']);
-			}
-			else {
-				$eventArray[$i]['date'] = null;
-			}
-			// name eg. 'chris'
-			if (array_key_exists('card', $tempArray)){
-				if(array_key_exists('name', $tempArray['card'])){
-					$eventArray[$i]['name'] = $tempArray['card']['name'];
+    		// if stripe event
+    		if ($event->provider == 'stripe'){
+	    		// decoding object
+				$tempArray = json_decode(strstr($event->object, '{'), true);
+
+				// formatting and creating data for return array
+				// type eg. 'charge.succeeded'
+				$eventArray[$i]['type'] = $event->type;
+				// provider eg. 'stripe'
+				$eventArray[$i]['provider'] = $event->provider;
+				// date eg. '02-11 20:44'
+				if (array_key_exists('created', $tempArray)){
+					$eventArray[$i]['date'] = date('m-d H:i', $tempArray['created']);
 				}
-			}
-			else {
-				$eventArray[$i]['name'] = 'Someone';
-			}
-			// currency
-			if (array_key_exists('currency', $tempArray)){
-				$eventArray[$i]['currency'] = $tempArray['currency'];
-			}
-			elseif (array_key_exists('plan', $tempArray)){
-				if (array_key_exists('currency', $tempArray['plan'])){
-					$eventArray[$i]['currency'] = $tempArray['plan']['currency'];
+				elseif(array_key_exists('plan', $tempArray) && array_key_exists('created', $tempArray['plan'])){
+					$eventArray[$i]['date'] = date('m-d H:i', $tempArray['plan']['created']);
 				}
-			}
-			else {
-				$eventArray[$i]['currency'] = null;
-			}
-			// currency to currency string, needs a helper function
-			if ($eventArray[$i]['currency'] == 'usd'){
-				$eventArray[$i]['currency'] = '$';
-			}
-			// amount paid
-			if (array_key_exists('amount_due', $tempArray)){
-				$eventArray[$i]['amount'] = $tempArray['amount_due'];
-			}
-			elseif (array_key_exists('plan', $tempArray)){
-				if (array_key_exists('amount', $tempArray['plan'])){
-					$eventArray[$i]['amount'] = $tempArray['plan']['amount'];
+				else {
+					$eventArray[$i]['date'] = null;
 				}
-			}
-			elseif (array_key_exists('amount_refunded', $tempArray)){
-				$eventArray[$i]['amount'] = $tempArray['amount_refunded'];
-			}
-			else {
-				$eventArray[$i]['amount'] = null;
-			}
-			// plan name
-			if (array_key_exists('plan', $tempArray)){
-				if (array_key_exists('name', $tempArray['plan'])){
-					$eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
+				// name eg. 'chris'
+				if (array_key_exists('card', $tempArray)){
+					if(array_key_exists('name', $tempArray['card'])){
+						if($tempArray['card']['name']){
+							$eventArray[$i]['name'] = $tempArray['card']['name'];
+						}
+						else {
+							$eventArray[$i]['name'] = 'Someone';
+						}
+					}
+					else {
+						$eventArray[$i]['name'] = 'Someone';
+					}
 				}
-			}
-			// plan interval
-			if (array_key_exists('plan', $tempArray)){
-				if (array_key_exists('interval', $tempArray['plan'])){
-					$eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
+				else {
+					$eventArray[$i]['name'] = 'Someone';
 				}
+				// currency
+				if (array_key_exists('currency', $tempArray)){
+					$eventArray[$i]['currency'] = $tempArray['currency'];
+				}
+				elseif (array_key_exists('plan', $tempArray)){
+					if (array_key_exists('currency', $tempArray['plan'])){
+						$eventArray[$i]['currency'] = $tempArray['plan']['currency'];
+					}
+				}
+				else {
+					$eventArray[$i]['currency'] = null;
+				}
+				// currency to currency string, needs a helper function
+				if ($eventArray[$i]['currency'] == 'usd'){
+					$eventArray[$i]['currency'] = '$';
+				}
+				// amount paid
+				if (array_key_exists('amount_due', $tempArray)){
+					$eventArray[$i]['amount'] = $tempArray['amount_due'];
+				}
+				elseif (array_key_exists('plan', $tempArray)){
+					if (array_key_exists('amount', $tempArray['plan'])){
+						$eventArray[$i]['amount'] = $tempArray['plan']['amount'];
+					}
+				}
+				elseif (array_key_exists('amount_refunded', $tempArray)){
+					$eventArray[$i]['amount'] = $tempArray['amount_refunded'];
+				}
+				else {
+					$eventArray[$i]['amount'] = null;
+				}
+				// plan name
+				if (array_key_exists('plan', $tempArray)){
+					if (array_key_exists('name', $tempArray['plan'])){
+						$eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
+					}
+				}
+				// plan interval
+				if (array_key_exists('plan', $tempArray)){
+					if (array_key_exists('interval', $tempArray['plan'])){
+						if ($tempArray['plan']['interval'] == 'day'){
+							$eventArray[$i]['plan_interval'] = 'daily';
+						}
+						elseif ($tempArray['plan']['interval'] == 'month'){
+							$eventArray[$i]['plan_interval'] = 'monthly';
+						}
+						elseif ($tempArray['plan']['interval'] == 'year'){
+							$eventArray[$i]['plan_interval'] = 'yearly';
+						}
+						else {
+							$eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
+						}
+					}
+				}
+				
+			}
+			elseif ($event->provider == 'paypal'){
+				// paypal formatter
 			}
 			$i++;
     	}
-
-
-    	
+ 			
     		return $eventArray;
     	
     }
