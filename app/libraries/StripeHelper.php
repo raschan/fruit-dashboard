@@ -72,7 +72,20 @@ class StripeHelper
         $out_events = array();
         // initializing variables
         $has_more = true;
-        $last_obj = null;
+        $lastEvent = DB::table('events')
+            ->where('user', Auth::user()->id)
+            ->where('provider', 'stripe')
+            ->orderBy('id','desc')
+            ->take(1)
+            ->get();
+        
+        if(count($lastEvent))
+        {
+            $last_obj = $lastEvent[0]->eventID;
+        } else {
+            $last_obj = null;
+        }
+
         $count = 0;
 
         while ($has_more) {
@@ -86,6 +99,7 @@ class StripeHelper
             // https://stripe.com/docs/api/php#events
             // pagination....
             if ($last_obj) {
+
                 // we have last obj -> starting from there
                 $returned_object = Stripe_Event::all(
                     array(
@@ -94,6 +108,7 @@ class StripeHelper
                     )
                 );
             } else {
+
                 // starting from zero
                 $returned_object = Stripe_Event::all(
                     array(
@@ -127,7 +142,6 @@ class StripeHelper
                     $last_obj = $event['id'];
                 }
             }// foreach
-
             // updating has_more
             $has_more = $events['has_more'];
             $count += 1;
@@ -140,6 +154,7 @@ class StripeHelper
             }
         } // while
 
+           
         // returning object
         return $out_events;
     }
