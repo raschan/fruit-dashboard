@@ -388,7 +388,10 @@
         responsive: true,
         maintainAspectRatio: false,
         bezierCurveTension : 0.1,
-        pointHitDetectionRadius : 5 
+        pointHitDetectionRadius : 5
+        @if ($data['id'] == 'mrr' || $data['id'] == 'arpu' || $data['id'] == 'arr')
+          ,tooltipTemplate: "<%if (label){%><%=label%>: $<%}%><%= value %>"
+        @endif
       };
       var ctx = $('#singleStat').get(0).getContext("2d");
       // all labels
