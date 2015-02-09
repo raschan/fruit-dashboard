@@ -152,26 +152,47 @@ class PayPalHelper {
             $plan_instance = array();
 
             // extracting data
-            $plan_instance['id'] = $json_plan['id'];
-            $plan_instance['name'] = $json_plan['name'];
+
+           $plan_instance['name'] = $plan->getName();
             $plan_instance['interval'] = $json_plan['payment_definitions'][0]['frequency'];
             $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
             $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
             $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
 
             // adding to array
-            array_push($out_plans, $plan_instance);
+            $out_plans[self::generatePlanId($plan->getPaymentDefinitions())] = $plan_instance;
         }
 
         // returning object
         return $out_plans;
     }
 
-     /**
-     * Getting the paypal customers for the user
-     * @param paypal api_context
-     *
-     * @return an array with the subscriptions
+    /**
+    * Generating an id for the payment definitions
+    * @param paymentDefinitions
+    *
+    * @return an alphanumberic id
+    */
+    private static function generatePlanId($paymentDefinitions) {
+        // initialize id
+        $id = "";
+
+        // going through the definitions
+        foreach ($paymentDefinitions as $paymentDefinition) {
+
+            // this is ridicoulous, but till the API will get the
+            // getID working this is working just fine
+            $id = $paymentDefinition->getType().$paymentDefinition->getFrequency().$paymentDefinition->getAmount()->getValue()[0].$paymentDefinition->getCycles();
+        }
+
+        // returning id
+        return $id;
+    }
+    /**
+    * Getting the paypal customers for the user
+    * @param paypal api_context
+    *
+    * @return an array with the subscriptions
     */
 
     public static function getCustomers($apiContext)
@@ -198,10 +219,15 @@ class PayPalHelper {
                 // getting the agreement
                 $agreement = Agreement::get($subId, $apiContext);
 
+                $plan = $agreement->plan;
+
                 // transforming agreement to our format
                 $formatted_agreement = array
                 (
-                    'start'     => strtotime($agreement->getStartDate())
+                    'id'        => $subId,
+                    'start'     => strtotime($agreement->getStartDate()),
+                    'status'    => 'active',
+                    'plan'      => array('id' => self::generatePlanId($agreement->plan->getPaymentDefinitions()))
                 );
 
                 // getting the payer of the agreement
@@ -210,8 +236,7 @@ class PayPalHelper {
                 // this is not working yet because the API sucks at the moment
                 // ... but it'll get better
                 // getting the payer_info
-                //$payer_info = $payer->getPayerInfo();
-
+                // $payer_info = $payer->getPayerInfo();
                 // getting the user id
                 //$user_email = $payer_info->getEmail();
 
@@ -237,7 +262,11 @@ class PayPalHelper {
                         (
                             'zombie'        => false,
                             'email'         => $user_email,
-                            'subscriptions' => array($formatted_agreement)
+                            'subscriptions' => array
+                                (
+                                    'data' => array($formatted_agreement),
+                                    'total_count' => 1
+                                )
                         )
                     );
                 } else {
@@ -245,9 +274,12 @@ class PayPalHelper {
 
                     // adding agreement to the existing ones
                     array_push(
-                        $customers[$found]['subscriptions'],
+                        $customers[$found]['subscriptions']['data'],
                         $formatted_agreement
                     );
+
+                    // updating total count
+                    $customers[$found]['subscriptions']['total_count']++;
                 }
 
             } catch (PayPal\Exception\PayPalConnectionException $ex) {

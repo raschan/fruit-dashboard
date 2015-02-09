@@ -10,6 +10,9 @@ class TailoredData
 	*/
 	public static function getCustomers()
 	{
+		// getting api context for PP
+		$apiContext = PayPalHelper::getApiContext();
+
 		// return array
 		$allCustomers = array();
 
@@ -25,10 +28,7 @@ class TailoredData
 		// get customers from Paypal if connected
 		if (Auth::user()->isPayPalConnected())
 		{
-			$paypalCustomers = PayPalHelper::getCustomers(Auth::user()->paypal_key);
-
-			// TODO
-			// tailor it to look like Stripe data
+			$paypalCustomers = PayPalHelper::getCustomers($apiContext);
 		}
 
 		// merge the 2 arrays
@@ -46,6 +46,9 @@ class TailoredData
 
 	public static function getPlans()
 	{
+		// getting api context for PP
+		$apiContext = PayPalHelper::getApiContext();
+
 		// return array
 		$allPlans = array();
 
@@ -61,10 +64,7 @@ class TailoredData
 		// get plans from Paypal if connected
 		if (Auth::user()->isPayPalConnected())
 		{
-			$paypalPlans = PayPalHelper::getPlans(Auth::user()->paypal_key);
-
-			// TODO
-			// tailor it to look like Stripe data
+			$paypalPlans = PayPalHelper::getPlans($apiContext);
 		}
 
 		// merge the 2 arrays

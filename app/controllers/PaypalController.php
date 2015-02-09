@@ -153,6 +153,7 @@ class PaypalController extends BaseController
 
         echo "<pre>";
         var_dump(print_r(PayPalHelper::getCustomers($api_context)));
+        var_dump(print_r(PayPalHelper::getPlans($api_context)));
         exit(1);
 
         // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]

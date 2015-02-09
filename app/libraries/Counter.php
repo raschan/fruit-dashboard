@@ -12,10 +12,10 @@ class Counter
 	*
 	* @return int
 	*/
-	public static function getARPU($stripeKey, $paypalKey)
+	public static function getARPU()
 	{
 		// get active customer count
-		$activeCustomers = self::getActiveCustomers($stripeKey, $paypalKey);
+		$activeCustomers = self::getActiveCustomers();
 
 		// get MRR - TEMPORARY SOLUTION!!!
 		$mrr = self::getMRR();
@@ -31,14 +31,14 @@ class Counter
 	| Base functions (depend only on data from Stripe/Paypal/Other)
 	|--------------------------------------------------------------
 	*/
-	
+
 
 	/**
 	* MRR - Monthly Recurring Revenue
-	* all recurring revenues, per month 
+	* all recurring revenues, per month
 	* (e.g a yearly plan is divided by 12)
-	* 
-	* Required events/data: 
+	*
+	* Required events/data:
 	* 	- plan details
 	* 		- subscription count
 	*		- plan cost
@@ -115,7 +115,7 @@ class Counter
     	}
     }
 
-    
+
     /**
     * Prepare MRR for statistics
     *
@@ -154,14 +154,14 @@ class Counter
 			$mrrData['oneMonthChange'] = $changeInPercent . '%';
         } else {
 	        $mrrData['oneMonthChange'] = null;
-	    }	
+	    }
 
     	if ($fullDataNeeded){
-    		
+
     		// building full mrr history
     		$firstDay = self::getFirstDay();
 			$mrrData['firstDay'] = date('d-m-Y',$firstDay);
-			
+
 
 	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
 	        	$date = date('Y-m-d',$i);
@@ -174,57 +174,57 @@ class Counter
 	    	$sixMonthTime = $currentDay - 6*30*24*60*60;
 	    	$nineMonthTime = $currentDay - 9*30*24*60*60;
 	    	$lastYearTime = $currentDay - 365*24*60*60;
-			
-			// past values (null if not available)		    
+
+			// past values (null if not available)
 			$twoMonthValue = self::getMRROnDay($twoMonthTime);
 			$threeMonthValue = self::getMRROnDay($threeMonthTime);
 			$sixMonthValue = self::getMRROnDay($sixMonthTime);
 			$nineMonthValue = self::getMRROnDay($nineMonthTime);
 			$oneYearValue = self::getMRROnDay($lastYearTime);
-	
+
 		    // MRR 30 days ago
 		    $mrrData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
 		    // MRR 6 months ago
-		    $mrrData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+		    $mrrData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null;
 			// MRR 1 year ago
 			$mrrData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
 
 			// check if data is available, so we don't divide by null
 			// we have 30 days change
-			
+
 			if ($twoMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) / $twoMonthValue * 100) - 100;
 				$mrrData['twoMonthChange'] = $changeInPercent . '%';
 			} else {
-				$mrrData['twoMonthChange'] = null; 
+				$mrrData['twoMonthChange'] = null;
 			}
 
 			if ($threeMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) / $threeMonthValue * 100) - 100;
 				$mrrData['threeMonthChange'] = $changeInPercent . '%';
 			} else {
-				$mrrData['threeMonthChange'] = null; 
+				$mrrData['threeMonthChange'] = null;
 			}
 
 			if ($sixMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) / $sixMonthValue * 100) - 100;
 				$mrrData['sixMonthChange'] = $changeInPercent . '%';
 			} else {
-				$mrrData['sixMonthChange'] = null; 
+				$mrrData['sixMonthChange'] = null;
 			}
 
 			if ($nineMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) / $nineMonthValue * 100) - 100;
 				$mrrData['nineMonthChange'] = $changeInPercent . '%';
 			} else {
-				$mrrData['nineMonthChange'] = null; 
+				$mrrData['nineMonthChange'] = null;
 			}
 
 			if ($oneYearValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) / $oneYearValue * 100) - 100;
 				$mrrData['oneYearChange'] = $changeInPercent . '%';
 			} else {
-				$mrrData['oneYearChange'] = null; 
+				$mrrData['oneYearChange'] = null;
 			}
 
 			// time interval for shown statistics
@@ -255,13 +255,13 @@ class Counter
 	/**
 	* OR - Other Revenues
 	* every revenue, which not connected to recurring revenues
-	* 
+	*
 	* Required events/data:
 	* 	- charge events
 	*
 	* @return int (cents)
 	*/
-	
+
 
 	/**
 	* Refunds
@@ -364,14 +364,14 @@ class Counter
 		$AUData['oneMonthChange'] = $changeInPercent . '%';
     } else {
         $AUData['oneMonthChange'] = null;
-    }	
+    }
 
     // full AU data
 	if ($fullDataNeeded){
 		// building full AU history
 		$firstDay = self::getFirstDay();
 		$AUData['firstDay'] = date('d-m-Y',$firstDay);
-		
+
 
         for ($i = $firstDay; $i < $currentDay; $i+=86400) {
         	$date = date('Y-m-d',$i);
@@ -383,8 +383,8 @@ class Counter
     	$sixMonthTime = $currentDay - 6*30*24*60*60;
     	$nineMonthTime = $currentDay - 9*30*24*60*60;
     	$lastYearTime = $currentDay - 365*24*60*60;
-		
-		// past values (null if not available)		    
+
+		// past values (null if not available)
 		$twoMonthValue = self::getAUOnDay($twoMonthTime);
 		$threeMonthValue = self::getAUOnDay($threeMonthTime);
 		$sixMonthValue = self::getAUOnDay($sixMonthTime);
@@ -394,46 +394,46 @@ class Counter
 	    // AU 30 days ago
 	    $AUData['oneMonth'] = ($lastMonthValue) ?  $lastMonthValue : null;
 	    // AU 6 months ago
-	    $AUData['sixMonth'] = ($sixMonthValue) ? $sixMonthValue : null; 
+	    $AUData['sixMonth'] = ($sixMonthValue) ? $sixMonthValue : null;
 		// AU 1 year ago
 		$AUData['oneYear'] = ($oneYearValue) ? $oneYearValue : null;
 
 		// check if data is available, so we don't divide by null
 		// we have 30 days change
-		
+
 		if ($twoMonthValue) {
 			$changeInPercent = (self::getAUOnDay($currentDay) / $twoMonthValue * 100) - 100;
 			$AUData['twoMonthChange'] = $changeInPercent . '%';
 		} else {
-			$AUData['twoMonthChange'] = null; 
+			$AUData['twoMonthChange'] = null;
 		}
 
 		if ($threeMonthValue) {
 			$changeInPercent = (self::getAUOnDay($currentDay) / $threeMonthValue * 100) - 100;
 			$AUData['threeMonthChange'] = $changeInPercent . '%';
 		} else {
-			$AUData['threeMonthChange'] = null; 
+			$AUData['threeMonthChange'] = null;
 		}
 
 		if ($sixMonthValue) {
 			$changeInPercent = (self::getAUOnDay($currentDay) / $sixMonthValue * 100) - 100;
 			$AUData['sixMonthChange'] = $changeInPercent . '%';
 		} else {
-			$AUData['sixMonthChange'] = null; 
+			$AUData['sixMonthChange'] = null;
 		}
 
 		if ($nineMonthValue) {
 			$changeInPercent = (self::getAUOnDay($currentDay) / $nineMonthValue * 100) - 100;
 			$AUData['nineMonthChange'] = $changeInPercent . '%';
 		} else {
-			$AUData['nineMonthChange'] = null; 
+			$AUData['nineMonthChange'] = null;
 		}
 
 		if ($oneYearValue) {
 			$changeInPercent = (self::getAUOnDay($currentDay) / $oneYearValue * 100) - 100;
 			$AUData['oneYearChange'] = $changeInPercent . '%';
 		} else {
-			$AUData['oneYearChange'] = null; 
+			$AUData['oneYearChange'] = null;
 		}
 
 		// time interval for shown statistics
@@ -468,7 +468,7 @@ class Counter
 
 	/**
 	* Cancellations
-	* count of cancelled subscriptions 
+	* count of cancelled subscriptions
 	*
 	* Required events/data:
 	*	- cancellation events
@@ -493,7 +493,7 @@ class Counter
 	* @return int (pieces)
 	*/
 
-	
+
 	/**
 	* Upgrades
 	* changing to a bigger plan
@@ -513,7 +513,7 @@ class Counter
 	*	- Coupon/Disount data
 	*
 	* @return int (cents)
-	*/ 
+	*/
 
 
 	/**
@@ -536,7 +536,7 @@ class Counter
 	/**
 	* NR - net revenue
 	* MRR + OR - refunds
-	* 
+	*
 	* Required functions:
 	*	-
 	*	- MRR
@@ -549,7 +549,7 @@ class Counter
 	/**
 	* ARR - Annual run rate
 	* MRR * 12
-	*	
+	*
 	* Required functions:
 	* 	- MRR
 	*
@@ -588,14 +588,14 @@ class Counter
 			$arrData['oneMonthChange'] = $changeInPercent . '%';
         } else {
 	        $arrData['oneMonthChange'] = null;
-	    }	
+	    }
 
 	    // full ARR data
     	if ($fullDataNeeded){
     		// building full arr history
     		$firstDay = self::getFirstDay();
 			$arrData['firstDay'] = date('d-m-Y',$firstDay);
-			
+
 
 	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
 	        	$date = date('Y-m-d',$i);
@@ -607,57 +607,57 @@ class Counter
 	    	$sixMonthTime = $currentDay - 6*30*24*60*60;
 	    	$nineMonthTime = $currentDay - 9*30*24*60*60;
 	    	$lastYearTime = $currentDay - 365*24*60*60;
-			
-			// past values (null if not available)		    
+
+			// past values (null if not available)
 			$twoMonthValue = self::getMRROnDay($twoMonthTime) * 12;
 			$threeMonthValue = self::getMRROnDay($threeMonthTime) * 12;
 			$sixMonthValue = self::getMRROnDay($sixMonthTime) * 12;
 			$nineMonthValue = self::getMRROnDay($nineMonthTime) * 12;
 			$oneYearValue = self::getMRROnDay($lastYearTime) * 12;
-	
+
 		    // MRR 30 days ago
 		    $arrData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue * 12) : null;
 		    // MRR 6 months ago
-		    $arrData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue * 12) : null; 
+		    $arrData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue * 12) : null;
 			// MRR 1 year ago
 			$arrData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue * 12) : null;
 
 			// check if data is available, so we don't divide by null
 			// we have 30 days change
-			
+
 			if ($twoMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) * 12 / $twoMonthValue * 100) - 100;
 				$arrData['twoMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arrData['twoMonthChange'] = null; 
+				$arrData['twoMonthChange'] = null;
 			}
 
 			if ($threeMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) * 12 / $threeMonthValue * 100) - 100;
 				$arrData['threeMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arrData['threeMonthChange'] = null; 
+				$arrData['threeMonthChange'] = null;
 			}
 
 			if ($sixMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) * 12 / $sixMonthValue * 100) - 100;
 				$arrData['sixMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arrData['sixMonthChange'] = null; 
+				$arrData['sixMonthChange'] = null;
 			}
 
 			if ($nineMonthValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) * 12 / $nineMonthValue * 100) - 100;
 				$arrData['nineMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arrData['nineMonthChange'] = null; 
+				$arrData['nineMonthChange'] = null;
 			}
 
 			if ($oneYearValue) {
 				$changeInPercent = (self::getMRROnDay($currentDay) * 12 / $oneYearValue * 100) - 100;
 				$arrData['oneYearChange'] = $changeInPercent . '%';
 			} else {
-				$arrData['oneYearChange'] = null; 
+				$arrData['oneYearChange'] = null;
 			}
 
 			// time interval for shown statistics
@@ -727,14 +727,14 @@ class Counter
 			$arpuData['oneMonthChange'] = $changeInPercent . '%';
         } else {
 	        $arpuData['oneMonthChange'] = null;
-	    }	
+	    }
 
 	    // full arpu data
     	if ($fullDataNeeded){
     		// building full arpu history
     		$firstDay = self::getFirstDay();
 			$arpuData['firstDay'] = date('d-m-Y',$firstDay);
-			
+
 
 	        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
 	        	$date = date('Y-m-d',$i);
@@ -746,57 +746,57 @@ class Counter
 	    	$sixMonthTime = $currentDay - 6*30*24*60*60;
 	    	$nineMonthTime = $currentDay - 9*30*24*60*60;
 	    	$lastYearTime = $currentDay - 365*24*60*60;
-			
-			// past values (null if not available)		    
+
+			// past values (null if not available)
 			$twoMonthValue = self::getarpuOnDay($twoMonthTime);
 			$threeMonthValue = self::getarpuOnDay($threeMonthTime);
 			$sixMonthValue = self::getarpuOnDay($sixMonthTime);
 			$nineMonthValue = self::getarpuOnDay($nineMonthTime);
 			$oneYearValue = self::getarpuOnDay($lastYearTime);
-	
+
 		    // arpu 30 days ago
 		    $arpuData['oneMonth'] = ($lastMonthValue) ? money_format('%n', $lastMonthValue) : null;
 		    // arpu 6 months ago
-		    $arpuData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null; 
+		    $arpuData['sixMonth'] = ($sixMonthValue) ? money_format('%n', $sixMonthValue) : null;
 			// arpu 1 year ago
 			$arpuData['oneYear'] = ($oneYearValue) ? money_format('%n', $oneYearValue) : null;
 
 			// check if data is available, so we don't divide by null
 			// we have 30 days change
-			
+
 			if ($twoMonthValue) {
 				$changeInPercent = (self::getarpuOnDay($currentDay) / $twoMonthValue * 100) - 100;
 				$arpuData['twoMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arpuData['twoMonthChange'] = null; 
+				$arpuData['twoMonthChange'] = null;
 			}
 
 			if ($threeMonthValue) {
 				$changeInPercent = (self::getarpuOnDay($currentDay) / $threeMonthValue * 100) - 100;
 				$arpuData['threeMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arpuData['threeMonthChange'] = null; 
+				$arpuData['threeMonthChange'] = null;
 			}
 
 			if ($sixMonthValue) {
 				$changeInPercent = (self::getarpuOnDay($currentDay) / $sixMonthValue * 100) - 100;
 				$arpuData['sixMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arpuData['sixMonthChange'] = null; 
+				$arpuData['sixMonthChange'] = null;
 			}
 
 			if ($nineMonthValue) {
 				$changeInPercent = (self::getarpuOnDay($currentDay) / $nineMonthValue * 100) - 100;
 				$arpuData['nineMonthChange'] = $changeInPercent . '%';
 			} else {
-				$arpuData['nineMonthChange'] = null; 
+				$arpuData['nineMonthChange'] = null;
 			}
 
 			if ($oneYearValue) {
 				$changeInPercent = (self::getarpuOnDay($currentDay) / $oneYearValue * 100) - 100;
 				$arpuData['oneYearChange'] = $changeInPercent . '%';
 			} else {
-				$arpuData['oneYearChange'] = null; 
+				$arpuData['oneYearChange'] = null;
 			}
 
 			// time interval for shown statistics
@@ -837,7 +837,7 @@ class Counter
 	*/
 
 
-	/** 
+	/**
 	* LV - Lifetime Value
 	* the average 'usefullness' of users
 	* (Average Revenue Per User) / (User Churn)
@@ -846,11 +846,11 @@ class Counter
 	*	- ARPU
 	*	- UC
 	*
-	* @return int (cents/percent) 
+	* @return int (cents/percent)
 	*/
 
 
-	/** 
+	/**
 	* RC - Revenue Churn
 	* (MRR loss due to cancellations and downgrades) / (last month MRR) * 100
 	*
@@ -870,7 +870,7 @@ class Counter
 	*/
 	/**
     * Get day of first recorded data
-    * 
+    *
     * @return string with date
     */
 
@@ -886,7 +886,7 @@ class Counter
     * Get Average Revenue Per Users on given day
     *
     * @param timestamp, current day timestamp
-    * 
+    *
     * @return int (cents) or null if data not exist
     */
 
@@ -898,13 +898,13 @@ class Counter
     	else {
     		return null;
     	}
-    	
+
     }
 
 	/**
     * Get Active User details
     *
-    * 
+    *
     * @return array
     */
 
@@ -928,7 +928,7 @@ class Counter
     * Get Active Users on given day
     *
     * @param timestamp, current day timestamp
-    * 
+    *
     * @return int (cents) or null if data not exist
     */
 
@@ -952,7 +952,7 @@ class Counter
     * Get MRR on given day
     *
     * @param timestamp, current day timestamp
-    * 
+    *
     * @return int (cents) or null if data not exist
     */
 
@@ -991,6 +991,7 @@ class Counter
             // going through each subscription if any
             if ($customer['subscriptions']['total_count'] > 0) {
                 // there are some subs
+
                 foreach ($customer['subscriptions']['data'] as
                          $subscription) {
                     // updating array
@@ -999,7 +1000,7 @@ class Counter
                     plan
                         id - string
                     start       - timestamp, subscription start date
-                    status      - string, possible values are: 
+                    status      - string, possible values are:
                                     'trialing'
                                     'active'
                                     'past_due'
@@ -1045,12 +1046,19 @@ class Counter
         		'mrr' => 0
         	);
         }
+
         // getting each plan's count and mrr contribution
         foreach ($currentSubscriptions as $subscription) {
-        	$planDetail = $planDetails[$subscription['plan_id']];
-            $planDetail['count']++;
-            $planDetail['mrr'] = $planDetail['price'] * $planDetail['count'];
-            $planDetails[$subscription['plan_id']] = $planDetail;
+            // we'll need to use isset because PayPal API is a piece of shit
+            // long version:
+            // in paypal there can be subscriptions to an
+            // already deleted plan
+            if (isset($planDetails[$subscription['plan_id']])) {
+                $planDetail = $planDetails[$subscription['plan_id']];
+                $planDetail['count']++;
+                $planDetail['mrr'] = $planDetail['price'] * $planDetail['count'];
+                $planDetails[$subscription['plan_id']] = $planDetail;
+            }
         }
 
 	    // returning int
