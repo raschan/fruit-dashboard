@@ -30,7 +30,7 @@ class CreateMrrTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('mrr');
+        Schema::dropIfExists('mrr');
     }
 
 }

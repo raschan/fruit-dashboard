@@ -133,16 +133,18 @@ class AuthController extends BaseController
     |===================================================
     */
     public function showDashboard()
-    {
+    {   
+        
         return View::make(
             'auth.dashboard',
             array(
                 'allFunctions' => array(
-                    Counter::showMRR(false),
-                    Counter::showActiveUsers(false),
-                    Counter::showARR(false),
-                    Counter::showARPU(false)
-                )
+                    MrrStat::showMRR(false),
+                    AUStat::showAU(false),
+                    ArrStat::showARR(false),
+                    ArpuStat::showARPU(false)
+                ),
+                'events' => Counter::formatEvents()
             )
         );
     }
@@ -351,32 +353,32 @@ class AuthController extends BaseController
             case 'mainPage':
             return View::make('auth.single_stat',
                 array(
-                    'data' => Counter::showMRR(true)
+                    'data' => MrrStat::showMRR(true)
                 )
             );
             case 'mrr':
             return View::make('auth.single_stat',
                 array(
-                    'data' => Counter::showMRR(true)
+                    'data' => MrrStat::showMRR(true)
                 )
             );
             break;
             case 'au':
             return View::make('auth.single_stat',
                 array(
-                    'data' => Counter::showActiveUsers(true)
+                    'data' => AUStat::showAU(true)
                 )
             );
             case 'arr':
             return View::make('auth.single_stat',
                 array(
-                    'data' => Counter::showARR(true)
+                    'data' => ArrStat::showARR(true)
                 )
             );
             case 'arpu':
             return View::make('auth.single_stat',
                 array(
-                    'data' => Counter::showARPU(true)
+                    'data' => ArpuStat::showARPU(true)
                 )
             );
             default:

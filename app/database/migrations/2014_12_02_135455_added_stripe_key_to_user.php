@@ -28,11 +28,14 @@ class AddedStripeKeyToUser extends Migration
      */
     public function down()
     {
-        Schema::table('users', function($table)
+        if (Schema::hasColumn('users','stripe_key'))
         {
-            // dropping column
-            $table->dropColumn('stripe_key');
-        });
+            Schema::table('users', function($table)
+            {
+                // dropping column
+                $table->dropColumn('stripe_key');
+            });
+        }
     }
 
 }

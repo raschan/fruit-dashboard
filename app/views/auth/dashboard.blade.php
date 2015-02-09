@@ -18,7 +18,7 @@
         <!-- {{ $allFunctions[$i]['statName'] }} -->
         @endif
           <div class="col-md-4 chart-box">
-            <div class="chart-wrapper">
+            <div class="chart-wrapper bordered">
               <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
               <div class="chart-text-left"> 
                 @if($allFunctions[$i]['currentValue'])
@@ -72,42 +72,118 @@
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
-          <ul class="list-group">
+          <ul class="list-group bordered">
             <li class="list-group-item">
               <h4>Transactions</h4>
             </li>
+            
+            @if($events)
+
+              @for ($i = 0; $i< count($events); $i++)
+
+                <!-- Charge events -->
+
+                @if ($events[$i]['type'] == 'charge.succeeded')
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      Charged
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'charge.failed')
+                  <li class="list-group-item">
+                    <span class="badge badge-danger">
+                      Failed
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'charge.refunded')
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Refunded
+                    </span>
+                    <span class="text-money up">
+                      {{ $events[$i]['currency'] }}{{ $events[$i]['amount'] }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif 
+
+                <!-- / Charge events -->
+
+                <!-- Subscription events -->
+
+                @if ($events[$i]['type'] == 'customer.subscription.created')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      New subscription
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    subscribed to 
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.subscription.updated')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Updated
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    updated to 
+                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif   
+
+                <!-- / Subscription events -->
+
+              @endfor
+            @else
             <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
+             No current data available.
             </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-success">Charged</span>
-              <span class="text-money up">$55</span> Cras justo odio <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-danger">FAILED</span>
-              <span class="text-money nochange">$55</span> Dapibus ac facilisis in <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
-            <li class="list-group-item">
-              <span class="badge badge-info">Downgrade</span>
-              Morbi leo risus <span class="timestamp">20:44</span>
-            </li> <!-- / .list-group-item -->
+            @endif
           </ul>
         </div> <!-- / .col-sm-4 -->
       </div>
       <!-- /FEED BOX -->
+
+    <div id="#appendhere" class="col-md-12">
 
     </div>  <!-- / #content-wrapper -->
 
@@ -130,9 +206,12 @@
 
     var data, ctx;
 
-    /* Monthly Recurring Revenue */
+    
 
     @for ($i = 0; $i< count($allFunctions); $i++)
+
+    /* {{ $allFunctions[$i]['statName'] }} */
+
     data = {
       labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
       datasets: [
@@ -147,6 +226,9 @@
 
     ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
     var {{$allFunctions[$i]['id']}}Chart = new Chart(ctx).Line(data, options);
+
+    /* / {{ $allFunctions[$i]['statName'] }} */
+
     @endfor
 
        

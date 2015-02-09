@@ -1,18 +1,6 @@
 /* Signin, signout page */
-.theme-asphalt {
-	background: #ecf0f1;
-}
-
 .theme-signout {
 	background-color: #27ae60;
-}
-
-.theme-signout .pa_page_alerts_default {
-	margin-bottom: 0;
-}
-
-.pa-page-alerts-box .alert {
-	border-radius: 0;
 }
 
 .theme-signout #main-navbar {
@@ -82,6 +70,13 @@
 
 /* ALL PAGES */
 
+/* growl */
+
+.growl.growl-notice {
+	background: #27ae60;
+	color: #fff;
+}
+
 .text-money {
 	font-weight: 700;
 }
@@ -108,7 +103,7 @@
 @media (min-width: 992px) {
 	.navbar {
 		padding: 0 60px 0 60px;
-		background: #333;
+		background: #2c3e50;
 	}
 }
 
@@ -121,7 +116,7 @@
 
 .stripe-form,
 .paypal-form {
-	border: 1px solid #ddd;
+
 }
 
 .paypal-form-wrapper {
@@ -144,14 +139,13 @@
 }
 
 .feed-box > ul {
-	border: 1px solid #ddd;
+
 }
 
 .chart-wrapper {
 	border-radius: 2px;
 	background-color: #fff;
 	padding: 0 0 5px 0;
-	border: 1px solid #ddd;
 	margin-bottom: -1px;
 }
 
@@ -227,13 +221,14 @@
 .timestamp {
 	color: #777;
 	font-size: 80%;
+	display: inline-block;
 }
 
 /* SETTINGS */
 
 .account-form,
 .connect-form {
-	border: 1px solid #ddd;
+	
 }
 
 .account-form-wrapper {
@@ -304,6 +299,7 @@
 
 /* Utility */
 
+
 @media (min-width: 845px) {
 	.sm-pull-right {
 		float: right !important;
@@ -327,3 +323,4 @@
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
