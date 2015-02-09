@@ -16,109 +16,109 @@
       <div class="col-md-10 col-md-offset-1">
 
         <!-- Account settings -->
+        <div class="row">
+        	<div class="col-sm-6 account-form-wrapper">
+            <div class="panel-body account-form bordered getHeight">
+              <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Change your account settings</h4>
+              {{ Form::open(array(
+                'route'=>'auth.settings',
+                'method' => 'post',
+                'id' => 'form-settings',
+                'role' => 'form',
+                'class' => 'panel-padding form-horizontal' )) }}
 
-      	<div class="col-sm-6 account-form-wrapper">
-          <div class="panel-body account-form">
-            <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Change your account settings</h4>
-            {{ Form::open(array(
-              'route'=>'auth.settings',
-              'method' => 'post',
-              'id' => 'form-settings',
-              'role' => 'form',
-              'class' => 'panel-padding form-horizontal' )) }}
+                <div class="form-group @if ($errors->first('email')) has-error @endif">
+                  {{ Form::label('id_name', 'Name', array(
+                    'class' => 'col-sm-3 control-label')) }}
+                  <div class="col-sm-9">
+                    <p class="form-control-static">
+                      @if(Auth::user()->name)
+                      {{ Auth::user()->name }}
+                      @else 
+                      N/A
+                      @endif
+                    </p>
+                  </div>
+                </div> <!-- / .form-group -->
 
-              <div class="form-group @if ($errors->first('email')) has-error @endif">
-                {{ Form::label('id_name', 'Name', array(
-                  'class' => 'col-sm-3 control-label')) }}
-                <div class="col-sm-9">
-                  <p class="form-control-static">
-                    @if(Auth::user()->name)
-                    {{ Auth::user()->name }}
+                <div class="form-group @if ($errors->first('email')) has-error @endif">
+                  {{ Form::label('id_country', 'Country', array(
+                    'class' => 'col-sm-3 control-label')) }}
+                  <div class="col-sm-9">
+                    <p class="form-control-static">
+                      @if(Auth::user()->zoneinfo)
+                      {{ Auth::user()->zoneinfo }}
+                      @else 
+                      N/A
+                      @endif
+                    </p>
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="form-group @if ($errors->first('email')) has-error @endif">
+                  {{ Form::label('id_email', 'Email', array(
+                    'class' => 'col-sm-3 control-label')) }}
+                  <div class="col-sm-9">
+                    {{ Form::text('email', Auth::user()->email, array(
+                      'id' => 'id_email',
+                      'class' => 'form-control')) }}
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="form-group">
+                  {{ Form::label('id_password', 'Password', array(
+                    'class' => 'col-sm-3 control-label')) }}
+                  <div class="col-sm-9">
+                    {{ Form::password('password', array(
+                      'id' => 'id_password',
+                      'class' => 'form-control')) }}
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
+                  {{ Form::submit('Save', array(
+                      'id' => 'id_submit',
+                      'class' => 'btn btn-primary btn-lg btn-flat')) }}
+                </div>
+
+              {{ Form::close() }}
+            </div> <!-- / .panel-body -->
+          </div> <!-- / .col-sm-6 -->
+
+          <!-- /Account settings -->
+
+          <!-- Connect a service  -->
+
+        	<div class="col-sm-6 connect-form">
+            <div class="panel-body bordered sameHeight">
+              <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Select a service to connect</h4>
+              <div class="list-group">
+                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                  <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
+                  <h4 class="list-group-item-heading">PayPal</h4>
+                  <p class="list-group-item-text">
+                    @if($paypal_connected)
+                      <span class="up">Connected.</span>
                     @else 
-                    N/A
+                      <span class="down">Not connected.</span>
                     @endif
                   </p>
-                </div>
-              </div> <!-- / .form-group -->
-
-              <div class="form-group @if ($errors->first('email')) has-error @endif">
-                {{ Form::label('id_country', 'Country', array(
-                  'class' => 'col-sm-3 control-label')) }}
-                <div class="col-sm-9">
-                  <p class="form-control-static">
-                    @if(Auth::user()->zoneinfo)
-                    {{ Auth::user()->zoneinfo }}
-                    @else 
-                    N/A
+                </a> <!-- / .list-group-item -->
+                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                  <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
+                  <h4 class="list-group-item-heading">Stripe</h4>
+                  <p class="list-group-item-text">
+                    @if($stripe_connected)
+                      <span class="up">Connected.</span>
+                    @else
+                      <span class="down">Not connected.</span>
                     @endif
                   </p>
-                </div>
-              </div> <!-- / .form-group -->
-
-              <div class="form-group @if ($errors->first('email')) has-error @endif">
-                {{ Form::label('id_email', 'Email', array(
-                  'class' => 'col-sm-3 control-label')) }}
-                <div class="col-sm-9">
-                  {{ Form::text('email', Auth::user()->email, array(
-                    'id' => 'id_email',
-                    'class' => 'form-control')) }}
-                </div>
-              </div> <!-- / .form-group -->
-
-              <div class="form-group">
-                {{ Form::label('id_password', 'Password', array(
-                  'class' => 'col-sm-3 control-label')) }}
-                <div class="col-sm-9">
-                  {{ Form::password('password', array(
-                    'id' => 'id_password',
-                    'class' => 'form-control')) }}
-                </div>
-              </div> <!-- / .form-group -->
-
-              <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
-                {{ Form::submit('Save', array(
-                    'id' => 'id_submit',
-                    'class' => 'btn btn-primary btn-lg btn-flat')) }}
-              </div>
-
-            {{ Form::close() }}
-          </div> <!-- /. panel-body -->
-        </div> <!-- /. col-md-6 -->
-
-        <!-- /Account settings -->
-
-        <!-- Connect a service  -->
-
-      	<div class="col-sm-6">
-          <div class="panel-body connect-form">
-            <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Select a service to connect</h4>
-            <div class="list-group">
-              <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
-                <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
-                <h4 class="list-group-item-heading">PayPal</h4>@if($paypal_connected)@else <span class="badge badge-primary">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
-                <p class="list-group-item-text">
-                  @if($paypal_connected)
-                    <span class="up">Connected.</span>
-                  @else 
-                    <span class="down">Not connected.</span>
-                  @endif
-                </p>
-              </a> <!-- / .list-group-item -->
-              <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
-                <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
-                <h4 class="list-group-item-heading">Stripe</h4>@if($stripe_connected)@else <span class="badge badge-primary">Click to connect!&nbsp;&nbsp;<i class="fa fa-angle-right"></i></span>@endif
-                <p class="list-group-item-text">
-                  @if($stripe_connected)
-                    <span class="up">Connected.</span>
-                  @else
-                    <span class="down">Not connected.</span>
-                  @endif
-                </p>
-              </a> <!-- / .list-group-item -->
-            </div> <!-- /. list-group -->
-          </div> <!-- /. panel-body -->
-      	</div> <!-- /. col-md-6 -->
-
+                </a> <!-- / .list-group-item -->
+              </div> <!-- / .list-group -->
+            </div> <!-- / .panel-body -->
+        	</div> <!-- / .col-sm-6 -->
+        </div> <!-- / .row -->
         <!-- /Connect a service  -->
 
       </div> <!-- /. col-md-10 -->
@@ -128,7 +128,16 @@
   @section('pageScripts')
 
     <script type="text/javascript">
-    
+    init.push(function () {
+      //make panels same height
+      var eHeight = $('.getHeight').innerHeight();
+      $('.sameHeight').outerHeight(eHeight);
+      window.addEventListener('resize', function(event){
+        eHeight = $('.getHeight').innerHeight();
+        $('.sameHeight').outerHeight(eHeight);
+      });
+    });
+
     </script>
 
   @stop

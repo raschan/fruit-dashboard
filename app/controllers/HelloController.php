@@ -44,6 +44,16 @@ class HelloController extends BaseController
             )
         );
     }
+
+    /*
+    |====================================================
+    | <GET> | showGYT: imports xls to database
+    |====================================================
+    */
+    public function showGYT()
+    {           
+        return View::make('dev.gyt');
+    }
     /*
     |====================================================
     | <GET> | showUsers: showing the current users
@@ -160,6 +170,22 @@ class HelloController extends BaseController
 
         return Response::json($charges);
     }
+
+    /*
+    |====================================================
+    | <GET> | showRashan: renders the testing page
+    |====================================================
+    */
+    public function showRashan()
+    {
+        $savedObjects = Counter::saveEvents();
+        return View::make('dev.rashan',array(
+                'name' => 'Rashan',
+                'count' => $savedObjects
+            )
+        );
+    }
+
     /*
     |========================================================
     | <AJAX/POST> | ajaxGetMrr: gets the logged in user's mrr
