@@ -5,40 +5,40 @@
 class Counter
 {
 
-	/*
-	|--------------------------------------------------------------
-	| Base functions (depend only on data from Stripe/Paypal/Other)
-	|--------------------------------------------------------------
-	*/
-	
-
-	/**
-	* MRR - Monthly Recurring Revenue
-	* all recurring revenues, per month 
-	* (e.g a yearly plan is divided by 12)
-	* 
-	* Required events/data: 
-	* 	- plan details
-	* 		- subscription count
-	*		- plan cost
-	*
-	* @return int (cents)
-	*/
-
-	/**
-	* Format events for dashboard transactions live feed
-	*
-	* @return array
-	*/
+    /*
+    |--------------------------------------------------------------
+    | Base functions (depend only on data from Stripe/Paypal/Other)
+    |--------------------------------------------------------------
+    */
 
 
-	/**
-	* Retreive data relevant to MRR and calculate the current value
-	*
-	* @return array (provider => mrr)
-	*/
+    /**
+    * MRR - Monthly Recurring Revenue
+    * all recurring revenues, per month
+    * (e.g a yearly plan is divided by 12)
+    *
+    * Required events/data:
+    *   - plan details
+    *       - subscription count
+    *       - plan cost
+    *
+    * @return int (cents)
+    */
 
-	public static function retreiveAndCalculateMRR()
+    /**
+    * Format events for dashboard transactions live feed
+    *
+    * @return array
+    */
+
+
+    /**
+    * Retreive data relevant to MRR and calculate the current value
+    *
+    * @return array (provider => mrr)
+    */
+
+    public static function retreiveAndCalculateMRR()
     {
         // getting the plans
         $plans = TailoredData::getPlans();
@@ -66,13 +66,13 @@ class Counter
 
         // counting the mrr
         foreach ($plan_subscriptions as $plan_id => $count) {
-        	if (isset($mrr[$plans[$plan_id]['provider']])){
-        		// we already met this provider
-   	        	$mrr[$plans[$plan_id]['provider']] += $plans[$plan_id]['amount'] * $count;
-   	        } else {
-   	        	// this is a new provider
-   	        	$mrr[$plans[$plan_id]['provider']] = $plans[$plan_id]['amount'] * $count;
-   	        }
+            if (isset($mrr[$plans[$plan_id]['provider']])){
+                // we already met this provider
+                $mrr[$plans[$plan_id]['provider']] += $plans[$plan_id]['amount'] * $count;
+            } else {
+                // this is a new provider
+                $mrr[$plans[$plan_id]['provider']] = $plans[$plan_id]['amount'] * $count;
+            }
         }
 
         // returning int
@@ -85,7 +85,7 @@ class Counter
 
     public static function saveMRR()
     {
-    	$currentDay = date('Y-m-d', time());
+        $currentDay = date('Y-m-d', time());
 
         // checking if we already have data
         $currentDayMRR = DB::table('mrr')
@@ -94,82 +94,82 @@ class Counter
             ->get();
 
         if (!$currentDayMRR) {
-        	// no previous data
-    		$mrrValue = self::retreiveAndCalculateMRR();
+            // no previous data
+            $mrrValue = self::retreiveAndCalculateMRR();
 
-    		foreach ($mrrValue as $provider => $value) {
-	    		DB::table('mrr')->insert(
-	                array(
-	                	'provider' 	=> $provider,
-	                    'value' 	=> $value,
-	                    'user'  	=> Auth::user()->id,
-	                    'date'  	=> $currentDay
-	                )
-	            );
-    		}
-    	}
+            foreach ($mrrValue as $provider => $value) {
+                DB::table('mrr')->insert(
+                    array(
+                        'provider'  => $provider,
+                        'value'     => $value,
+                        'user'      => Auth::user()->id,
+                        'date'      => $currentDay
+                    )
+                );
+            }
+        }
     }
 
-    
-    
-	/**
-	* OR - Other Revenues
-	* every revenue, which not connected to recurring revenues
-	* 
-	* Required events/data:
-	* 	- charge events
-	*
-	* @return int (cents)
-	*/
-	
-
-	/**
-	* Refunds
-	* refunds on any made charge
-	*
-	* Required events/data:
-	*	- refund events
-	*
-	* @return int (cents)
-	*/
 
 
-	/**
-	* AU - Active Users
-	* every user, who has atleast one live subscription
-	*
-	* Required events/data:
-	*	- user/customer details
-	*		- subscription data
-	*
-	* @return pos. int (heads)
-	*/
+    /**
+    * OR - Other Revenues
+    * every revenue, which not connected to recurring revenues
+    *
+    * Required events/data:
+    *   - charge events
+    *
+    * @return int (cents)
+    */
 
-	public static function getActiveCustomers()
-	{
-		// get all the customers
-		$allCustomers = TailoredData::getCustomers();
 
-		// return int
-		$activeCustomers = 0;
+    /**
+    * Refunds
+    * refunds on any made charge
+    *
+    * Required events/data:
+    *   - refund events
+    *
+    * @return int (cents)
+    */
 
-		// count all, that have at least one subscription
-		foreach ($allCustomers as $customer) {
-			if ($customer['subscriptions']['total_count'] > 0){
-				$activeCustomers++;
-			}
-		}
 
-		return $activeCustomers;
-	}
+    /**
+    * AU - Active Users
+    * every user, who has atleast one live subscription
+    *
+    * Required events/data:
+    *   - user/customer details
+    *       - subscription data
+    *
+    * @return pos. int (heads)
+    */
 
-	/**
+    public static function getActiveCustomers()
+    {
+        // get all the customers
+        $allCustomers = TailoredData::getCustomers();
+
+        // return int
+        $activeCustomers = 0;
+
+        // count all, that have at least one subscription
+        foreach ($allCustomers as $customer) {
+            if ($customer['subscriptions']['total_count'] > 0){
+                $activeCustomers++;
+            }
+        }
+
+        return $activeCustomers;
+    }
+
+    /**
     * Save the daily Active Users number in database
     */
 
     public static function saveAU()
     {
-    	$currentDay = date('Y-m-d', time());
+        $currentDay = date('Y-m-d', time());
 
         // checking if we already have data
         $currentDayAU = DB::table('au')
@@ -178,251 +178,251 @@ class Counter
             ->get();
 
         if (!$currentDayAU) {
-        	// no previous data
-    		$AUValue = self::getActiveCustomers();
+            // no previous data
+            $AUValue = self::getActiveCustomers();
 
-    		DB::table('AU')->insert(
+            DB::table('AU')->insert(
                 array(
                     'value' => $AUValue,
                     'user'  => Auth::user()->id,
                     'date'  => $currentDay
                 )
             );
-    	}
+        }
     }
 
 
 
-	/**
-	* Fees
-	* all payed fees
-	*
-	* Required events/data:
-	* 	- all events regarding spending money
-	*
-	* @return int (cents)
-	*/
+    /**
+    * Fees
+    * all payed fees
+    *
+    * Required events/data:
+    *   - all events regarding spending money
+    *
+    * @return int (cents)
+    */
 
 
-	/**
-	* Cancellations
-	* count of cancelled subscriptions 
-	*
-	* Required events/data:
-	*	- cancellation events
-	*
-	* Must save also:
-	* 	- the price difference
-	*
-	* @return int (pieces)
-	*/
+    /**
+    * Cancellations
+    * count of cancelled subscriptions
+    *
+    * Required events/data:
+    *   - cancellation events
+    *
+    * Must save also:
+    *   - the price difference
+    *
+    * @return int (pieces)
+    */
 
 
-	/**
-	* Downgrade
-	* changing to a smaller plan
-	*
-	* Required events/data:
-	* 	- update events, where plan cost went down
-	*
-	* Must save also:
-	* 	- the price difference
-	*
-	* @return int (pieces)
-	*/
-
-	
-	/**
-	* Upgrades
-	* changing to a bigger plan
-	*
-	* Required events/data:
-	*	- update events, where plan cost went up
-	*
-	* @return int (pieces)
-	*/
+    /**
+    * Downgrade
+    * changing to a smaller plan
+    *
+    * Required events/data:
+    *   - update events, where plan cost went down
+    *
+    * Must save also:
+    *   - the price difference
+    *
+    * @return int (pieces)
+    */
 
 
-	/**
-	* CR - Coupons Redeemed
-	* income loss due to redeemed coupons
-	*
-	* Required events/data
-	*	- Coupon/Disount data
-	*
-	* @return int (cents)
-	*/ 
+    /**
+    * Upgrades
+    * changing to a bigger plan
+    *
+    * Required events/data:
+    *   - update events, where plan cost went up
+    *
+    * @return int (pieces)
+    */
 
 
-	/**
-	* FC - Failed Charges
-	*
-	* Required events/data
-	*	- charge events, which failed to be paid
-	*
-	* @return int (cents)
-	*/
+    /**
+    * CR - Coupons Redeemed
+    * income loss due to redeemed coupons
+    *
+    * Required events/data
+    *   - Coupon/Disount data
+    *
+    * @return int (cents)
+    */
 
 
-	/*
-	|--------------------------------------------------------------
-	| Derived functions (have dependecies on base functions)
-	|--------------------------------------------------------------
-	*/
+    /**
+    * FC - Failed Charges
+    *
+    * Required events/data
+    *   - charge events, which failed to be paid
+    *
+    * @return int (cents)
+    */
 
 
-	/**
-	* NR - net revenue
-	* MRR + OR - refunds
-	* 
-	* Required functions:
-	*	-
-	*	- MRR
-	*	- Refunds
-	* ORR
-	* @return int (cents)
-	*/
+    /*
+    |--------------------------------------------------------------
+    | Derived functions (have dependecies on base functions)
+    |--------------------------------------------------------------
+    */
 
 
-	/**
-	* ARR - Annual run rate
-	* MRR * 12
-	*	
-	* Required functions:
-	* 	- MRR
-	*
-	* @return int (cents)
-	*/
+    /**
+    * NR - net revenue
+    * MRR + OR - refunds
+    *
+    * Required functions:
+    *   -
+    *   - MRR
+    *   - Refunds
+    * ORR
+    * @return int (cents)
+    */
 
 
-	/**
-	* ARPU - Average Revenue Per active Users
-	* MRR / active users
-	*
-	* Required functions:
-	*	- MRR
-	*	- AU
-	*
-	* @return int (cents)
-	*/
+    /**
+    * ARR - Annual run rate
+    * MRR * 12
+    *
+    * Required functions:
+    *   - MRR
+    *
+    * @return int (cents)
+    */
 
 
-	/**
-	* UC - User Churn
-	* Cancellations / (Last month Active Users) * 100
-	*
-	* Required functions:
-	*	- Cancellations
-	* 	- AU 30 days before
-	*
-	* @return int (percent)
-	*/
+    /**
+    * ARPU - Average Revenue Per active Users
+    * MRR / active users
+    *
+    * Required functions:
+    *   - MRR
+    *   - AU
+    *
+    * @return int (cents)
+    */
 
 
-	/** 
-	* LV - Lifetime Value
-	* the average 'usefullness' of users
-	* (Average Revenue Per User) / (User Churn)
-	*
-	* Required functions:
-	*	- ARPU
-	*	- UC
-	*
-	* @return int (cents/percent) 
-	*/
+    /**
+    * UC - User Churn
+    * Cancellations / (Last month Active Users) * 100
+    *
+    * Required functions:
+    *   - Cancellations
+    *   - AU 30 days before
+    *
+    * @return int (percent)
+    */
 
 
-	/** 
-	* RC - Revenue Churn
-	* (MRR loss due to cancellations and downgrades) / (last month MRR) * 100
-	*
-	* Required functions:
-	* 	- MRR (30 days before)
-	*	- price difference of cancellations
-	*	- price difference of downgrades
-	*
-	* @return int (percent)
-	*/
+    /**
+    * LV - Lifetime Value
+    * the average 'usefullness' of users
+    * (Average Revenue Per User) / (User Churn)
+    *
+    * Required functions:
+    *   - ARPU
+    *   - UC
+    *
+    * @return int (cents/percent)
+    */
 
 
-	/*
-	|------------------------------------------------------------
-	| Other helper functions
-	|------------------------------------------------------------
-	*/
+    /**
+    * RC - Revenue Churn
+    * (MRR loss due to cancellations and downgrades) / (last month MRR) * 100
+    *
+    * Required functions:
+    *   - MRR (30 days before)
+    *   - price difference of cancellations
+    *   - price difference of downgrades
+    *
+    * @return int (percent)
+    */
 
-	/**
+
+    /*
+    |------------------------------------------------------------
+    | Other helper functions
+    |------------------------------------------------------------
+    */
+
+    /**
     * Get Active User details
     *
-    * 
+    *
     * @return array
     */
 
     private static function getAUDetails()
     {
-    	$day = date('Y-m-d', $timestamp);
+        $day = date('Y-m-d', $timestamp);
 
-    	$au = DB::table('au')
-    		->where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->get();
+        $au = DB::table('au')
+            ->where('date',$day)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-    	if($au){
-    		return $au[0]->value;
-    	} else {
-			return null;
-    	}
+        if($au){
+            return $au[0]->value;
+        } else {
+            return null;
+        }
     }
 
-	/**
+    /**
     * Get Active Users on given day
     *
     * @param timestamp, current day timestamp
-    * 
+    *
     * @return int (cents) or null if data not exist
     */
 
     private static function getAUOnDay($timestamp)
     {
-    	$day = date('Y-m-d', $timestamp);
+        $day = date('Y-m-d', $timestamp);
 
-    	$au = DB::table('au')
-    		->where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->get();
+        $au = DB::table('au')
+            ->where('date',$day)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-    	if($au){
-    		return $au[0]->value;
-    	} else {
-			return null;
-    	}
+        if($au){
+            return $au[0]->value;
+        } else {
+            return null;
+        }
     }
 
-	/**
+    /**
     * Get MRR on given day
     *
     * @param timestamp, current day timestamp
-    * 
+    *
     * @return int (cents) or null if data not exist
     */
 
     private static function getMRROnDay($timestamp)
     {
-    	$day = date('Y-m-d', $timestamp);
+        $day = date('Y-m-d', $timestamp);
 
-    	$mrr = DB::table('mrr')
-    		->where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->get();
+        $mrr = DB::table('mrr')
+            ->where('date',$day)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-    	if($mrr){
-    		return $mrr[0]->value;
-    	} else {
-			return null;
-    	}
+        if($mrr){
+            return $mrr[0]->value;
+        } else {
+            return null;
+        }
     }
 
-	/**
+    /**
      * Getting all the subscriptions.
      *
      * @return an array with the active subscriptions
@@ -449,7 +449,7 @@ class Counter
                     plan
                         id - string
                     start       - timestamp, subscription start date
-                    status      - string, possible values are: 
+                    status      - string, possible values are:
                                     'trialing'
                                     'active'
                                     'past_due'
@@ -461,11 +461,11 @@ class Counter
                     // only count subscriptions, that are active
                     if ($subscription['status'] == 'active')
                     {
-	                    $active_subscriptions[$subscription['id']] =
-	                        array(
-	                            'plan_id'  => $subscription['plan']['id']
-	                        );
-	                }
+                        $active_subscriptions[$subscription['id']] =
+                            array(
+                                'plan_id'  => $subscription['plan']['id']
+                            );
+                    }
                 } // foreach subscriptions
             } // if subscriptions
         } // foreach customer
@@ -475,185 +475,185 @@ class Counter
 
     public static function getSubscriptionDetails()
     {
-    	// get all active subscriptions
-    	$currentSubscriptions = self::getCurrentSubscriptions();
+        // get all active subscriptions
+        $currentSubscriptions = self::getCurrentSubscriptions();
 
-    	// get all plans
-    	$plans = TailoredData::getPlans();
+        // get all plans
+        $plans = TailoredData::getPlans();
 
-    	// we'll store the details here
+        // we'll store the details here
         $planDetails = array();
 
         // getting plan details
         foreach ($plans as $id => $plan) {
-        	$planDetails[$id] = array(
-        		'name' => $plan['name'],
-        		'price' => $plan['amount'],
-        		'currency' => $plan['currency'],
-        		'interval' => $plan['interval'],
-        		'count' => 0,
-        		'mrr' => 0
-        	);
+            $planDetails[$id] = array(
+                'name' => $plan['name'],
+                'price' => $plan['amount'],
+                'currency' => $plan['currency'],
+                'interval' => $plan['interval'],
+                'count' => 0,
+                'mrr' => 0
+            );
         }
         // getting each plan's count and mrr contribution
         foreach ($currentSubscriptions as $subscription) {
-        	$planDetail = $planDetails[$subscription['plan_id']];
+            $planDetail = $planDetails[$subscription['plan_id']];
             $planDetail['count']++;
             $planDetail['mrr'] = $planDetail['price'] * $planDetail['count'];
             $planDetails[$subscription['plan_id']] = $planDetail;
         }
 
-	    // returning int
+        // returning int
         return $planDetails;
     }
 
     public static function saveEvents()
     {
-    	$savedObjects = 0;
-    	$eventsToSave = TailoredData::getEvents();
-    	foreach ($eventsToSave as $id => $event) {
-    		$hasEvent = DB::table('events')
-    		->where('eventID',$id)
-    		->where('user', Auth::user()->id)
-    		->get();
+        $savedObjects = 0;
+        $eventsToSave = TailoredData::getEvents();
+        foreach ($eventsToSave as $id => $event) {
+            $hasEvent = DB::table('events')
+            ->where('eventID',$id)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-    		// if we dont already have that event
-    		if(!$hasEvent)
-    		{    		
-    			$savedObjects++;
-	    		DB::table('events')->insert(
-	                array(
-	                    'created' 	=> date('Y-m-d', $event['created']),
-	                    'user'  	=> Auth::user()->id,
-	                    'provider' 	=> $event['provider'],
-	                    'eventID'	=> $id,
-	                    'type'		=> $event['type'],
-	                    'object'	=> json_encode($event['object'])
-	                )
-	            );
-	    	}
-		}
-		return $savedObjects;
-    } 
+            // if we dont already have that event
+            if(!$hasEvent)
+            {
+                $savedObjects++;
+                DB::table('events')->insert(
+                    array(
+                        'created'   => date('Y-m-d', $event['created']),
+                        'user'      => Auth::user()->id,
+                        'provider'  => $event['provider'],
+                        'eventID'   => $id,
+                        'type'      => $event['type'],
+                        'object'    => json_encode($event['object'])
+                    )
+                );
+            }
+        }
+        return $savedObjects;
+    }
 
     public static function formatEvents()
     {
-    	// helpers
-    	$eventArray = array();
-    	$tempArray = array();
+        // helpers
+        $eventArray = array();
+        $tempArray = array();
 
-    	// last X events from database
-    	// select only those event types, which we show on dashboard
-    	$events = DB::table('events')
-    		->where('user', Auth::user()->id)
-    		->whereIn('type', ['charge.succeeded', 'charge.failed', 'charge.refunded', 'customer.subscription.created','customer.subscription.updated'])
-    		->orderBy('created', 'desc')
-    		->take(20)
-    		->get();
-    	
+        // last X events from database
+        // select only those event types, which we show on dashboard
+        $events = DB::table('events')
+            ->where('user', Auth::user()->id)
+            ->whereIn('type', ['charge.succeeded', 'charge.failed', 'charge.refunded', 'customer.subscription.created','customer.subscription.updated'])
+            ->orderBy('created', 'desc')
+            ->take(20)
+            ->get();
 
-    	$i = 0;
-    	foreach ($events as $event){
-    		// if stripe event
-    		if ($event->provider == 'stripe'){
-	    		// decoding object
-				$tempArray = json_decode(strstr($event->object, '{'), true);
 
-				// formatting and creating data for return array
-				// type eg. 'charge.succeeded'
-				$eventArray[$i]['type'] = $event->type;
-				// provider eg. 'stripe'
-				$eventArray[$i]['provider'] = $event->provider;
-				// date eg. '02-11 20:44'
-				if (array_key_exists('created', $tempArray)){
-					$eventArray[$i]['date'] = date('m-d H:i', $tempArray['created']);
-				}
-				elseif(array_key_exists('plan', $tempArray) && array_key_exists('created', $tempArray['plan'])){
-					$eventArray[$i]['date'] = date('m-d H:i', $tempArray['plan']['created']);
-				}
-				else {
-					$eventArray[$i]['date'] = null;
-				}
-				// name eg. 'chris'
-				if (array_key_exists('card', $tempArray)){
-					if(array_key_exists('name', $tempArray['card'])){
-						if($tempArray['card']['name']){
-							$eventArray[$i]['name'] = $tempArray['card']['name'];
-						}
-						else {
-							$eventArray[$i]['name'] = 'Someone';
-						}
-					}
-					else {
-						$eventArray[$i]['name'] = 'Someone';
-					}
-				}
-				else {
-					$eventArray[$i]['name'] = 'Someone';
-				}
-				// currency
-				if (array_key_exists('currency', $tempArray)){
-					$eventArray[$i]['currency'] = $tempArray['currency'];
-				}
-				elseif (array_key_exists('plan', $tempArray)){
-					if (array_key_exists('currency', $tempArray['plan'])){
-						$eventArray[$i]['currency'] = $tempArray['plan']['currency'];
-					}
-				}
-				else {
-					$eventArray[$i]['currency'] = null;
-				}
-				// currency to currency string, needs a helper function
-				if ($eventArray[$i]['currency'] == 'usd'){
-					$eventArray[$i]['currency'] = '$';
-				}
-				// amount paid
-				if (array_key_exists('amount_due', $tempArray)){
-					$eventArray[$i]['amount'] = $tempArray['amount_due'];
-				}
-				elseif (array_key_exists('plan', $tempArray)){
-					if (array_key_exists('amount', $tempArray['plan'])){
-						$eventArray[$i]['amount'] = $tempArray['plan']['amount'];
-					}
-				}
-				elseif (array_key_exists('amount_refunded', $tempArray)){
-					$eventArray[$i]['amount'] = $tempArray['amount_refunded'];
-				}
-				else {
-					$eventArray[$i]['amount'] = null;
-				}
-				// plan name
-				if (array_key_exists('plan', $tempArray)){
-					if (array_key_exists('name', $tempArray['plan'])){
-						$eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
-					}
-				}
-				// plan interval
-				if (array_key_exists('plan', $tempArray)){
-						if ($tempArray['plan']['interval'] == 'day'){
-							$eventArray[$i]['plan_interval'] = 'daily';
-						}
-						elseif ($tempArray['plan']['interval'] == 'month'){
-							$eventArray[$i]['plan_interval'] = 'monthly';
-						}
-						elseif ($tempArray['plan']['interval'] == 'year'){
-							$eventArray[$i]['plan_interval'] = 'yearly';
-						}
-						else {
-							$eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
-						}
-					
-				}
-				
-			}
-			elseif ($event->provider == 'paypal'){
-				// paypal formatter
-			}
-			$i++;
-    	}
- 			
-    		return $eventArray;
-    	
+        $i = 0;
+        foreach ($events as $event){
+            // if stripe event
+            if ($event->provider == 'stripe'){
+                // decoding object
+                $tempArray = json_decode(strstr($event->object, '{'), true);
+
+                // formatting and creating data for return array
+                // type eg. 'charge.succeeded'
+                $eventArray[$i]['type'] = $event->type;
+                // provider eg. 'stripe'
+                $eventArray[$i]['provider'] = $event->provider;
+                // date eg. '02-11 20:44'
+                if (array_key_exists('created', $tempArray)){
+                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['created']);
+                }
+                elseif(array_key_exists('plan', $tempArray) && array_key_exists('created', $tempArray['plan'])){
+                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['plan']['created']);
+                }
+                else {
+                    $eventArray[$i]['date'] = null;
+                }
+                // name eg. 'chris'
+                if (array_key_exists('card', $tempArray)){
+                    if(array_key_exists('name', $tempArray['card'])){
+                        if($tempArray['card']['name']){
+                            $eventArray[$i]['name'] = $tempArray['card']['name'];
+                        }
+                        else {
+                            $eventArray[$i]['name'] = 'Someone';
+                        }
+                    }
+                    else {
+                        $eventArray[$i]['name'] = 'Someone';
+                    }
+                }
+                else {
+                    $eventArray[$i]['name'] = 'Someone';
+                }
+                // currency
+                if (array_key_exists('currency', $tempArray)){
+                    $eventArray[$i]['currency'] = $tempArray['currency'];
+                }
+                elseif (array_key_exists('plan', $tempArray)){
+                    if (array_key_exists('currency', $tempArray['plan'])){
+                        $eventArray[$i]['currency'] = $tempArray['plan']['currency'];
+                    }
+                }
+                else {
+                    $eventArray[$i]['currency'] = null;
+                }
+                // currency to currency string, needs a helper function
+                if ($eventArray[$i]['currency'] == 'usd'){
+                    $eventArray[$i]['currency'] = '$';
+                }
+                // amount paid
+                if (array_key_exists('amount_due', $tempArray)){
+                    $eventArray[$i]['amount'] = $tempArray['amount_due'];
+                }
+                elseif (array_key_exists('plan', $tempArray)){
+                    if (array_key_exists('amount', $tempArray['plan'])){
+                        $eventArray[$i]['amount'] = $tempArray['plan']['amount'];
+                    }
+                }
+                elseif (array_key_exists('amount_refunded', $tempArray)){
+                    $eventArray[$i]['amount'] = $tempArray['amount_refunded'];
+                }
+                else {
+                    $eventArray[$i]['amount'] = null;
+                }
+                // plan name
+                if (array_key_exists('plan', $tempArray)){
+                    if (array_key_exists('name', $tempArray['plan'])){
+                        $eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
+                    }
+                }
+                // plan interval
+                if (array_key_exists('plan', $tempArray)){
+                        if ($tempArray['plan']['interval'] == 'day'){
+                            $eventArray[$i]['plan_interval'] = 'daily';
+                        }
+                        elseif ($tempArray['plan']['interval'] == 'month'){
+                            $eventArray[$i]['plan_interval'] = 'monthly';
+                        }
+                        elseif ($tempArray['plan']['interval'] == 'year'){
+                            $eventArray[$i]['plan_interval'] = 'yearly';
+                        }
+                        else {
+                            $eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
+                        }
+
+                }
+
+            }
+            elseif ($event->provider == 'paypal'){
+                // paypal formatter
+            }
+            $i++;
+        }
+
+            return $eventArray;
+
     }
-    	
+
 }
