@@ -274,8 +274,8 @@ class PaypalController extends BaseController
                 $patch = new Patch();
 
                 $value = new PayPalModel('{
-            	       "state":"ACTIVE"
-            	     }');
+                       "state":"ACTIVE"
+                     }');
 
                 $patch->setOp('replace')
                     ->setPath('/')

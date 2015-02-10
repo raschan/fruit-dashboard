@@ -48,7 +48,7 @@ class BaseStat
         return $data;
 
     }
-	
+
     /**
     * Prepare data for full statistics (for single_stat)
     *
@@ -74,7 +74,7 @@ class BaseStat
         // building full mrr history
         $firstDay = static::getFirstDay();
         $data['firstDay'] = date('d-m-Y',$firstDay);
-        
+
 
         for ($i = $firstDay; $i < $currentDay; $i+=86400) {
             $date = date('Y-m-d',$i);
@@ -82,7 +82,7 @@ class BaseStat
         }
 
         // past values (null if not available)
-        $lastMonthValue = static::getStatOnDay($lastMonthTime);          
+        $lastMonthValue = static::getStatOnDay($lastMonthTime);
         $twoMonthValue = static::getStatOnDay($twoMonthTime);
         $threeMonthValue = static::getStatOnDay($threeMonthTime);
         $sixMonthValue = static::getStatOnDay($sixMonthTime);
@@ -92,46 +92,46 @@ class BaseStat
         // 30 days ago
         $data['oneMonth'] = $lastMonthValue;
         // 6 months ago
-        $data['sixMonth'] = $sixMonthValue; 
+        $data['sixMonth'] = $sixMonthValue;
         // 1 year ago
         $data['oneYear'] = $oneYearValue;
 
         // check if data is available, so we don't divide by null
         // we have 30 days change
-        
+
         if ($twoMonthValue) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $twoMonthValue * 100) - 100;
             $data['twoMonthChange'] = round($changeInPercent) . '%';
         } else {
-            $data['twoMonthChange'] = null; 
+            $data['twoMonthChange'] = null;
         }
 
         if ($threeMonthValue) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $threeMonthValue * 100) - 100;
             $data['threeMonthChange'] = round($changeInPercent) . '%';
         } else {
-            $data['threeMonthChange'] = null; 
+            $data['threeMonthChange'] = null;
         }
 
         if ($sixMonthValue) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $sixMonthValue * 100) - 100;
             $data['sixMonthChange'] = round($changeInPercent) . '%';
         } else {
-            $data['sixMonthChange'] = null; 
+            $data['sixMonthChange'] = null;
         }
 
         if ($nineMonthValue) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $nineMonthValue * 100) - 100;
             $data['nineMonthChange'] = round($changeInPercent) . '%';
         } else {
-            $data['nineMonthChange'] = null; 
+            $data['nineMonthChange'] = null;
         }
 
         if ($oneYearValue) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $oneYearValue * 100) - 100;
             $data['oneYearChange'] = round($changeInPercent) . '%';
         } else {
-            $data['oneYearChange'] = null; 
+            $data['oneYearChange'] = null;
         }
 
         // time interval for shown statistics
@@ -146,12 +146,12 @@ class BaseStat
 
         return $data;
 
-    }  
+    }
 
-    
+
 
     /**
-    * Convert data to money format 
+    * Convert data to money format
     *
     * @param array, every data needed
     * @param bool, if full stat is needed
@@ -167,14 +167,14 @@ class BaseStat
             // 30 days ago
             $data['oneMonth'] = $data['oneMonth'] ? money_format('%n', $data['oneMonth'] / 100) : null;
             // 6 months ago
-            $data['sixMonth'] = $data['sixMonth'] ? money_format('%n', $data['sixMonth'] / 100) : null; 
+            $data['sixMonth'] = $data['sixMonth'] ? money_format('%n', $data['sixMonth'] / 100) : null;
             // 1 year ago
             $data['oneYear'] = $data['oneYear'] ? money_format('%n', $data['oneYear'] / 100) : null;
         }
 
         return $data;
     }
-	
+
     /**
     * Get stat on given day
     *
@@ -207,7 +207,7 @@ class BaseStat
 
     /**
     * Get day of first recorded data
-    * 
+    *
     * @return string with date
     */
 

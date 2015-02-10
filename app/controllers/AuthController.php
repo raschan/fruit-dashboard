@@ -133,8 +133,7 @@ class AuthController extends BaseController
     |===================================================
     */
     public function showDashboard()
-    {   
-        
+    {
         return View::make(
             'auth.dashboard',
             array(
