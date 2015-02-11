@@ -35,11 +35,10 @@ class MrrStat extends BaseStat {
 	        	$mrrData['detailData'][$id]['price'] = money_format('%n', $planDetail['price'] / 100);
 	            $mrrData['detailData'][$id]['mrr'] = money_format('%n', $planDetail['mrr'] / 100);
         	}
-
+    	}
         // converting to money format
         $mrrData = self::toMoneyFormat($mrrData, $fullDataNeeded);
-
-    	}
+        
     	return $mrrData;
     }
 
