@@ -177,7 +177,10 @@ class AuthController extends BaseController
     {
         // Validation rules
         $rules = array(
-            'email' => 'email'
+            'email' => 'email',
+            'oldpassword' => 'required|min:4',
+            'newpassword1' => 'required|min:4',
+            'newpassword2' => 'required|min:4',
         );
         // run the validation rules on the inputs
         $validator = Validator::make(Input::all(), $rules);
@@ -201,10 +204,26 @@ class AuthController extends BaseController
                 // if email is registered and changed
                 if ($user->email != Input::get('email')) {
                     return Redirect::route('auth.settings')
-                        ->withErrors('email', 'This email is already registered.') // send back errors
+                        ->with('error', 'This email is already registered.') // send back errors
                         ->withInput(); // sending back data
                 }
             }
+            // checking if old password is the old password
+            if (Hash::check(Input::get('oldpassword'), $user->password)){
+                // if new passwords are the same
+                if (Input::get('newpassword1') === Input::get('newpassword2')){
+                    $user->password = Hash::make(Input::get('newpassword1'));
+                }
+                else {
+                    return Redirect::route('auth.settings')
+                        ->with('error', 'The new passwords you entered do not match.'); // send back errors
+                }
+            }
+            else {
+                return Redirect::route('auth.settings')
+                    ->with('error', 'The old password you entered is incorrect.'); // send back errors
+            }
+
 
 
             $user->save();
