@@ -1,12 +1,12 @@
-<?php 
+<?php
 
 class AUStat extends BaseStat {
 
     /**
     * Prepare Active Users for statistics
     *
-    * @param boolean 
-    * 
+    * @param boolean
+    *
     * @return array
     */
 
@@ -18,7 +18,7 @@ class AUStat extends BaseStat {
         // return array
         $AUData = array();
         $AUData = self::showSimpleStat();
-   
+
 
             // full AU data
             if ($fullDataNeeded){
@@ -26,7 +26,7 @@ class AUStat extends BaseStat {
                 $AUData = self::showFullStat();
 
                 // data for single stat table
-                $AUData['detailData'] = Counter::getSubscriptionDetails();
+                $AUData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
 
             }
 

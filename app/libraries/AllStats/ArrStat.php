@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	/**
     * Prepare ARR for statistics
@@ -11,8 +11,8 @@ class ArrStat extends BaseStat {
 	/**
     * Prepare ARR for statistics
     *
-    * @param boolean 
-    * 
+    * @param boolean
+    *
     * @return array
     */
 
@@ -24,14 +24,14 @@ class ArrStat extends BaseStat {
         // return array
         $arrData = array();
         $arrData = self::showSimpleStat();
-   
+
 
             // full ARR data
             if ($fullDataNeeded){
 
                 $arrData = self::showFullStat();
                 // data for single stat table
-                $arrData['detailData'] = Counter::getSubscriptionDetails();
+                $arrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
 
             }
         // converting to money format
@@ -70,7 +70,7 @@ class ArrStat extends BaseStat {
 
     /**
     * Get day of first recorded data
-    * 
+    *
     * @return string with date
     */
 

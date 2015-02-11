@@ -1,11 +1,10 @@
 <?php
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Auth\Openid\PPOpenIdSession;
+use PayPal\Api\OpenIdSession;
 use PayPal\Rest\ApiContext;
 
-use PayPal\Auth\Openid\PPOpenIdTokeninfo;
-use PayPal\Exception\PPConnectionException;
-use PayPal\Auth\Openid\PPOpenIdUserinfo;
+use PayPal\Api\OpenIdTokeninfo;
+use PayPal\Exception\ConnectionException;
+use PayPal\Api\OpenIdUserinfo;
 use PayPal\Api\Plan;
 
 use PayPal\Api\PaymentDefinition;
@@ -22,7 +21,7 @@ class HelloController extends BaseController
 {
     public function showHello()
     {
-        
+
     }
 
     /*
@@ -31,17 +30,14 @@ class HelloController extends BaseController
     |====================================================
     */
     public function showStripe()
-    {   
+    {
         //TEMPORARY SOLUTION!!!!
-        Counter::saveMRR();
+        Counter::saveMRR(Auth::user());
 
         setlocale(LC_MONETARY,"en_US");
-        
+
         return View::make(
-            'dev.stripe',
-            array(
-                'data' => Counter::showMRR(true)
-            )
+            'dev.stripe'
         );
     }
 
@@ -51,7 +47,7 @@ class HelloController extends BaseController
     |====================================================
     */
     public function showGYT()
-    {           
+    {
         return View::make('dev.gyt');
     }
     /*
@@ -60,7 +56,7 @@ class HelloController extends BaseController
     |====================================================
     */
     public function showUsers()
-    {   
+    {
         // returning the current users
         return View::make(
             'dev.users',
@@ -80,14 +76,14 @@ class HelloController extends BaseController
         $api_context = PayPalHelper::getApiContext();
         try {
             $params = array('access_token' => PayPalHelper::generateAccessTokenFromRefreshToken(Auth::user()->paypal_key));
-            $user = PPOpenIdUserinfo::getUserinfo($params, $api_context);
+            $user = OpenIdUserinfo::getUserinfo($params, $api_context);
         } catch (Exception $ex) {
             print "no pp key";
         }
         /*
         // Create a new instance of Plan object
         $plan = new Plan();
-        
+
         // # Basic Information
         // Fill up the basic information that is required for the plan
         $plan->setName('Welltakeyourmoney')
@@ -95,7 +91,7 @@ class HelloController extends BaseController
             ->setType('fixed');
 
         $paymentDefinition = new PaymentDefinition();
-        
+
         // The possible values for such setters are mentioned in the setter method documentation.
         // Just open the class file. e.g. lib/PayPal/Api/PaymentDefinition.php and look for setFrequency method.
         // You should be able to see the acceptable values in the comments.
@@ -114,7 +110,7 @@ class HelloController extends BaseController
             ->setInitialFailAmountAction("CONTINUE")
             ->setMaxFailAttempts("0")
             ->setSetupFee(new Currency(array('value' => 9999, 'currency' => 'USD')));
-        
+
         $plan->setPaymentDefinitions(array($paymentDefinition));
         $plan->setMerchantPreferences($merchantPreferences);
 
@@ -127,28 +123,28 @@ class HelloController extends BaseController
             exit(1);
         }
         */
-        
+
         try {
             $params = array('page_size' => '20');
             $planList = Plan::all($params, $api_context);
-        } catch (PayPal\Exception\PPConnectionException $ex) {
+        } catch (PayPal\Exception\ConnectionException $ex) {
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
-        Log::info($planList); 
+        Log::info($planList);
 
         try {
             $plan = Plan::get("P-0TA38541GG196850X3XYQ2KI", $api_context);
-        } catch (PayPal\Exception\PPConnectionException $ex) {
+        } catch (PayPal\Exception\ConnectionException $ex) {
             echo '<pre>';print_r(json_decode($ex->getData()));
             exit(1);
         }
-        
+
         return View::make(
             'dev.paypal',
             array('output' => $plan)
         );
-        
+
     }
 
 
@@ -178,7 +174,7 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
-        $savedObjects = Counter::saveEvents();
+        $savedObjects = Counter::saveEvents(Auth::user());
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
                 'count' => $savedObjects
