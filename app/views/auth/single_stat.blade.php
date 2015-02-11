@@ -320,7 +320,7 @@
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
           console.log("are we here?");
           // update start datepicker to end datepicker value
-          $(this).datepicker('update', selectedStopDate);
+          $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
           // growl
           $.growl.warning({
@@ -333,7 +333,7 @@
         else {
           //METHOD DOESNT WORK, WHY?
           // update end datepicker first selectable value to start datepicker value
-          $('#stopDateStat').datepicker('setStartDate', selectedStartDate);
+          $('#stopDateStat').datepicker('setStartDate', new Date(arrayStartKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
         }
@@ -341,6 +341,7 @@
       });
 
       $('#stopDateStat').datepicker().on("changeDate", function(e){
+        console.log(e);
         selectedStartDate = $('#startDateStat').prop("value");
         selectedStopDate = $('#stopDateStat').prop("value");
 
@@ -355,7 +356,7 @@
           console.log(selectedStopDate);
           console.log(arrayStopKey);
           // update end datepicker to start datepicker value
-          $(this).datepicker('update', selectedStartDate);
+          $(this).datepicker('update', new Date(arrayStartKey));
           //$(this).prop("value",selectedStartDate);
           // growl
           $.growl.warning({
@@ -369,7 +370,7 @@
         else {
           //METHOD DOESNT WORK, WHY?
           // update start datepicker last selectable value to end datepicker value
-          $('#startDateStat').datepicker('setEndDate', selectedStopDate);
+          $('#startDateStat').datepicker('setEndDate', new Date(arrayStopKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
         }
@@ -397,7 +398,7 @@
       // all labels
       var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
       // all data value
-      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
+      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach];
 
       // for default view
       var data30 = {
@@ -407,7 +408,7 @@
                 label: "{{$data['statName']}}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach]
             }
         ]
       };
@@ -441,33 +442,50 @@
             newData.push(data[i]);  
           }
 
-          var modulus = Math.round((newLabel.length) / 30);
-
-          i=0;
-
-          for(i in newLabel){
-            if (i !== 0 && i % modulus !== 0){
-              newLabel[i]="";
+          // if dataset bigger than 30
+          var finalData = [];
+          var finalLabel = [];
+          if (newData.length > 30){
+            console.log('good');
+            // find modulus for 30 points in dataset, with equal distance
+            var modulus = Math.floor((newLabel.length) / 30);
+            
+            for(i=0; i<newData.length; i++){
+              // first dataset and where modulus equals zero goes into final data
+              if (i === 0 || i % modulus === 0){
+                finalData.push(newData[i]);
+                finalLabel.push(newLabel[i]);
+              }
+              if (finalData.length === 30){
+                break;
+              }
             }
+
           }
+          else {
+            console.log('meh')
+            finalData = newData;
+            finalLabel = newLabel;
+          }
+          
           
           // destroying stat
           singleStat.destroy();
 
           // for updated view
-          var dataNew = {
-            labels: newLabel,
+          var dataFinal = {
+            labels: finalLabel,
             datasets: [
                 {
                     fillColor: "rgba(151,187,205,0.4)",
                     strokeColor: "rgba(151,187,205,0.6)",
-                    data: newData
+                    data: finalData
                 }
             ]
           };
           // creating updated stat
           ctx = $('#singleStat').get(0).getContext("2d");
-          singleStat = new Chart(ctx).Line(dataNew, options);
+          singleStat = new Chart(ctx).Line(dataFinal, options);
         }
       }
 
