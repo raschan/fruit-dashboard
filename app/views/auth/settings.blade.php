@@ -27,10 +27,10 @@
                 'role' => 'form',
                 'class' => 'panel-padding form-horizontal' )) }}
 
-                <div class="form-group @if ($errors->first('email')) has-error @endif">
+                <div class="form-group">
                   {{ Form::label('id_name', 'Name', array(
-                    'class' => 'col-sm-3 control-label')) }}
-                  <div class="col-sm-9">
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
                     <p class="form-control-static">
                       @if(Auth::user()->name)
                       {{ Auth::user()->name }}
@@ -41,10 +41,10 @@
                   </div>
                 </div> <!-- / .form-group -->
 
-                <div class="form-group @if ($errors->first('email')) has-error @endif">
+                <div class="form-group">
                   {{ Form::label('id_country', 'Country', array(
-                    'class' => 'col-sm-3 control-label')) }}
-                  <div class="col-sm-9">
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
                     <p class="form-control-static">
                       @if(Auth::user()->zoneinfo)
                       {{ Auth::user()->zoneinfo }}
@@ -57,8 +57,8 @@
 
                 <div class="form-group @if ($errors->first('email')) has-error @endif">
                   {{ Form::label('id_email', 'Email', array(
-                    'class' => 'col-sm-3 control-label')) }}
-                  <div class="col-sm-9">
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
                     {{ Form::text('email', Auth::user()->email, array(
                       'id' => 'id_email',
                       'class' => 'form-control')) }}
@@ -67,10 +67,40 @@
 
                 <div class="form-group">
                   {{ Form::label('id_password', 'Password', array(
-                    'class' => 'col-sm-3 control-label')) }}
-                  <div class="col-sm-9">
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
                     {{ Form::password('password', array(
                       'id' => 'id_password',
+                      'class' => 'form-control')) }}
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="form-group">
+                  {{ Form::label('id_oldpassword', 'Old password', array(
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
+                    {{ Form::password('oldpassword', array(
+                      'id' => 'id_oldpassword',
+                      'class' => 'form-control')) }}
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="form-group">
+                  {{ Form::label('id_newpassword1', 'New password', array(
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
+                    {{ Form::password('newpassword1', array(
+                      'id' => 'id_newpassword1',
+                      'class' => 'form-control')) }}
+                  </div>
+                </div> <!-- / .form-group -->
+
+                <div class="form-group">
+                  {{ Form::label('id_newpassword2', 'New password again', array(
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
+                    {{ Form::password('newpassword2', array(
+                      'id' => 'id_newpassword2',
                       'class' => 'form-control')) }}
                   </div>
                 </div> <!-- / .form-group -->
@@ -129,13 +159,7 @@
 
     <script type="text/javascript">
     init.push(function () {
-      //make panels same height
-      var eHeight = $('.getHeight').innerHeight();
-      $('.sameHeight').outerHeight(eHeight);
-      window.addEventListener('resize', function(event){
-        eHeight = $('.getHeight').innerHeight();
-        $('.sameHeight').outerHeight(eHeight);
-      });
+      
     });
 
     </script>
