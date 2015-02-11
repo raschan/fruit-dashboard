@@ -160,6 +160,12 @@ class BaseStat
     */
 
     public static function toMoneyFormat($data, $fullDataNeeded){
+        if (strlen(Auth::user()->zoneinfo) == 0){
+            $countrycode = "en_US";
+        }
+        else {
+            $countrycode = Config::get('constants.' . Auth::user()->zoneinfo);
+        }
         setlocale(LC_MONETARY,"en_US");
         $data['currentValue'] = money_format('%n',$data['currentValue'] / 100);
 

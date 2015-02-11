@@ -603,10 +603,7 @@ class Counter
                 else {
                     $eventArray[$i]['currency'] = null;
                 }
-                // currency to currency string, needs a helper function
-                if ($eventArray[$i]['currency'] == 'usd'){
-                    $eventArray[$i]['currency'] = '$';
-                }
+                
                 // amount paid
                 if (array_key_exists('amount_due', $tempArray)){
                     $eventArray[$i]['amount'] = $tempArray['amount_due'];
