@@ -55,61 +55,105 @@
                   </div>
                 </div> <!-- / .form-group -->
 
-                <div class="form-group @if ($errors->first('email')) has-error @endif">
-                  {{ Form::label('id_email', 'Email', array(
+                <div class="form-group" id="editEmailForm">
+                  {{ Form::label('id_emailedit', 'Email', array(
                     'class' => 'col-sm-4 control-label')) }}
                   <div class="col-sm-8">
-                    {{ Form::text('email', Auth::user()->email, array(
-                      'id' => 'id_email',
-                      'class' => 'form-control')) }}
+                    <p class="form-control-static">
+                      {{ Auth::user()->email }}
+                      <button id="editEmail" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                    </p>
                   </div>
                 </div> <!-- / .form-group -->
 
-                <div class="form-group">
-                  {{ Form::label('id_password', 'Password', array(
-                    'class' => 'col-sm-4 control-label')) }}
-                  <div class="col-sm-8">
-                    {{ Form::password('password', array(
-                      'id' => 'id_password',
-                      'class' => 'form-control')) }}
-                  </div>
-                </div> <!-- / .form-group -->
+                <!-- hidden email change form -->
 
-                <div class="form-group">
-                  {{ Form::label('id_oldpassword', 'Old password', array(
-                    'class' => 'col-sm-4 control-label')) }}
-                  <div class="col-sm-8">
-                    {{ Form::password('oldpassword', array(
-                      'id' => 'id_oldpassword',
-                      'class' => 'form-control')) }}
-                  </div>
-                </div> <!-- / .form-group -->
+                <div id="changeEmailForm" class="hidden-form">
 
-                <div class="form-group">
-                  {{ Form::label('id_newpassword1', 'New password', array(
-                    'class' => 'col-sm-4 control-label')) }}
-                  <div class="col-sm-8">
-                    {{ Form::password('newpassword1', array(
-                      'id' => 'id_newpassword1',
-                      'class' => 'form-control')) }}
-                  </div>
-                </div> <!-- / .form-group -->
+                  <div class="form-group @if ($errors->first('email')) has-error @endif">
+                    {{ Form::label('id_email', 'Email', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::text('email', '', array(
+                        'id' => 'id_email',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
 
-                <div class="form-group">
-                  {{ Form::label('id_newpassword2', 'New password again', array(
-                    'class' => 'col-sm-4 control-label')) }}
-                  <div class="col-sm-8">
-                    {{ Form::password('newpassword2', array(
-                      'id' => 'id_newpassword2',
-                      'class' => 'form-control')) }}
-                  </div>
-                </div> <!-- / .form-group -->
+                  <div class="form-group @if ($errors->first('password')) has-error @endif">
+                    {{ Form::label('id_password', 'Password', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::password('password', array(
+                        'id' => 'id_password',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
 
-                <div class="col-sm-2 col-sm-offset-5 padding-xs-vr">
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
                   {{ Form::submit('Save', array(
                       'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-lg btn-flat')) }}
+                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                  </div>
+
                 </div>
+
+                <!-- / hidden email change form -->
+
+                <div id="editPasswordForm">
+                  <div class="form-group">
+                    {{ Form::label('id_passwordedit', 'Password', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                    </div>
+                  </div> <!-- / .form-group -->
+                </div>
+
+                <!-- hidden password change form -->
+
+                <div id="changePasswordForm" class="hidden-form">
+                  <div class="form-group @if ($errors->first('oldpassword')) has-error @endif">
+                    {{ Form::label('id_oldpassword', 'Old password', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::password('oldpassword', array(
+                        'id' => 'id_oldpassword',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="form-group @if ($errors->first('newpassword1')) has-error @endif">
+                    {{ Form::label('id_newpassword1', 'New password', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::password('newpassword1', array(
+                        'id' => 'id_newpassword1',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="form-group @if ($errors->first('newpassword2')) has-error @endif">
+                    {{ Form::label('id_newpassword2', 'New password again', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::password('newpassword2', array(
+                        'id' => 'id_newpassword2',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                  {{ Form::submit('Save', array(
+                      'id' => 'id_submit',
+                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                  </div>
+
+                </div>
+
+                <!-- hidden password change form -->
+
+                
 
               {{ Form::close() }}
             </div> <!-- / .panel-body -->
@@ -157,9 +201,34 @@
 
   @section('pageScripts')
 
+
+    @if (Session::get('errors') || Session::get('error'))
     <script type="text/javascript">
     init.push(function () {
-      
+        // if error slide down
+        $('#editEmailForm').slideUp('fast', function (){
+          $('#changeEmailForm').slideDown('fast');
+        });
+        $('#editPasswordForm').slideUp('fast', function (){
+          $('#changePasswordForm').slideDown('fast');
+        });
+    });
+    </script>
+    @endif 
+
+    <script type="text/javascript">
+    init.push(function () {
+      // event listeners for hidden forms
+      $('#editEmail').on('click', function (){
+        $('#editEmailForm').slideUp('fast', function (){
+          $('#changeEmailForm').slideDown('fast');
+        });
+      })
+      $('#editPassword').on('click', function (){
+        $('#editPasswordForm').slideUp('fast', function (){
+          $('#changePasswordForm').slideDown('fast');
+        });
+      })
     });
 
     </script>
