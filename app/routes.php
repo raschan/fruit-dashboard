@@ -146,12 +146,6 @@ Route::get('/disconnect/{service}', array(
 
 // single_stat route
 
-Route::get('statistics', array(
-    'before' => 'auth',
-    'as' => 'auth.single_stat',
-    'uses' => 'AuthController@showSinglestat'
-));
-
 Route::get('statistics/{statID}', array(
     'before' => 'auth',
     'as' => 'auth.single_stat',
@@ -195,4 +189,21 @@ Route::get('paypallogin', array(
 Route::get('paypaluserinfo', array(
     'as' => 'dev.paypaluserinfo',
     'uses' => 'PaypalController@showUserInfo'
+));
+
+/*
+|--------------------------------------------------------------------------
+| demo Routes
+|--------------------------------------------------------------------------
+*/
+// single_stat
+Route::get('demo/statistics/{statID}', array(
+    'as' => 'demo.single_stat',
+    'uses' => 'DemoController@showSinglestat'
+));
+
+// dashboard route
+Route::get('demo/dashboard', array(
+    'as' => 'demo.dashboard',
+    'uses' => 'DemoController@showDashboard'
 ));
