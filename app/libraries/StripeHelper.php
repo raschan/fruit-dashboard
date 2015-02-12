@@ -8,7 +8,7 @@ class StripeHelper
 	/**
 	 * Getting all the charges for the user
 	 * @param stripe key
-	 * 
+	 *
 	 * @return an array with the charges
 	*/
 
@@ -63,22 +63,22 @@ class StripeHelper
 	/**
 	 * Getting specific events for the user (null = all)
 	 * @param stripe key
-	 * 
+	 *
 	 * @return an array with the charges
 	*/
 
-    public static function getEvents($key)
+    public static function getEvents($user)
     {
         $out_events = array();
         // initializing variables
         $has_more = true;
         $lastEvent = DB::table('events')
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->where('provider', 'stripe')
             ->orderBy('id','desc')
             ->take(1)
             ->get();
-        
+
         if(count($lastEvent))
         {
             $last_obj = $lastEvent[0]->eventID;
@@ -93,7 +93,7 @@ class StripeHelper
             $previous_last_obj = $last_obj;
 
             // telling stripe who we are
-            Stripe::setApiKey($key);
+            Stripe::setApiKey($user->stripe_key);
 
             // getting the events
             // https://stripe.com/docs/api/php#events
@@ -130,7 +130,7 @@ class StripeHelper
                 type        - string, see https://stripe.com/docs/api/php#event_types
                 object      - hash map (assoc array)
                 */
-                
+
                 if (isset($event['data']['object']['id'])) {
                     $out_events[$event['id']] =
                         array(
@@ -154,7 +154,7 @@ class StripeHelper
             }
         } // while
 
-           
+
         // returning object
         return $out_events;
     }
@@ -163,7 +163,7 @@ class StripeHelper
 	/**
 	 * Getting all the plans for the user
 	 * @param stripe key
-	 * 
+	 *
 	 * @return an array with the plans
 	*/
 
@@ -185,7 +185,7 @@ class StripeHelper
             // updating array
 
             /*
-            interval        - string, one of 'day', 'week', 'month' or 'year'. 
+            interval        - string, one of 'day', 'week', 'month' or 'year'.
                                 The frequency with which a subscription should be billed.
             name            - name of the plan
             interval_count  - pos int, with the property 'interval' specifies how frequent is the billing,

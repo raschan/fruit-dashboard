@@ -4,21 +4,21 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class GetMrr extends Command {
+class GetEvents extends Command {
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'mrr:get';
+    protected $name = 'events:get';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description.';
+    protected $description = 'This command saves all the stripe and PayPal events of all users.';
 
     /**
      * Create a new command instance.
@@ -37,8 +37,13 @@ class GetMrr extends Command {
      */
     public function fire()
     {
-        $users = User::all();
-        echo var_dump($users);
+        // going through the users
+        foreach (User::all() as $user) {
+
+            // saving events
+            Counter::saveEvents($user);
+
+        }
     }
 
 }
