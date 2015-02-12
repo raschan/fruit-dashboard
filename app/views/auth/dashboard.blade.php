@@ -89,7 +89,7 @@
                       Charged
                     </span>
                     <span class="text-money up">
-                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] }}
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
                     from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
@@ -106,7 +106,7 @@
                       Failed
                     </span>
                     <span class="text-money up">
-                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] }}
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
                     from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
@@ -123,7 +123,7 @@
                       Refunded
                     </span>
                     <span class="text-money up">
-                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] }}
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
                     from <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])

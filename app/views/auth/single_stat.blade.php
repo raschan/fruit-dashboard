@@ -446,7 +446,6 @@
           var finalData = [];
           var finalLabel = [];
           if (newData.length > 30){
-            console.log('good');
             // find modulus for 30 points in dataset, with equal distance
             var modulus = Math.floor((newLabel.length) / 30);
             
@@ -463,7 +462,6 @@
 
           }
           else {
-            console.log('meh')
             finalData = newData;
             finalLabel = newLabel;
           }
