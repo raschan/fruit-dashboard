@@ -143,7 +143,7 @@ class AuthController extends BaseController
                     ArrStat::showARR(false),
                     ArpuStat::showARPU(false)
                 ),
-                'events' => Counter::formatEvents()
+                'events' => Counter::formatEvents(Auth::user())
             )
         );
     }

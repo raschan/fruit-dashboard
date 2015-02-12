@@ -55,19 +55,6 @@ jQuery( document ).ready( function( $ ) {
     <!-- Page Content -->
     <div class="container">
 
-    <h2>MRR history</h2>
-    @foreach ($data['history'] as $date => $value)
-        @if (!is_null($value))
-            <p> {{ $date }}: {{ $value }} </p>
-        @endif
-    @endforeach
-
-    <h2>Plan details</h2>
-    @foreach ($data['detailData'] as $details)
-        <p> {{$details['name']}}({{ $details['interval'] }}),  {{ $details['amount'] }},  {{ $details['count'] }},   {{$details['mrr']}} </p>
-    @endforeach
-    </br>
-
 
     </div>
     <!-- /.container -->

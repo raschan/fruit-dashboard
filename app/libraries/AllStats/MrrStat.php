@@ -28,7 +28,7 @@ class MrrStat extends BaseStat {
 
             // data for single stat table
 			// get all the plan details
-			$mrrData['detailData'] = Counter::getSubscriptionDetails();
+			$mrrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
 
 			//converting price and mrr to money format
         	foreach ($mrrData['detailData'] as $id => $planDetail) {
@@ -38,7 +38,7 @@ class MrrStat extends BaseStat {
     	}
         // converting to money format
         $mrrData = self::toMoneyFormat($mrrData, $fullDataNeeded);
-        
+
     	return $mrrData;
     }
 

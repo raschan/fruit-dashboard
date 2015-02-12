@@ -32,15 +32,12 @@ class HelloController extends BaseController
     public function showStripe()
     {
         //TEMPORARY SOLUTION!!!!
-        Counter::saveMRR();
+        Counter::saveMRR(Auth::user());
 
         setlocale(LC_MONETARY,"en_US");
 
         return View::make(
-            'dev.stripe',
-            array(
-                'data' => Counter::showMRR(true)
-            )
+            'dev.stripe'
         );
     }
 
@@ -177,7 +174,7 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
-        $savedObjects = Counter::saveEvents();
+        $savedObjects = Counter::saveEvents(Auth::user());
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
                 'count' => $savedObjects

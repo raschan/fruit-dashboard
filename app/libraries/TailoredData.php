@@ -8,7 +8,7 @@ class TailoredData
     *
     * @return array of all customers
     */
-    public static function getCustomers()
+    public static function getCustomers($user)
     {
         // return array
         $allCustomers = array();
@@ -17,15 +17,18 @@ class TailoredData
         $paypalCustomers = array();
 
         // get customers from Stripe if connected
-        if (Auth::user()->isStripeConnected())
+        if ($user->isStripeConnected())
         {
-            $stripeCustomers = StripeHelper::getCustomers(Auth::user()->stripe_key);
+            $stripeCustomers = StripeHelper::getCustomers($user->stripe_key);
         }
 
         // get customers from Paypal if connected
-        if (Auth::user()->isPayPalConnected())
+        if ($user->isPayPalConnected())
         {
-            $paypalCustomers = PayPalHelper::getCustomers(Auth::user()->paypal_key);
+            // getting api context
+            $apiContext = PayPalHelper::getApiContext();
+
+            $paypalCustomers = PayPalHelper::getCustomers($apiContext);
 
             // TODO
             // tailor it to look like Stripe data
@@ -44,7 +47,7 @@ class TailoredData
     * @return array of plans
     */
 
-    public static function getPlans()
+    public static function getPlans($user)
     {
         // return array
         $allPlans = array();
@@ -53,18 +56,18 @@ class TailoredData
         $paypalPlans = array();
 
         // get plans from Stripe if connected
-        if (Auth::user()->isStripeConnected())
+        if ($user->isStripeConnected())
         {
-            $stripePlans = StripeHelper::getPlans(Auth::user()->stripe_key);
+            $stripePlans = StripeHelper::getPlans($user->stripe_key);
         }
 
         // get plans from Paypal if connected
-        if (Auth::user()->isPayPalConnected())
+        if ($user->isPayPalConnected())
         {
-            $paypalPlans = PayPalHelper::getPlans(Auth::user()->paypal_key);
+            // getting api context
+            $apiContext = PayPalHelper::getApiContext();
 
-            // TODO
-            // tailor it to look like Stripe data
+            $paypalPlans = PayPalHelper::getPlans($apiContext);
         }
 
         // merge the 2 arrays
@@ -79,23 +82,26 @@ class TailoredData
     * @return array of all customers
     */
 
-    public static function getEvents(){
+    public static function getEvents($user){
         // return array
         $allEvents = array();
-
         $stripeEvents = array();
         $paypalEvents = array();
 
         // get charges from Stripe if connected
-        if (Auth::user()->isStripeConnected())
+        if ($user->isStripeConnected())
         {
-            $stripeEvents = StripeHelper::getEvents(Auth::user()->stripe_key);
+            $stripeEvents = StripeHelper::getEvents($user);
         }
 
+
         // get plans from Paypal if connected
-        if (Auth::user()->isPayPalConnected())
+        if ($user->isPayPalConnected())
         {
-            $paypalEvents = PayPalHelper::getEvents(Auth::user()->paypal_key);
+            // getting api context
+            $apiContext = PayPalHelper::getApiContext();
+
+            $paypalPlans = PayPalHelper::getEvents($apiContext);
         }
 
         // merge the 2 arrays
