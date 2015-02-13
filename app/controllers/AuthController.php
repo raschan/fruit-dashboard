@@ -177,7 +177,11 @@ class AuthController extends BaseController
     {
         // Validation rules
         $rules = array(
-            'email' => 'email'
+            'email' => 'required_with:password|email',
+            'password' => 'required_with:email|min:4',
+            'oldpassword' => 'required_with: newpassword1, newpassword2|required_with:newpassword1|required_with:newpassword2|min:4',
+            'newpassword1' => 'required_with: oldpassword, newpassword2|required_with:oldpassword|required_with:newpassword2|min:4',
+            'newpassword2' => 'required_with: oldpassword, newpassword1|required_with:oldpassword|required_with:newpassword1|min:4',
         );
         // run the validation rules on the inputs
         $validator = Validator::make(Input::all(), $rules);
@@ -193,20 +197,50 @@ class AuthController extends BaseController
             // checking actions and updating data
             // checking if submitted email has registered user
             $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
-            // if email is not registered
-            if (is_null($user_to_check)) {
-                // we have valid email
-                $user->email = Input::get('email');
-            } else {
-                // if email is registered and changed
-                if ($user->email != Input::get('email')) {
-                    return Redirect::route('auth.settings')
-                        ->withErrors('email', 'This email is already registered.') // send back errors
-                        ->withInput(); // sending back data
+            // if we do not have data in the email form
+            // and validator has no errors, then password change
+            if (Input::has('password')){
+                // if email is not registered
+                if (is_null($user_to_check)) {
+                    // we have valid email, we need to check password
+                    if (Hash::check(Input::get('password'), $user->password)){
+                        $user->email = Input::get('email');
+                    }
+                    else {
+                        return Redirect::route('auth.settings')
+                            ->with('error', 'The password you entered is incorrect.') // send back errors
+                            ->withInput(); // sending back data
+                    }
+                } else {
+                    // if email is registered and changed
+                    if ($user->email != Input::get('email')) {
+                        return Redirect::route('auth.settings')
+                            ->with('error', 'This email is already registered.') // send back errors
+                            ->withInput(); // sending back data
+                    }
                 }
             }
-
-
+            // validator has no errors, and password field is not empty
+            // email change
+            else {
+                // if we have data from the password change form
+                // checking if old password is the old password
+                if (Hash::check(Input::get('oldpassword'), $user->password)){
+                    // if new passwords are the same
+                    if (Input::get('newpassword1') === Input::get('newpassword2')){
+                        $user->password = Hash::make(Input::get('newpassword1'));
+                    }
+                    else {
+                        return Redirect::route('auth.settings')
+                            ->with('error', 'The new passwords you entered do not match.'); // send back errors
+                    }
+                }
+                else {
+                    return Redirect::route('auth.settings')
+                        ->with('error', 'The old password you entered is incorrect.'); // send back errors
+                }  
+            }
+                
             $user->save();
             // setting data
             return Redirect::route('auth.settings')

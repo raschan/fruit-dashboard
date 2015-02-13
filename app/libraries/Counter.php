@@ -553,6 +553,7 @@ class Counter
 
 
         $i = 0;
+        
         foreach ($events as $event){
             // if stripe event
             if ($event->provider == 'stripe'){
@@ -603,12 +604,12 @@ class Counter
                 else {
                     $eventArray[$i]['currency'] = null;
                 }
-                // currency to currency string, needs a helper function
-                if ($eventArray[$i]['currency'] == 'usd'){
-                    $eventArray[$i]['currency'] = '$';
-                }
+                
                 // amount paid
-                if (array_key_exists('amount_due', $tempArray)){
+                if(array_key_exists('amount', $tempArray)){
+                    $eventArray[$i]['amount'] = $tempArray['amount'];
+                }
+                elseif (array_key_exists('amount_due', $tempArray)){
                     $eventArray[$i]['amount'] = $tempArray['amount_due'];
                 }
                 elseif (array_key_exists('plan', $tempArray)){
