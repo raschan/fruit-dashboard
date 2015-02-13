@@ -64,7 +64,7 @@ class StripeHelper
 	 * Getting specific events for the user (null = all)
 	 * @param stripe key
 	 * 
-	 * @return an array with the charges
+	 * @return an array with the events
 	*/
 
     public static function getEvents($key)
@@ -72,23 +72,24 @@ class StripeHelper
         $out_events = array();
         // initializing variables
         $has_more = true;
-        $lastEvent = DB::table('events')
+        $foundLatestEvent = false;
+
+        $latestEvent = DB::table('events')
             ->where('user', Auth::user()->id)
             ->where('provider', 'stripe')
-            ->orderBy('id','desc')
-            ->take(1)
+            ->orderBy('created','desc')
+            ->take(2)
             ->get();
         
-        if(count($lastEvent))
-        {
-            $last_obj = $lastEvent[0]->eventID;
-        } else {
-            $last_obj = null;
-        }
+        $last_obj = null;
+
+        var_dump($latestEvent);
 
         $count = 0;
 
-        while ($has_more) {
+        // continue request as long as there is more AND we don't already have it
+        while ($has_more && !$foundLatestEvent) {
+            $count++;
             // trying to avoid overflow
             $previous_last_obj = $last_obj;
 
@@ -103,10 +104,11 @@ class StripeHelper
                 // we have last obj -> starting from there
                 $returned_object = Stripe_Event::all(
                     array(
-                        'limit'          => 100,
+                        'limit'          => 50,
                         'starting_after' => $last_obj
                     )
                 );
+
             } else {
 
                 // starting from zero
@@ -132,6 +134,12 @@ class StripeHelper
                 */
                 
                 if (isset($event['data']['object']['id'])) {
+                    if ($latestEvent) {
+                        if ($event['id'] == $latestEvent[0]->eventID)
+                        {
+                            $foundLatestEvent = true;
+                        }
+                    }
                     $out_events[$event['id']] =
                         array(
                             'created'   => $event['created'],
@@ -140,20 +148,21 @@ class StripeHelper
                             'provider'  => 'stripe'
                         );
                     $last_obj = $event['id'];
+                    var_dump($last_obj);
+                    var_dump($out_events[$event['id']]['created']);
                 }
             }// foreach
             // updating has_more
             $has_more = $events['has_more'];
-            $count += 1;
-
             // avoiding infinite loop
-            if ((($previous_last_obj == $last_obj) and $has_more) or $count > 100) {
+            if (($previous_last_obj == $last_obj) and $has_more) {
                 // we should never get here
                 // this is too bad system failure :(
                 $has_more = false;
             }
         } // while
 
+        var_dump($count);
            
         // returning object
         return $out_events;
