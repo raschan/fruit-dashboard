@@ -8,7 +8,7 @@ class StripeHelper
 	/**
 	 * Getting all the charges for the user
 	 * @param stripe key
-	 * 
+	 *
 	 * @return an array with the charges
 	*/
 
@@ -67,7 +67,7 @@ class StripeHelper
 	 * @return an array with the events
 	*/
 
-    public static function getEvents($key)
+    public static function getEvents($user)
     {
         $out_events = array();
         // initializing variables
@@ -83,8 +83,6 @@ class StripeHelper
         
         $last_obj = null;
 
-        var_dump($latestEvent);
-
         $count = 0;
 
         // continue request as long as there is more AND we don't already have it
@@ -94,7 +92,7 @@ class StripeHelper
             $previous_last_obj = $last_obj;
 
             // telling stripe who we are
-            Stripe::setApiKey($key);
+            Stripe::setApiKey($user->stripe_key);
 
             // getting the events
             // https://stripe.com/docs/api/php#events
@@ -132,7 +130,7 @@ class StripeHelper
                 type        - string, see https://stripe.com/docs/api/php#event_types
                 object      - hash map (assoc array)
                 */
-                
+
                 if (isset($event['data']['object']['id'])) {
                     if ($latestEvent) {
                         if ($event['id'] == $latestEvent[0]->eventID)
@@ -148,8 +146,6 @@ class StripeHelper
                             'provider'  => 'stripe'
                         );
                     $last_obj = $event['id'];
-                    var_dump($last_obj);
-                    var_dump($out_events[$event['id']]['created']);
                 }
             }// foreach
             // updating has_more
@@ -162,8 +158,6 @@ class StripeHelper
             }
         } // while
 
-        var_dump($count);
-           
         // returning object
         return $out_events;
     }
@@ -172,7 +166,7 @@ class StripeHelper
 	/**
 	 * Getting all the plans for the user
 	 * @param stripe key
-	 * 
+	 *
 	 * @return an array with the plans
 	*/
 
@@ -194,7 +188,7 @@ class StripeHelper
             // updating array
 
             /*
-            interval        - string, one of 'day', 'week', 'month' or 'year'. 
+            interval        - string, one of 'day', 'week', 'month' or 'year'.
                                 The frequency with which a subscription should be billed.
             name            - name of the plan
             interval_count  - pos int, with the property 'interval' specifies how frequent is the billing,

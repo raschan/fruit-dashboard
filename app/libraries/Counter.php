@@ -38,13 +38,13 @@ class Counter
     * @return array (provider => mrr)
     */
 
-    public static function retreiveAndCalculateMRR()
+    public static function retreiveAndCalculateMRR($user)
     {
         // getting the plans
-        $plans = TailoredData::getPlans();
+        $plans = TailoredData::getPlans($user);
 
         // getting current subscriptions (only active subscriptions)
-        $current_subscriptions = self::getCurrentSubscriptions();
+        $current_subscriptions = self::getCurrentSubscriptions($user);
 
         // we'll store the relations here
         $plan_subscriptions = array();
@@ -83,26 +83,26 @@ class Counter
     * Save the daily MRR in database
     */
 
-    public static function saveMRR()
+    public static function saveMRR($user)
     {
         $currentDay = date('Y-m-d', time());
 
         // checking if we already have data
         $currentDayMRR = DB::table('mrr')
             ->where('date', $currentDay)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
         if (!$currentDayMRR) {
             // no previous data
-            $mrrValue = self::retreiveAndCalculateMRR();
+            $mrrValue = self::retreiveAndCalculateMRR($user);
 
             foreach ($mrrValue as $provider => $value) {
                 DB::table('mrr')->insert(
                     array(
                         'provider'  => $provider,
                         'value'     => $value,
-                        'user'      => Auth::user()->id,
+                        'user'      => $user->id,
                         'date'      => $currentDay
                     )
                 );
@@ -145,10 +145,10 @@ class Counter
     * @return pos. int (heads)
     */
 
-    public static function getActiveCustomers()
+    public static function getActiveCustomers($user)
     {
         // get all the customers
-        $allCustomers = TailoredData::getCustomers();
+        $allCustomers = TailoredData::getCustomers($user);
 
         // return int
         $activeCustomers = 0;
@@ -167,14 +167,14 @@ class Counter
     * Save the daily Active Users number in database
     */
 
-    public static function saveAU()
+    public static function saveAU($user)
     {
         $currentDay = date('Y-m-d', time());
 
         // checking if we already have data
         $currentDayAU = DB::table('au')
             ->where('date', $currentDay)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
         if (!$currentDayAU) {
@@ -184,7 +184,7 @@ class Counter
             DB::table('AU')->insert(
                 array(
                     'value' => $AUValue,
-                    'user'  => Auth::user()->id,
+                    'user'  => $user->id,
                     'date'  => $currentDay
                 )
             );
@@ -358,13 +358,13 @@ class Counter
     * @return array
     */
 
-    private static function getAUDetails()
+    private static function getAUDetails($user)
     {
         $day = date('Y-m-d', $timestamp);
 
         $au = DB::table('au')
             ->where('date',$day)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
         if($au){
@@ -382,13 +382,13 @@ class Counter
     * @return int (cents) or null if data not exist
     */
 
-    private static function getAUOnDay($timestamp)
+    private static function getAUOnDay($timestamp, $user)
     {
         $day = date('Y-m-d', $timestamp);
 
         $au = DB::table('au')
             ->where('date',$day)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
         if($au){
@@ -406,13 +406,13 @@ class Counter
     * @return int (cents) or null if data not exist
     */
 
-    private static function getMRROnDay($timestamp)
+    private static function getMRROnDay($timestamp, $user)
     {
         $day = date('Y-m-d', $timestamp);
 
         $mrr = DB::table('mrr')
             ->where('date',$day)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
         if($mrr){
@@ -427,13 +427,13 @@ class Counter
      *
      * @return an array with the active subscriptions
     */
-    private static function getCurrentSubscriptions()
+    private static function getCurrentSubscriptions($user)
     {
         // intializing out array
         $active_subscriptions = array();
 
         // getting the customers
-        $customers = TailoredData::getCustomers();
+        $customers = TailoredData::getCustomers($user);
 
         // getting the active subscriptions for a customer
         foreach ($customers as $customer) {
@@ -473,16 +473,17 @@ class Counter
         return $active_subscriptions;
     }
 
-    public static function getSubscriptionDetails()
+    public static function getSubscriptionDetails($user)
     {
         // get all active subscriptions
-        $currentSubscriptions = self::getCurrentSubscriptions();
+        $currentSubscriptions = self::getCurrentSubscriptions($user);
 
         // get all plans
-        $plans = TailoredData::getPlans();
+        $plans = TailoredData::getPlans($user);
 
         // we'll store the details here
         $planDetails = array();
+
 
         // getting plan details
         foreach ($plans as $id => $plan) {
@@ -507,14 +508,14 @@ class Counter
         return $planDetails;
     }
 
-    public static function saveEvents()
+    public static function saveEvents($user)
     {
         $savedObjects = 0;
-        $eventsToSave = TailoredData::getEvents();
+        $eventsToSave = TailoredData::getEvents($user);
         foreach ($eventsToSave as $id => $event) {
             $hasEvent = DB::table('events')
             ->where('eventID',$id)
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->get();
 
             // if we dont already have that event
@@ -524,7 +525,7 @@ class Counter
                 DB::table('events')->insert(
                     array(
                         'created'   => date('Y-m-d', $event['created']),
-                        'user'      => Auth::user()->id,
+                        'user'      => $user->id,
                         'provider'  => $event['provider'],
                         'eventID'   => $id,
                         'type'      => $event['type'],
@@ -536,7 +537,7 @@ class Counter
         return $savedObjects;
     }
 
-    public static function formatEvents()
+    public static function formatEvents($user)
     {
         // helpers
         $eventArray = array();
@@ -545,7 +546,7 @@ class Counter
         // last X events from database
         // select only those event types, which we show on dashboard
         $events = DB::table('events')
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->whereIn('type', ['charge.succeeded', 'charge.failed', 'charge.refunded', 'customer.subscription.created','customer.subscription.updated'])
             ->orderBy('created', 'desc')
             ->take(20)

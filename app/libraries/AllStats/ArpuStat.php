@@ -6,8 +6,8 @@ class ArpuStat extends BaseStat {
     /**
     * Prepare ARPU for statistics
     *
-    * @param boolean 
-    * 
+    * @param boolean
+    *
     * @return array
     */
 
@@ -16,17 +16,17 @@ class ArpuStat extends BaseStat {
         // defaults
         self::$statName = 'Average Revenue Per User';
         self::$statID = 'arpu';
-    	
+
     	$arpuData = array();
 
     	$arpuData = self::showSimpleStat();
 
     	if ($fullDataNeeded){
-    		
+
     		$arpuData = self::showFullStat();
 
 			// get all the plans details
-			$arpuData['detailData'] = Counter::getSubscriptionDetails();
+			$arpuData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
 
 
     	}
@@ -68,14 +68,14 @@ class ArpuStat extends BaseStat {
 
     /**
     * Get day of first recorded data
-    * 
+    *
     * @return string with date
     */
 
     public static function getFirstDay(){
 
         $firstDay = DB::table('mrr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
-        
+
         if ($firstDay){
             return strtotime($firstDay->date);
         }

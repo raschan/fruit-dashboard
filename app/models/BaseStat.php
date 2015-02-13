@@ -73,13 +73,14 @@ class BaseStat
 
         // building full mrr history
         $firstDay = static::getFirstDay();
-        $data['firstDay'] = date('d-m-Y',$firstDay);
+        $data['firstDay'] = date('d-m-Y', $firstDay);
 
 
         for ($i = $firstDay; $i < $currentDay; $i+=86400) {
             $date = date('Y-m-d',$i);
             $data['fullHistory'][$date] = static::getStatOnDay($i);
         }
+        
 
         // past values (null if not available)
         $lastMonthValue = static::getStatOnDay($lastMonthTime);
@@ -226,7 +227,7 @@ class BaseStat
         }
         else {
             // needs review, so it can handle null with new users too
-            return date('Y-m-d', '2013-12-31');
+            return 1388448000;
         }
     }
 
