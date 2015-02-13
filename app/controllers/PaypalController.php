@@ -150,11 +150,6 @@ class PaypalController extends BaseController
         // setting api context
         $api_context = PayPalHelper::getApiContext();
 
-
-        echo "<pre>";
-        var_dump(print_r(PayPalHelper::getCustomers($api_context)));
-        exit(1);
-
         // [I-F231FUFEPYG8, I-9XA8BL6KSYAT, I-WFTN8BULD984, I-YSRV6BDEPBLG]
         // $agreement = new Agreement();
         // $agreement->execute("EC-08Y71958XX624761D", $api_context);

@@ -102,7 +102,7 @@ class PayPalHelper {
      * @return an array with the charges
     */
 
-    public static function getEvents($key)
+    public static function getEvents($apiContext)
     {
         $out_events = array();
 
@@ -152,20 +152,39 @@ class PayPalHelper {
             $plan_instance = array();
 
             // extracting data
-            $plan_instance['id'] = $json_plan['id'];
             $plan_instance['name'] = $json_plan['name'];
             $plan_instance['interval'] = $json_plan['payment_definitions'][0]['frequency'];
             $plan_instance['interval_count'] = $json_plan['payment_definitions'][0]['frequency_interval'];
             $plan_instance['currency'] = $json_plan['payment_definitions'][0]['amount']['currency'];
-            $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value'];
+            $plan_instance['amount'] = $json_plan['payment_definitions'][0]['amount']['value']*100;
             $plan_instance['provider'] = 'paypal';
 
             // adding to array
-            array_push($out_plans, $plan_instance);
+            $out_plans[self::generatePlanId($plan)] = $plan_instance;
         }
 
         // returning object
         return $out_plans;
+    }
+
+     /**
+     * Generating a goddamn id for the plan, because paypal's own function sucks
+     * @param paypal plan
+     *
+     * @return an id
+    */
+
+    private static function generatePlanId($plan) {
+
+        $jsonPlan = json_decode($plan->toJson(), true);
+
+
+        $id = $jsonPlan['payment_definitions'][0]['frequency'].
+            $jsonPlan['payment_definitions'][0]['amount']['value'][0].
+            $jsonPlan['payment_definitions'][0]['cycles'].
+            $jsonPlan['merchant_preferences']['max_fail_attempts'];
+
+        return $id;
     }
 
      /**
@@ -181,7 +200,7 @@ class PayPalHelper {
         // !!! Currently unavailable !!!
         // subscription_ids = getSubscriptions()
 
-        $subscriptionIds = array("I-F231FUFEPYG8", "I-9XA8BL6KSYAT", "I-WFTN8BULD984", "I-YSRV6BDEPBLG");
+        $subscriptionIds = array("I-F231FUFEPYG8", "I-WFTN8BULD984", "I-YSRV6BDEPBLG");
 
         // initializing customer array
         $customers = array();
@@ -199,10 +218,14 @@ class PayPalHelper {
                 // getting the agreement
                 $agreement = Agreement::get($subId, $apiContext);
 
+
                 // transforming agreement to our format
                 $formatted_agreement = array
                 (
-                    'start'     => strtotime($agreement->getStartDate())
+                    'id'     => $subId,
+                    'start'  => strtotime($agreement->getStartDate()),
+                    'status' => strtolower($agreement->getState()),
+                    'plan'   => array('id' => self::generatePlanId($agreement->getPlan()))
                 );
 
                 // getting the payer of the agreement
@@ -238,17 +261,24 @@ class PayPalHelper {
                         (
                             'zombie'        => false,
                             'email'         => $user_email,
-                            'subscriptions' => array($formatted_agreement)
+                            'subscriptions' => array(
+                                'total_count' => 1,
+                                'data' => array($formatted_agreement))
                         )
                     );
+                    // user's first subscription
+
                 } else {
                     // we already added this customer
 
                     // adding agreement to the existing ones
                     array_push(
-                        $customers[$found]['subscriptions'],
+                        $customers[$found]['subscriptions']['data'],
                         $formatted_agreement
                     );
+
+                    // adding total count
+                    $customers[$found]['subscriptions']['total_count']++;
                 }
 
             } catch (PayPal\Exception\PayPalConnectionException $ex) {
