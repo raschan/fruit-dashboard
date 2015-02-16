@@ -72,7 +72,7 @@
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
-          <ul class="list-group bordered">
+          <ul class="list-group transasction-list">
             <li class="list-group-item">
               <h4>Transactions</h4>
             </li>
@@ -87,6 +87,9 @@
                   <li class="list-group-item">
                     <span class="badge badge-success">
                       Charged
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
                     </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
@@ -105,6 +108,9 @@
                     <span class="badge badge-danger">
                       Failed
                     </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
@@ -121,6 +127,9 @@
                   <li class="list-group-item">
                     <span class="badge badge-warning">
                       Refunded
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
                     </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
@@ -142,7 +151,10 @@
                   <li class="list-group-item">
                     <span class="badge badge-info">
                       New subscription
-                    </span>         
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
                     <b>{{ $events[$i]['name'] }}</b>
                     subscribed to 
                     {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
@@ -158,6 +170,9 @@
                   <li class="list-group-item">
                     <span class="badge badge-info">
                       Updated
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
                     </span>         
                     <b>{{ $events[$i]['name'] }}</b>
                     updated to 
