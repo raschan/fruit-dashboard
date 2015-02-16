@@ -46,7 +46,7 @@
 	text-decoration: underline;
 }
 
-.feed-box .list-group-item > .badge {
+.feed-box .list-group-item > .list-group-row > .badge {
 	float: right;
 }
 
@@ -218,11 +218,24 @@
 	font-size: 20px;
 }
 
+.transaction-list .list-group-item {
+	border: none;
+}
+
 .timestamp {
-	color: #777;
+	color: #848484;
+	border-radius: 3px;
 	font-size: 80%;
 	display: inline-block;
 }
+
+.provider {
+	font-size: 1.5em;
+	vertical-align: middle;
+}
+
+
+.provider .icon {}
 
 /* SETTINGS */
 
@@ -235,7 +248,7 @@
 	padding-bottom: 15px;
 }
 
-.list-group-item {
+.connect-form .list-group-item {
 	border: none;
 	padding-bottom: 15px;
 }
