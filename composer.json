@@ -41,6 +41,7 @@
 		"ext-curl" : "*",
 		"ext-json" : "*",
 		"paypal/rest-api-sdk-php" : "*",
-		"stripe/stripe-php": "1.*"
+		"stripe/stripe-php": "1.*",
+		"doctrine/dbal" : "*"
 	}
 }
