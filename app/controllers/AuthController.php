@@ -199,27 +199,7 @@ class AuthController extends BaseController
             $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
             // if we do not have data in the email form
             // and validator has no errors, then password change
-            if (Input::hasNot('password')){
-                // if we have data from the password change form
-                // checking if old password is the old password
-                if (Hash::check(Input::get('oldpassword'), $user->password)){
-                    // if new passwords are the same
-                    if (Input::get('newpassword1') === Input::get('newpassword2')){
-                        $user->password = Hash::make(Input::get('newpassword1'));
-                    }
-                    else {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'The new passwords you entered do not match.'); // send back errors
-                    }
-                }
-                else {
-                    return Redirect::route('auth.settings')
-                        ->with('error', 'The old password you entered is incorrect.'); // send back errors
-                }  
-            }
-            // validator has no errors, and password field is not empty
-            // email change
-            else {
+            if (Input::has('password')){
                 // if email is not registered
                 if (is_null($user_to_check)) {
                     // we have valid email, we need to check password
@@ -240,7 +220,27 @@ class AuthController extends BaseController
                     }
                 }
             }
-            
+            // validator has no errors, and password field is not empty
+            // email change
+            else {
+                // if we have data from the password change form
+                // checking if old password is the old password
+                if (Hash::check(Input::get('oldpassword'), $user->password)){
+                    // if new passwords are the same
+                    if (Input::get('newpassword1') === Input::get('newpassword2')){
+                        $user->password = Hash::make(Input::get('newpassword1'));
+                    }
+                    else {
+                        return Redirect::route('auth.settings')
+                            ->with('error', 'The new passwords you entered do not match.'); // send back errors
+                    }
+                }
+                else {
+                    return Redirect::route('auth.settings')
+                        ->with('error', 'The old password you entered is incorrect.'); // send back errors
+                }  
+            }
+                
             $user->save();
             // setting data
             return Redirect::route('auth.settings')
