@@ -24,13 +24,27 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
+$env = $app->detectEnvironment(function()
+{
+	$hostname = gethostname();
+	if ($hostname == 'server.abfinformatika.hu') {
+		if ($_SERVER['HTTP_HOST'] == 'startupdashboard-dev.abfinformatika.hu') {
+			return 'development';
+		} else {
+			return 'production';
+		}
+	} else {
+		return 'local';
+	}
+});
+
+/*
 $env = $app->detectEnvironment(array(
    'development' => array('precise64','homestead','andy94'),
-   /* precise64: Vagrant dev virtualhost */
    'production' => array('server.abfinformatika.hu',)
-   /*
-    * server.abfinformatika.hu: the actual server name */
 ));
+*/
+
 /*
 |--------------------------------------------------------------------------
 | Bind Paths
