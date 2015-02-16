@@ -204,7 +204,15 @@ class MrrTableSeeder extends Seeder
 array(
 'value' => 0,
 'user' => 4,
-'date' => '2014-01-02'
+'date' => '2015-01-01'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 135916,
+'user' => 4,
+'date' => '2015-01-02'
 )
 );
 
@@ -212,2015 +220,2903 @@ DB::table('mrr')->insert(
 array(
 'value' => 169247,
 'user' => 4,
-'date' => '2014-01-03'
+'date' => '2015-01-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 453635,
+'value' => 142168,
 'user' => 4,
-'date' => '2014-01-06'
+'date' => '2015-01-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 247460,
+'value' => 187865,
 'user' => 4,
-'date' => '2014-01-07'
+'date' => '2015-01-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 416372,
+'value' => 492189,
 'user' => 4,
-'date' => '2014-01-08'
+'date' => '2015-01-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 323612,
+'value' => 287224,
 'user' => 4,
-'date' => '2014-01-09'
+'date' => '2015-01-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 409086,
+'value' => 452446,
 'user' => 4,
-'date' => '2014-01-10'
+'date' => '2015-01-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 781222,
+'value' => 350130,
 'user' => 4,
-'date' => '2014-01-13'
+'date' => '2015-01-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 720007,
+'value' => 442315,
 'user' => 4,
-'date' => '2014-01-14'
+'date' => '2015-01-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1945822,
+'value' => 495393,
 'user' => 4,
-'date' => '2014-01-15'
+'date' => '2015-01-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 676941,
+'value' => 490970,
 'user' => 4,
-'date' => '2014-01-16'
+'date' => '2015-01-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 685293,
+'value' => 844211,
 'user' => 4,
-'date' => '2014-01-17'
+'date' => '2015-01-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1144285,
+'value' => 758497,
 'user' => 4,
-'date' => '2014-01-20'
+'date' => '2015-01-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1137863,
+'value' => 2058759,
 'user' => 4,
-'date' => '2014-01-21'
+'date' => '2015-01-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 767192,
+'value' => 769282,
 'user' => 4,
-'date' => '2014-01-22'
+'date' => '2015-01-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1186220,
+'value' => 704329,
 'user' => 4,
-'date' => '2014-01-23'
+'date' => '2015-01-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 579987,
+'value' => 788848,
 'user' => 4,
-'date' => '2014-01-24'
+'date' => '2015-01-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1639757,
+'value' => 577550,
 'user' => 4,
-'date' => '2014-01-27'
+'date' => '2015-01-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1832812,
+'value' => 1204510,
 'user' => 4,
-'date' => '2014-01-28'
+'date' => '2015-01-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1148456,
+'value' => 1271598,
 'user' => 4,
-'date' => '2014-01-29'
+'date' => '2015-01-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1114755,
+'value' => 879000,
 'user' => 4,
-'date' => '2014-01-30'
+'date' => '2015-01-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 963435,
+'value' => 1278599,
 'user' => 4,
-'date' => '2014-01-31'
+'date' => '2015-01-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2058550,
+'value' => 674437,
 'user' => 4,
-'date' => '2014-02-03'
+'date' => '2015-01-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1979645,
+'value' => 640715,
 'user' => 4,
-'date' => '2014-02-04'
+'date' => '2015-01-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1268868,
+'value' => 627227,
 'user' => 4,
-'date' => '2014-02-05'
+'date' => '2015-01-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 707670,
+'value' => 1727689,
 'user' => 4,
-'date' => '2014-02-06'
+'date' => '2015-01-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1488018,
+'value' => 1983290,
 'user' => 4,
-'date' => '2014-02-07'
+'date' => '2015-01-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2886082,
+'value' => 1217421,
 'user' => 4,
-'date' => '2014-02-10'
+'date' => '2015-01-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2610632,
+'value' => 1203434,
 'user' => 4,
-'date' => '2014-02-11'
+'date' => '2015-01-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2741730,
+'value' => 1074134,
 'user' => 4,
-'date' => '2014-02-12'
+'date' => '2015-01-31'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2635762,
+'value' => 955979,
 'user' => 4,
-'date' => '2014-02-13'
+'date' => '2015-02-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1706764,
+'value' => 1009686,
 'user' => 4,
-'date' => '2014-02-14'
+'date' => '2015-02-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3016184,
+'value' => 2154959,
 'user' => 4,
-'date' => '2014-02-17'
+'date' => '2015-02-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3133156,
+'value' => 2136653,
 'user' => 4,
-'date' => '2014-02-18'
+'date' => '2015-02-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2645123,
+'value' => 1326151,
 'user' => 4,
-'date' => '2014-02-19'
+'date' => '2015-02-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3267735,
+'value' => 748694,
 'user' => 4,
-'date' => '2014-02-20'
+'date' => '2015-02-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1028193,
+'value' => 1670501,
 'user' => 4,
-'date' => '2014-02-21'
+'date' => '2015-02-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2674577,
+'value' => 1703911,
 'user' => 4,
-'date' => '2014-02-24'
+'date' => '2015-02-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1573721,
+'value' => 1687206,
 'user' => 4,
-'date' => '2014-02-25'
+'date' => '2015-02-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2724923,
+'value' => 3086301,
 'user' => 4,
-'date' => '2014-02-26'
+'date' => '2015-02-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1483985,
+'value' => 2854309,
 'user' => 4,
-'date' => '2014-02-27'
+'date' => '2015-02-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1435554,
+'value' => 3036009,
 'user' => 4,
-'date' => '2014-02-28'
+'date' => '2015-02-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5379517,
+'value' => 2831752,
 'user' => 4,
-'date' => '2014-03-03'
+'date' => '2015-02-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3022187,
+'value' => 1874679,
 'user' => 4,
-'date' => '2014-03-04'
+'date' => '2015-02-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2592498,
+'value' => 1724704,
 'user' => 4,
-'date' => '2014-03-05'
+'date' => '2015-02-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2600047,
+'value' => 1537237,
 'user' => 4,
-'date' => '2014-03-06'
+'date' => '2015-02-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2978630,
+'value' => 3323893,
 'user' => 4,
-'date' => '2014-03-07'
+'date' => '2015-02-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3934165,
+'value' => 3448522,
 'user' => 4,
-'date' => '2014-03-10'
+'date' => '2015-02-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4701584,
+'value' => 2822133,
 'user' => 4,
-'date' => '2014-03-11'
+'date' => '2015-02-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3491660,
+'value' => 3527324,
 'user' => 4,
-'date' => '2014-03-12'
+'date' => '2015-02-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1646179,
+'value' => 1197454,
 'user' => 4,
-'date' => '2014-03-13'
+'date' => '2015-02-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4614332,
+'value' => 1377072,
 'user' => 4,
-'date' => '2014-03-14'
+'date' => '2015-02-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4689050,
+'value' => 1053759,
 'user' => 4,
-'date' => '2014-03-17'
+'date' => '2015-02-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3464681,
+'value' => 2841510,
 'user' => 4,
-'date' => '2014-03-18'
+'date' => '2015-02-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1388476,
+'value' => 1757654,
 'user' => 4,
-'date' => '2014-03-19'
+'date' => '2015-02-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3074960,
+'value' => 3111648,
 'user' => 4,
-'date' => '2014-03-20'
+'date' => '2015-02-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5096363,
+'value' => 1732463,
 'user' => 4,
-'date' => '2014-03-21'
+'date' => '2015-02-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4933561,
+'value' => 1529473,
 'user' => 4,
-'date' => '2014-03-24'
+'date' => '2015-02-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5206616,
+'value' => 1498884,
 'user' => 4,
-'date' => '2014-03-25'
+'date' => '2015-03-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1907098,
+'value' => 1284758,
 'user' => 4,
-'date' => '2014-03-26'
+'date' => '2015-03-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2100881,
+'value' => 5899771,
 'user' => 4,
-'date' => '2014-03-27'
+'date' => '2015-03-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4821544,
+'value' => 3422896,
 'user' => 4,
-'date' => '2014-03-28'
+'date' => '2015-03-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4928303,
+'value' => 2795627,
 'user' => 4,
-'date' => '2014-03-31'
+'date' => '2015-03-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3785618,
+'value' => 2792355,
 'user' => 4,
-'date' => '2014-04-01'
+'date' => '2015-03-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4124896,
+'value' => 3431528,
 'user' => 4,
-'date' => '2014-04-02'
+'date' => '2015-03-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5936294,
+'value' => 2985429,
 'user' => 4,
-'date' => '2014-04-03'
+'date' => '2015-03-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3164092,
+'value' => 3877627,
 'user' => 4,
-'date' => '2014-04-04'
+'date' => '2015-03-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4337273,
+'value' => 4190757,
 'user' => 4,
-'date' => '2014-04-07'
+'date' => '2015-03-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5093289,
+'value' => 5242259,
 'user' => 4,
-'date' => '2014-04-08'
+'date' => '2015-03-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4535383,
+'value' => 3812580,
 'user' => 4,
-'date' => '2014-04-09'
+'date' => '2015-03-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2368745,
+'value' => 1954701,
 'user' => 4,
-'date' => '2014-04-10'
+'date' => '2015-03-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3067943,
+'value' => 5141700,
 'user' => 4,
-'date' => '2014-04-11'
+'date' => '2015-03-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7153295,
+'value' => 4216194,
 'user' => 4,
-'date' => '2014-04-14'
+'date' => '2015-03-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6156364,
+'value' => 4164777,
 'user' => 4,
-'date' => '2014-04-15'
+'date' => '2015-03-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6703800,
+'value' => 5177371,
 'user' => 4,
-'date' => '2014-04-16'
+'date' => '2015-03-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3477129,
+'value' => 3715955,
 'user' => 4,
-'date' => '2014-04-17'
+'date' => '2015-03-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4554570,
+'value' => 1529488,
 'user' => 4,
-'date' => '2014-04-18'
+'date' => '2015-03-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7124059,
+'value' => 3262052,
 'user' => 4,
-'date' => '2014-04-22'
+'date' => '2015-03-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5199444,
+'value' => 5587075,
 'user' => 4,
-'date' => '2014-04-23'
+'date' => '2015-03-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4386613,
+'value' => 5419462,
 'user' => 4,
-'date' => '2014-04-24'
+'date' => '2015-03-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3823877,
+'value' => 5307721,
 'user' => 4,
-'date' => '2014-04-25'
+'date' => '2015-03-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5517355,
+'value' => 5256800,
 'user' => 4,
-'date' => '2014-04-28'
+'date' => '2015-03-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5413812,
+'value' => 5805269,
 'user' => 4,
-'date' => '2014-04-29'
+'date' => '2015-03-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7590411,
+'value' => 2256394,
 'user' => 4,
-'date' => '2014-04-30'
+'date' => '2015-03-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9651477,
+'value' => 2282948,
 'user' => 4,
-'date' => '2014-05-05'
+'date' => '2015-03-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7560657,
+'value' => 5466545,
 'user' => 4,
-'date' => '2014-05-06'
+'date' => '2015-03-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4976595,
+'value' => 5302548,
 'user' => 4,
-'date' => '2014-05-07'
+'date' => '2015-03-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4061456,
+'value' => 4755894,
 'user' => 4,
-'date' => '2014-05-08'
+'date' => '2015-03-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5374556,
+'value' => 5223414,
 'user' => 4,
-'date' => '2014-05-09'
+'date' => '2015-03-31'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 644040,
+'value' => 4086282,
 'user' => 4,
-'date' => '2014-05-10'
+'date' => '2015-04-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8489185,
+'value' => 4747662,
 'user' => 4,
-'date' => '2014-05-12'
+'date' => '2015-04-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5768475,
+'value' => 6552578,
 'user' => 4,
-'date' => '2014-05-13'
+'date' => '2015-04-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7169339,
+'value' => 3610052,
 'user' => 4,
-'date' => '2014-05-14'
+'date' => '2015-04-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4645597,
+'value' => 3321248,
 'user' => 4,
-'date' => '2014-05-15'
+'date' => '2015-04-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5853959,
+'value' => 3862755,
 'user' => 4,
-'date' => '2014-05-16'
+'date' => '2015-04-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9334706,
+'value' => 4601027,
 'user' => 4,
-'date' => '2014-05-19'
+'date' => '2015-04-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4645273,
+'value' => 5480118,
 'user' => 4,
-'date' => '2014-05-20'
+'date' => '2015-04-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4205076,
+'value' => 4873013,
 'user' => 4,
-'date' => '2014-05-21'
+'date' => '2015-04-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5886151,
+'value' => 2675508,
 'user' => 4,
-'date' => '2014-05-22'
+'date' => '2015-04-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6325729,
+'value' => 3414119,
 'user' => 4,
-'date' => '2014-05-23'
+'date' => '2015-04-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6678014,
+'value' => 3926237,
 'user' => 4,
-'date' => '2014-05-26'
+'date' => '2015-04-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4624322,
+'value' => 3618966,
 'user' => 4,
-'date' => '2014-05-27'
+'date' => '2015-04-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5154943,
+'value' => 7859163,
 'user' => 4,
-'date' => '2014-05-28'
+'date' => '2015-04-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4987645,
+'value' => 6674238,
 'user' => 4,
-'date' => '2014-05-29'
+'date' => '2015-04-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6180788,
+'value' => 7518897,
 'user' => 4,
-'date' => '2014-05-30'
+'date' => '2015-04-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4644042,
+'value' => 3980320,
 'user' => 4,
-'date' => '2014-06-02'
+'date' => '2015-04-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3475875,
+'value' => 4957269,
 'user' => 4,
-'date' => '2014-06-03'
+'date' => '2015-04-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10632429,
+'value' => 4758978,
 'user' => 4,
-'date' => '2014-06-04'
+'date' => '2015-04-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8884334,
+'value' => 5849577,
 'user' => 4,
-'date' => '2014-06-05'
+'date' => '2015-04-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7250411,
+'value' => 5948722,
 'user' => 4,
-'date' => '2014-06-06'
+'date' => '2015-04-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9165958,
+'value' => 7824838,
 'user' => 4,
-'date' => '2014-06-10'
+'date' => '2015-04-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14312564,
+'value' => 5658557,
 'user' => 4,
-'date' => '2014-06-11'
+'date' => '2015-04-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3715728,
+'value' => 5131495,
 'user' => 4,
-'date' => '2014-06-12'
+'date' => '2015-04-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7468359,
+'value' => 4353563,
 'user' => 4,
-'date' => '2014-06-13'
+'date' => '2015-04-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6167962,
+'value' => 3526386,
 'user' => 4,
-'date' => '2014-06-16'
+'date' => '2015-04-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6638949,
+'value' => 3831135,
 'user' => 4,
-'date' => '2014-06-17'
+'date' => '2015-04-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5402999,
+'value' => 5895453,
 'user' => 4,
-'date' => '2014-06-18'
+'date' => '2015-04-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4132414,
+'value' => 6171455,
 'user' => 4,
-'date' => '2014-06-19'
+'date' => '2015-04-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7612026,
+'value' => 8004122,
 'user' => 4,
-'date' => '2014-06-20'
+'date' => '2015-04-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9293698,
+'value' => 9364823,
 'user' => 4,
-'date' => '2014-06-23'
+'date' => '2015-05-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7543315,
+'value' => 6963586,
 'user' => 4,
-'date' => '2014-06-24'
+'date' => '2015-05-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6019486,
+'value' => 8964617,
 'user' => 4,
-'date' => '2014-06-25'
+'date' => '2015-05-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2791457,
+'value' => 6403298,
 'user' => 4,
-'date' => '2014-06-26'
+'date' => '2015-05-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3707354,
+'value' => 10189220,
 'user' => 4,
-'date' => '2014-06-27'
+'date' => '2015-05-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7424522,
+'value' => 8084989,
 'user' => 4,
-'date' => '2014-06-30'
+'date' => '2015-05-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7771634,
+'value' => 5982141,
 'user' => 4,
-'date' => '2014-07-01'
+'date' => '2015-05-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5109141,
+'value' => 4601181,
 'user' => 4,
-'date' => '2014-07-02'
+'date' => '2015-05-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8624927,
+'value' => 6039149,
 'user' => 4,
-'date' => '2014-07-03'
+'date' => '2015-05-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6003286,
+'value' => 1026737,
 'user' => 4,
-'date' => '2014-07-04'
+'date' => '2015-05-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9079991,
+'value' => 1026737,
 'user' => 4,
-'date' => '2014-07-07'
+'date' => '2015-05-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5023038,
+'value' => 8934195,
 'user' => 4,
-'date' => '2014-07-08'
+'date' => '2015-05-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9687571,
+'value' => 6177654,
 'user' => 4,
-'date' => '2014-07-09'
+'date' => '2015-05-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6455472,
+'value' => 7929591,
 'user' => 4,
-'date' => '2014-07-10'
+'date' => '2015-05-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5577088,
+'value' => 5108845,
 'user' => 4,
-'date' => '2014-07-11'
+'date' => '2015-05-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14307764,
+'value' => 6548887,
 'user' => 4,
-'date' => '2014-07-14'
+'date' => '2015-05-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4852939,
+'value' => 7400242,
 'user' => 4,
-'date' => '2014-07-15'
+'date' => '2015-05-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 2170560,
+'value' => 6745354,
 'user' => 4,
-'date' => '2014-07-16'
+'date' => '2015-05-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6440838,
+'value' => 9839808,
 'user' => 4,
-'date' => '2014-07-17'
+'date' => '2015-05-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7005768,
+'value' => 5536476,
 'user' => 4,
-'date' => '2014-07-18'
+'date' => '2015-05-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7230252,
+'value' => 4660662,
 'user' => 4,
-'date' => '2014-07-21'
+'date' => '2015-05-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5857072,
+'value' => 6611161,
 'user' => 4,
-'date' => '2014-07-22'
+'date' => '2015-05-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7277797,
+'value' => 6894521,
 'user' => 4,
-'date' => '2014-07-23'
+'date' => '2015-05-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6033416,
+'value' => 6136124,
 'user' => 4,
-'date' => '2014-07-24'
+'date' => '2015-05-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5471939,
+'value' => 6549795,
 'user' => 4,
-'date' => '2014-07-25'
+'date' => '2015-05-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4719021,
+'value' => 7261275,
 'user' => 4,
-'date' => '2014-07-28'
+'date' => '2015-05-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7807950,
+'value' => 5195518,
 'user' => 4,
-'date' => '2014-07-29'
+'date' => '2015-05-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8000043,
+'value' => 5658260,
 'user' => 4,
-'date' => '2014-07-30'
+'date' => '2015-05-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8636861,
+'value' => 5672455,
 'user' => 4,
-'date' => '2014-07-31'
+'date' => '2015-05-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4010878,
+'value' => 6483346,
 'user' => 4,
-'date' => '2014-08-01'
+'date' => '2015-05-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11728946,
+'value' => 7066847,
 'user' => 4,
-'date' => '2014-08-04'
+'date' => '2015-05-31'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10092717,
+'value' => 6483346,
 'user' => 4,
-'date' => '2014-08-05'
+'date' => '2015-06-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3863556,
+'value' => 4886283,
 'user' => 4,
-'date' => '2014-08-06'
+'date' => '2015-06-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9797644,
+'value' => 3668311,
 'user' => 4,
-'date' => '2014-08-07'
+'date' => '2015-06-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4979572,
+'value' => 12123506,
 'user' => 4,
-'date' => '2014-08-08'
+'date' => '2015-06-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13104757,
+'value' => 9385054,
 'user' => 4,
-'date' => '2014-08-11'
+'date' => '2015-06-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6128036,
+'value' => 8130987,
 'user' => 4,
-'date' => '2014-08-12'
+'date' => '2015-06-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6200715,
+'value' => 6830029,
 'user' => 4,
-'date' => '2014-08-13'
+'date' => '2015-06-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5543983,
+'value' => 7724437,
 'user' => 4,
-'date' => '2014-08-14'
+'date' => '2015-06-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6745529,
+'value' => 8374916,
 'user' => 4,
-'date' => '2014-08-15'
+'date' => '2015-06-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11469738,
+'value' => 9705206,
 'user' => 4,
-'date' => '2014-08-18'
+'date' => '2015-06-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6026632,
+'value' => 15188418,
 'user' => 4,
-'date' => '2014-08-19'
+'date' => '2015-06-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11607075,
+'value' => 4514454,
 'user' => 4,
-'date' => '2014-08-21'
+'date' => '2015-06-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5349041,
+'value' => 8598855,
 'user' => 4,
-'date' => '2014-08-22'
+'date' => '2015-06-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13840655,
+'value' => 9802695,
 'user' => 4,
-'date' => '2014-08-25'
+'date' => '2015-06-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10142820,
+'value' => 7824958,
 'user' => 4,
-'date' => '2014-08-26'
+'date' => '2015-06-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5911596,
+'value' => 6536894,
 'user' => 4,
-'date' => '2014-08-27'
+'date' => '2015-06-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6810103,
+'value' => 7818859,
 'user' => 4,
-'date' => '2014-08-28'
+'date' => '2015-06-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8234976,
+'value' => 6226688,
 'user' => 4,
-'date' => '2014-08-29'
+'date' => '2015-06-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9741132,
+'value' => 4389086,
 'user' => 4,
-'date' => '2014-09-01'
+'date' => '2015-06-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8522887,
+'value' => 8229233,
 'user' => 4,
-'date' => '2014-09-02'
+'date' => '2015-06-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 4578531,
+'value' => 8887571,
 'user' => 4,
-'date' => '2014-09-03'
+'date' => '2015-06-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8499804,
+'value' => 7982356,
 'user' => 4,
-'date' => '2014-09-04'
+'date' => '2015-06-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11061740,
+'value' => 10087832,
 'user' => 4,
-'date' => '2014-09-05'
+'date' => '2015-06-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11776777,
+'value' => 8516164,
 'user' => 4,
-'date' => '2014-09-08'
+'date' => '2015-06-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8521740,
+'value' => 6535254,
 'user' => 4,
-'date' => '2014-09-09'
+'date' => '2015-06-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 15780007,
+'value' => 3108810,
 'user' => 4,
-'date' => '2014-09-10'
+'date' => '2015-06-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9582004,
+'value' => 4080897,
 'user' => 4,
-'date' => '2014-09-11'
+'date' => '2015-06-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9783523,
+'value' => 4121706,
 'user' => 4,
-'date' => '2014-09-12'
+'date' => '2015-06-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14584919,
+'value' => 4203324,
 'user' => 4,
-'date' => '2014-09-15'
+'date' => '2015-06-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13066035,
+'value' => 7894836,
 'user' => 4,
-'date' => '2014-09-16'
+'date' => '2015-06-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3749154,
+'value' => 8671732,
 'user' => 4,
-'date' => '2014-09-17'
+'date' => '2015-07-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 3846247,
+'value' => 5579736,
 'user' => 4,
-'date' => '2014-09-18'
+'date' => '2015-07-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10787088,
+'value' => 9465389,
 'user' => 4,
-'date' => '2014-09-19'
+'date' => '2015-07-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7447902,
+'value' => 6387541,
 'user' => 4,
-'date' => '2014-09-22'
+'date' => '2015-07-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7817423,
+'value' => 6962420,
 'user' => 4,
-'date' => '2014-09-23'
+'date' => '2015-07-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5818045,
+'value' => 7154046,
 'user' => 4,
-'date' => '2014-09-24'
+'date' => '2015-07-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9547130,
+'value' => 9655520,
 'user' => 4,
-'date' => '2014-09-25'
+'date' => '2015-07-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6667324,
+'value' => 6004396,
 'user' => 4,
-'date' => '2014-09-26'
+'date' => '2015-07-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14791302,
+'value' => 10570696,
 'user' => 4,
-'date' => '2014-09-29'
+'date' => '2015-07-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 5908290,
+'value' => 7293866,
 'user' => 4,
-'date' => '2014-09-30'
+'date' => '2015-07-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8473910,
+'value' => 6479394,
 'user' => 4,
-'date' => '2014-10-01'
+'date' => '2015-07-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9863192,
+'value' => 5442691,
 'user' => 4,
-'date' => '2014-10-02'
+'date' => '2015-07-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9595220,
+'value' => 5831455,
 'user' => 4,
-'date' => '2014-10-03'
+'date' => '2015-07-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14385635,
+'value' => 16523029,
 'user' => 4,
-'date' => '2014-10-06'
+'date' => '2015-07-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9480034,
+'value' => 5472644,
 'user' => 4,
-'date' => '2014-10-07'
+'date' => '2015-07-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 17378295,
+'value' => 2958572,
 'user' => 4,
-'date' => '2014-10-08'
+'date' => '2015-07-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13171156,
+'value' => 7029783,
 'user' => 4,
-'date' => '2014-10-09'
+'date' => '2015-07-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8460555,
+'value' => 7751032,
 'user' => 4,
-'date' => '2014-10-10'
+'date' => '2015-07-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13112534,
+'value' => 9223728,
 'user' => 4,
-'date' => '2014-10-13'
+'date' => '2015-07-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12306228,
+'value' => 6200825,
 'user' => 4,
-'date' => '2014-10-14'
+'date' => '2015-07-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10703911,
+'value' => 8365692,
 'user' => 4,
-'date' => '2014-10-15'
+'date' => '2015-07-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6167286,
+'value' => 6367342,
 'user' => 4,
-'date' => '2014-10-16'
+'date' => '2015-07-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6280704,
+'value' => 8293248,
 'user' => 4,
-'date' => '2014-10-17'
+'date' => '2015-07-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 1409938,
+'value' => 7103800,
 'user' => 4,
-'date' => '2014-10-18'
+'date' => '2015-07-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 16685528,
+'value' => 6340846,
 'user' => 4,
-'date' => '2014-10-20'
+'date' => '2015-07-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7419880,
+'value' => 7418790,
 'user' => 4,
-'date' => '2014-10-21'
+'date' => '2015-07-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 7343899,
+'value' => 5262902,
 'user' => 4,
-'date' => '2014-10-22'
+'date' => '2015-07-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 26647912,
+'value' => 5583970,
 'user' => 4,
-'date' => '2014-10-27'
+'date' => '2015-07-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12366379,
+'value' => 8423792,
 'user' => 4,
-'date' => '2014-10-28'
+'date' => '2015-07-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6801353,
+'value' => 8626776,
 'user' => 4,
-'date' => '2014-10-29'
+'date' => '2015-07-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10173919,
+'value' => 9295947,
 'user' => 4,
-'date' => '2014-10-30'
+'date' => '2015-07-31'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 6771912,
+'value' => 4323525,
 'user' => 4,
-'date' => '2014-10-31'
+'date' => '2015-08-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 17144600,
+'value' => 4366760,
 'user' => 4,
-'date' => '2014-11-03'
+'date' => '2015-08-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12132947,
+'value' => 4150584,
 'user' => 4,
-'date' => '2014-11-04'
+'date' => '2015-08-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10232446,
+'value' => 12409999,
 'user' => 4,
-'date' => '2014-11-05'
+'date' => '2015-08-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 15080347,
+'value' => 10842065,
 'user' => 4,
-'date' => '2014-11-06'
+'date' => '2015-08-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 21654838,
+'value' => 4531247,
 'user' => 4,
-'date' => '2014-11-07'
+'date' => '2015-08-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 18365895,
+'value' => 11261779,
 'user' => 4,
-'date' => '2014-11-10'
+'date' => '2015-08-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8253840,
+'value' => 6172100,
 'user' => 4,
-'date' => '2014-11-11'
+'date' => '2015-08-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14604773,
+'value' => 5986937,
 'user' => 4,
-'date' => '2014-11-12'
+'date' => '2015-08-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 19052832,
+'value' => 6418984,
 'user' => 4,
-'date' => '2014-11-13'
+'date' => '2015-08-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12192670,
+'value' => 13854713,
 'user' => 4,
-'date' => '2014-11-14'
+'date' => '2015-08-11'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 18477389,
+'value' => 7279470,
 'user' => 4,
-'date' => '2014-11-17'
+'date' => '2015-08-12'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11642125,
+'value' => 7405731,
 'user' => 4,
-'date' => '2014-11-18'
+'date' => '2015-08-13'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10654644,
+'value' => 5857804,
 'user' => 4,
-'date' => '2014-11-19'
+'date' => '2015-08-14'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8467866,
+'value' => 7791235,
 'user' => 4,
-'date' => '2014-11-20'
+'date' => '2015-08-15'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 296894059,
+'value' => 9271570,
 'user' => 4,
-'date' => '2014-11-21'
+'date' => '2015-08-16'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 16339128,
+'value' => 7323761,
 'user' => 4,
-'date' => '2014-11-24'
+'date' => '2015-08-17'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13283983,
+'value' => 12141813,
 'user' => 4,
-'date' => '2014-11-25'
+'date' => '2015-08-18'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11524903,
+'value' => 7193187,
 'user' => 4,
-'date' => '2014-11-26'
+'date' => '2015-08-19'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13280027,
+'value' => 7840574,
 'user' => 4,
-'date' => '2014-11-27'
+'date' => '2015-08-20'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14466573,
+'value' => 12955762,
 'user' => 4,
-'date' => '2014-11-28'
+'date' => '2015-08-21'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 16044373,
+'value' => 6475510,
 'user' => 4,
-'date' => '2014-12-01'
+'date' => '2015-08-22'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 22261307,
+'value' => 7058306,
 'user' => 4,
-'date' => '2014-12-02'
+'date' => '2015-08-23'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 16257267,
+'value' => 5504184,
 'user' => 4,
-'date' => '2014-12-03'
+'date' => '2015-08-24'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 11878440,
+'value' => 14673912,
 'user' => 4,
-'date' => '2014-12-04'
+'date' => '2015-08-25'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 14743540,
+'value' => 10753268,
 'user' => 4,
-'date' => '2014-12-05'
+'date' => '2015-08-26'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 29546907,
+'value' => 6945494,
 'user' => 4,
-'date' => '2014-12-08'
+'date' => '2015-08-27'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10122793,
+'value' => 7412469,
 'user' => 4,
-'date' => '2014-12-09'
+'date' => '2015-08-28'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 9156280,
+'value' => 8743776,
 'user' => 4,
-'date' => '2014-12-10'
+'date' => '2015-08-29'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10006687,
+'value' => 8656338,
 'user' => 4,
-'date' => '2014-12-11'
+'date' => '2015-08-30'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12057453,
+'value' => 8044273,
 'user' => 4,
-'date' => '2014-12-12'
+'date' => '2015-08-31'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8821633,
+'value' => 10733258,
 'user' => 4,
-'date' => '2014-12-13'
+'date' => '2015-09-01'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10183553,
+'value' => 9735348,
 'user' => 4,
-'date' => '2014-12-15'
+'date' => '2015-09-02'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 13120333,
+'value' => 5056250,
 'user' => 4,
-'date' => '2014-12-16'
+'date' => '2015-09-03'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10533507,
+'value' => 9663983,
 'user' => 4,
-'date' => '2014-12-17'
+'date' => '2015-09-04'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8470373,
+'value' => 11749551,
 'user' => 4,
-'date' => '2014-12-18'
+'date' => '2015-09-05'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12265400,
+'value' => 12924506,
 'user' => 4,
-'date' => '2014-12-19'
+'date' => '2015-09-06'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 12492527,
+'value' => 11162073,
 'user' => 4,
-'date' => '2014-12-22'
+'date' => '2015-09-07'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 10954113,
+'value' => 12532394,
 'user' => 4,
-'date' => '2014-12-23'
+'date' => '2015-09-08'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 0,
+'value' => 9625262,
 'user' => 4,
-'date' => '2014-12-24'
+'date' => '2015-09-09'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 18829347,
+'value' => 17502368,
 'user' => 4,
-'date' => '2014-12-29'
+'date' => '2015-09-10'
 )
 );
 
 DB::table('mrr')->insert(
 array(
-'value' => 8030447,
+'value' => 10396177,
 'user' => 4,
-'date' => '2014-12-30'
+'date' => '2015-09-11'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11423967,
+'user' => 4,
+'date' => '2015-09-12'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12909082,
+'user' => 4,
+'date' => '2015-09-13'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11995165,
+'user' => 4,
+'date' => '2015-09-14'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 15703107,
+'user' => 4,
+'date' => '2015-09-15'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14298624,
+'user' => 4,
+'date' => '2015-09-16'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 5027069,
+'user' => 4,
+'date' => '2015-09-17'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 5134118,
+'user' => 4,
+'date' => '2015-09-18'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12191369,
+'user' => 4,
+'date' => '2015-09-19'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10118836,
+'user' => 4,
+'date' => '2015-09-20'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12922851,
+'user' => 4,
+'date' => '2015-09-21'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8065507,
+'user' => 4,
+'date' => '2015-09-22'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8721542,
+'user' => 4,
+'date' => '2015-09-23'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 6545579,
+'user' => 4,
+'date' => '2015-09-24'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11033649,
+'user' => 4,
+'date' => '2015-09-25'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7660271,
+'user' => 4,
+'date' => '2015-09-26'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7966682,
+'user' => 4,
+'date' => '2015-09-27'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7507065,
+'user' => 4,
+'date' => '2015-09-28'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 15725490,
+'user' => 4,
+'date' => '2015-09-29'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 6287507,
+'user' => 4,
+'date' => '2015-09-30'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9778106,
+'user' => 4,
+'date' => '2015-10-01'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11256953,
+'user' => 4,
+'date' => '2015-10-02'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10425564,
+'user' => 4,
+'date' => '2015-10-03'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10425564,
+'user' => 4,
+'date' => '2015-10-04'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9695774,
+'user' => 4,
+'date' => '2015-10-05'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 15292486,
+'user' => 4,
+'date' => '2015-10-06'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11019525,
+'user' => 4,
+'date' => '2015-10-07'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 18633068,
+'user' => 4,
+'date' => '2015-10-08'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14217011,
+'user' => 4,
+'date' => '2015-10-09'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9005299,
+'user' => 4,
+'date' => '2015-10-10'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7384345,
+'user' => 4,
+'date' => '2015-10-11'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8825193,
+'user' => 4,
+'date' => '2015-10-12'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 15076271,
+'user' => 4,
+'date' => '2015-10-13'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13309317,
+'user' => 4,
+'date' => '2015-10-14'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12348670,
+'user' => 4,
+'date' => '2015-10-15'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7524570,
+'user' => 4,
+'date' => '2015-10-16'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 6685515,
+'user' => 4,
+'date' => '2015-10-17'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 2131768,
+'user' => 4,
+'date' => '2015-10-18'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 2451533,
+'user' => 4,
+'date' => '2015-10-19'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 17956164,
+'user' => 4,
+'date' => '2015-10-20'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8111162,
+'user' => 4,
+'date' => '2015-10-21'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8030269,
+'user' => 4,
+'date' => '2015-10-22'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7869663,
+'user' => 4,
+'date' => '2015-10-23'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7789361,
+'user' => 4,
+'date' => '2015-10-24'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 6424215,
+'user' => 4,
+'date' => '2015-10-25'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8110571,
+'user' => 4,
+'date' => '2015-10-26'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 28333717,
+'user' => 4,
+'date' => '2015-10-27'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14146401,
+'user' => 4,
+'date' => '2015-10-28'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7465273,
+'user' => 4,
+'date' => '2015-10-29'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11390401,
+'user' => 4,
+'date' => '2015-10-30'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7208084,
+'user' => 4,
+'date' => '2015-10-31'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8145135,
+'user' => 4,
+'date' => '2015-11-01'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 7352245,
+'user' => 4,
+'date' => '2015-11-02'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 19378088,
+'user' => 4,
+'date' => '2015-11-03'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13743961,
+'user' => 4,
+'date' => '2015-11-04'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10880310,
+'user' => 4,
+'date' => '2015-11-05'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 16215829,
+'user' => 4,
+'date' => '2015-11-06'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 23871321,
+'user' => 4,
+'date' => '2015-11-07'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 19335770,
+'user' => 4,
+'date' => '2015-11-08'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 20290623,
+'user' => 4,
+'date' => '2015-11-09'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 19522266,
+'user' => 4,
+'date' => '2015-11-10'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9984430,
+'user' => 4,
+'date' => '2015-11-11'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 15755429,
+'user' => 4,
+'date' => '2015-11-12'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 21459761,
+'user' => 4,
+'date' => '2015-11-13'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13190196,
+'user' => 4,
+'date' => '2015-11-14'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11343569,
+'user' => 4,
+'date' => '2015-11-15'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13981608,
+'user' => 4,
+'date' => '2015-11-16'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 19646844,
+'user' => 4,
+'date' => '2015-11-17'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12627251,
+'user' => 4,
+'date' => '2015-11-18'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12199708,
+'user' => 4,
+'date' => '2015-11-19'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10250070,
+'user' => 4,
+'date' => '2015-11-20'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 315617108,
+'user' => 4,
+'date' => '2015-11-21'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 261962199,
+'user' => 4,
+'date' => '2015-11-22'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 255649857,
+'user' => 4,
+'date' => '2015-11-23'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 17397921,
+'user' => 4,
+'date' => '2015-11-24'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14751240,
+'user' => 4,
+'date' => '2015-11-25'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13148211,
+'user' => 4,
+'date' => '2015-11-26'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14385404,
+'user' => 4,
+'date' => '2015-11-27'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 16000613,
+'user' => 4,
+'date' => '2015-11-28'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 16960650,
+'user' => 4,
+'date' => '2015-11-29'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 18720718,
+'user' => 4,
+'date' => '2015-11-30'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 17327458,
+'user' => 4,
+'date' => '2015-12-01'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 23944052,
+'user' => 4,
+'date' => '2015-12-02'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 17302377,
+'user' => 4,
+'date' => '2015-12-03'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13146022,
+'user' => 4,
+'date' => '2015-12-04'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 16762997,
+'user' => 4,
+'date' => '2015-12-05'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13578027,
+'user' => 4,
+'date' => '2015-12-06'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 16930627,
+'user' => 4,
+'date' => '2015-12-07'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 31446351,
+'user' => 4,
+'date' => '2015-12-08'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11655972,
+'user' => 4,
+'date' => '2015-12-09'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9996559,
+'user' => 4,
+'date' => '2015-12-10'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13801274,
+'user' => 4,
+'date' => '2015-12-11'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12832575,
+'user' => 4,
+'date' => '2015-12-12'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10271166,
+'user' => 4,
+'date' => '2015-12-13'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10990148,
+'user' => 4,
+'date' => '2015-12-14'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11089871,
+'user' => 4,
+'date' => '2015-12-15'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14847850,
+'user' => 4,
+'date' => '2015-12-16'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11903858,
+'user' => 4,
+'date' => '2015-12-17'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 10275785,
+'user' => 4,
+'date' => '2015-12-18'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13936318,
+'user' => 4,
+'date' => '2015-12-19'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 11427780,
+'user' => 4,
+'date' => '2015-12-20'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 13378865,
+'user' => 4,
+'date' => '2015-12-21'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 14367275,
+'user' => 4,
+'date' => '2015-12-22'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 12540734,
+'user' => 4,
+'date' => '2015-12-23'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 819351,
+'user' => 4,
+'date' => '2015-12-24'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 811157,
+'user' => 4,
+'date' => '2015-12-25'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 827545,
+'user' => 4,
+'date' => '2015-12-26'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 925867,
+'user' => 4,
+'date' => '2015-12-27'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 712835,
+'user' => 4,
+'date' => '2015-12-28'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 20039805,
+'user' => 4,
+'date' => '2015-12-29'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 9429117,
+'user' => 4,
+'date' => '2015-12-30'
+)
+);
+
+DB::table('mrr')->insert(
+array(
+'value' => 8354728,
+'user' => 4,
+'date' => '2015-12-31'
 )
 );
 
