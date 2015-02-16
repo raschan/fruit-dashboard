@@ -199,7 +199,7 @@ class AuthController extends BaseController
             $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
             // if we do not have data in the email form
             // and validator has no errors, then password change
-            if (empty(Input::get('password'))){
+            if (Input::hasNot('password')){
                 // if we have data from the password change form
                 // checking if old password is the old password
                 if (Hash::check(Input::get('oldpassword'), $user->password)){
