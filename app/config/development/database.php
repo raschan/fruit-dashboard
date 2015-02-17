@@ -19,16 +19,16 @@ return array(
    */
    
    'connections' => array(
-       'mysql' => array(
+      'mysql' => array(
         'driver'    => 'mysql',
         'host'      => 'localhost',
-        'database'  => 'supdashboarddb',
-        'username'  => 'SUpDashboardRoot',
-        'password'  => 'SUpDashboardPassword',
+        'database'  => 'abfinfor_supdashboarddevdb',
+        'username'  => 'abfinfor_root',
+        'password'  => 'A$9ZkUTHru[v',
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
-       ),
+      ),
 
    ),
 );

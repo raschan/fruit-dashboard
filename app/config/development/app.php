@@ -26,5 +26,5 @@ return array(
    |
    */
 
-   'url' => 'http://localhost',
+   'url' => 'http://supdashboard-dev.abfinformatika.hu',
 );

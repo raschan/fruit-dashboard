@@ -71,7 +71,7 @@
                 <div id="changeEmailForm" class="hidden-form">
 
                   <div class="form-group @if ($errors->first('email')) has-error @endif">
-                    {{ Form::label('id_email', 'Email', array(
+                    {{ Form::label('id_email', 'New email', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       {{ Form::text('email', '', array(
@@ -81,7 +81,7 @@
                   </div> <!-- / .form-group -->
 
                   <div class="form-group @if ($errors->first('password')) has-error @endif">
-                    {{ Form::label('id_password', 'Password', array(
+                    {{ Form::label('id_password', 'Your password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       {{ Form::password('password', array(
