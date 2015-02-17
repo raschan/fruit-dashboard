@@ -174,10 +174,16 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
+        Counter::saveCancellations(Auth::user());
+
+        $timeItStarts = time();
         $savedObjects = Counter::saveEvents(Auth::user());
+        $timeItFinishes = time();
+
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
-                'count' => $savedObjects
+                'count' => $savedObjects,
+                'timeItTakes' => $timeItFinishes - $timeItStarts
             )
         );
     }
