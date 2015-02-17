@@ -219,7 +219,7 @@ class StripeHelper
      * Getting all the customers for the user
      * @param stripe key
      *
-     * @return an array with the subscriptions
+     * @return an array with the customers
     */
 
     public static function getCustomers($key)
