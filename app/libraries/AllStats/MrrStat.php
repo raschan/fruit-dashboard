@@ -29,7 +29,7 @@ class MrrStat extends BaseStat {
             // data for single stat table
 			// get all the plan details
 			$mrrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
-
+            setlocale(LC_MONETARY,"en_US");
 			//converting price and mrr to money format
         	foreach ($mrrData['detailData'] as $id => $planDetail) {
 	        	$mrrData['detailData'][$id]['price'] = money_format('%n', $planDetail['price'] / 100);
