@@ -400,7 +400,7 @@
       // all labels
       var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
       // all data value
-      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach];
+      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
 
       // for default view
       var data30 = {
@@ -410,7 +410,7 @@
                 label: "{{$data['statName']}}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach]
+                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
             }
         ]
       };
