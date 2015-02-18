@@ -17,6 +17,8 @@
                 <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
                 <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
                 <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
