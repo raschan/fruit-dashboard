@@ -69,7 +69,7 @@ class BaseStat
         // return array
         $data = array();
 
-        $data = self::showSimpleStat();
+        $data = static::showSimpleStat();
 
         // building full mrr history
         $firstDay = static::getFirstDay();
@@ -146,7 +146,6 @@ class BaseStat
         );
 
         return $data;
-
     }
 
 
