@@ -19,12 +19,18 @@ class MrrStat extends BaseStat {
 
     	$mrrData = array();
 
-    	$mrrData = self::showSimpleStat();
-
         // full MRR data
     	if ($fullDataNeeded){
 
     		$mrrData = self::showFullStat();
+
+            // correction of the money to dollars from cents
+            foreach($mrrData['fullHistory'] as $date => $value)
+            {   
+                if ($value) {
+                    $mrrData['fullHistory'][$date] = $value / 100;
+                }
+            }
 
             // data for single stat table
 			// get all the plan details
@@ -35,9 +41,18 @@ class MrrStat extends BaseStat {
 	        	$mrrData['detailData'][$id]['price'] = money_format('%n', $planDetail['price'] / 100);
 	            $mrrData['detailData'][$id]['mrr'] = money_format('%n', $planDetail['mrr'] / 100);
         	}
-    	}
+    	} else {
+            $mrrData = self::showSimpleStat();
+        }
         // converting to money format
         $mrrData = self::toMoneyFormat($mrrData, $fullDataNeeded);
+
+        foreach($mrrData['history'] as $date => $value)
+        {   
+            if ($value) {
+                $mrrData['history'][$date] = $value / 100;
+            }
+        }
 
     	return $mrrData;
     }

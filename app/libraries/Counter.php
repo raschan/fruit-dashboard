@@ -341,32 +341,7 @@ class Counter
     *
     * @return int (percent)
     */
-
-    public static function saveUC($user)
-    {
-    	$currentDay = date('Y-m-d',time());
-
-    	$currentDayUC = DB::table('uc')
-    		->where('date',$currentDay)
-    		->where('user', $user->id)
-            ->get();
-
-        if (!$currentDayUC)
-        {
-        	$userChurnValue = self::getUserChurn($user);
-
-            DB::table('uc')->insert(
-                array(
-                    'value' => $userChurnValue,
-                    'user'  => $user->id,
-                    'date'  => $currentDay
-                )
-            );
-        } else {
-        	var_dump($currentDayUC[0]->value);
-        }
-    }
-
+    
 
     /**
     * LV - Lifetime Value
@@ -744,21 +719,5 @@ class Counter
         var_dump($cancellations);
 
     	return $cancellations;
-    }
-
-    private static function getUserChurn($user)
-    {
-    	// get todays cancellations
-    	$cancellations = CancellationStat::getStatOnDay(time());
-    	// get active users 30 days before today
-    	$activeUsers = AUStat::getStatOnDay(time() - 30*24*60*60);
-
-    	// check, if they exist
-    	if ($cancellations && $activeUsers) 
-    	{
-    		return round($cancellations / $activeUsers * 100, 1);
-    	} else {
-    		return null;
-    	}
     }
 }
