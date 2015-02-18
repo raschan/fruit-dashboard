@@ -12,7 +12,16 @@ class CancellationStat extends BaseStat {
 
 		$cancellationData = array();
 
-    	$cancellationData = self::showSimpleStat();
+    	if ($fullDataNeeded){
+
+            $cancellationData = self::showFullStat();
+
+            // data for single stat table
+            $cancellationData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+
+        } else {
+        	$cancellationData = self::showSimpleStat();
+        }
 
     	return $cancellationData;
 	}

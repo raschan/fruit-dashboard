@@ -8,8 +8,14 @@ class UserChurnStat extends BaseStat {
 		self::$statName = 'User Churn';
 
 		$userChurnData = array();
-		$userChurnData = self::showSimpleStat();
 
+		if($fullDataNeeded)
+		{
+			$userChurnData = self::showFullStat();
+			$userChurnData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+		} else {
+			$userChurnData = self::showSimpleStat();
+		}
 		return $userChurnData;
 	}
 }
