@@ -1,12 +1,71 @@
 <?php
 
-class BaseStat
-{
-    // later rewrite to be protected
-    public static $statName;
-    public static $statID;
 
-    /**
+class CancellationStat extends BaseStat {
+
+
+	public static function showCancellation($fullDataNeeded = false)
+	{
+		// defaults
+		self::$statID = 'cancellations';
+		self::$statName = 'Cancellations';
+
+		$cancellationData = array();
+
+    	if ($fullDataNeeded){
+
+            $cancellationData = self::showFullStat();
+
+            // data for single stat table
+            $cancellationData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+
+        } else {
+        	$cancellationData = self::showSimpleStat();
+        }
+
+    	return $cancellationData;
+	}
+
+    public static function getIndicatorStatOnDay($timestamp)
+    {
+        $beforeValues = array(); 
+        for ($i=0; $i < 30 ; $i++) { 
+            $day = date('Y-m-d', $timestamp - $i * 24*60*60);
+
+            $stats = DB::table('cancellations')
+                ->where('date',$day)
+                ->where('user', Auth::user()->id)
+                ->get();
+
+            if($stats){
+                $statValue = 0;
+                foreach ($stats as $stat) {
+                    $statValue += $stat->value;
+                }
+                $beforeValues[$day] = $statValue;
+            } else {
+                $beforeValues[$day] = null;
+            }
+        }
+
+        $returnValue = null;
+        foreach ($beforeValues as $value) {
+            if($value)
+            {
+                if($returnValue)
+                {
+                    $returnValue += $value;
+                } else {
+                    $returnValue = $value;
+                }
+            }
+        }
+
+        return $returnValue;
+    }
+
+
+        /**
     * Prepare data for simple statistics (for dashboard)
     *
     * @return array
@@ -33,13 +92,13 @@ class BaseStat
         }
 
         // current value, formatted for money
-        $data['currentValue'] = static::getStatOnDay($currentDay);
+        $data['currentValue'] = static::getIndicatorStatOnDay($currentDay);
 
         // change in timeframe
-        $lastMonthValue = static::getStatOnDay($lastMonthTime);
+        $lastMonthValue = static::getIndicatorStatOnDay($lastMonthTime);
         // check if data is available, so we don't divide by null
         if ($lastMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $lastMonthValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $lastMonthValue * 100) - 100;
             $data['oneMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['oneMonthChange'] = null;
@@ -69,7 +128,7 @@ class BaseStat
         // return array
         $data = array();
 
-        $data = static::showSimpleStat();
+        $data = self::showSimpleStat();
 
         // building full mrr history
         $firstDay = static::getFirstDay();
@@ -83,12 +142,12 @@ class BaseStat
         
 
         // past values (null if not available)
-        $lastMonthValue = static::getStatOnDay($lastMonthTime);
-        $twoMonthValue = static::getStatOnDay($twoMonthTime);
-        $threeMonthValue = static::getStatOnDay($threeMonthTime);
-        $sixMonthValue = static::getStatOnDay($sixMonthTime);
-        $nineMonthValue = static::getStatOnDay($nineMonthTime);
-        $oneYearValue = static::getStatOnDay($lastYearTime);
+        $lastMonthValue = static::getIndicatorStatOnDay($lastMonthTime);
+        $twoMonthValue = static::getIndicatorStatOnDay($twoMonthTime);
+        $threeMonthValue = static::getIndicatorStatOnDay($threeMonthTime);
+        $sixMonthValue = static::getIndicatorStatOnDay($sixMonthTime);
+        $nineMonthValue = static::getIndicatorStatOnDay($nineMonthTime);
+        $oneYearValue = static::getIndicatorStatOnDay($lastYearTime);
 
         // 30 days ago
         $data['oneMonth'] = $lastMonthValue;
@@ -101,35 +160,35 @@ class BaseStat
         // we have 30 days change
 
         if ($twoMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $twoMonthValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $twoMonthValue * 100) - 100;
             $data['twoMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['twoMonthChange'] = null;
         }
 
         if ($threeMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $threeMonthValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $threeMonthValue * 100) - 100;
             $data['threeMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['threeMonthChange'] = null;
         }
 
         if ($sixMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $sixMonthValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $sixMonthValue * 100) - 100;
             $data['sixMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['sixMonthChange'] = null;
         }
 
         if ($nineMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $nineMonthValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $nineMonthValue * 100) - 100;
             $data['nineMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['nineMonthChange'] = null;
         }
 
         if ($oneYearValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $oneYearValue * 100) - 100;
+            $changeInPercent = ($data['currentValue'] / $oneYearValue * 100) - 100;
             $data['oneYearChange'] = round($changeInPercent) . '%';
         } else {
             $data['oneYearChange'] = null;
@@ -146,86 +205,6 @@ class BaseStat
         );
 
         return $data;
-    }
-
-
-
-    /**
-    * Convert data to money format
-    *
-    * @param array, every data needed
-    * @param bool, if full stat is needed
-    *
-    * @return array
-    */
-
-    public static function toMoneyFormat($data, $fullDataNeeded){
-        
-        setlocale(LC_MONETARY,"en_US");
-        $data['currentValue'] = money_format('%n',$data['currentValue'] / 100);
-
-        if ($fullDataNeeded){
-            // 30 days ago
-            $data['oneMonth'] = $data['oneMonth'] ? money_format('%n', $data['oneMonth'] / 100) : null;
-            // 6 months ago
-            $data['sixMonth'] = $data['sixMonth'] ? money_format('%n', $data['sixMonth'] / 100) : null;
-            // 1 year ago
-            $data['oneYear'] = $data['oneYear'] ? money_format('%n', $data['oneYear'] / 100) : null;
-        }
-
-        return $data;
-    }
-
-    /**
-    * Get stat on given day
-    *
-    * @param timestamp, current day timestamp
-    *
-    * @return int (cents) or null if data not exist
-    */
-
-    public static function getStatOnDay($timeStamp)
-    {
-    	$day = date('Y-m-d', $timeStamp);
-
-    	$stats = DB::table(self::$statID)
-    		->where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->get();
-
-    	if($stats){
-            $statValue = 0;
-            foreach ($stats as $stat) {
-                $statValue += $stat->value;
-            }
-    		return $statValue;
-    	} else {
-			return null;
-    	}
-    }
-
-
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table(self::$statID)
-            ->where('user', Auth::user()->id)
-            ->orderBy('date', 'asc')
-            ->first();
-
-        if ($firstDay){
-            return strtotime($firstDay->date);
-        }
-        else {
-            // needs review, so it can handle null with new users too
-            return 1388448000;
-        }
     }
 
 }

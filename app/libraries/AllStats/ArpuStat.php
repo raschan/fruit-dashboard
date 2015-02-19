@@ -19,17 +19,30 @@ class ArpuStat extends BaseStat {
 
     	$arpuData = array();
 
-    	$arpuData = self::showSimpleStat();
 
-    	if ($fullDataNeeded){
+        if ($fullDataNeeded){
 
-    		$arpuData = self::showFullStat();
+            $arpuData = self::showFullStat();
 
-			// get all the plans details
-			$arpuData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+            foreach($arpuData['fullHistory'] as $date => $value)
+            {   
+                if ($value) {
+                    $arpuData['fullHistory'][$date] = $value / 100;
+                }
+            }
 
+            // get all the plans details
+            $arpuData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+        } else {
+        	$arpuData = self::showSimpleStat();
+        }
 
-    	}
+        foreach($arpuData['history'] as $date => $value)
+        {   
+            if ($value) {
+                $arpuData['history'][$date] = $value / 100;
+            }
+        }
 
         //converting to money format
         $arpuData = self::toMoneyFormat($arpuData, $fullDataNeeded);
@@ -60,7 +73,7 @@ class ArpuStat extends BaseStat {
             ->get();
 
         if($mrrOnDay && $auOnDay){
-            return $mrrOnDay[0]->value / $auOnDay[0]->value;
+            return round($mrrOnDay[0]->value / $auOnDay[0]->value);
         } else {
             return null;
         }
