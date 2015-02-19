@@ -15,7 +15,7 @@ class AUTableSeeder extends Seeder
             
             $date = date('Y-m-d', $currentDay + $i*24*60*60);
 
-            $value = $previousValue + rand(-2,5);
+            $value = $previousValue + rand(-2,3);
             $value = $value < 0 ? 0 : $value;
             $previousValue = $value;
 
@@ -23,7 +23,8 @@ class AUTableSeeder extends Seeder
                 array(
                     'value' => $value,
                     'user' => 1,
-                    'date' => $date
+                    'date' => $date,
+                    'provider' => 'stripe'
                 )
             );
         }
