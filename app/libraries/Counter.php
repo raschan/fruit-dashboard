@@ -217,6 +217,30 @@ class Counter
     * @return int (pieces)
     */
 
+    public static function saveCancellations($user) 
+    {
+    	$currentDay = date('Y-m-d',time());
+
+    	$currentDayCancellations = DB::table('cancellations')
+    		->where('date',$currentDay)
+    		->where('user', $user->id)
+            ->get();
+
+        if (!$currentDayCancellations)
+        {
+        	$cancellationValue = self::getCancellations($user);
+
+            DB::table('cancellations')->insert(
+                array(
+                    'value' => $cancellationValue,
+                    'user'  => $user->id,
+                    'date'  => $currentDay
+                )
+            );
+        } else {
+        	var_dump($currentDayCancellations[0]->value);
+        }
+    }
 
     /**
     * Downgrade
@@ -317,7 +341,7 @@ class Counter
     *
     * @return int (percent)
     */
-
+    
 
     /**
     * LV - Lifetime Value
@@ -524,7 +548,7 @@ class Counter
                 $savedObjects++;
                 DB::table('events')->insert(
                     array(
-                        'created'   => date('Y-m-d', $event['created']),
+                        'created'   => date('Y-m-d H:i:s',$event['created']),
                         'user'      => $user->id,
                         'provider'  => $event['provider'],
                         'eventID'   => $id,
@@ -655,7 +679,45 @@ class Counter
         }
 
             return $eventArray;
-
     }
 
+    private static function getCancellations($user)
+    {	
+    	// return value
+    	$cancellations = 0;
+
+   		// check if we reached the day before yesterday
+    	$reachedEndOfDay = false;
+
+    	$currentDay = time();
+    	$yesterDay = $currentDay - 24*60*60;
+
+    	// get all the evens saying customer cancelled
+    	$events = DB::table('events')
+            ->where('user', $user->id)
+            ->whereIn('type', ['customer.subscription.deleted'])
+            ->orderBy('created', 'desc')
+            ->get();
+
+        $i = 0;
+
+        // go through all the returned events and check for dates
+        while (!$reachedEndOfDay)
+        {
+        	if (strtotime($events[$i]->created) < $yesterDay) {
+        		$reachedEndOfDay = true;
+        	} else {
+        		$cancellations++;
+        	}
+        	$i++;
+        	if (!isset($events[$i]))
+        	{
+        		$reachedEndOfDay = true;
+        	}
+        }
+
+        var_dump($cancellations);
+
+    	return $cancellations;
+    }
 }

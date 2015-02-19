@@ -23,19 +23,35 @@ class ArrStat extends BaseStat {
 
         // return array
         $arrData = array();
-        $arrData = self::showSimpleStat();
 
+        // full ARR data
+        if ($fullDataNeeded){
 
-            // full ARR data
-            if ($fullDataNeeded){
+            $arrData = self::showFullStat();
 
-                $arrData = self::showFullStat();
-                // data for single stat table
-                $arrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
-
+            // correction of the money to dollars from cents
+            foreach($arrData['fullHistory'] as $date => $value)
+            {   
+                if ($value) {
+                    $arrData['fullHistory'][$date] = $value / 100;
+                }
             }
+
+            // data for single stat table
+            $arrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+
+        } else {
+            $arrData = self::showSimpleStat();
+        }
         // converting to money format
         $arrData = self::toMoneyFormat($arrData, $fullDataNeeded);
+
+        foreach($arrData['history'] as $date => $value)
+        {   
+            if ($value) {
+                $arrData['history'][$date] = $value / 100;
+            }
+        }
 
         return $arrData;
     }
@@ -76,7 +92,10 @@ class ArrStat extends BaseStat {
 
     public static function getFirstDay(){
 
-        $firstDay = DB::table('mrr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
+        $firstDay = DB::table('mrr')
+            ->where('user', Auth::user()->id)
+            ->orderBy('date', 'asc')
+            ->first();
         $firstDay = strtotime($firstDay->date);
 
         return $firstDay;

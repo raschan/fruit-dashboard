@@ -19,18 +19,17 @@ class AUStat extends BaseStat {
         $AUData = array();
         $AUData = self::showSimpleStat();
 
+        // full AU data
+        if ($fullDataNeeded){
 
-            // full AU data
-            if ($fullDataNeeded){
+            $AUData = self::showFullStat();
 
-                $AUData = self::showFullStat();
+            // data for single stat table
+            $AUData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
 
-                // data for single stat table
-                $AUData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
-
-            }
+        }
 
         return $AUData;
-        }
+    }
 
 }
