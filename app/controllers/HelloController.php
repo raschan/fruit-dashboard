@@ -177,13 +177,10 @@ class HelloController extends BaseController
 
         $timeItStarts = time();
         $savedObjects = Counter::saveEvents(Auth::user());
-        $timeItFinishes = time();
 
         Counter::saveCancellations(Auth::user());
+        $timeItFinishes = time();
 
-        var_dump(CancellationStat::showCancellation());
-        var_dump(UserChurnStat::showUserChurn());
-    
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
                 'count' => $savedObjects,
