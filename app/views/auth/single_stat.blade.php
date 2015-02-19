@@ -17,6 +17,8 @@
                 <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
                 <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
                 <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
@@ -398,7 +400,7 @@
       // all labels
       var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
       // all data value
-      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach];
+      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
 
       // for default view
       var data30 = {
@@ -408,7 +410,7 @@
                 label: "{{$data['statName']}}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach]
+                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
             }
         ]
       };
