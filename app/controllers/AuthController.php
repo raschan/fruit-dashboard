@@ -138,10 +138,12 @@ class AuthController extends BaseController
             'auth.dashboard',
             array(
                 'allFunctions' => array(
-                    MrrStat::showMRR(false),
-                    AUStat::showAU(false),
-                    ArrStat::showARR(false),
-                    ArpuStat::showARPU(false)
+                    MrrStat::showMRR(),
+                    AUStat::showAU(),
+                    ArrStat::showARR(),
+                    ArpuStat::showARPU(),
+                    CancellationStat::showCancellation(),
+                    UserChurnStat::showUserChurn()
                 ),
                 'events' => Counter::formatEvents(Auth::user())
             )
@@ -412,6 +414,17 @@ class AuthController extends BaseController
             return View::make('auth.single_stat',
                 array(
                     'data' => ArpuStat::showARPU(true)
+                )
+            );
+            case 'cancellations':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => CancellationStat::showCancellation(true)
+                )
+            );case 'uc':
+            return View::make('auth.single_stat',
+                array(
+                    'data' => UserChurnStat::showUserChurn(true)
                 )
             );
             default:
