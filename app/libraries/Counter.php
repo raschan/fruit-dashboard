@@ -234,11 +234,11 @@ class Counter
                 array(
                     'value' => $cancellationValue,
                     'user'  => $user->id,
-                    'date'  => $currentDay
+                    'date'  => $currentDay,
+                    'provider' => 'stripe',
+                    'cumulativeValue' => CancellationStat::getIndicatorStatOnDay(time())
                 )
             );
-        } else {
-        	var_dump($currentDayCancellations[0]->value);
         }
     }
 
@@ -406,45 +406,7 @@ class Counter
     * @return int (cents) or null if data not exist
     */
 
-    private static function getAUOnDay($timestamp, $user)
-    {
-        $day = date('Y-m-d', $timestamp);
-
-        $au = DB::table('au')
-            ->where('date',$day)
-            ->where('user', $user->id)
-            ->get();
-
-        if($au){
-            return $au[0]->value;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-    * Get MRR on given day
-    *
-    * @param timestamp, current day timestamp
-    *
-    * @return int (cents) or null if data not exist
-    */
-
-    private static function getMRROnDay($timestamp, $user)
-    {
-        $day = date('Y-m-d', $timestamp);
-
-        $mrr = DB::table('mrr')
-            ->where('date',$day)
-            ->where('user', $user->id)
-            ->get();
-
-        if($mrr){
-            return $mrr[0]->value;
-        } else {
-            return null;
-        }
-    }
+    
 
     /**
      * Getting all the subscriptions.
@@ -537,6 +499,8 @@ class Counter
         $savedObjects = 0;
         $eventsToSave = TailoredData::getEvents($user);
         foreach ($eventsToSave as $id => $event) {
+
+            // check, if we already saved this event
             $hasEvent = DB::table('events')
             ->where('eventID',$id)
             ->where('user', $user->id)
@@ -715,8 +679,6 @@ class Counter
         		$reachedEndOfDay = true;
         	}
         }
-
-        var_dump($cancellations);
 
     	return $cancellations;
     }
