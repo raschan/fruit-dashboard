@@ -179,7 +179,7 @@ class Counter
 
         if (!$currentDayAU) {
             // no previous data
-            $AUValue = self::getActiveCustomers();
+            $AUValue = self::getActiveCustomers($user);
 
             DB::table('AU')->insert(
                 array(

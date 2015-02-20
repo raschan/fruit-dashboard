@@ -33,7 +33,9 @@ class HelloController extends BaseController
     {
         //TEMPORARY SOLUTION!!!!
         Counter::saveMRR(Auth::user());
-
+        Counter::saveCancellations(Auth::user());
+        Counter::saveAU(Auth::user());
+        
         setlocale(LC_MONETARY,"en_US");
 
         return View::make(
@@ -181,8 +183,6 @@ class HelloController extends BaseController
 
         Counter::saveCancellations(Auth::user());
 
-        var_dump(CancellationStat::showCancellation());
-        var_dump(UserChurnStat::showUserChurn());
     
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
