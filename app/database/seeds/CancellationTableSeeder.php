@@ -18,7 +18,8 @@ class CancellationTableSeeder extends Seeder
                 array(
                     'value' => $value,
                     'user' => 1,
-                    'date' => $date
+                    'date' => $date,
+                    'provider' => 'stripe'
                 )
             );
         }

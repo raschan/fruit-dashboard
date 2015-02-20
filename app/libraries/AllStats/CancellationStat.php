@@ -28,39 +28,67 @@ class CancellationStat extends BaseStat {
 
     public static function getIndicatorStatOnDay($timestamp)
     {
-        $beforeValues = array(); 
-        for ($i=0; $i < 30 ; $i++) { 
-            $day = date('Y-m-d', $timestamp - $i * 24*60*60);
+        $beforeValues = array();
 
-            $stats = DB::table('cancellations')
-                ->where('date',$day)
-                ->where('user', Auth::user()->id)
-                ->get();
+        $day = date('Y-m-d', $timestamp);        
 
-            if($stats){
-                $statValue = 0;
-                foreach ($stats as $stat) {
-                    $statValue += $stat->value;
-                }
-                $beforeValues[$day] = $statValue;
-            } else {
-                $beforeValues[$day] = null;
-            }
-        }
+        $returnValue = DB::table('cancellations')
+            ->where('date', $day)
+            ->where('user', Auth::user()->id)
+            ->get();
 
-        $returnValue = null;
-        foreach ($beforeValues as $value) {
-            if($value)
+        if ($returnValue)
+        {
+            // we have data for that day
+            // FIX IT FOR MULTIPLE PROVIDERS
+            if ($returnValue[0]->cumulativeValue)
             {
-                if($returnValue)
-                {
-                    $returnValue += $value;
-                } else {
-                    $returnValue = $value;
+                // we have a cumulative value
+                // FIX IT FOR MULTIPLE PROVIDERS
+                $returnValue = $returnValue[0]->cumulativeValue;
+            } else {
+                // we don't have the cumulative value, lets compute it
+                for ($i=0; $i < 30 ; $i++) { 
+                    $day = date('Y-m-d', $timestamp - $i * 24*60*60);
+
+                    $stats = DB::table('cancellations')
+                        ->where('date',$day)
+                        ->where('user', Auth::user()->id)
+                        ->get();
+
+                    if($stats){
+                        $statValue = 0;
+                        foreach ($stats as $stat) {
+                            $statValue += $stat->value;
+                        }
+                        $beforeValues[$day] = $statValue;
+                    } else {
+                        $beforeValues[$day] = null;
+                    }
                 }
+
+                $returnValue = null;
+                foreach ($beforeValues as $value) {
+                    if($value)
+                    {
+                        if($returnValue)
+                        {
+                            $returnValue += $value;
+                        } else {
+                            $returnValue = $value;
+                        }
+                    }
+                }
+                // save the cumulative value
+                // FIX IT FOR MULTIPLE PROVIDERS
+                $day = date('Y-m-d', $timestamp);
+                DB::table('cancellations')
+                    ->where('user', Auth::user()->id)
+                    ->where('date', $day)
+                    ->where('provider', 'stripe')
+                    ->update(array('cumulativeValue' => $returnValue));
             }
         }
-
         return $returnValue;
     }
 
