@@ -19,6 +19,9 @@ class UserChurnStat extends BaseStat {
 
 		$userChurnData = self::toMoneyFormat($userChurnData, $fullDataNeeded);
 
+        // positive value is not good variable, for front end colors
+        $userChurnData['positiveIsGood'] = false;
+
 		return $userChurnData;
 	}
 
