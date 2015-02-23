@@ -26,7 +26,7 @@
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
                 </div>
               </div>
-              <div class="form-group dash col-md-1 no-padding-hr">
+              <div class="form-group dash col-md-1 no-padding-hr text-center">
                 &ndash;
               </div>
               <div class="form-group col-md-5 no-padding-hr">

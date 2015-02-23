@@ -57,7 +57,7 @@
 
   @section('pageContent')
     <div id="content-wrapper">
-      
+
       <div id="pa-page-alerts-box">
         <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
           <button type="button" class="close">×</button><strong>Demo site!</strong> Needs text.
@@ -86,7 +86,7 @@
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
                 </div>
               </div>
-              <div class="form-group dash col-md-1 no-padding-hr">
+              <div class="form-group dash col-md-1 no-padding-hr text-center">
                 &ndash;
               </div>
               <div class="form-group col-md-5 no-padding-hr">
