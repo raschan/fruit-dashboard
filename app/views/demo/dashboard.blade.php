@@ -1,10 +1,75 @@
 @extends('meta.base-user')
 
-  @section('pageContent')
+@section('navbar')
+
+<div id="main-navbar" class="navbar" role="navigation">
+  <!-- Main menu toggle -->
+  <button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
+  
+  <div class="navbar-inner">
+    <!-- Main navbar header -->
+    <div class="navbar-header">
+
+      <!-- Logo -->
+      <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
+        Startup Dashboard
+      </a>
+
+      <!-- Main navbar toggle -->
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse"><i class="navbar-icon fa fa-bars"></i></button>
+
+    </div> <!-- / .navbar-header -->
+
+    <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
+      <div>
+        <div class="right clearfix">
+          <ul class="nav navbar-nav pull-right right-navbar-nav">
+
+<!-- 3. $NAVBAR_ICON_BUTTONS =======================================================================
+
+            Navbar Icon Buttons
+
+            NOTE: .nav-icon-btn triggers a dropdown menu on desktop screens only. On small screens .nav-icon-btn acts like a hyperlink.
+
+            Classes:
+            * 'nav-icon-btn-info'
+            * 'nav-icon-btn-success'
+            * 'nav-icon-btn-warning'
+            * 'nav-icon-btn-danger' 
+-->
+            
+            
+<!-- /3. $END_NAVBAR_ICON_BUTTONS -->
+            
+            <li>
+              <a href="{{ URL::route('auth.signup') }}">
+                <i class="dropdown-icon fa fa-rocket"></i>&nbsp;&nbsp;Sign up
+              </a>
+            </li>
+          </ul> <!-- / .navbar-nav -->
+        </div> <!-- / .right -->
+      </div>
+    </div> <!-- / #main-navbar-collapse -->
+  </div> <!-- / .navbar-inner -->
+</div> <!-- / #main-navbar -->
+
+@stop
+
+@section('pageContent')
+      <!-- <div id="main-menu" role="navigation">
+      </div> -->
     <div id="content-wrapper">
+      
+
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
       </div> <!-- / .page-header -->
+
+      <div id="pa-page-alerts-box">
+        <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
+          <button type="button" class="close">×</button><strong>Demo site!</strong> Needs text.
+        </div>
+      </div>
 
       <!-- STATISTICS BOX -->
 
@@ -49,7 +114,7 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
+              <a href="{{ URL::route('demo.single_stat', $allFunctions[$i]['id']) }}">
                 <div class="chart-overlay">
                   <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                 </div>
@@ -57,7 +122,7 @@
               <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
             </div> <!-- / .chart-wrapper -->
           </div> <!-- / .chart-box -->
-        @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
+          @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
         </div> <!-- / .row -->
         @endif
         <!-- /{{ $allFunctions[$i]['statName'] }} -->
