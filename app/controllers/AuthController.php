@@ -54,9 +54,9 @@ class AuthController extends BaseController
 
                 // check if already connected
                 if (Auth::user()->isConnected()) {
-                    return Redirect::route('auth.dashboard')->with('success', 'You have been signed in.');
+                    return Redirect::route('auth.dashboard')->with('success', 'Sign in successful.');
                 } else {
-                    return Redirect::route('auth.connect')->with('success', 'You have been signed in.');
+                    return Redirect::route('auth.connect')->with('success', 'Sign in successful.');
                 }
             } else {
                 // auth unsuccessful -> redirect to login

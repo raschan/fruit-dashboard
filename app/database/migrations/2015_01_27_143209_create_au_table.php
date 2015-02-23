@@ -20,6 +20,7 @@ class CreateAuTable extends Migration {
             $table->integer('user')->unsigned();
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
             $table->date('date');
+            $table->string('provider');
         });
 	}
 
