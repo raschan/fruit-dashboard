@@ -1,20 +1,80 @@
 @extends('meta.base-user')
 
+@section('navbar')
+
+<div id="main-navbar" class="navbar" role="navigation">
+  <!-- Main menu toggle -->
+  <button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
+  
+  <div class="navbar-inner">
+    <!-- Main navbar header -->
+    <div class="navbar-header">
+
+      <!-- Logo -->
+      <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
+        Startup Dashboard
+      </a>
+
+      <!-- Main navbar toggle -->
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse"><i class="navbar-icon fa fa-bars"></i></button>
+
+    </div> <!-- / .navbar-header -->
+
+    <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
+      <div>
+        <div class="right clearfix">
+          <ul class="nav navbar-nav pull-right right-navbar-nav">
+
+<!-- 3. $NAVBAR_ICON_BUTTONS =======================================================================
+
+            Navbar Icon Buttons
+
+            NOTE: .nav-icon-btn triggers a dropdown menu on desktop screens only. On small screens .nav-icon-btn acts like a hyperlink.
+
+            Classes:
+            * 'nav-icon-btn-info'
+            * 'nav-icon-btn-success'
+            * 'nav-icon-btn-warning'
+            * 'nav-icon-btn-danger' 
+-->
+            
+            
+<!-- /3. $END_NAVBAR_ICON_BUTTONS -->
+            
+            <li>
+              <a href="{{ URL::route('auth.signup') }}">
+                <i class="dropdown-icon fa fa-rocket"></i>&nbsp;&nbsp;Sign up
+              </a>
+            </li>
+          </ul> <!-- / .navbar-nav -->
+        </div> <!-- / .right -->
+      </div>
+    </div> <!-- / #main-navbar-collapse -->
+  </div> <!-- / .navbar-inner -->
+</div> <!-- / #main-navbar -->
+
+@stop
+
   @section('pageContent')
     <div id="content-wrapper">
+      
+      <div id="pa-page-alerts-box">
+        <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
+          <button type="button" class="close">×</button><strong>Demo site!</strong> Needs text.
+        </div>
+      </div>
+
       <div class="col-md-12">
-
         <div class="row no-margin-hr panel-padding stat-header bordered">
-
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control input-lg" onChange="window.location.href=this.value">
-                <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
-                <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
-                <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
-                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
-                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
-                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
+                <option value="{{ URL::route('demo.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
+                <option value="{{ URL::route('demo.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
+                <option value="{{ URL::route('demo.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('demo.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('demo.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
+                <option value="{{ URL::route('demo.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
@@ -237,17 +297,9 @@
           <div class="invoice-info">
             <div class="invoice-recipient">
               <strong>
-                @if(Auth::user()->name)
-                {{ Auth::user()->name }}
-                @else
-                N/A
-                @endif
+               Demo site
               </strong><br>
-              @if(Auth::user()->zoneinfo)
-              {{ Auth::user()->zoneinfo }}
-              @else
-              N/A
-              @endif<br>
+               United States
             </div> <!-- / .invoice-recipient -->
             <div class="invoice-total">
               CURRENT:

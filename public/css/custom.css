@@ -280,12 +280,6 @@
 	font-size: 36px;
 }
 
-.stat-input {
-	font-size: 19px;
-	height: 40px;
-	margin-top: 5px;
-}
-
 .stat-header {
 	background: #f7f7f7;
 	border-bottom: 8px solid #f1f1f1;
@@ -297,7 +291,11 @@
 	padding-top: 7px;
 }
 
-@media (max-width: 844px) {
+.stat-date .input-group {
+	padding-bottom: 8px;
+}
+
+@media (max-width: 992px) {
 
 	.stat-header .dash {
 		display: none;
