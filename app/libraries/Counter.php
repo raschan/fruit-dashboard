@@ -535,9 +535,20 @@ class Counter
         // select only those event types, which we show on dashboard
         $events = DB::table('events')
             ->where('user', $user->id)
-            ->whereIn('type', ['charge.succeeded', 'charge.failed', 'charge.refunded', 'customer.subscription.created','customer.subscription.updated'])
+            ->whereIn('type', ['charge.succeeded'
+                                ,'charge.failed'
+                                ,'charge.captured'
+                                ,'charge.refunded'
+                                ,'customer.created'
+                                ,'customer.deleted'
+                                ,'customer.subscription.created'
+                                ,'customer.subscription.updated'
+                                ,'customer.subscription.deleted'
+                                ,'customer.discount.created'
+                                ,'customer.discount.updated'
+                                ,'customer.discount.deleted'])
             ->orderBy('created', 'desc')
-            ->take(20)
+            //->take(20)
             ->get();
 
 
