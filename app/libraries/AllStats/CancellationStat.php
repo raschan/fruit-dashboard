@@ -23,6 +23,9 @@ class CancellationStat extends BaseStat {
         	$cancellationData = self::showSimpleStat();
         }
 
+        // positive value is not good variable, for front end colors
+        $cancellationData['positiveIsGood'] = false;
+
     	return $cancellationData;
 	}
 

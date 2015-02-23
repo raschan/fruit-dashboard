@@ -25,6 +25,7 @@ class BaseStat
         // basics, what we are
         $data['id'] = self::$statID;
         $data['statName'] = self::$statName;
+        $data['positiveIsGood'] = true;
 
         // building history array for dashboard
         for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {

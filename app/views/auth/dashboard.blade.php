@@ -20,10 +20,18 @@
               <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
               <div class="chart-text-left"> 
                 @if($allFunctions[$i]['currentValue'])
-                  @if(!str_contains($allFunctions[$i]['currentValue'],'-'))
-                    <span class="text-money up">
+                  @if($allFunctions[$i]['positiveIsGood'])
+                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $allFunctions[$i]['currentValue'] }}
                 @else
@@ -34,10 +42,18 @@
               </div>
               <div class="chart-text-right">
                 @if($allFunctions[$i]['oneMonthChange'])
-                  @if(!str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @if($allFunctions[$i]['positiveIsGood'])
+                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @else
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @endif
                   @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
                   @endif
                   {{ $allFunctions[$i]['oneMonthChange'] }}
                   </span>
@@ -178,7 +194,6 @@
                     <!-- NEEDS FIXING!!!!!! -->
 
                     </span>
-                    @endif
                   </li> <!-- / .list-group-item -->
                 @endif
                 
