@@ -103,6 +103,26 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
+                @if ($events[$i]['type'] == 'charge.captured')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Captured
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>
+                    <span class="text-money up">
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
                 @if ($events[$i]['type'] == 'charge.failed')
                   <li class="list-group-item">
                     <span class="badge badge-danger">
@@ -145,7 +165,28 @@
 
                 <!-- / Charge events -->
 
-                <!-- Subscription events -->
+                <!-- Customer events -->
+                
+                @if ($events[$i]['type'] == 'customer.created')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      New Customer
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
+                    <b>{{ $events[$i]['name'] }}</b>
+                    
+                    <!-- NEEDS FIXING!!!!!! -->
+
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+                
+                <!-- / Customer events -->
+
+                <!-- Customer Subscription events -->
 
                 @if ($events[$i]['type'] == 'customer.subscription.created')
                   <li class="list-group-item">
@@ -185,7 +226,7 @@
                   </li> <!-- / .list-group-item -->
                 @endif   
 
-                <!-- / Subscription events -->
+                <!-- / Customer Subscription events -->
 
               @endfor
             @else
