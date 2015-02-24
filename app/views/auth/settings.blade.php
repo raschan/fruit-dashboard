@@ -5,14 +5,7 @@
       <div class="page-header text-center">
         <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
       </div> <!-- / .page-header -->
-<!-- 
-    {{ $errors->first('email') }}
-         {{ var_dump($errors) }}
-        @foreach ($errors->all() as $error)
-        <div>hello</div>
-          <div>{{ $error }}</div>
-        
-        @endforeach -->
+
       <div class="col-md-10 col-md-offset-1">
 
         <!-- Account settings -->
@@ -170,6 +163,9 @@
             <div class="panel-body bordered sameHeight">
               <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Select a service to connect</h4>
               <div class="list-group">
+                
+              {{-- 
+                <!-- hidden for development, will not be rendered on client side -->   
                 <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">PayPal</h4>
@@ -181,6 +177,9 @@
                     @endif
                   </p>
                 </a> <!-- / .list-group-item -->
+                <!-- / hidden for development, will not be rendered on client side -->
+              --}}   
+
                 <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
