@@ -286,6 +286,10 @@
             </div> <!-- /.statistic-description  -->
         </div> <!-- /.row -->
 
+      {{--    
+
+        <!-- hidden for development, will not be rendered on client side -->        
+  
         <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
@@ -360,6 +364,11 @@
             </div>
           </div> <!-- / .invoice-table -->
         </div> <!-- /. row -->
+        
+        <!-- / hidden for development, will not be rendered on client side -->    
+         
+      --}}
+      
       </div> <!-- . col-md-12 -->
     </div> <!-- / #content-wrapper -->
   @stop

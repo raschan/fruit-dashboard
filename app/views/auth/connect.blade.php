@@ -8,6 +8,8 @@
 
       <div class="col-md-10 col-md-offset-1">
 
+      {{-- 
+        <!-- hidden for development, will not be rendered on client side -->   
         <!-- PayPal connect-->
 
         <div class="row">
@@ -42,6 +44,8 @@
         </div> <!-- /. row -->
 
         <!-- /PayPal connect-->
+        <!-- / hidden for development, will not be rendered on client side -->   
+      --}}
 
         <!-- Stripe connect -->
         <div class="row">
