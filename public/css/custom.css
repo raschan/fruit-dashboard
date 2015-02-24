@@ -68,6 +68,26 @@
 	color: #000;
 }
 
+/* Demo pages */
+
+.demo-link {
+	font-weight: 700;
+	color: #fff;
+	text-shadow: 0 1px 0 rgba(0,0,0,.2);
+	background: 0 0;
+	background-image: -webkit-gradient(linear,0 100%,100% 0,color-stop(0.25,rgba(255,255,255,.06)),color-stop(0.25,transparent),color-stop(0.5,transparent),color-stop(0.5,rgba(255,255,255,.06)),color-stop(0.75,rgba(255,255,255,.06)),color-stop(0.75,transparent),to(transparent));
+	background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.06)25%,transparent 25%,transparent 50%,rgba(255,255,255,.06)50%,rgba(255,255,255,.06)75%,transparent 75%,transparent);
+	background-image: -moz-linear-gradient(45deg,rgba(255,255,255,.06)25%,transparent 25%,transparent 50%,rgba(255,255,255,.06)50%,rgba(255,255,255,.06)75%,transparent 75%,transparent);
+	background-image: linear-gradient(45deg,rgba(255,255,255,.06)25%,transparent 25%,transparent 50%,rgba(255,255,255,.06)50%,rgba(255,255,255,.06)75%,transparent 75%,transparent);
+	background-size: 20px 20px;
+	text-decoration: underline;
+	transition: all .3s;
+}
+.demo-link:hover,
+.demo-link:focus {
+	color: #f2f2f2;
+}
+
 /* ALL PAGES */
 
 /* growl */

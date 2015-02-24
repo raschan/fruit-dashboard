@@ -105,7 +105,8 @@
                     {{ Form::label('id_passwordedit', 'Password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      <p class="form-control-static">********
+                      <p class="form-control-static">
+                        <span>********</span>
                         <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
                       </p>
                     </div>

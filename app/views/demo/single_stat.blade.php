@@ -60,7 +60,7 @@
 
       <div id="pa-page-alerts-box">
         <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
-          <button type="button" class="close">×</button><strong>Demo site!</strong> Needs text.
+          <button type="button" class="close">×</button><strong>This is a demo site.</strong>&nbsp;<a href="{{ URL::route('auth.signup') }}" class="demo-link">Sign up now!</a>
         </div>
       </div>
 
