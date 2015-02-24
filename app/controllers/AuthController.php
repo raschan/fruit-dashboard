@@ -175,77 +175,130 @@ class AuthController extends BaseController
     | <POST> | doSettings: updates user data
     |===================================================
     */
-    public function doSettings()
+    public function doSettingsName()
     {
         // Validation rules
         $rules = array(
-            'email' => 'required_with:password|email',
-            'password' => 'required_with:email|min:4',
-            'oldpassword' => 'required_with: newpassword1, newpassword2|required_with:newpassword1|required_with:newpassword2|min:4',
-            'newpassword1' => 'required_with: oldpassword, newpassword2|required_with:oldpassword|required_with:newpassword2|min:4',
-            'newpassword2' => 'required_with: oldpassword, newpassword1|required_with:oldpassword|required_with:newpassword1|min:4',
-        );
+            'name' => 'requiredemail_|unique:users,name',
+            'name_password' => 'required|min:4',
+            );
         // run the validation rules on the inputs
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
-            return Redirect::route('auth.settings')
+            return Redirect::to('/settings')
                 ->withErrors($validator) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success -> edit_profile
             // selecting logged in user
             $user = Auth::user();
-            // checking actions and updating data
-            // checking if submitted email has registered user
-            $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
-            // if we do not have data in the email form
-            // and validator has no errors, then password change
-            if (Input::has('password')){
-                // if email is not registered
-                if (is_null($user_to_check)) {
-                    // we have valid email, we need to check password
-                    if (Hash::check(Input::get('password'), $user->password)){
-                        $user->email = Input::get('email');
-                    }
-                    else {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'The password you entered is incorrect.') // send back errors
-                            ->withInput(); // sending back data
-                    }
-                } else {
-                    // if email is registered and changed
-                    if ($user->email != Input::get('email')) {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'This email is already registered.') // send back errors
-                            ->withInput(); // sending back data
-                    }
-                }
-            }
-            // validator has no errors, and password field is not empty
-            // email change
-            else {
-                // if we have data from the password change form
-                // checking if old password is the old password
-                if (Hash::check(Input::get('oldpassword'), $user->password)){
-                    // if new passwords are the same
-                    if (Input::get('newpassword1') === Input::get('newpassword2')){
-                        $user->password = Hash::make(Input::get('newpassword1'));
-                    }
-                    else {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'The new passwords you entered do not match.'); // send back errors
-                    }
-                }
-                else {
-                    return Redirect::route('auth.settings')
-                        ->with('error', 'The old password you entered is incorrect.'); // send back errors
-                }  
+            
+            // we need to check the password
+            if (Hash::check(Input::get('name_password'), $user->password)){
+                $user->name = Input::get('name');
             }
                 
             $user->save();
             // setting data
-            return Redirect::route('auth.settings')
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsCountry()
+    {
+        // Validation rules
+        $rules = array(
+            'country' => 'required',
+            );
+
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::to('/settings')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+
+            // selecting logged in user
+            $user = Auth::user();
+            // if we have zoneinfo
+            // changing zoneinfo
+            $user->zoneinfo = Input::get('country');
+            // saving user
+            $user->save();
+
+            // redirect to settings
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsEmail()
+    {
+        // Validation rules
+        $rules = array(
+            'email' => 'required|unique:users,email|email',
+            'email_password' => 'required|min:4',
+            );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::to('/settings')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // validator success -> edit_profile
+            // selecting logged in user
+            $user = Auth::user();
+            
+            // we need to check the password
+            if (Hash::check(Input::get('email_password'), $user->password)){
+                $user->email = Input::get('email');
+            }
+                
+            $user->save();
+            // setting data
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsPassword()
+    {
+        // Validation rules
+        $rules = array(
+            'old_password' => 'required|min:4',
+            'new_password' => 'required|confirmed|min:4',
+        );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            return Redirect::to('/settings')
+                ->withErrors($validator) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // validator success -> edit_profile
+            // selecting logged in user
+            $user = Auth::user();
+            
+            // if we have data from the password change form
+            // checking if old password is the old password
+            if (Hash::check(Input::get('old_password'), $user->password)){
+                $user->password = Hash::make(Input::get('new_password'));
+            }
+            else {
+                return Redirect::to('/settings')
+                    ->with('error', 'The old password you entered is incorrect.'); // send back errors
+            }  
+                
+            $user->save();
+            // setting data
+            return Redirect::to('/settings')
                 ->with('success', 'Edit was successful.');
         }
     }

@@ -117,10 +117,24 @@ Route::get('settings', array(
     'uses' => 'AuthController@showSettings'
 ));
 
-Route::post('settings', array(
+Route::post('settingsName', array(
     'before' => 'auth',
-    'as' => 'auth.settings',
-    'uses' => 'AuthController@doSettings'
+    'uses' => 'AuthController@doSettingsName'
+));
+
+Route::post('settingsCountry', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsCountry'
+));
+
+Route::post('settingsEmail', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsEmail'
+));
+
+Route::post('settingsPassword', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsPassword'
 ));
 
 // connect routes
