@@ -23,7 +23,7 @@ class CancellationStat extends BaseStat {
         	$cancellationData = self::showSimpleStat();
         }
 
-        // positive value is not good variable, for front end colors
+        // positiveIsGood, for front end colors
         $cancellationData['positiveIsGood'] = false;
 
     	return $cancellationData;
@@ -135,6 +135,9 @@ class CancellationStat extends BaseStat {
             $data['oneMonthChange'] = null;
         }
 
+        // positiveIsGood, for front end colors
+        $data['positiveIsGood'] = false;
+
         return $data;
 
     }
@@ -234,6 +237,9 @@ class CancellationStat extends BaseStat {
             'startDate' => $startDate,
             'stopDate' => $stopDate
         );
+
+        // positiveIsGood, for front end colors
+        $data['positiveIsGood'] = false;
 
         return $data;
     }
