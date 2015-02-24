@@ -498,28 +498,35 @@ class Counter
     {
         $savedObjects = 0;
         $eventsToSave = TailoredData::getEvents($user);
-        foreach ($eventsToSave as $id => $event) {
 
-            // check, if we already saved this event
-            $hasEvent = DB::table('events')
-            ->where('eventID',$id)
-            ->where('user', $user->id)
-            ->get();
+        if(!$eventsToSave)
+        {
+            return $savedObjects;
+        } else {
 
-            // if we dont already have that event
-            if(!$hasEvent)
-            {
-                $savedObjects++;
-                DB::table('events')->insert(
-                    array(
-                        'created'   => date('Y-m-d H:i:s',$event['created']),
-                        'user'      => $user->id,
-                        'provider'  => $event['provider'],
-                        'eventID'   => $id,
-                        'type'      => $event['type'],
-                        'object'    => json_encode($event['object'])
-                    )
-                );
+            foreach ($eventsToSave as $id => $event) {
+
+                // check, if we already saved this event
+                $hasEvent = DB::table('events')
+                ->where('eventID',$id)
+                ->where('user', $user->id)
+                ->get();
+
+                // if we dont already have that event
+                if(!$hasEvent)
+                {
+                    $savedObjects++;
+                    DB::table('events')->insert(
+                        array(
+                            'created'   => date('Y-m-d H:i:s',$event['created']),
+                            'user'      => $user->id,
+                            'provider'  => $event['provider'],
+                            'eventID'   => $id,
+                            'type'      => $event['type'],
+                            'object'    => json_encode($event['object'])
+                        )
+                    );
+                }
             }
         }
         return $savedObjects;

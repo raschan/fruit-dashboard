@@ -75,7 +75,7 @@ class StripeHelper
         $foundLatestEvent = false;
 
         $latestEvent = DB::table('events')
-            ->where('user', Auth::user()->id)
+            ->where('user', $user->id)
             ->where('provider', 'stripe')
             ->orderBy('created','desc')
             ->take(2)
@@ -83,11 +83,8 @@ class StripeHelper
         
         $last_obj = null;
 
-        $count = 0;
-
         // continue request as long as there is more AND we don't already have it
         while ($has_more && !$foundLatestEvent) {
-            $count++;
             // trying to avoid overflow
             $previous_last_obj = $last_obj;
 
