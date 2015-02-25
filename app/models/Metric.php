@@ -2,17 +2,22 @@
 
 class Metric extends Eloquent
 {
-	public function calculateMetrics($user) {
+	
 
-		// calculate all the metrics
-			// monthly recurring revenue
-			// active users
-			// annual recurring revenue
-			// average recurring revenue per active user
-			// cancellations
-			// cumulative cancellations
-			// user chuen
+	// first time calculator - called once per user
+	// can be a long running method
+	public function calculateMetricsOnConnect() {
+		// request events
+		// request plans and subscription infos (alternativly, customers)
+		// calculate today's mrr and au
+		// reverse calculate from events
+			// save daily cancellations
+
+		// calculate arr, arpu, monthly cancellations, uc  
 	}
+
+	// showMetric methods
+
 }
 
 ?>

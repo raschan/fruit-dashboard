@@ -32,7 +32,7 @@ class DemoController extends BaseController
                         CancellationStat::showCancellation(),
                         UserChurnStat::showUserChurn()
                     ),
-                    'events' => Counter::formatEvents(Auth::user()),
+                    'events' => Calculator::formatEvents(Auth::user()),
                     Auth::logout()
                 )
             );

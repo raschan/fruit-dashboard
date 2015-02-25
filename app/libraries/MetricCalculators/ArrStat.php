@@ -1,14 +1,26 @@
 <?php
 
-	/**
-    * Prepare ARR for statistics
+class ArrStat extends BaseStat {
+    
+    /**
+    * calculate today's ARR from today's MRR
     *
-    * @return array
+    * @param today's MRR
+    *
+    * @return int
     */
 
-class ArrStat extends BaseStat {
+    public static function calculate($mrr)
+    {
+        return $mrr * 12;
+    }
 
-	/**
+
+    
+
+
+
+    /**
     * Prepare ARR for statistics
     *
     * @param boolean
@@ -38,7 +50,7 @@ class ArrStat extends BaseStat {
             }
 
             // data for single stat table
-            $arrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+            $arrData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
 
         } else {
             $arrData = self::showSimpleStat();

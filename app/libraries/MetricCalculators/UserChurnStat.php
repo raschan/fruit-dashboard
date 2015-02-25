@@ -2,6 +2,33 @@
 
 class UserChurnStat extends BaseStat {
 
+    /**
+    * calculate today's UC from today's monthly cancellations, and 30 days ago AU
+    *
+    * @param today's montly cancellations
+    * @param user
+    * @param today's timestamp
+    *
+    * @return floar
+    */
+
+    public static function calculate($mC,$user,$timestamp)
+    {
+        // return value
+        $returnValue = 0;
+
+        // get AU 30 days ago
+        $metrics = Metric::where('user', $user->id)
+                    ->where('date', date('Y-m-d', $timestamp - 30 * 86400))
+                    ->get();
+
+        // calculate UC
+        $returnValue = $mC / $metrics[0]->au * 100;
+
+        return $returnValue;
+    }
+
+
 	public static function showUserChurn ($fullDataNeeded = false)
 	{
 		self::$statID = 'uc';
@@ -12,7 +39,7 @@ class UserChurnStat extends BaseStat {
 		if($fullDataNeeded)
 		{
 			$userChurnData = self::showFullStat();
-			$userChurnData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+			$userChurnData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
 		} else {
 			$userChurnData = self::showSimpleStat();
 		}

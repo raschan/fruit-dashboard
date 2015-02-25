@@ -32,9 +32,9 @@ class HelloController extends BaseController
     public function showStripe()
     {
         //TEMPORARY SOLUTION!!!!
-        Counter::saveMRR(Auth::user());
-        Counter::saveCancellations(Auth::user());
-        Counter::saveAU(Auth::user());
+        Calculator::saveMRR(Auth::user());
+        Calculator::saveCancellations(Auth::user());
+        Calculator::saveAU(Auth::user());
         
         setlocale(LC_MONETARY,"en_US");
 
@@ -178,9 +178,9 @@ class HelloController extends BaseController
     {
 
         $timeItStarts = time();
-        $savedObjects = Counter::saveEvents(Auth::user());
+        $savedObjects = Calculator::saveEvents(Auth::user());
 
-        Counter::saveCancellations(Auth::user());
+        Calculator::saveCancellations(Auth::user());
         $timeItFinishes = time();
 
         return View::make('dev.rashan',array(

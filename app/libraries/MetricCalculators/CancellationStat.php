@@ -3,6 +3,54 @@
 
 class CancellationStat extends BaseStat {
 
+    /**
+    * calculate today's Cancellations from today's changes
+    * relevant changes:
+    *   - customer deleted
+    *
+    * @param today's changes
+    * @param user for monthly value
+    *
+    * @return int
+    */
+
+    public static function calculate($events,$user)
+    {
+        // return values
+        $dailyValue = 0;
+        $monthlyValue = 0;
+
+
+
+        // lets get the daily cancellations
+        // for every event
+        foreach ($events as $event) {
+
+            // if its a subscription cancellation event, count it
+            if($event->type == 'customer.subscription.deleted')
+            {
+                $dailyValue++;
+            }
+        }
+        // lets count the previous 30 days cancellations
+        $metrics = Metric::where('user', $user->id)
+                            ->orderBy('date', 'desc')
+                            ->take(29);
+        // lets count them
+        foreach ($metrics as $metric) 
+        {
+            $monthlyValue += $metric->dailyCancellations;
+        }
+
+        // add todays value
+        $monthlyValue += $dailyValue;
+
+        // return the values
+        return array($dailyValue,$monthlyValue);
+
+    }
+
+
 
 	public static function showCancellation($fullDataNeeded = false)
 	{
@@ -17,7 +65,7 @@ class CancellationStat extends BaseStat {
             $cancellationData = self::showFullStat();
 
             // data for single stat table
-            $cancellationData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+            $cancellationData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
 
         } else {
         	$cancellationData = self::showSimpleStat();

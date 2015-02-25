@@ -4,6 +4,22 @@
 class ArpuStat extends BaseStat {
 
     /**
+    * calculate today's ARPU from today's MRR and AU
+    *
+    * @param today's MRR
+    * @param today's AU
+    *
+    * @return int
+    */
+
+    public static function calculate($mrr, $au)
+    {
+        return round($mrr / $au);
+    }
+
+
+
+    /**
     * Prepare ARPU for statistics
     *
     * @param boolean
@@ -32,7 +48,7 @@ class ArpuStat extends BaseStat {
             }
 
             // get all the plans details
-            $arpuData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+            $arpuData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
         } else {
         	$arpuData = self::showSimpleStat();
         }
