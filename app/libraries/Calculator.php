@@ -2,8 +2,106 @@
 
 
 
-class Counter
+class Calculator
 {
+
+    /** 
+    * daily metric calculator - called from cron script
+    * @param $user
+    * 
+    * @return null
+    */
+
+    public static function calculateMetrics($user) {
+
+        // get needed time vars
+        $timestamp = time();
+        $today = date('Y-m-d', $timestamp);
+        $yesterday = date('Y-m-d', $timestamp - 86400);
+
+        // check, if we already have todays metrics
+        $metrics = Metrics::where('user',$user->id)
+                    ->where('date',$today)
+                    ->get();
+        // create metrics object, if it doesn't exist
+        if(!$metrics)
+        {
+            $metrics = new Metrics;
+        }
+
+        // get yesterday's metrics
+        $yesterdayMetric = Metrics::where('user', $user->id)
+                    ->where('date', $yesterday)
+                    ->get();
+        // get today's events
+        $events = Event::where('user', $user->id)
+                    ->where('date', $today)
+                    ->get();
+        // events have a provider, needs merging
+        // FIXME!!!!
+
+
+        // calculate all the metrics
+
+        // monthly recurring revenue
+            // return int
+        $metrics->mrr = MrrStat::calculate($yesterdayMetric->mrr, $events);
+
+        // active users
+            // return int
+        $metrics->au = AUStat::calculate($yesterdayMetric->au, $events);   
+        
+        // annual recurring revenue
+            // return int
+        $metrics->arr = ArrStat::calculate($metrics->mrr);
+
+        // average recurring revenue per active user
+            // return int
+        $metrics->arpu = ArpuStat::calculate($metrics->mrr, $metrics->au);
+        
+        // daily and monthly cancellations
+            // return array
+        list($daily, $monthly) = Cancellations::calculate($events,$user);
+        $metrics->dailyCancellations = $daily;
+        $metrics->monthlyCancellations = $monthly;
+
+        // user churn
+            // return float
+        $metrics->uc = UserChurnStat::calculate($metric->monthlyCancellations,$user,$today);
+        
+        // save everything
+        $metrics->save();
+    }
+
+    /**
+    * helper function for calculationg MRR
+    * @param plan array
+    *
+    * @return int, contribution to MRR
+    */
+
+    public static function getMRRContribution($plan)
+    {
+        // check all possible intervals, and return the correct amount
+
+        switch ($plan['interval']) {
+
+            case 'day':
+                return $plan['amount'] * 30;        // average days in a month
+
+            case 'week':
+                return $plan['amount'] * 4;         // average weeks in a month
+            
+            case 'month':
+                return $plan['amount'];             // basic amount
+
+            case 'year':
+                return round($plan['amount'] / 12); // rebased for a month
+
+            default:
+                return null;                        // should never ever return this, its a major fault at provider
+        }
+    }
 
     /*
     |--------------------------------------------------------------
@@ -518,12 +616,16 @@ class Counter
                     $savedObjects++;
                     DB::table('events')->insert(
                         array(
-                            'created'   => date('Y-m-d H:i:s',$event['created']),
-                            'user'      => $user->id,
-                            'provider'  => $event['provider'],
-                            'eventID'   => $id,
-                            'type'      => $event['type'],
-                            'object'    => json_encode($event['object'])
+                            'created'               => date('Y-m-d H:i:s',$event['created']),
+                            'date'                  => date('Y-m-d', $event['created']),
+                            'user'                  => $user->id,
+                            'provider'              => $event['provider'],
+                            'eventID'               => $id,
+                            'type'                  => $event['type'],
+                            'object'                => json_encode($event['data']['object']),
+                            'previousAttributes'    => isset($event['data']['previous_attributes']) 
+                                                        ? json_encode($event['data']['previous_attributes']) 
+                                                        : null
                         )
                     );
                 }
@@ -653,9 +755,6 @@ class Counter
 
                 }
 
-            }
-            elseif ($event->provider == 'paypal'){
-                // paypal formatter
             }
             $i++;
         }

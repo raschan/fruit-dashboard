@@ -5,6 +5,7 @@
 | Dev routes (these routes are for testing API-s only)
 |--------------------------------------------------------------------------
 */
+
 Route::get('/rashan', array(
     'before' => 'auth|api_key',
     'as' => 'dev.rashan',
@@ -37,30 +38,6 @@ Route::get('/paypal', array(
     'before' => 'auth|api_key',
     'as' => 'dev.paypal',
     'uses' => 'HelloController@showPaypal'
-));
-
-Route::get('/paypal/buildToken', array(
-    'before' => 'auth',
-    'as' => 'paypal.buildToken',
-    'uses' => 'PaypalController@createRefreshToken'
-));
-
-Route::get('/paypal/createplan', array(
-    'before' => 'auth|api_key',
-    'as' => 'paypal.createPlan',
-    'uses' => 'PaypalController@showCreatePlan'
-));
-
-Route::post('/paypal/createplan', array(
-    'before' => 'auth|api_key',
-    'as' => 'paypal.createPlan',
-    'uses' => 'PaypalController@doCreatePlan'
-));
-
-Route::get('/paypal/deleteplan/{id}', array(
-    'before' => 'auth|api_key',
-    'as' => 'paypal.deleteplan',
-    'uses' => 'PaypalController@doDeletePlan'
 ));
 
 
@@ -182,34 +159,10 @@ Route::post('addkey', array(
 
 /*
 |--------------------------------------------------------------------------
-| Paypal Routes
-|--------------------------------------------------------------------------
-*/
-
-// get paypal information
-Route::get('paypalinformation', array(
-    'before' => 'auth',
-    'as' => 'dev.paypalinfo',
-    'uses' => 'PaypalController@showPaypalInfo'
-));
-
-// go to paypal login
-Route::get('paypallogin', array(
-    'as' => 'dev.paypallogin',
-    'uses' => 'PaypalController@loginWithPaypal'
-));
-
-// get paypal user information
-Route::get('paypaluserinfo', array(
-    'as' => 'dev.paypaluserinfo',
-    'uses' => 'PaypalController@showUserInfo'
-));
-
-/*
-|--------------------------------------------------------------------------
 | demo Routes
 |--------------------------------------------------------------------------
 */
+
 // single_stat
 Route::get('demo/statistics/{statID}', array(
     'as' => 'demo.single_stat',

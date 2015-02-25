@@ -139,7 +139,7 @@ class StripeHelper
                         array(
                             'created'   => $event['created'],
                             'type'      => $event['type'],
-                            'object'    => $event['data']['object'],
+                            'data'      => $event['data'],
                             'provider'  => 'stripe'
                         );
                     $last_obj = $event['id'];
