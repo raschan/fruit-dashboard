@@ -49,9 +49,10 @@
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
-                      'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelName">Cancel</button>
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat')) }}
                   </div>
 
                 </div>
@@ -97,9 +98,10 @@
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
-                      'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelCountry">Cancel</button> 
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat')) }} 
                   </div>
 
                 </div>
@@ -150,7 +152,8 @@
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelEmail">Cancel</button>  
+                    {{ Form::submit('Save', array(
                       'id' => 'id_submit',
                       'class' => 'btn btn-primary btn-sm btn-flat')) }}
                   </div>
@@ -214,9 +217,11 @@
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
-                      'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelPassword">Cancel</button>  
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                    
                   </div>
 
                 </div>
@@ -326,6 +331,28 @@
       $('#editPassword').on('click', function (){
         $('#editPasswordForm').slideUp('fast', function (){
           $('#changePasswordForm').slideDown('fast');
+        });
+      })
+
+      // event listeners for cancel buttons
+      $('#cancelName').on('click', function (){
+        $('#changeNameForm').slideUp('fast', function (){
+          $('#editNameForm').slideDown('fast');
+        });
+      })
+      $('#cancelCountry').on('click', function (){
+        $('#changeCountryForm').slideUp('fast', function (){
+          $('#editCountryForm').slideDown('fast');
+        });
+      })
+      $('#cancelEmail').on('click', function (){
+        $('#changeEmailForm').slideUp('fast', function (){
+          $('#editEmailForm').slideDown('fast');
+        });
+      })
+      $('#cancelPassword').on('click', function (){
+        $('#changePasswordForm').slideUp('fast', function (){
+          $('#editPasswordForm').slideDown('fast');
         });
       })
     });
