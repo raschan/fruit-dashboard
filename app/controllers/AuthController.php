@@ -179,8 +179,7 @@ class AuthController extends BaseController
     {
         // Validation rules
         $rules = array(
-            'name' => 'requiredemail_|unique:users,name',
-            'name_password' => 'required|min:4',
+            'name' => 'required|unique:users,name',
             );
         // run the validation rules on the inputs
         $validator = Validator::make(Input::all(), $rules);
@@ -192,12 +191,9 @@ class AuthController extends BaseController
         } else {
             // validator success -> edit_profile
             // selecting logged in user
-            $user = Auth::user();
+            $user = Auth::user(); 
             
-            // we need to check the password
-            if (Hash::check(Input::get('name_password'), $user->password)){
-                $user->name = Input::get('name');
-            }
+            $user->name = Input::get('name');
                 
             $user->save();
             // setting data

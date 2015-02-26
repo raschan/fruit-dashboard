@@ -48,16 +48,6 @@
                     </div>
                   </div> <!-- / .form-group -->
 
-                  <div class="form-group @if ($errors->first('name_password')) has-error @endif">
-                    {{ Form::label('id_name_password', 'Your password', array(
-                      'class' => 'col-sm-4 control-label')) }}
-                    <div class="col-sm-8">
-                      {{ Form::password('name_password', array(
-                        'id' => 'id_name_password',
-                        'class' => 'form-control')) }}
-                    </div>
-                  </div> <!-- / .form-group -->
-
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
                   {{ Form::submit('Save', array(
                       'id' => 'id_submit',
