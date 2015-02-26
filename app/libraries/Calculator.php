@@ -1,6 +1,6 @@
 <?php
 
-
+use Abf\Event;
 
 class Calculator
 {
@@ -20,17 +20,17 @@ class Calculator
         $yesterday = date('Y-m-d', $timestamp - 86400);
 
         // check, if we already have todays metrics
-        $metrics = Metrics::where('user',$user->id)
+        $metrics = Metric::where('user',$user->id)
                     ->where('date',$today)
                     ->get();
         // create metrics object, if it doesn't exist
         if(!$metrics)
         {
-            $metrics = new Metrics;
+            $metrics = new Metric;
         }
 
         // get yesterday's metrics
-        $yesterdayMetric = Metrics::where('user', $user->id)
+        $yesterdayMetric = Metric::where('user', $user->id)
                     ->where('date', $yesterday)
                     ->get();
         // get today's events
@@ -41,6 +41,7 @@ class Calculator
         // FIXME!!!!
 
 
+        
         // calculate all the metrics
 
         // monthly recurring revenue
@@ -72,6 +73,36 @@ class Calculator
         // save everything
         $metrics->save();
     }
+
+
+    /** 
+    * first time metric calculator - called on connect
+    * calculates metrics in the past
+    * can be a long running method
+    * @param $user
+    * 
+    * @return null
+    */
+
+    public function calculateMetricsOnConnect() {
+        // request events
+        self::saveEvents($user);
+
+        // request plans and subscription infos (alternativly, customers)
+        $customers = TailoredData::getCustomers($user);
+
+        $metric = new Metric;
+        // calculate today's mrr and au
+        $metric->au = count($customers);
+        $metric->mrr = MrrStat::calculateFirstTime($customers);
+        // reverse calculate from events
+
+
+            // save daily cancellations
+
+        // calculate arr, arpu, monthly cancellations, uc  
+    }
+
 
     /**
     * helper function for calculationg MRR
@@ -594,44 +625,29 @@ class Calculator
 
     public static function saveEvents($user)
     {
-        $savedObjects = 0;
         $eventsToSave = TailoredData::getEvents($user);
 
-        if(!$eventsToSave)
+        if($eventsToSave)
         {
-            return $savedObjects;
-        } else {
-
             foreach ($eventsToSave as $id => $event) {
-
                 // check, if we already saved this event
-                $hasEvent = DB::table('events')
-                ->where('eventID',$id)
-                ->where('user', $user->id)
-                ->get();
+                $newEvent = Event::firstOrNew(array(
+                        'date'      => date('Y-m-d', $event['created']),
+                        'eventID'   => $id
+                    )
+                );
 
-                // if we dont already have that event
-                if(!$hasEvent)
-                {
-                    $savedObjects++;
-                    DB::table('events')->insert(
-                        array(
-                            'created'               => date('Y-m-d H:i:s',$event['created']),
-                            'date'                  => date('Y-m-d', $event['created']),
-                            'user'                  => $user->id,
-                            'provider'              => $event['provider'],
-                            'eventID'               => $id,
-                            'type'                  => $event['type'],
-                            'object'                => json_encode($event['data']['object']),
-                            'previousAttributes'    => isset($event['data']['previous_attributes']) 
-                                                        ? json_encode($event['data']['previous_attributes']) 
-                                                        : null
-                        )
-                    );
-                }
+                $newEvent->user                 = intval($user->id);
+                $newEvent->created              = date('Y-m-d H:i:s', $event['created']);
+                $newEvent->provider             = $event['provider'];
+                $newEvent->type                 = $event['type'];
+                $newEvent->object               = json_encode($event['data']['object']);
+                $newEvent->previousAttributes   = isset($event['data']['previous_attributes'])
+                                                    ? json_encode($event['data']['previous_attributes'])
+                                                    : null;
+                $newEvent->save();
             }
         }
-        return $savedObjects;
     }
 
     public static function formatEvents($user)
