@@ -11,14 +11,15 @@ class MrrStat extends BaseStat {
     *
     * @param yesterday's value
     * @param today's changes
+    * @param direction of calculation (+1 forwards, -1 backwards)
     *
     * @return int
     */
 
-    public static function calculate($yesterdayMRR, $events)
+    public static function calculate($yesterdayMRR, $events, $direction = 1)
     {
         // return var
-        $todayMRR = $yesterdayMRR;
+        $currentMRR = $yesterdayMRR;
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
@@ -34,7 +35,7 @@ class MrrStat extends BaseStat {
                     {
                         // no problems here, add the contribution to yesterdayMRR
 
-                        $todayMRR += $changeValue;
+                        $currentMRR += $changeValue * $direction;
                     } else {
                         // do some error handling here
                     }
@@ -50,7 +51,7 @@ class MrrStat extends BaseStat {
                     if (!is_null($changeValue))
                     {
                         // no problems here, add the contribution to yesterdayMRR
-                        $todayMRR -= $changeValue;
+                        $currentMRR -= $changeValue * $direction;
                     } else {
                         // do some error handling here
                     }
@@ -67,7 +68,7 @@ class MrrStat extends BaseStat {
                     if (!is_null($changeValue))
                     {
                         // no problems here, decrease MRR with previous value
-                        $todayMRR -= $changeValue;
+                        $currentMRR -= $changeValue * $direction;
                     } else {
                         // do some error handling here
                     }
@@ -78,7 +79,7 @@ class MrrStat extends BaseStat {
                     if (!is_null($changeValue))
                     {
                         // no problems here, increase MRR with new value
-                        $todayMRR += $changeValue;
+                        $currentMRR += $changeValue * $direction;
                     } else {
                         // do some error handling here
                     }
@@ -89,10 +90,49 @@ class MrrStat extends BaseStat {
             } // end switch
         } // end foreach
 
-        return $todayMRR;
+        return $currentMRR;
     }
 
+    /**
+    * calculate today's MRR for the first time
+    * @param customers array
+    *
+    * @return int
+    */
 
+    public static function calculateFirstTime($customers)
+    {
+        // return value
+        $currentMRR = 0;
+
+        // go through each customer
+        foreach ($customers as $customer) {
+            // go through a customers each subscription
+            foreach ($customer['subscriptions'] as $subscription) {
+                // get the MRR contribution of the subscription, and
+                // add it to the total
+                $currentMRR += Calculator::getMRRContribution($subscription['plan']);   
+            }
+        }
+
+        return $currentMRR;
+    }
+
+    /**
+    * calculates MRR history after connection
+    * 
+    * @param yesterday's events
+    * @param today's MRR
+    *
+    * @return int
+    */
+
+    public static function calculateHistory($events, $currentMRR)
+    {
+        $yesterdayMRR = self::calculate($currentMRR, $events, -1);
+
+        return $yesterdayMRR;
+    }
 
     /**
     * Prepare MRR for statistics

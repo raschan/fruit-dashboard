@@ -31,7 +31,6 @@ class AUStat extends BaseStat {
                     // customer deleted, decrease AU
                     $todayAU--;
                     break;
-                    break;
 
                 default:
                     // do nothing

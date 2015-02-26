@@ -16,8 +16,8 @@ class CreateMetricsTable extends Migration {
 		{
 			// identification of row
 			$table->increments('id');
-			$talbe->integer('user');
-			$table->foreign('user')->references('id')->on('users')->onDelete('cascade');
+			$table->integer('user')->unsigned();
+            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
 
 			$table->date('date');
 
@@ -30,7 +30,7 @@ class CreateMetricsTable extends Migration {
 			$table->bigInteger('arpu')->unsigned();					// average recurring revenue per active user
 			$table->integer('dailyCancellations')->unsigned();		// cancellations
 			$table->integer('monthlyCancellations')->unsigned();	// cumulative cancellations (sum of last 30 days)
-			$table->decimal('uc', 5, 2);							// user churn
+			$table->decimal('uc', 5, 1);							// user churn
 
 		});
 	}

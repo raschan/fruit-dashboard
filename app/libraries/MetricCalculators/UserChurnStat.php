@@ -23,7 +23,7 @@ class UserChurnStat extends BaseStat {
                     ->get();
 
         // calculate UC
-        $returnValue = $mC / $metrics[0]->au * 100;
+        $returnValue = $metrics ? $mC / $metrics[0]->au * 100 : null;
 
         return $returnValue;
     }

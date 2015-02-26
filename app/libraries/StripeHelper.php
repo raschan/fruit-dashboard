@@ -1,5 +1,8 @@
 <?php
 
+use Stripe\Event;
+use Stripe\Stripe;
+
 class StripeHelper
 {
 
@@ -97,7 +100,7 @@ class StripeHelper
             if ($last_obj) {
 
                 // we have last obj -> starting from there
-                $returned_object = Stripe_Event::all(
+                $returned_object = Event::all(
                     array(
                         'limit'          => 50,
                         'starting_after' => $last_obj
@@ -107,7 +110,7 @@ class StripeHelper
             } else {
 
                 // starting from zero
-                $returned_object = Stripe_Event::all(
+                $returned_object = Event::all(
                     array(
                         'limit' => 100
                         )

@@ -41,9 +41,8 @@ class GetEvents extends Command {
         foreach (User::all() as $user) {
 
             // saving events
-            Counter::saveEvents($user);
+            Calculator::saveEvents($user);
 
         }
     }
-
 }
