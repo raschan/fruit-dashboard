@@ -178,14 +178,11 @@ class HelloController extends BaseController
     {
 
         $timeItStarts = time();
-        $savedObjects = Calculator::saveEvents(Auth::user());
-
-        Calculator::saveCancellations(Auth::user());
+        Calculator::calculateMetricsOnConnect();
         $timeItFinishes = time();
 
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
-                'count' => $savedObjects,
                 'timeItTakes' => $timeItFinishes - $timeItStarts
             )
         );

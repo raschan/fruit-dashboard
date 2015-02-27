@@ -2,6 +2,7 @@
 
 use Stripe\Event;
 use Stripe\Stripe;
+use Stripe\Customer;
 
 class StripeHelper
 {
@@ -231,7 +232,7 @@ class StripeHelper
         Stripe::setApiKey($key);
 
         // getting the customers
-        $returned_object = Stripe_Customer::all();
+        $returned_object = Customer::all();
 
         // extracting data
         $customers = json_decode(strstr($returned_object, '{'), true);
@@ -249,7 +250,7 @@ class StripeHelper
                 array(
                     'zombie'        => $customer['livemode'],
                     'email'         => $customer['email'],
-                    'subscriptions' => $customer['subscriptions']
+                    'subscriptions' => $customer['subscriptions']['data']
                 );
         } //foreach
 

@@ -23,9 +23,36 @@ class UserChurnStat extends BaseStat {
                     ->get();
 
         // calculate UC
-        $returnValue = $metrics ? $mC / $metrics[0]->au * 100 : null;
+        $returnValue = ($metrics && $metrics[0]->au != 0) 
+                        ? $mC / $metrics[0]->au * 100 
+                        : null;
 
         return $returnValue;
+    }
+
+    /**
+    * calculates UC history after connection
+    * 
+    * @param monthly cancellations array
+    * @param active users array
+    *
+    * @return array of int
+    */
+
+    public static function calculateHistory($mC, $au)
+    {
+        // return array
+        $historyUC = array();
+
+        foreach ($mC as $date => $cancellations) 
+        {
+            $date30DaysAgo = date('Y-m-d', strtotime($date) - 30 * 86400);
+            $historyUC[$date] = (isset($au[$date30DaysAgo]) && $au[$date30DaysAgo] != 0) 
+                                    ? $cancellations / $au[$date30DaysAgo]
+                                    : null;
+        }
+
+        return $historyUC;
     }
 
 
