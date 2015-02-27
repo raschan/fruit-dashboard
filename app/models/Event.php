@@ -1,6 +1,6 @@
 <?php
 
-namespace Abf;
+namespace Abf;		// needed because of conflicts with Laravel and Stripe
 
 use Eloquent;
 

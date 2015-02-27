@@ -1,6 +1,6 @@
 <?php
 
-use Abf\Event;
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
 class Calculator
 {
@@ -19,20 +19,25 @@ class Calculator
         $today = date('Y-m-d', $timestamp);
         $yesterday = date('Y-m-d', $timestamp - 86400);
 
-        // check, if we already have todays metrics
+        // get today's metrics
         $metrics = Metric::where('user',$user->id)
                     ->where('date',$today)
-                    ->get();
-        // create metrics object, if it doesn't exist
-        if(!$metrics)
+                    ->first();
+        // check, if querry was succesful
+        if(empty($metrics))
         {
+            // create metrics object, if it doesn't exist
             $metrics = new Metric;
+            $metrics->date = date('Y-m-d',$timestamp);
+            $metrics->user = $user->id;
         }
 
         // get yesterday's metrics
+        // this should never return an empty array
         $yesterdayMetric = Metric::where('user', $user->id)
                     ->where('date', $yesterday)
                     ->get();
+
         // get today's events
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
@@ -84,25 +89,98 @@ class Calculator
     * @return null
     */
 
-    public function calculateMetricsOnConnect() {
-        // request events
+    public static function calculateMetricsOnConnect() 
+    {
+        $timestamp = time();
+        $todayDate = date('Y-m-d', $timestamp);    
+        // get the connected use
+        $user = Auth::user();
+
+        // request and save events
         self::saveEvents($user);
+
+        // get first event date
+        $firstDate = Event::where('user', $user->id)
+                        ->orderBy('date','asc')
+                        ->first()
+                        ->date;
 
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
+        // calculate starter mrr and au
+        $starterAU = count($customers);
+        $starterMRR = MrrStat::calculateFirstTime($customers);
 
-        $metric = new Metric;
-        // calculate today's mrr and au
-        $metric->au = count($customers);
-        $metric->mrr = MrrStat::calculateFirstTime($customers);
+        
         // reverse calculate from events
+        $historyMRR = MrrStat::calculateHistory($timestamp,$user,$firstDate,$starterMRR);
+        $historyAU = AUStat::calculateHistory($timestamp,$user,$firstDate,$starterAU);
+        $historyCancellation = CancellationStat::calculateHistory($timestamp,$user,$firstDate);
+        // calculate arr, arpu, uc
+        $historyUC = UserChurnStat::calculateHistory($historyCancellation['monthly'], $historyAU);
+        $historyARR = ArrStat::calculateHistory($historyMRR);
+        $historyARPU = ArpuStat::calculateHistory($historyMRR, $historyAU);
 
+        // save all the data
+        foreach ($historyAU as $date => $au) 
+        {
+            $metrics = new Metric;
+            $metrics->user = $user->id;
+            $metrics->date = $date;
 
-            // save daily cancellations
+            $metrics->mrr = $historyMRR[$date];
+            $metrics->au = $au;
+            $metrics->arr = $historyARR[$date];
+            $metrics->arpu = $historyARPU[$date];
+            $metrics->uc = array_key_exists($date, $historyUC) ? $historyUC[$date] : null;
 
-        // calculate arr, arpu, monthly cancellations, uc  
+            $metrics->dailyCancellations = array_key_exists($date, $historyCancellation['daily']) 
+                                                ? $historyCancellation['daily'][$date]
+                                                : 0 ;
+            $metrics->monthlyCancellations = array_key_exists($date, $historyCancellation['monthly']) 
+                                                ? $historyCancellation['monthly'][$date]
+                                                : null ;
+
+            $metrics->save();
+        }
     }
 
+    /**
+    * save every event we don't have already
+    *
+    * @param user
+    *
+    * @return null
+    */
+
+    public static function saveEvents($user)
+    {
+        $eventsToSave = TailoredData::getEvents($user);
+
+        if($eventsToSave)
+        {
+            foreach ($eventsToSave as $id => $event) {
+                // check, if we already saved this event
+                $newEvent = Event::firstOrNew(array(
+                        'date'      => date('Y-m-d', $event['created']),
+                        'eventID'   => $id
+                    )
+                );
+
+                $newEvent->date                 = date('Y-m-d', $event['created']);
+                $newEvent->eventID              = $id;
+                $newEvent->user                 = intval($user->id);
+                $newEvent->created              = date('Y-m-d H:i:s', $event['created']);
+                $newEvent->provider             = $event['provider'];
+                $newEvent->type                 = $event['type'];
+                $newEvent->object               = json_encode($event['data']['object']);
+                $newEvent->previousAttributes   = isset($event['data']['previous_attributes'])
+                                                    ? json_encode($event['data']['previous_attributes'])
+                                                    : null;
+                $newEvent->save();
+            }
+        }
+    }
 
     /**
     * helper function for calculationg MRR
@@ -348,16 +426,16 @@ class Calculator
 
     public static function saveCancellations($user) 
     {
-    	$currentDay = date('Y-m-d',time());
+        $currentDay = date('Y-m-d',time());
 
-    	$currentDayCancellations = DB::table('cancellations')
-    		->where('date',$currentDay)
-    		->where('user', $user->id)
+        $currentDayCancellations = DB::table('cancellations')
+            ->where('date',$currentDay)
+            ->where('user', $user->id)
             ->get();
 
         if (!$currentDayCancellations)
         {
-        	$cancellationValue = self::getCancellations($user);
+            $cancellationValue = self::getCancellations($user);
 
             DB::table('cancellations')->insert(
                 array(
@@ -623,32 +701,6 @@ class Calculator
         return $planDetails;
     }
 
-    public static function saveEvents($user)
-    {
-        $eventsToSave = TailoredData::getEvents($user);
-
-        if($eventsToSave)
-        {
-            foreach ($eventsToSave as $id => $event) {
-                // check, if we already saved this event
-                $newEvent = Event::firstOrNew(array(
-                        'date'      => date('Y-m-d', $event['created']),
-                        'eventID'   => $id
-                    )
-                );
-
-                $newEvent->user                 = intval($user->id);
-                $newEvent->created              = date('Y-m-d H:i:s', $event['created']);
-                $newEvent->provider             = $event['provider'];
-                $newEvent->type                 = $event['type'];
-                $newEvent->object               = json_encode($event['data']['object']);
-                $newEvent->previousAttributes   = isset($event['data']['previous_attributes'])
-                                                    ? json_encode($event['data']['previous_attributes'])
-                                                    : null;
-                $newEvent->save();
-            }
-        }
-    }
 
     public static function formatEvents($user)
     {

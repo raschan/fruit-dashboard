@@ -3,9 +3,9 @@
 class ArrStat extends BaseStat {
     
     /**
-    * calculate today's ARR from today's MRR
+    * calculate current ARR from current MRR
     *
-    * @param today's MRR
+    * @param current MRR
     *
     * @return int
     */
@@ -15,8 +15,25 @@ class ArrStat extends BaseStat {
         return $mrr * 12;
     }
 
+    /**
+    * calculate past ARR from past MRR
+    *
+    * @param array of MRR
+    *
+    * @return array
+    */
 
-    
+    public static function calculateHistory($mrrArray)
+    {
+        $historyARR = array();
+
+        foreach ($mrrArray as $date => $mrr) 
+        {
+            $historyARR[$date] = self::calculate($mrr);
+        }
+
+        return $historyARR;
+    }
 
 
 

@@ -1,5 +1,7 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
+
 
 class CancellationStat extends BaseStat {
 
@@ -19,8 +21,6 @@ class CancellationStat extends BaseStat {
         // return values
         $dailyValue = 0;
         $monthlyValue = 0;
-
-
 
         // lets get the daily cancellations
         // for every event
@@ -47,9 +47,80 @@ class CancellationStat extends BaseStat {
 
         // return the values
         return array($dailyValue,$monthlyValue);
-
     }
 
+
+    /**
+    * calculates daily cancellations history after connection
+    * 
+    * @param current day's timestamp
+    * @param user
+    * @param date of first event
+    *
+    * @return array of int
+    */
+
+    public static function calculateHistory($timestamp, $user, $firstDate)
+    {
+        // return array
+        $historyCanc = array();
+
+        $events = Event::where('user', $user->id)
+                    ->get();
+        // save the first one
+        foreach ($events as $event) 
+        {
+            if(!isset($historyCanc['daily'][$event->date]))
+            {
+                // we have no data on this date yet,
+                // initialize it
+                $historyCanc['daily'][$event->date] = 0;
+            }
+            // if its a subscription cancellation event, count it
+            if($event->type == 'customer.subscription.deleted')
+            {
+                $historyCanc['daily'][$event->date]++;
+            }
+        }
+
+        $historyCanc['monthly'] = self::monthlyCancellations($historyCanc['daily']);
+
+        return $historyCanc;
+    }
+
+    /** calculates monthly cancellation history
+    * @param daily cancellations array
+    *
+    * @return array
+    */
+
+    private static function monthlyCancellations($dailyCancellations)
+    {
+        $monthlyCancellations = array();
+
+        // making sure the array is in order (newest first)
+        krsort($dailyCancellations);
+
+        $offset = 0;
+
+        foreach ($dailyCancellations as $date => $value) 
+        {
+            set_time_limit(20);
+            //get the last max 30 days
+            $last30days = array_slice($dailyCancellations, $offset, 30);
+            
+            // initialize the monthly data
+            $monthlyCancellations[$date] = 0;
+            foreach ($last30days as $cancellations) 
+            {
+                $monthlyCancellations[$date] += $cancellations;
+            }
+
+            $offset++;
+        }
+
+        return $monthlyCancellations;
+    }
 
 
 	public static function showCancellation($fullDataNeeded = false)

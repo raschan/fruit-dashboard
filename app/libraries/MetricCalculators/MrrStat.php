@@ -1,5 +1,7 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
+
 class MrrStat extends BaseStat {
 
     /**
@@ -9,17 +11,17 @@ class MrrStat extends BaseStat {
     *   - subscription cancelled
     *   - subscription updated
     *
-    * @param yesterday's value
-    * @param today's changes
+    * @param base value
+    * @param current day's changes
     * @param direction of calculation (+1 forwards, -1 backwards)
     *
     * @return int
     */
 
-    public static function calculate($yesterdayMRR, $events, $direction = 1)
+    public static function calculate($baseMRR, $events, $direction = 1)
     {
         // return var
-        $currentMRR = $yesterdayMRR;
+        $currentMRR = $baseMRR;
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
@@ -62,26 +64,30 @@ class MrrStat extends BaseStat {
                     $newValues = json_decode(strstr($event->object, '{'), true);
                     $previousValues = json_decode(strstr($event->previousAttributes, '{'), true);
 
-                    // decrease MRR with previous amount
-                    $changeValue = Calculator::getMRRContribution($previousValues['plan']);
-                    // check if there is a problem
-                    if (!is_null($changeValue))
+                    // check, if its a change in subscription, or just a renewal
+                    if(isset($previousValues['plan']))
                     {
-                        // no problems here, decrease MRR with previous value
-                        $currentMRR -= $changeValue * $direction;
-                    } else {
-                        // do some error handling here
-                    }
+                        // decrease MRR with previous amount
+                        $changeValue = Calculator::getMRRContribution($previousValues['plan']);
+                        // check if there is a problem
+                        if (!is_null($changeValue))
+                        {
+                            // no problems here, decrease MRR with previous value
+                            $currentMRR -= $changeValue * $direction;
+                        } else {
+                            // do some error handling here
+                        }
 
-                    // increase MRR with new amount
-                    $changeValue = Calculator::getMRRContribution($newValues['plan']);
-                    // check if there is a problem
-                    if (!is_null($changeValue))
-                    {
-                        // no problems here, increase MRR with new value
-                        $currentMRR += $changeValue * $direction;
-                    } else {
-                        // do some error handling here
+                        // increase MRR with new amount
+                        $changeValue = Calculator::getMRRContribution($newValues['plan']);
+                        // check if there is a problem
+                        if (!is_null($changeValue))
+                        {
+                            // no problems here, increase MRR with new value
+                            $currentMRR += $changeValue * $direction;
+                        } else {
+                            // do some error handling here
+                        }
                     }
                     break;
 
@@ -92,6 +98,8 @@ class MrrStat extends BaseStat {
 
         return $currentMRR;
     }
+
+
 
     /**
     * calculate today's MRR for the first time
@@ -121,17 +129,41 @@ class MrrStat extends BaseStat {
     /**
     * calculates MRR history after connection
     * 
-    * @param yesterday's events
-    * @param today's MRR
+    * @param current day's timestamp
+    * @param user
+    * @param date of first event
+    * @param starting point
     *
-    * @return int
+    * @return array of int
     */
 
-    public static function calculateHistory($events, $currentMRR)
+    public static function calculateHistory($timestamp, $user, $firstDate, $baseMRR)
     {
-        $yesterdayMRR = self::calculate($currentMRR, $events, -1);
+        // return array
+        $historyMRR = array();
 
-        return $yesterdayMRR;
+        // save the first one
+        $historyMRR[date('Y-m-d',$timestamp)] = $baseMRR;
+        
+        // change to yesterday
+        $timestamp -= 86400;
+
+        while ($timestamp >= strtotime($firstDate)) 
+        {
+            $currentDate = date('Y-m-d', $timestamp);
+
+            $events = Event::where('user', $user->id)
+                            ->where('date', $currentDate)
+                            ->get();
+
+            $historyMRR[$currentDate] = self::calculate($baseMRR, $events, -1);
+
+            // set the new base value
+            $baseMRR = $historyMRR[$currentDate];
+            // set the new current time
+            $timestamp -= 86400;
+        }
+        return $historyMRR;
     }
 
     /**

@@ -11,8 +11,8 @@
     <!-- Page Content -->
     <div class="container">
         <h1>Hello {{ $name }}</h1>
-        <p>I saved {{ $count }} events.
-        <br/>It took {{ date('i:s',$timeItTakes) }} to finish.
+        <p>I finished calculating your stuff.
+        <br/>It took {{ date('i:s',$timeItTakes) }}.
         <br/>You're welcome.</p>
     </div>
 </body>

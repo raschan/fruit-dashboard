@@ -14,10 +14,30 @@ class ArpuStat extends BaseStat {
 
     public static function calculate($mrr, $au)
     {
-        return round($mrr / $au);
+        $arpu = $au != 0 ? round($mrr / $au) : null;
+        return $arpu;
     }
 
+    /**
+    * calculate past ARPU from past MRR and AU
+    *
+    * @param array of MRR
+    * @param array of AU
+    *
+    * @return array
+    */
 
+    public static function calculateHistory($arrayMRR, $arrayAU)
+    {
+        $historyARPU = array();
+
+        foreach ($arrayMRR as $date => $mrr) 
+        {
+            $historyARPU[$date] = self::calculate($mrr,$arrayAU[$date]);
+        }
+
+        return $historyARPU;
+    }
 
     /**
     * Prepare ARPU for statistics
