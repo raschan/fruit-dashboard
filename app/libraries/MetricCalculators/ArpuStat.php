@@ -47,7 +47,7 @@ class ArpuStat extends BaseStat {
     * @return array
     */
 
-    public static function showARPU($fullDataNeeded = false)
+    public static function show($fullDataNeeded = false)
     {
         // defaults
         self::$statName = 'Average Revenue Per User';
@@ -66,9 +66,6 @@ class ArpuStat extends BaseStat {
                     $arpuData['fullHistory'][$date] = $value / 100;
                 }
             }
-
-            // get all the plans details
-            $arpuData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
         } else {
         	$arpuData = self::showSimpleStat();
         }

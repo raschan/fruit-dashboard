@@ -93,7 +93,7 @@ class AUStat extends BaseStat {
     * @return array
     */
 
-    public static function showAU($fullDataNeeded = false) {
+    public static function show($fullDataNeeded = false) {
         // defaults
         self::$statName = 'Active Users';
         self::$statID = 'au';
@@ -106,10 +106,6 @@ class AUStat extends BaseStat {
         if ($fullDataNeeded){
 
             $AUData = self::showFullStat();
-
-            // data for single stat table
-            $AUData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
-
         }
 
         return $AUData;

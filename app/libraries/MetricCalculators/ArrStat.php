@@ -45,7 +45,7 @@ class ArrStat extends BaseStat {
     * @return array
     */
 
-    public static function showARR($fullDataNeeded = false) {
+    public static function show($fullDataNeeded = false) {
     	// defaults
         self::$statName = 'Annual Run Rate';
         self::$statID = 'arr';
@@ -65,10 +65,6 @@ class ArrStat extends BaseStat {
                     $arrData['fullHistory'][$date] = $value / 100;
                 }
             }
-
-            // data for single stat table
-            $arrData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
-
         } else {
             $arrData = self::showSimpleStat();
         }

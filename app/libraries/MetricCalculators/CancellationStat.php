@@ -123,7 +123,7 @@ class CancellationStat extends BaseStat {
     }
 
 
-	public static function showCancellation($fullDataNeeded = false)
+	public static function show($fullDataNeeded = false)
 	{
 		// defaults
 		self::$statID = 'cancellations';
@@ -134,9 +134,6 @@ class CancellationStat extends BaseStat {
     	if ($fullDataNeeded){
 
             $cancellationData = self::showFullStat();
-
-            // data for single stat table
-            $cancellationData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
 
         } else {
         	$cancellationData = self::showSimpleStat();

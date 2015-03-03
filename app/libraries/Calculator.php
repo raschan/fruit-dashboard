@@ -704,38 +704,42 @@ class Calculator
 
     public static function formatEvents($user)
     {
-        // helpers
-        $eventArray = array();
-        $tempArray = array();
+        $eventArray = array();      // return array
+        $tempArray = array();       // helper
+        $prevTempArray = array();   // previous values
 
         // last X events from database
         // select only those event types, which we show on dashboard
-        $events = DB::table('events')
-            ->where('user', $user->id)
-            ->whereIn('type', ['charge.succeeded'
-                                ,'charge.failed'
-                                ,'charge.captured'
-                                ,'charge.refunded'
-                                ,'customer.created'
-                                ,'customer.deleted'
-                                ,'customer.subscription.created'
-                                ,'customer.subscription.updated'
-                                ,'customer.subscription.deleted'
-                                ,'customer.discount.created'
-                                ,'customer.discount.updated'
-                                ,'customer.discount.deleted'])
-            ->orderBy('created', 'desc')
-            //->take(20)
-            ->get();
+        $events = Event::where('user', $user->id)
+                ->whereIn('type', ['charge.succeeded'
+                                    ,'charge.failed'
+                                    ,'charge.captured'
+                                    ,'charge.refunded'
+                                    ,'customer.created'
+                                    ,'customer.deleted'
+                                    ,'customer.subscription.created'
+                                    ,'customer.subscription.updated'
+                                    ,'customer.subscription.deleted'
+                                    ,'customer.discount.created'
+                                    ,'customer.discount.updated'
+                                    ,'customer.discount.deleted'])
+                ->orderBy('created', 'desc')
+                //->take(20)
+                ->get();
 
 
         $i = 0;
         
-        foreach ($events as $event){
+        foreach ($events as $event)
+        {
             // if stripe event
-            if ($event->provider == 'stripe'){
+            if ($event->provider == 'stripe')
+            {
                 // decoding object
                 $tempArray = json_decode(strstr($event->object, '{'), true);
+                $prevTempArray = !is_null($event->previousAttributes)
+                                    ? json_decode(strstr($event->previousAttributes , '{'), true)
+                                    : null;
 
                 // formatting and creating data for return array
                 // type eg. 'charge.succeeded'
@@ -743,15 +747,8 @@ class Calculator
                 // provider eg. 'stripe'
                 $eventArray[$i]['provider'] = $event->provider;
                 // date eg. '02-11 20:44'
-                if (array_key_exists('created', $tempArray)){
-                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['created']);
-                }
-                elseif(array_key_exists('plan', $tempArray) && array_key_exists('created', $tempArray['plan'])){
-                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['plan']['created']);
-                }
-                else {
-                    $eventArray[$i]['date'] = null;
-                }
+                $eventArray[$i]['date'] = date('m-d H:i', strtotime($event->created));
+
                 // name eg. 'chris'
                 if (array_key_exists('card', $tempArray)){
                     if(array_key_exists('name', $tempArray['card'])){
@@ -759,15 +756,15 @@ class Calculator
                             $eventArray[$i]['name'] = $tempArray['card']['name'];
                         }
                         else {
-                            $eventArray[$i]['name'] = 'Someone';
+                            $eventArray[$i]['name'] = 'Someone1';
                         }
                     }
                     else {
-                        $eventArray[$i]['name'] = 'Someone';
+                        $eventArray[$i]['name'] = 'Someone2';
                     }
                 }
                 else {
-                    $eventArray[$i]['name'] = 'Someone';
+                    $eventArray[$i]['name'] = 'Someone3';
                 }
                 // currency
                 if (array_key_exists('currency', $tempArray)){
@@ -807,25 +804,57 @@ class Calculator
                     }
                 }
                 // plan interval
-                if (array_key_exists('plan', $tempArray)){
-                        if ($tempArray['plan']['interval'] == 'day'){
+                if (array_key_exists('plan', $tempArray))
+                {
+                switch ($tempArray['plan']['interval']) 
+                    {
+                        case 'day':
                             $eventArray[$i]['plan_interval'] = 'daily';
-                        }
-                        elseif ($tempArray['plan']['interval'] == 'month'){
-                            $eventArray[$i]['plan_interval'] = 'monthly';
-                        }
-                        elseif ($tempArray['plan']['interval'] == 'year'){
+                            break;
+                        case 'week':
+                            $eventArray[$i]['plan_interval'] = 'weekly';
+                            break;
+                        case 'month':
+                            $eventArray[$i]['plan_interval'] = 'daily';
+                            break;
+                        case 'year':
                             $eventArray[$i]['plan_interval'] = 'yearly';
-                        }
-                        else {
-                            $eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
-                        }
-
+                            break;
+                        default:
+                            // don't do anything
+                    }
                 }
-
-            }
+                // previous plan ID, name, interval and amount
+                if (!is_null($prevTempArray))
+                {
+                    if (array_key_exists('plan', $prevTempArray))
+                    {
+                        $eventArray[$i]['prevPlanID'] = $prevTempArray['plan']['id'];
+                        $eventArray[$i]['prevPlanName'] = $prevTempArray['plan']['name'];
+                        $eventArray[$i]['prevPlanAmount'] = $prevTempArray['plan']['amount'];
+    
+                        switch ($prevTempArray['plan']['interval']) 
+                        {
+                            case 'day':
+                                $eventArray[$i]['prevPlanInterval'] = 'daily';
+                                break;
+                            case 'week':
+                                $eventArray[$i]['prevPlanInterval'] = 'weekly';
+                                break;
+                            case 'month':
+                                $eventArray[$i]['prevPlanInterval'] = 'daily';
+                                break;
+                            case 'year':
+                                $eventArray[$i]['prevPlanInterval'] = 'yearly';
+                                break;
+                            default:
+                                // don't do anything}
+                        }
+                    }
+                }
+            } // end if stripe event
             $i++;
-        }
+        }// end foreach
 
             return $eventArray;
     }
@@ -842,11 +871,10 @@ class Calculator
     	$yesterDay = $currentDay - 24*60*60;
 
     	// get all the evens saying customer cancelled
-    	$events = DB::table('events')
-            ->where('user', $user->id)
-            ->whereIn('type', ['customer.subscription.deleted'])
-            ->orderBy('created', 'desc')
-            ->get();
+    	$events = Event::where('user', $user->id)
+                    ->whereIn('type', ['customer.subscription.deleted'])
+                    ->orderBy('created', 'desc')
+                    ->get();
 
         $i = 0;
 
@@ -858,6 +886,7 @@ class Calculator
         	} else {
         		$cancellations++;
         	}
+
         	$i++;
         	if (!isset($events[$i]))
         	{
@@ -866,5 +895,23 @@ class Calculator
         }
 
     	return $cancellations;
+    }
+
+    /** 
+    * Stores all the metrics we currently calculate
+    *
+    * @return assoc array of metric Classnames and column headers
+    */
+
+    public static function currentMetrics()
+    {
+        return array(
+            'mrr'               => 'MrrStat'
+            ,'au'               => 'AUStat'
+            ,'arr'              => 'ArrStat'
+            ,'arpu'             => 'ArpuStat'
+            ,'cancellations'    => 'CancellationStat'
+            ,'uc'               => 'UserChurnStat'           
+        );
     }
 }

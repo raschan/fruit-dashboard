@@ -134,18 +134,18 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        $allMetrics = array();
+        $currentMetrics = Calculator::currentMetrics();
+
+        foreach ($currentMetrics as $statID => $statClassName) {
+            $allMetrics[] = $statClassName::show();
+        }
+
         return View::make(
             'auth.dashboard',
             array(
-                'allFunctions' => array(
-                    MrrStat::showMRR(),
-                    AUStat::showAU(),
-                    ArrStat::showARR(),
-                    ArpuStat::showARPU(),
-                    CancellationStat::showCancellation(),
-                    UserChurnStat::showUserChurn()
-                ),
-                'events' => Calculator::formatEvents(Auth::user())
+                'allFunctions' => $allMetrics
+                ,'events' => Calculator::formatEvents(Auth::user())
             )
         );
     }
@@ -435,55 +435,21 @@ class AuthController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat($statID = 'mainPage')
+    public function showSinglestat($statID)
     {
-        switch($statID){
-            case 'mainPage':
+
+        $currentMetrics = Calculator::currentMetrics();
+
+        if (isset($currentMetrics[$statID]))
+        {
             return View::make('auth.single_stat',
                 array(
-                    'data' => MrrStat::showMRR(true)
+                    'data' => $currentMetrics[$statID]::show(true)
                 )
             );
-            case 'mrr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => MrrStat::showMRR(true)
-                )
-            );
-            break;
-            case 'au':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => AUStat::showAU(true)
-                )
-            );
-            case 'arr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArrStat::showARR(true)
-                )
-            );
-            case 'arpu':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArpuStat::showARPU(true)
-                )
-            );
-            case 'cancellations':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => CancellationStat::showCancellation(true)
-                )
-            );case 'uc':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => UserChurnStat::showUserChurn(true)
-                )
-            );
-            default:
-                return Redirect::route('auth.dashboard')
+        } else {
+            return Redirect::route('auth.dashboard')
                 ->with('error', 'Statistic does not exist.');
-            break;
         }
 
     }

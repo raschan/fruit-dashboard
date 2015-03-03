@@ -56,7 +56,7 @@ class UserChurnStat extends BaseStat {
     }
 
 
-	public static function showUserChurn ($fullDataNeeded = false)
+	public static function show ($fullDataNeeded = false)
 	{
 		self::$statID = 'uc';
 		self::$statName = 'User Churn';
@@ -66,7 +66,6 @@ class UserChurnStat extends BaseStat {
 		if($fullDataNeeded)
 		{
 			$userChurnData = self::showFullStat();
-			$userChurnData['detailData'] = Calculator::getSubscriptionDetails(Auth::user());
 		} else {
 			$userChurnData = self::showSimpleStat();
 		}
