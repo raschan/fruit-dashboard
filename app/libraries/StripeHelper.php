@@ -78,12 +78,10 @@ class StripeHelper
         $has_more = true;
         $foundLatestEvent = false;
 
-        $latestEvent = DB::table('events')
-            ->where('user', $user->id)
-            ->where('provider', 'stripe')
-            ->orderBy('created','desc')
-            ->take(2)
-            ->get();
+        $latestEvent = Abf\Event::where('user', $user->id)
+                        ->where('provider', 'stripe')
+                        ->orderBy('created','desc')
+                        ->first();
         
         $last_obj = null;
 
@@ -133,7 +131,7 @@ class StripeHelper
                 */
 
                 if (isset($event['data']['object']['id'])) {
-                    if ($latestEvent) {
+                    if ($latestEvent[0]) {
                         if ($event['id'] == $latestEvent[0]->eventID)
                         {
                             $foundLatestEvent = true;

@@ -225,7 +225,8 @@ class BaseStat
         }
         else {
             // needs review, so it can handle null with new users too
-            return 1388448000;
+            // for new users, firstday is today
+            return time();
         }
     }
 
