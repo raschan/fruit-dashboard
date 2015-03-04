@@ -89,12 +89,10 @@ class Calculator
     * @return null
     */
 
-    public static function calculateMetricsOnConnect() 
+    public static function calculateMetricsOnConnect($user) 
     {
         $timestamp = time();
         $todayDate = date('Y-m-d', $timestamp);    
-        // get the connected use
-        $user = Auth::user();
 
         // request and save events
         self::saveEvents($user);
@@ -124,7 +122,13 @@ class Calculator
         // save all the data
         foreach ($historyAU as $date => $au) 
         {
-            $metrics = new Metric;
+            $metrics = Metric::firstOrNew(
+                array(
+                        'date'      => $date,
+                        'user'      => $user->id
+                    )
+                );
+            var_dump($metrics);
             $metrics->user = $user->id;
             $metrics->date = $date;
 
@@ -139,7 +143,7 @@ class Calculator
                                                 : 0 ;
             $metrics->monthlyCancellations = array_key_exists($date, $historyCancellation['monthly']) 
                                                 ? $historyCancellation['monthly'][$date]
-                                                : null ;
+                                                : 0 ;
 
             $metrics->save();
         }
@@ -169,7 +173,7 @@ class Calculator
 
                 $newEvent->date                 = date('Y-m-d', $event['created']);
                 $newEvent->eventID              = $id;
-                $newEvent->user                 = intval($user->id);
+                $newEvent->user                 = $user->id;
                 $newEvent->created              = date('Y-m-d H:i:s', $event['created']);
                 $newEvent->provider             = $event['provider'];
                 $newEvent->type                 = $event['type'];

@@ -11,9 +11,7 @@
     <!-- Page Content -->
     <div class="container">
         <h1>Hello {{ $name }}</h1>
-        <p>I finished calculating your stuff.
-        <br/>It took {{ date('i:s',$timeItTakes) }}.
-        <br/>You're welcome.</p>
+        <p>I finished calculating your stuff.</p>
     </div>
 </body>
 </html>
