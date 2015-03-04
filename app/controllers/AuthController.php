@@ -135,10 +135,21 @@ class AuthController extends BaseController
     public function showDashboard()
     {
         $allMetrics = array();
+
+        // get the metrics we are calculating right now
         $currentMetrics = Calculator::currentMetrics();
 
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
         foreach ($currentMetrics as $statID => $statClassName) {
-            $allMetrics[] = $statClassName::show();
+
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$statID;
+            }
+            $allMetrics[] = $statClassName::show($metricsArray);
         }
 
         return View::make(
