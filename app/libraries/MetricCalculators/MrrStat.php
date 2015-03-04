@@ -174,7 +174,7 @@ class MrrStat extends BaseStat {
     * @return array
     */
 
-    public static function show($fullDataNeeded = false)
+    public static function show($metrics, $fullDataNeeded = false)
     {
         // defaults
         self::$statName = 'Monthly Recurring Revenue';
@@ -198,7 +198,7 @@ class MrrStat extends BaseStat {
 
             
     	} else {
-            $mrrData = self::showSimpleStat();
+            $mrrData = self::showSimpleStat($metrics);
         }
         // converting to money format
         $mrrData = self::toMoneyFormat($mrrData, $fullDataNeeded);

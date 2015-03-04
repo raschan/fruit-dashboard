@@ -12,11 +12,12 @@ class BaseStat
     * @return array
     */
 
-    public static function showSimpleStat()
+    public static function showSimpleStat($metrics)
     {
         // helpers
-        $currentDay = time();
-        $lastMonthTime = $currentDay - 30*24*60*60;
+        $currentTime = time();
+        $currentDate = date('Y-m-d', $currentTime);
+        $lastMonthDate = date('Y-m-d',$currentTime - 31*86400);
 
         // return array
         $data = array();
@@ -27,25 +28,38 @@ class BaseStat
         $data['statName'] = self::$statName;
         $data['positiveIsGood'] = true;
 
+        
+        // building history array for dashboard from values array
+
+        foreach ($metrics as $date => $metric) {
+            $data['history'][$date] = $metric;
+        }
+/*
         // building history array for dashboard
-        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
+        for ($i = $currentDate-30*86400; $i < $currentDate; $i+=86400) {
             $date = date('Y-m-d',$i);
             $data['history'][$date] = static::getStatOnDay($i);
         }
-
+*/
         // current value, formatted for money
-        $data['currentValue'] = static::getStatOnDay($currentDay);
+        $data['currentValue'] = $metrics[$currentDate];
 
-        // change in timeframe
-        $lastMonthValue = static::getStatOnDay($lastMonthTime);
-        // check if data is available, so we don't divide by null
-        if ($lastMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $lastMonthValue * 100) - 100;
-            $data['oneMonthChange'] = round($changeInPercent) . '%';
+        // change in a month
+        // check if there is enough data in the array
+        if (isset($metrics[$lastMonthDate]))
+        {
+            // check data, so we don't try to divide by zero
+            if ($metrics[$lastMonthDate] != 0)
+            {
+                $changeInPercent = ($metrics[$currentDate] / $metrics[$lastMonthDate] * 100) - 100;
+                $data['oneMonthChange'] = round($changeInPercent) . '%';
+            } else {
+                $data['oneMonthChange'] = null;
+            }
         } else {
             $data['oneMonthChange'] = null;
         }
-
+    
         return $data;
 
     }
@@ -56,7 +70,7 @@ class BaseStat
     * @return array
     */
 
-    public static function showFullStat()
+    public static function showFullStat($metrics)
     {
         // helpers
         $currentDay = time();
@@ -70,7 +84,7 @@ class BaseStat
         // return array
         $data = array();
 
-        $data = static::showSimpleStat();
+        $data = static::showSimpleStat($metrics);
 
         // building full mrr history
         $firstDay = static::getFirstDay();
