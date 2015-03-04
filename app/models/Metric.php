@@ -2,7 +2,7 @@
 
 class Metric extends Eloquent
 {
-	// showMetric methods
+	protected $fillable = array('*');
 }
 
 ?>

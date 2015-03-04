@@ -176,14 +176,15 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
+        $user = Auth::user();
+        // can't push objects to the queue, 
+        // push the ID of the user instead
+        Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
-        $timeItStarts = time();
-        Calculator::calculateMetricsOnConnect();
-        $timeItFinishes = time();
+//        Calculator::calculateMetricsOnConnect($user);
 
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
-                'timeItTakes' => $timeItFinishes - $timeItStarts
             )
         );
     }
