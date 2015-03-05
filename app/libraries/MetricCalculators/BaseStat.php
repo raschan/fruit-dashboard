@@ -42,7 +42,12 @@ class BaseStat
         }
 */
         // current value, formatted for money
-        $data['currentValue'] = $metrics[$currentDate];
+        if(isset($metrics[$currentDate]))
+        {   
+            $data['currentValue'] = $metrics[$currentDate];
+        } else {
+            $data['currentValue'] = null;
+        }
 
         // change in a month
         // check if there is enough data in the array
