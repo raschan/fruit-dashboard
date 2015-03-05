@@ -35,7 +35,8 @@ class CancellationStat extends BaseStat {
         // lets count the previous 30 days cancellations
         $metrics = Metric::where('user', $user->id)
                             ->orderBy('date', 'desc')
-                            ->take(29);
+                            ->take(29)
+                            ->get();
         // lets count them
         foreach ($metrics as $metric) 
         {
@@ -105,7 +106,6 @@ class CancellationStat extends BaseStat {
 
         foreach ($dailyCancellations as $date => $value) 
         {
-            set_time_limit(20);
             //get the last max 30 days
             $last30days = array_slice($dailyCancellations, $offset, 30);
             
@@ -123,7 +123,7 @@ class CancellationStat extends BaseStat {
     }
 
 
-	public static function show($fullDataNeeded = false)
+	public static function show($metrics, $fullDataNeeded = false)
 	{
 		// defaults
 		self::$statID = 'cancellations';
@@ -133,20 +133,39 @@ class CancellationStat extends BaseStat {
 
     	if ($fullDataNeeded){
 
-            $cancellationData = self::showFullStat();
+            $cancellationData = self::showFullStat($metrics);
 
         } else {
-        	$cancellationData = self::showSimpleStat();
+            $cancellationData = self::showSimpleStat($metrics);
         }
 
         // positiveIsGood, for front end colors
         $cancellationData['positiveIsGood'] = false;
 
-    	return $cancellationData;
-	}
+        return $cancellationData;
+    }
 
-    public static function getIndicatorStatOnDay($timestamp)
+    // temporary solution
+    public static function getStatOnDay($timestamp)
     {
+        $user = Auth::user();
+        $returnValue = Metric::where('user', $user->id)
+                        ->where('date', date('Y-m-d', $timestamp))
+                        ->first()
+                        ->cancellations;
+        return $returnValue;
+    }
+    private static function getIndicatorStatOnDay($timestamp)
+    {
+        $user = Auth::user();
+        $returnValue = Metric::where('user', $user->id)
+                        ->where('date', date('Y-m-d',$timestamp))
+                        ->first()
+                        ->monthlyCancellations;
+
+        return $returnValue;
+    }
+        /*
         $beforeValues = array();
 
         $day = date('Y-m-d', $timestamp);        
@@ -209,8 +228,7 @@ class CancellationStat extends BaseStat {
             }
         }
         return $returnValue;
-    }
-
+    /
 
         /**
     * Prepare data for simple statistics (for dashboard)
@@ -218,25 +236,21 @@ class CancellationStat extends BaseStat {
     * @return array
     */
 
-    public static function showSimpleStat()
+    public static function showSimpleStat($metrics)
     {
         // helpers
         $currentDay = time();
         $lastMonthTime = $currentDay - 30*24*60*60;
 
         // return array
-        $data = array();
+        // get parents showSimpleStat
+        $data = parent::showSimpleStat($metrics);
 
+        // override what is different
         // simple data
         // basics, what we are
         $data['id'] = self::$statID;
         $data['statName'] = self::$statName;
-
-        // building history array for dashboard
-        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['history'][$date] = static::getStatOnDay($i);
-        }
 
         // current value, formatted for money
         $data['currentValue'] = static::getIndicatorStatOnDay($currentDay);
@@ -264,7 +278,7 @@ class CancellationStat extends BaseStat {
     * @return array
     */
 
-    public static function showFullStat()
+    public static function showFullStat($metrics)
     {
         // helpers
         $currentDay = time();
@@ -278,7 +292,7 @@ class CancellationStat extends BaseStat {
         // return array
         $data = array();
 
-        $data = self::showSimpleStat();
+        $data = self::showSimpleStat($metrics);
 
         // building full mrr history
         $firstDay = static::getFirstDay();

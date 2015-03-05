@@ -47,7 +47,7 @@ class ArpuStat extends BaseStat {
     * @return array
     */
 
-    public static function show($fullDataNeeded = false)
+    public static function show($metrics, $fullDataNeeded = false)
     {
         // defaults
         self::$statName = 'Average Revenue Per User';
@@ -58,7 +58,7 @@ class ArpuStat extends BaseStat {
 
         if ($fullDataNeeded){
 
-            $arpuData = self::showFullStat();
+            $arpuData = self::showFullStat($metrics);
 
             foreach($arpuData['fullHistory'] as $date => $value)
             {   
@@ -67,7 +67,7 @@ class ArpuStat extends BaseStat {
                 }
             }
         } else {
-        	$arpuData = self::showSimpleStat();
+        	$arpuData = self::showSimpleStat($metrics);
         }
 
         foreach($arpuData['history'] as $date => $value)
