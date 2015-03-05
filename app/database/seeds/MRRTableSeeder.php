@@ -16,13 +16,12 @@ class MrrTableSeeder extends Seeder
             $date = date('Y-m-d', $currentDay + $i*24*60*60);
 
             $value = $previousValue * ((100 - rand(-15,10)) / 100);
-            var_dump($value);
             $value = $value < 0 ? 0 : $value;
             $previousValue = $value;
 
             DB::table('mrr')->insert(
                 array(
-                    'value' => $value,
+                    'value' => round($value),
                     'user' => 1,
                     'date' => $date,
                     'provider' => 'stripe'

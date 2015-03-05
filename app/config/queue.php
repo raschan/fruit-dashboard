@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'sync',
+	'default' => 'async',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -29,6 +29,10 @@ return array(
 	*/
 
 	'connections' => array(
+
+		'async' => array(
+        	'driver' => 'async',
+    	),
 
 		'sync' => array(
 			'driver' => 'sync',

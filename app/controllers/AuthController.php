@@ -134,18 +134,29 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        $allMetrics = array();
+
+        // get the metrics we are calculating right now
+        $currentMetrics = Calculator::currentMetrics();
+
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
+        foreach ($currentMetrics as $statID => $statClassName) {
+
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$statID;
+            }
+            $allMetrics[] = $statClassName::show($metricsArray);
+        }
+
         return View::make(
             'auth.dashboard',
             array(
-                'allFunctions' => array(
-                    MrrStat::showMRR(),
-                    AUStat::showAU(),
-                    ArrStat::showARR(),
-                    ArpuStat::showARPU(),
-                    CancellationStat::showCancellation(),
-                    UserChurnStat::showUserChurn()
-                ),
-                'events' => Counter::formatEvents(Auth::user())
+                'allFunctions' => $allMetrics
+                ,'events' => Calculator::formatEvents(Auth::user())
             )
         );
     }
@@ -306,6 +317,7 @@ class AuthController extends BaseController
     */
     public function showConnect()
     {
+        /*
         // getting paypal api context
         $apiContext = PayPalHelper::getApiContext();
 
@@ -318,15 +330,15 @@ class AuthController extends BaseController
             null,
             $apiContext
         );
-
+        */
         // selecting logged in user
         $user = Auth::user();
 
         // returning view
         return View::make('auth.connect',
             array(
-                'redirect_url' => $redirectUrl,
-                'paypal_connected' => $user->isPayPalConnected(),
+                //'redirect_url' => $redirectUrl,
+                //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected' => $user->isStripeConnected()
             )
         );
@@ -431,55 +443,34 @@ class AuthController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat($statID = 'mainPage')
+    public function showSinglestat($statID)
     {
-        switch($statID){
-            case 'mainPage':
+
+        $currentMetrics = Calculator::currentMetrics();
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
+        
+        foreach ($currentMetrics as $statID => $statClassName) {
+
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$statID;
+            }
+            $allMetrics[$statID] = $metricsArray;
+        }
+
+        if (isset($currentMetrics[$statID]))
+        {
             return View::make('auth.single_stat',
                 array(
-                    'data' => MrrStat::showMRR(true)
+                    'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
                 )
             );
-            case 'mrr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => MrrStat::showMRR(true)
-                )
-            );
-            break;
-            case 'au':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => AUStat::showAU(true)
-                )
-            );
-            case 'arr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArrStat::showARR(true)
-                )
-            );
-            case 'arpu':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArpuStat::showARPU(true)
-                )
-            );
-            case 'cancellations':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => CancellationStat::showCancellation(true)
-                )
-            );case 'uc':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => UserChurnStat::showUserChurn(true)
-                )
-            );
-            default:
-                return Redirect::route('auth.dashboard')
+        } else {
+            return Redirect::route('auth.dashboard')
                 ->with('error', 'Statistic does not exist.');
-            break;
         }
 
     }

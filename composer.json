@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"barryvdh/laravel-async-queue": "0.3.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -41,7 +42,7 @@
 		"ext-curl" : "*",
 		"ext-json" : "*",
 		"paypal/rest-api-sdk-php" : "*",
-		"stripe/stripe-php": "1.*",
+		"stripe/stripe-php": "*",
 		"doctrine/dbal" : "*"
 	}
 }

@@ -1,5 +1,9 @@
 <?php
 
+use Stripe\Event;
+use Stripe\Stripe;
+use Stripe\Customer;
+
 class StripeHelper
 {
 
@@ -74,20 +78,15 @@ class StripeHelper
         $has_more = true;
         $foundLatestEvent = false;
 
-        $latestEvent = DB::table('events')
-            ->where('user', Auth::user()->id)
-            ->where('provider', 'stripe')
-            ->orderBy('created','desc')
-            ->take(2)
-            ->get();
+        $latestEvent = Abf\Event::where('user', $user->id)
+                        ->where('provider', 'stripe')
+                        ->orderBy('created','desc')
+                        ->first();
         
         $last_obj = null;
 
-        $count = 0;
-
         // continue request as long as there is more AND we don't already have it
         while ($has_more && !$foundLatestEvent) {
-            $count++;
             // trying to avoid overflow
             $previous_last_obj = $last_obj;
 
@@ -100,7 +99,7 @@ class StripeHelper
             if ($last_obj) {
 
                 // we have last obj -> starting from there
-                $returned_object = Stripe_Event::all(
+                $returned_object = Event::all(
                     array(
                         'limit'          => 50,
                         'starting_after' => $last_obj
@@ -110,7 +109,7 @@ class StripeHelper
             } else {
 
                 // starting from zero
-                $returned_object = Stripe_Event::all(
+                $returned_object = Event::all(
                     array(
                         'limit' => 100
                         )
@@ -132,7 +131,7 @@ class StripeHelper
                 */
 
                 if (isset($event['data']['object']['id'])) {
-                    if ($latestEvent) {
+                    if ($latestEvent[0]) {
                         if ($event['id'] == $latestEvent[0]->eventID)
                         {
                             $foundLatestEvent = true;
@@ -142,7 +141,7 @@ class StripeHelper
                         array(
                             'created'   => $event['created'],
                             'type'      => $event['type'],
-                            'object'    => $event['data']['object'],
+                            'data'      => $event['data'],
                             'provider'  => 'stripe'
                         );
                     $last_obj = $event['id'];
@@ -231,7 +230,7 @@ class StripeHelper
         Stripe::setApiKey($key);
 
         // getting the customers
-        $returned_object = Stripe_Customer::all();
+        $returned_object = Customer::all();
 
         // extracting data
         $customers = json_decode(strstr($returned_object, '{'), true);
@@ -249,7 +248,7 @@ class StripeHelper
                 array(
                     'zombie'        => $customer['livemode'],
                     'email'         => $customer['email'],
-                    'subscriptions' => $customer['subscriptions']
+                    'subscriptions' => $customer['subscriptions']['data']
                 );
         } //foreach
 
