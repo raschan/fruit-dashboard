@@ -19,10 +19,10 @@ class DemoController extends BaseController
             return Redirect::route('auth.connect');
         } 
         else {
-            $user = User::find(1);
-            Auth::login($user);
-
             try { 
+                $user = User::find(1);
+                Auth::login($user);
+
                 $allMetrics = array();
 
                 // get the metrics we are calculating right now
@@ -54,8 +54,8 @@ class DemoController extends BaseController
 
             catch (Exception $e) {
                 Auth::logout();
-            return Redirect::to('auth.signup')
-                    ->with('error', 'Something went wrong, we will return shortly.');
+                return Redirect::route('auth.signup')
+                        ->with('error', 'Something went wrong, we will return shortly.');
             }
 
         }
@@ -71,10 +71,10 @@ class DemoController extends BaseController
             return Redirect::route('auth.connect');
         } 
         else {
-            $user = User::find(1);
-            Auth::login($user);
-            
-            try { 
+            try {
+                $user = User::find(1);
+                Auth::login($user);
+
                 $currentMetrics = Calculator::currentMetrics();
                 $metricValues = Metric::where('user', Auth::user()->id)
                                         ->orderBy('date','desc')
@@ -110,6 +110,8 @@ class DemoController extends BaseController
                 return Redirect::route('auth.signup')
                         ->with('error', 'Something went wrong, we will return shortly.');
             }
+            
         }
-    }   
+    }
+    
 }
