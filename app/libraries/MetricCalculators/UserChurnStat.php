@@ -15,16 +15,14 @@ class UserChurnStat extends BaseStat {
     public static function calculate($mC,$user,$timestamp)
     {
         // return value
-        $returnValue = 0;
+        $returnValue = null;
 
         // get AU 30 days ago
         $metrics = Metric::where('user', $user->id)
                     ->where('date', date('Y-m-d', $timestamp - 30 * 86400))
-                    ->get();
-
-        // calculate UC
-        $returnValue = ($metrics && $metrics[0]->au != 0) 
-                        ? $mC / $metrics[0]->au * 100 
+                    ->first();
+        $returnValue = ($metrics->au != 0) 
+                        ? $mC / $metrics->au * 100 
                         : null;
 
         return $returnValue;
@@ -56,7 +54,7 @@ class UserChurnStat extends BaseStat {
     }
 
 
-	public static function show ($fullDataNeeded = false)
+	public static function show ($metrics, $fullDataNeeded = false)
 	{
 		self::$statID = 'uc';
 		self::$statName = 'User Churn';
@@ -65,9 +63,9 @@ class UserChurnStat extends BaseStat {
 
 		if($fullDataNeeded)
 		{
-			$userChurnData = self::showFullStat();
+			$userChurnData = self::showFullStat($metrics);
 		} else {
-			$userChurnData = self::showSimpleStat();
+			$userChurnData = self::showSimpleStat($metrics);
 		}
 
 		$userChurnData = self::toMoneyFormat($userChurnData, $fullDataNeeded);

@@ -45,7 +45,7 @@ class ArrStat extends BaseStat {
     * @return array
     */
 
-    public static function show($fullDataNeeded = false) {
+    public static function show($metrics, $fullDataNeeded = false) {
     	// defaults
         self::$statName = 'Annual Run Rate';
         self::$statID = 'arr';
@@ -56,7 +56,7 @@ class ArrStat extends BaseStat {
         // full ARR data
         if ($fullDataNeeded){
 
-            $arrData = self::showFullStat();
+            $arrData = self::showFullStat($metrics);
 
             // correction of the money to dollars from cents
             foreach($arrData['fullHistory'] as $date => $value)
@@ -66,7 +66,7 @@ class ArrStat extends BaseStat {
                 }
             }
         } else {
-            $arrData = self::showSimpleStat();
+            $arrData = self::showSimpleStat($metrics);
         }
         // converting to money format
         $arrData = self::toMoneyFormat($arrData, $fullDataNeeded);

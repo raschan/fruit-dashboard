@@ -6,6 +6,7 @@ use Illuminate\Auth\UserInterface;
 
 class User extends Eloquent implements UserInterface
 {
+    protected $guarded = array();
     use UserTrait;
     /**
      * Testing if the user has connected a stripe account

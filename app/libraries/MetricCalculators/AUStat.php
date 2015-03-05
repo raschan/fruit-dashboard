@@ -93,19 +93,20 @@ class AUStat extends BaseStat {
     * @return array
     */
 
-    public static function show($fullDataNeeded = false) {
+    public static function show($metrics, $fullDataNeeded = false) {
         // defaults
         self::$statName = 'Active Users';
         self::$statID = 'au';
 
         // return array
         $AUData = array();
-        $AUData = self::showSimpleStat();
-
+        
         // full AU data
         if ($fullDataNeeded){
 
-            $AUData = self::showFullStat();
+            $AUData = self::showFullStat($metrics);
+        } else {
+            $AUData = self::showSimpleStat($metrics);
         }
 
         return $AUData;

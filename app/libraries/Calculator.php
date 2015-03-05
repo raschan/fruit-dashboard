@@ -20,6 +20,7 @@ class Calculator
         $yesterday = date('Y-m-d', $timestamp - 86400);
 
         // get today's metrics
+        /*
         $metrics = Metric::where('user',$user->id)
                     ->where('date',$today)
                     ->first();
@@ -31,13 +32,21 @@ class Calculator
             $metrics->date = date('Y-m-d',$timestamp);
             $metrics->user = $user->id;
         }
+        */
+
+        $metrics = Metric::firstOrNew(
+            array(
+                    'user'  => $user->id,
+                    'date'  => $today
+                    )
+            );
 
         // get yesterday's metrics
         // this should never return an empty array
         $yesterdayMetric = Metric::where('user', $user->id)
                     ->where('date', $yesterday)
-                    ->get();
-
+                    ->first();
+        var_dump($yesterdayMetric);
         // get today's events
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
@@ -67,13 +76,13 @@ class Calculator
         
         // daily and monthly cancellations
             // return array
-        list($daily, $monthly) = Cancellations::calculate($events,$user);
-        $metrics->dailyCancellations = $daily;
+        list($daily, $monthly) = CancellationStat::calculate($events,$user);
+        $metrics->cancellations = $daily;
         $metrics->monthlyCancellations = $monthly;
 
         // user churn
             // return float
-        $metrics->uc = UserChurnStat::calculate($metric->monthlyCancellations,$user,$today);
+        $metrics->uc = UserChurnStat::calculate($metrics->monthlyCancellations,$user,$timestamp);
         
         // save everything
         $metrics->save();
@@ -138,7 +147,7 @@ class Calculator
             $metrics->arpu = $historyARPU[$date];
             $metrics->uc = array_key_exists($date, $historyUC) ? $historyUC[$date] : null;
 
-            $metrics->dailyCancellations = array_key_exists($date, $historyCancellation['daily']) 
+            $metrics->cancellations = array_key_exists($date, $historyCancellation['daily']) 
                                                 ? $historyCancellation['daily'][$date]
                                                 : 0 ;
             $metrics->monthlyCancellations = array_key_exists($date, $historyCancellation['monthly']) 
@@ -165,12 +174,12 @@ class Calculator
         {
             foreach ($eventsToSave as $id => $event) {
                 // check, if we already saved this event
-                $newEvent = Event::firstOrNew(array(
+                $newEvent = Event::firstOrNew(
+                    array(
                         'date'      => date('Y-m-d', $event['created']),
                         'eventID'   => $id
                     )
                 );
-
                 $newEvent->date                 = date('Y-m-d', $event['created']);
                 $newEvent->eventID              = $id;
                 $newEvent->user                 = $user->id;

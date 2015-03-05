@@ -321,6 +321,7 @@ class AuthController extends BaseController
     */
     public function showConnect()
     {
+        /*
         // getting paypal api context
         $apiContext = PayPalHelper::getApiContext();
 
@@ -333,15 +334,15 @@ class AuthController extends BaseController
             null,
             $apiContext
         );
-
+        */
         // selecting logged in user
         $user = Auth::user();
 
         // returning view
         return View::make('auth.connect',
             array(
-                'redirect_url' => $redirectUrl,
-                'paypal_connected' => $user->isPayPalConnected(),
+                //'redirect_url' => $redirectUrl,
+                //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected' => $user->isStripeConnected()
             )
         );
@@ -450,12 +451,25 @@ class AuthController extends BaseController
     {
 
         $currentMetrics = Calculator::currentMetrics();
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
+        
+        foreach ($currentMetrics as $statID => $statClassName) {
+
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$statID;
+            }
+            $allMetrics[$statID] = $metricsArray;
+        }
 
         if (isset($currentMetrics[$statID]))
         {
             return View::make('auth.single_stat',
                 array(
-                    'data' => $currentMetrics[$statID]::show(true)
+                    'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
                 )
             );
         } else {

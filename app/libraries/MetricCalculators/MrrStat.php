@@ -186,7 +186,7 @@ class MrrStat extends BaseStat {
         // full MRR data
     	if ($fullDataNeeded){
 
-    		$mrrData = self::showFullStat();
+    		$mrrData = self::showFullStat($metrics);
 
             // correction of the money to dollars from cents
             foreach($mrrData['fullHistory'] as $date => $value)

@@ -27,8 +27,10 @@ class CreateMetricsTable extends Migration {
 			$table->bigInteger('mrr')->unsigned();					// monthly recurring revenue
 			$table->integer('au')->unsigned();						// active users
 			$table->bigInteger('arr')->unsigned();					// annual recurring revenue
-			$table->bigInteger('arpu')->unsigned()->nullable();		// average recurring revenue per active user
-			$table->integer('dailyCancellations')->unsigned();		// cancellations
+			$table->bigInteger('arpu')								// average recurring revenue per active user
+				->unsigned()
+				->nullable();		
+			$table->integer('cancellations')->unsigned();			// cancellations
 			$table->integer('monthlyCancellations')					// cumulative cancellations (sum of last 30 days)
 				->unsigned()
 				->nullable();										

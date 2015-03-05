@@ -21,17 +21,30 @@ class DemoController extends BaseController
         else {
             $user = User::find(1);
             Auth::login($user);
+
+            $allMetrics = array();
+
+            // get the metrics we are calculating right now
+            $currentMetrics = Calculator::currentMetrics();
+
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
+            foreach ($currentMetrics as $statID => $statClassName) {
+
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$statID;
+                }
+                $allMetrics[] = $statClassName::show($metricsArray);
+            }
+
+
             return View::make(
                 'demo.dashboard',
                 array(
-                    'allFunctions' => array(
-                        MrrStat::showMRR(),
-                        AUStat::showAU(),
-                        ArrStat::showARR(),
-                        ArpuStat::showARPU(),
-                        CancellationStat::showCancellation(),
-                        UserChurnStat::showUserChurn()
-                    ),
+                    'allFunctions' => $allMetrics,
                     'events' => Calculator::formatEvents(Auth::user()),
                     Auth::logout()
                 )

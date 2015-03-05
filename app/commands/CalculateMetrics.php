@@ -40,8 +40,12 @@ class CalculateMetrics extends Command {
 		// going through the users
         foreach (User::all() as $user) {
 
-            // saving events
-            Calculator::calculateMetrics($user);
+        	// check if user is connected
+        	if($user->isStripeConnected())
+        	{
+        		// saving events
+	            Calculator::calculateMetrics($user);
+	        }
         }
 	}
 }
