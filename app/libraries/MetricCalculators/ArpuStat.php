@@ -4,6 +4,42 @@
 class ArpuStat extends BaseStat {
 
     /**
+    * calculate today's ARPU from today's MRR and AU
+    *
+    * @param today's MRR
+    * @param today's AU
+    *
+    * @return int
+    */
+
+    public static function calculate($mrr, $au)
+    {
+        $arpu = $au != 0 ? round($mrr / $au) : null;
+        return $arpu;
+    }
+
+    /**
+    * calculate past ARPU from past MRR and AU
+    *
+    * @param array of MRR
+    * @param array of AU
+    *
+    * @return array
+    */
+
+    public static function calculateHistory($arrayMRR, $arrayAU)
+    {
+        $historyARPU = array();
+
+        foreach ($arrayMRR as $date => $mrr) 
+        {
+            $historyARPU[$date] = self::calculate($mrr,$arrayAU[$date]);
+        }
+
+        return $historyARPU;
+    }
+
+    /**
     * Prepare ARPU for statistics
     *
     * @param boolean
@@ -11,7 +47,7 @@ class ArpuStat extends BaseStat {
     * @return array
     */
 
-    public static function showARPU($fullDataNeeded = false)
+    public static function show($metrics, $fullDataNeeded = false)
     {
         // defaults
         self::$statName = 'Average Revenue Per User';
@@ -22,7 +58,7 @@ class ArpuStat extends BaseStat {
 
         if ($fullDataNeeded){
 
-            $arpuData = self::showFullStat();
+            $arpuData = self::showFullStat($metrics);
 
             foreach($arpuData['fullHistory'] as $date => $value)
             {   
@@ -30,11 +66,8 @@ class ArpuStat extends BaseStat {
                     $arpuData['fullHistory'][$date] = $value / 100;
                 }
             }
-
-            // get all the plans details
-            $arpuData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
         } else {
-        	$arpuData = self::showSimpleStat();
+        	$arpuData = self::showSimpleStat($metrics);
         }
 
         foreach($arpuData['history'] as $date => $value)

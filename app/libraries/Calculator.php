@@ -1,9 +1,229 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
-
-class Counter
+class Calculator
 {
+
+    /** 
+    * daily metric calculator - called from cron script
+    * @param $user
+    * 
+    * @return null
+    */
+
+    public static function calculateMetrics($user) {
+
+        // get needed time vars
+        $timestamp = time();
+        $today = date('Y-m-d', $timestamp);
+        $yesterday = date('Y-m-d', $timestamp - 86400);
+
+        // get today's metrics
+        /*
+        $metrics = Metric::where('user',$user->id)
+                    ->where('date',$today)
+                    ->first();
+        // check, if querry was succesful
+        if(empty($metrics))
+        {
+            // create metrics object, if it doesn't exist
+            $metrics = new Metric;
+            $metrics->date = date('Y-m-d',$timestamp);
+            $metrics->user = $user->id;
+        }
+        */
+
+        $metrics = Metric::firstOrNew(
+            array(
+                    'user'  => $user->id,
+                    'date'  => $today
+                    )
+            );
+
+        // get yesterday's metrics
+        // this should never return an empty array
+        $yesterdayMetric = Metric::where('user', $user->id)
+                    ->where('date', $yesterday)
+                    ->first();
+        // get today's events
+        $events = Event::where('user', $user->id)
+                    ->where('date', $today)
+                    ->get();
+        // events have a provider, needs merging
+        // FIXME!!!!
+
+
+        
+        // calculate all the metrics
+
+        // monthly recurring revenue
+            // return int
+        $metrics->mrr = MrrStat::calculate($yesterdayMetric->mrr, $events);
+
+        // active users
+            // return int
+        $metrics->au = AUStat::calculate($yesterdayMetric->au, $events);   
+        
+        // annual recurring revenue
+            // return int
+        $metrics->arr = ArrStat::calculate($metrics->mrr);
+
+        // average recurring revenue per active user
+            // return int
+        $metrics->arpu = ArpuStat::calculate($metrics->mrr, $metrics->au);
+        
+        // daily and monthly cancellations
+            // return array
+        list($daily, $monthly) = CancellationStat::calculate($events,$user);
+        $metrics->cancellations = $daily;
+        $metrics->monthlyCancellations = $monthly;
+
+        // user churn
+            // return float
+        $metrics->uc = UserChurnStat::calculate($metrics->monthlyCancellations,$user,$timestamp);
+        
+        // save everything
+        $metrics->save();
+    }
+
+
+    /** 
+    * first time metric calculator - called on connect
+    * calculates metrics in the past
+    * can be a long running method
+    * @param $user
+    * 
+    * @return null
+    */
+
+    public static function calculateMetricsOnConnect($user) 
+    {
+        $timestamp = time();
+        $todayDate = date('Y-m-d', $timestamp);    
+
+        Log::info(var_export($todayDate,true));
+        // request and save events
+        self::saveEvents($user);
+        Log::info(var_export($todayDate,true));        
+        // get first event date
+        $firstDate = Event::where('user', $user->id)
+                        ->orderBy('date','asc')
+                        ->first()
+                        ->date;
+        Log::info(var_export($todayDate,true));
+        // request plans and subscription infos (alternativly, customers)
+        $customers = TailoredData::getCustomers($user);
+        // calculate starter mrr and au
+        $starterAU = count($customers);
+        $starterMRR = MrrStat::calculateFirstTime($customers);
+
+        
+        // reverse calculate from events
+        $historyMRR = MrrStat::calculateHistory($timestamp,$user,$firstDate,$starterMRR);
+        $historyAU = AUStat::calculateHistory($timestamp,$user,$firstDate,$starterAU);
+        $historyCancellation = CancellationStat::calculateHistory($timestamp,$user,$firstDate);
+        // calculate arr, arpu, uc
+        $historyUC = UserChurnStat::calculateHistory($historyCancellation['monthly'], $historyAU);
+        $historyARR = ArrStat::calculateHistory($historyMRR);
+        $historyARPU = ArpuStat::calculateHistory($historyMRR, $historyAU);
+
+        // save all the data
+        foreach ($historyAU as $date => $au) 
+        {
+            $metrics = Metric::firstOrNew(
+                array(
+                        'date'      => $date,
+                        'user'      => $user->id
+                    )
+                );
+            var_dump($metrics);
+            $metrics->user = $user->id;
+            $metrics->date = $date;
+
+            $metrics->mrr = $historyMRR[$date];
+            $metrics->au = $au;
+            $metrics->arr = $historyARR[$date];
+            $metrics->arpu = $historyARPU[$date];
+            $metrics->uc = array_key_exists($date, $historyUC) ? $historyUC[$date] : null;
+
+            $metrics->cancellations = array_key_exists($date, $historyCancellation['daily']) 
+                                                ? $historyCancellation['daily'][$date]
+                                                : 0 ;
+            $metrics->monthlyCancellations = array_key_exists($date, $historyCancellation['monthly']) 
+                                                ? $historyCancellation['monthly'][$date]
+                                                : 0 ;
+
+            $metrics->save();
+        }
+    }
+
+    /**
+    * save every event we don't have already
+    *
+    * @param user
+    *
+    * @return null
+    */
+
+    public static function saveEvents($user)
+    {
+        $eventsToSave = TailoredData::getEvents($user);
+
+        if($eventsToSave)
+        {
+            foreach ($eventsToSave as $id => $event) {
+                // check, if we already saved this event
+                $newEvent = Event::firstOrNew(
+                    array(
+                        'date'      => date('Y-m-d', $event['created']),
+                        'eventID'   => $id
+                    )
+                );
+                $newEvent->date                 = date('Y-m-d', $event['created']);
+                $newEvent->eventID              = $id;
+                $newEvent->user                 = $user->id;
+                $newEvent->created              = date('Y-m-d H:i:s', $event['created']);
+                $newEvent->provider             = $event['provider'];
+                $newEvent->type                 = $event['type'];
+                $newEvent->object               = json_encode($event['data']['object']);
+                $newEvent->previousAttributes   = isset($event['data']['previous_attributes'])
+                                                    ? json_encode($event['data']['previous_attributes'])
+                                                    : null;
+                $newEvent->save();
+            }
+        }
+    }
+
+    /**
+    * helper function for calculationg MRR
+    * @param plan array
+    *
+    * @return int, contribution to MRR
+    */
+
+    public static function getMRRContribution($plan)
+    {
+        // check all possible intervals, and return the correct amount
+
+        switch ($plan['interval']) {
+
+            case 'day':
+                return $plan['amount'] * 30;        // average days in a month
+
+            case 'week':
+                return $plan['amount'] * 4;         // average weeks in a month
+            
+            case 'month':
+                return $plan['amount'];             // basic amount
+
+            case 'year':
+                return round($plan['amount'] / 12); // rebased for a month
+
+            default:
+                return null;                        // should never ever return this, its a major fault at provider
+        }
+    }
 
     /*
     |--------------------------------------------------------------
@@ -219,16 +439,16 @@ class Counter
 
     public static function saveCancellations($user) 
     {
-    	$currentDay = date('Y-m-d',time());
+        $currentDay = date('Y-m-d',time());
 
-    	$currentDayCancellations = DB::table('cancellations')
-    		->where('date',$currentDay)
-    		->where('user', $user->id)
+        $currentDayCancellations = DB::table('cancellations')
+            ->where('date',$currentDay)
+            ->where('user', $user->id)
             ->get();
 
         if (!$currentDayCancellations)
         {
-        	$cancellationValue = self::getCancellations($user);
+            $cancellationValue = self::getCancellations($user);
 
             DB::table('cancellations')->insert(
                 array(
@@ -494,71 +714,45 @@ class Counter
         return $planDetails;
     }
 
-    public static function saveEvents($user)
-    {
-        $savedObjects = 0;
-        $eventsToSave = TailoredData::getEvents($user);
-        foreach ($eventsToSave as $id => $event) {
-
-            // check, if we already saved this event
-            $hasEvent = DB::table('events')
-            ->where('eventID',$id)
-            ->where('user', $user->id)
-            ->get();
-
-            // if we dont already have that event
-            if(!$hasEvent)
-            {
-                $savedObjects++;
-                DB::table('events')->insert(
-                    array(
-                        'created'   => date('Y-m-d H:i:s',$event['created']),
-                        'user'      => $user->id,
-                        'provider'  => $event['provider'],
-                        'eventID'   => $id,
-                        'type'      => $event['type'],
-                        'object'    => json_encode($event['object'])
-                    )
-                );
-            }
-        }
-        return $savedObjects;
-    }
 
     public static function formatEvents($user)
     {
-        // helpers
-        $eventArray = array();
-        $tempArray = array();
+        $eventArray = array();      // return array
+        $tempArray = array();       // helper
+        $prevTempArray = array();   // previous values
 
         // last X events from database
         // select only those event types, which we show on dashboard
-        $events = DB::table('events')
-            ->where('user', $user->id)
-            ->whereIn('type', ['charge.succeeded'
-                                ,'charge.failed'
-                                ,'charge.captured'
-                                ,'charge.refunded'
-                                ,'customer.created'
-                                ,'customer.deleted'
-                                ,'customer.subscription.created'
-                                ,'customer.subscription.updated'
-                                ,'customer.subscription.deleted'
-                                ,'customer.discount.created'
-                                ,'customer.discount.updated'
-                                ,'customer.discount.deleted'])
-            ->orderBy('created', 'desc')
-            //->take(20)
-            ->get();
+        $events = Event::where('user', $user->id)
+                ->whereIn('type', ['charge.succeeded'
+                                    ,'charge.failed'
+                                    ,'charge.captured'
+                                    ,'charge.refunded'
+                                    ,'customer.created'
+                                    ,'customer.deleted'
+                                    ,'customer.subscription.created'
+                                    ,'customer.subscription.updated'
+                                    ,'customer.subscription.deleted'
+                                    ,'customer.discount.created'
+                                    ,'customer.discount.updated'
+                                    ,'customer.discount.deleted'])
+                ->orderBy('created', 'desc')
+                //->take(20)
+                ->get();
 
 
         $i = 0;
         
-        foreach ($events as $event){
+        foreach ($events as $event)
+        {
             // if stripe event
-            if ($event->provider == 'stripe'){
+            if ($event->provider == 'stripe')
+            {
                 // decoding object
                 $tempArray = json_decode(strstr($event->object, '{'), true);
+                $prevTempArray = !is_null($event->previousAttributes)
+                                    ? json_decode(strstr($event->previousAttributes , '{'), true)
+                                    : null;
 
                 // formatting and creating data for return array
                 // type eg. 'charge.succeeded'
@@ -566,15 +760,8 @@ class Counter
                 // provider eg. 'stripe'
                 $eventArray[$i]['provider'] = $event->provider;
                 // date eg. '02-11 20:44'
-                if (array_key_exists('created', $tempArray)){
-                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['created']);
-                }
-                elseif(array_key_exists('plan', $tempArray) && array_key_exists('created', $tempArray['plan'])){
-                    $eventArray[$i]['date'] = date('m-d H:i', $tempArray['plan']['created']);
-                }
-                else {
-                    $eventArray[$i]['date'] = null;
-                }
+                $eventArray[$i]['date'] = date('m-d H:i', strtotime($event->created));
+
                 // name eg. 'chris'
                 if (array_key_exists('card', $tempArray)){
                     if(array_key_exists('name', $tempArray['card'])){
@@ -582,15 +769,15 @@ class Counter
                             $eventArray[$i]['name'] = $tempArray['card']['name'];
                         }
                         else {
-                            $eventArray[$i]['name'] = 'Someone';
+                            $eventArray[$i]['name'] = 'Someone1';
                         }
                     }
                     else {
-                        $eventArray[$i]['name'] = 'Someone';
+                        $eventArray[$i]['name'] = 'Someone2';
                     }
                 }
                 else {
-                    $eventArray[$i]['name'] = 'Someone';
+                    $eventArray[$i]['name'] = 'Someone3';
                 }
                 // currency
                 if (array_key_exists('currency', $tempArray)){
@@ -630,28 +817,57 @@ class Counter
                     }
                 }
                 // plan interval
-                if (array_key_exists('plan', $tempArray)){
-                        if ($tempArray['plan']['interval'] == 'day'){
+                if (array_key_exists('plan', $tempArray))
+                {
+                switch ($tempArray['plan']['interval']) 
+                    {
+                        case 'day':
                             $eventArray[$i]['plan_interval'] = 'daily';
-                        }
-                        elseif ($tempArray['plan']['interval'] == 'month'){
-                            $eventArray[$i]['plan_interval'] = 'monthly';
-                        }
-                        elseif ($tempArray['plan']['interval'] == 'year'){
+                            break;
+                        case 'week':
+                            $eventArray[$i]['plan_interval'] = 'weekly';
+                            break;
+                        case 'month':
+                            $eventArray[$i]['plan_interval'] = 'daily';
+                            break;
+                        case 'year':
                             $eventArray[$i]['plan_interval'] = 'yearly';
-                        }
-                        else {
-                            $eventArray[$i]['plan_interval'] = $tempArray['plan']['interval'];
-                        }
-
+                            break;
+                        default:
+                            // don't do anything
+                    }
                 }
-
-            }
-            elseif ($event->provider == 'paypal'){
-                // paypal formatter
-            }
+                // previous plan ID, name, interval and amount
+                if (!is_null($prevTempArray))
+                {
+                    if (array_key_exists('plan', $prevTempArray))
+                    {
+                        $eventArray[$i]['prevPlanID'] = $prevTempArray['plan']['id'];
+                        $eventArray[$i]['prevPlanName'] = $prevTempArray['plan']['name'];
+                        $eventArray[$i]['prevPlanAmount'] = $prevTempArray['plan']['amount'];
+    
+                        switch ($prevTempArray['plan']['interval']) 
+                        {
+                            case 'day':
+                                $eventArray[$i]['prevPlanInterval'] = 'daily';
+                                break;
+                            case 'week':
+                                $eventArray[$i]['prevPlanInterval'] = 'weekly';
+                                break;
+                            case 'month':
+                                $eventArray[$i]['prevPlanInterval'] = 'daily';
+                                break;
+                            case 'year':
+                                $eventArray[$i]['prevPlanInterval'] = 'yearly';
+                                break;
+                            default:
+                                // don't do anything}
+                        }
+                    }
+                }
+            } // end if stripe event
             $i++;
-        }
+        }// end foreach
 
             return $eventArray;
     }
@@ -668,11 +884,10 @@ class Counter
     	$yesterDay = $currentDay - 24*60*60;
 
     	// get all the evens saying customer cancelled
-    	$events = DB::table('events')
-            ->where('user', $user->id)
-            ->whereIn('type', ['customer.subscription.deleted'])
-            ->orderBy('created', 'desc')
-            ->get();
+    	$events = Event::where('user', $user->id)
+                    ->whereIn('type', ['customer.subscription.deleted'])
+                    ->orderBy('created', 'desc')
+                    ->get();
 
         $i = 0;
 
@@ -684,6 +899,7 @@ class Counter
         	} else {
         		$cancellations++;
         	}
+
         	$i++;
         	if (!isset($events[$i]))
         	{
@@ -692,5 +908,23 @@ class Counter
         }
 
     	return $cancellations;
+    }
+
+    /** 
+    * Stores all the metrics we currently calculate
+    *
+    * @return assoc array of metric Classnames and column headers
+    */
+
+    public static function currentMetrics()
+    {
+        return array(
+            'mrr'               => 'MrrStat'
+            ,'au'               => 'AUStat'
+            ,'arr'              => 'ArrStat'
+            ,'arpu'             => 'ArpuStat'
+            ,'cancellations'    => 'CancellationStat'
+            ,'uc'               => 'UserChurnStat'           
+        );
     }
 }

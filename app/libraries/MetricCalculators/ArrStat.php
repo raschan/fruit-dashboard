@@ -1,14 +1,43 @@
 <?php
 
-	/**
-    * Prepare ARR for statistics
+class ArrStat extends BaseStat {
+    
+    /**
+    * calculate current ARR from current MRR
+    *
+    * @param current MRR
+    *
+    * @return int
+    */
+
+    public static function calculate($mrr)
+    {
+        return $mrr * 12;
+    }
+
+    /**
+    * calculate past ARR from past MRR
+    *
+    * @param array of MRR
     *
     * @return array
     */
 
-class ArrStat extends BaseStat {
+    public static function calculateHistory($mrrArray)
+    {
+        $historyARR = array();
 
-	/**
+        foreach ($mrrArray as $date => $mrr) 
+        {
+            $historyARR[$date] = self::calculate($mrr);
+        }
+
+        return $historyARR;
+    }
+
+
+
+    /**
     * Prepare ARR for statistics
     *
     * @param boolean
@@ -16,7 +45,7 @@ class ArrStat extends BaseStat {
     * @return array
     */
 
-    public static function showARR($fullDataNeeded = false) {
+    public static function show($metrics, $fullDataNeeded = false) {
     	// defaults
         self::$statName = 'Annual Run Rate';
         self::$statID = 'arr';
@@ -27,7 +56,7 @@ class ArrStat extends BaseStat {
         // full ARR data
         if ($fullDataNeeded){
 
-            $arrData = self::showFullStat();
+            $arrData = self::showFullStat($metrics);
 
             // correction of the money to dollars from cents
             foreach($arrData['fullHistory'] as $date => $value)
@@ -36,12 +65,8 @@ class ArrStat extends BaseStat {
                     $arrData['fullHistory'][$date] = $value / 100;
                 }
             }
-
-            // data for single stat table
-            $arrData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
-
         } else {
-            $arrData = self::showSimpleStat();
+            $arrData = self::showSimpleStat($metrics);
         }
         // converting to money format
         $arrData = self::toMoneyFormat($arrData, $fullDataNeeded);

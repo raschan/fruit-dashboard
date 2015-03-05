@@ -21,28 +21,43 @@ class DemoController extends BaseController
         else {
             $user = User::find(1);
             Auth::login($user);
+
             try { 
+                $allMetrics = array();
+
+                // get the metrics we are calculating right now
+                $currentMetrics = Calculator::currentMetrics();
+
+                $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->orderBy('date','desc')
+                                        ->take(31)
+                                        ->get();
+                foreach ($currentMetrics as $statID => $statClassName) {
+
+                    $metricsArray = array();
+                    foreach ($metricValues as $metric) {
+                        $metricsArray[$metric->date] = $metric->$statID;
+                    }
+                    $allMetrics[] = $statClassName::show($metricsArray);
+                }
+
+
                 return View::make(
                     'demo.dashboard',
                     array(
-                        'allFunctions' => array(
-                            MrrStat::showMRR(),
-                            AUStat::showAU(),
-                            ArrStat::showARR(),
-                            ArpuStat::showARPU(),
-                            CancellationStat::showCancellation(),
-                            UserChurnStat::showUserChurn()
-                        ),
-                        'events' => Counter::formatEvents(Auth::user()),
+                        'allFunctions' => $allMetrics,
+                        'events' => Calculator::formatEvents(Auth::user()),
                         Auth::logout()
                     )
                 );
             }
+
             catch (Exception $e) {
                 Auth::logout();
             return Redirect::to('auth.signup')
                     ->with('error', 'Something went wrong, we will return shortly.');
             }
+
         }
     }
 
@@ -51,69 +66,50 @@ class DemoController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat($statID = 'mainPage')
+    public function showSinglestat($statID)
     {   if (Auth::check()) {
             return Redirect::route('auth.connect');
         } 
         else {
             $user = User::find(1);
             Auth::login($user);
+            
             try { 
-                switch($statID){
-                    case 'mainPage':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => MrrStat::showMRR(true), Auth::logout()
-                        )
-                    );
-                    case 'mrr':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => MrrStat::showMRR(true), Auth::logout()
-                        )
-                    );
-                    break;
-                    case 'au':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => AUStat::showAU(true), Auth::logout()
-                        )
-                    );
-                    case 'arr':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => ArrStat::showARR(true), Auth::logout()
-                        )
-                    );
-                    case 'arpu':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => ArpuStat::showARPU(true), Auth::logout()
-                        )
-                    );
-                    case 'cancellations':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => CancellationStat::showCancellation(true), Auth::logout()
-                        )
-                    );case 'uc':
-                    return View::make('demo.single_stat',
-                        array(
-                            'data' => UserChurnStat::showUserChurn(true), Auth::logout()
-                        )
-                    );
-                    default:
-                        return Redirect::route('demo.dashboard')
-                        ->with('error', 'Statistic does not exist.');
-                    break;
+                $currentMetrics = Calculator::currentMetrics();
+                $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->orderBy('date','desc')
+                                        ->take(31)
+                                        ->get();
+                
+                foreach ($currentMetrics as $statID => $statClassName) {
+
+                    $metricsArray = array();
+                    foreach ($metricValues as $metric) {
+                        $metricsArray[$metric->date] = $metric->$statID;
+                    }
+                    $allMetrics[$statID] = $metricsArray;
                 }
+
+                if (isset($currentMetrics[$statID]))
+                {
+                    return View::make('demo.single_stat',
+                        array(
+                            'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
+                        )
+                    );
+                } else {
+                    return Redirect::route('demo.dashboard')
+                        ->with('error', 'Statistic does not exist.');
+                }
+                return Redirect::route('demo.dashboard')
+                ->with('error', 'Statistic does not exist.');
             }
+
             catch (Exception $e) {
                 Auth::logout();
                 return Redirect::route('auth.signup')
                         ->with('error', 'Something went wrong, we will return shortly.');
             }
         }
-    }
-    
+    }   
 }

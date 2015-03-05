@@ -1,10 +1,129 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
+
 
 class CancellationStat extends BaseStat {
 
+    /**
+    * calculate today's Cancellations from today's changes
+    * relevant changes:
+    *   - customer deleted
+    *
+    * @param today's changes
+    * @param user for monthly value
+    *
+    * @return int
+    */
 
-	public static function showCancellation($fullDataNeeded = false)
+    public static function calculate($events,$user)
+    {
+        // return values
+        $dailyValue = 0;
+        $monthlyValue = 0;
+
+        // lets get the daily cancellations
+        // for every event
+        foreach ($events as $event) {
+
+            // if its a subscription cancellation event, count it
+            if($event->type == 'customer.subscription.deleted')
+            {
+                $dailyValue++;
+            }
+        }
+        // lets count the previous 30 days cancellations
+        $metrics = Metric::where('user', $user->id)
+                            ->orderBy('date', 'desc')
+                            ->take(29)
+                            ->get();
+        // lets count them
+        foreach ($metrics as $metric) 
+        {
+            $monthlyValue += $metric->dailyCancellations;
+        }
+
+        // add todays value
+        $monthlyValue += $dailyValue;
+
+        // return the values
+        return array($dailyValue,$monthlyValue);
+    }
+
+
+    /**
+    * calculates daily cancellations history after connection
+    * 
+    * @param current day's timestamp
+    * @param user
+    * @param date of first event
+    *
+    * @return array of int
+    */
+
+    public static function calculateHistory($timestamp, $user, $firstDate)
+    {
+        // return array
+        $historyCanc = array();
+
+        $events = Event::where('user', $user->id)
+                    ->get();
+        // save the first one
+        foreach ($events as $event) 
+        {
+            if(!isset($historyCanc['daily'][$event->date]))
+            {
+                // we have no data on this date yet,
+                // initialize it
+                $historyCanc['daily'][$event->date] = 0;
+            }
+            // if its a subscription cancellation event, count it
+            if($event->type == 'customer.subscription.deleted')
+            {
+                $historyCanc['daily'][$event->date]++;
+            }
+        }
+
+        $historyCanc['monthly'] = self::monthlyCancellations($historyCanc['daily']);
+
+        return $historyCanc;
+    }
+
+    /** calculates monthly cancellation history
+    * @param daily cancellations array
+    *
+    * @return array
+    */
+
+    private static function monthlyCancellations($dailyCancellations)
+    {
+        $monthlyCancellations = array();
+
+        // making sure the array is in order (newest first)
+        krsort($dailyCancellations);
+
+        $offset = 0;
+
+        foreach ($dailyCancellations as $date => $value) 
+        {
+            //get the last max 30 days
+            $last30days = array_slice($dailyCancellations, $offset, 30);
+            
+            // initialize the monthly data
+            $monthlyCancellations[$date] = 0;
+            foreach ($last30days as $cancellations) 
+            {
+                $monthlyCancellations[$date] += $cancellations;
+            }
+
+            $offset++;
+        }
+
+        return $monthlyCancellations;
+    }
+
+
+	public static function show($metrics, $fullDataNeeded = false)
 	{
 		// defaults
 		self::$statID = 'cancellations';
@@ -14,23 +133,39 @@ class CancellationStat extends BaseStat {
 
     	if ($fullDataNeeded){
 
-            $cancellationData = self::showFullStat();
-
-            // data for single stat table
-            $cancellationData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+            $cancellationData = self::showFullStat($metrics);
 
         } else {
-        	$cancellationData = self::showSimpleStat();
+            $cancellationData = self::showSimpleStat($metrics);
         }
 
         // positiveIsGood, for front end colors
         $cancellationData['positiveIsGood'] = false;
 
-    	return $cancellationData;
-	}
+        return $cancellationData;
+    }
 
-    public static function getIndicatorStatOnDay($timestamp)
+    // temporary solution
+    public static function getStatOnDay($timestamp)
     {
+        $user = Auth::user();
+        $returnValue = Metric::where('user', $user->id)
+                        ->where('date', date('Y-m-d', $timestamp))
+                        ->first()
+                        ->cancellations;
+        return $returnValue;
+    }
+    private static function getIndicatorStatOnDay($timestamp)
+    {
+        $user = Auth::user();
+        $returnValue = Metric::where('user', $user->id)
+                        ->where('date', date('Y-m-d',$timestamp))
+                        ->first()
+                        ->monthlyCancellations;
+
+        return $returnValue;
+    }
+        /*
         $beforeValues = array();
 
         $day = date('Y-m-d', $timestamp);        
@@ -93,8 +228,7 @@ class CancellationStat extends BaseStat {
             }
         }
         return $returnValue;
-    }
-
+    /
 
         /**
     * Prepare data for simple statistics (for dashboard)
@@ -102,25 +236,21 @@ class CancellationStat extends BaseStat {
     * @return array
     */
 
-    public static function showSimpleStat()
+    public static function showSimpleStat($metrics)
     {
         // helpers
         $currentDay = time();
         $lastMonthTime = $currentDay - 30*24*60*60;
 
         // return array
-        $data = array();
+        // get parents showSimpleStat
+        $data = parent::showSimpleStat($metrics);
 
+        // override what is different
         // simple data
         // basics, what we are
         $data['id'] = self::$statID;
         $data['statName'] = self::$statName;
-
-        // building history array for dashboard
-        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['history'][$date] = static::getStatOnDay($i);
-        }
 
         // current value, formatted for money
         $data['currentValue'] = static::getIndicatorStatOnDay($currentDay);
@@ -148,7 +278,7 @@ class CancellationStat extends BaseStat {
     * @return array
     */
 
-    public static function showFullStat()
+    public static function showFullStat($metrics)
     {
         // helpers
         $currentDay = time();
@@ -162,7 +292,7 @@ class CancellationStat extends BaseStat {
         // return array
         $data = array();
 
-        $data = self::showSimpleStat();
+        $data = self::showSimpleStat($metrics);
 
         // building full mrr history
         $firstDay = static::getFirstDay();

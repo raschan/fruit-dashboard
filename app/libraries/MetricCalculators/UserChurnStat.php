@@ -2,7 +2,59 @@
 
 class UserChurnStat extends BaseStat {
 
-	public static function showUserChurn ($fullDataNeeded = false)
+    /**
+    * calculate today's UC from today's monthly cancellations, and 30 days ago AU
+    *
+    * @param today's montly cancellations
+    * @param user
+    * @param today's timestamp
+    *
+    * @return floar
+    */
+
+    public static function calculate($mC,$user,$timestamp)
+    {
+        // return value
+        $returnValue = null;
+
+        // get AU 30 days ago
+        $metrics = Metric::where('user', $user->id)
+                    ->where('date', date('Y-m-d', $timestamp - 30 * 86400))
+                    ->first();
+        $returnValue = ($metrics->au != 0) 
+                        ? $mC / $metrics->au * 100 
+                        : null;
+
+        return $returnValue;
+    }
+
+    /**
+    * calculates UC history after connection
+    * 
+    * @param monthly cancellations array
+    * @param active users array
+    *
+    * @return array of int
+    */
+
+    public static function calculateHistory($mC, $au)
+    {
+        // return array
+        $historyUC = array();
+
+        foreach ($mC as $date => $cancellations) 
+        {
+            $date30DaysAgo = date('Y-m-d', strtotime($date) - 30 * 86400);
+            $historyUC[$date] = (isset($au[$date30DaysAgo]) && $au[$date30DaysAgo] != 0) 
+                                    ? $cancellations / $au[$date30DaysAgo]
+                                    : null;
+        }
+
+        return $historyUC;
+    }
+
+
+	public static function show ($metrics, $fullDataNeeded = false)
 	{
 		self::$statID = 'uc';
 		self::$statName = 'User Churn';
@@ -11,10 +63,9 @@ class UserChurnStat extends BaseStat {
 
 		if($fullDataNeeded)
 		{
-			$userChurnData = self::showFullStat();
-			$userChurnData['detailData'] = Counter::getSubscriptionDetails(Auth::user());
+			$userChurnData = self::showFullStat($metrics);
 		} else {
-			$userChurnData = self::showSimpleStat();
+			$userChurnData = self::showSimpleStat($metrics);
 		}
 
 		$userChurnData = self::toMoneyFormat($userChurnData, $fullDataNeeded);
