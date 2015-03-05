@@ -46,7 +46,6 @@ class Calculator
         $yesterdayMetric = Metric::where('user', $user->id)
                     ->where('date', $yesterday)
                     ->first();
-        var_dump($yesterdayMetric);
         // get today's events
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
@@ -103,15 +102,16 @@ class Calculator
         $timestamp = time();
         $todayDate = date('Y-m-d', $timestamp);    
 
+        Log::info(var_export($todayDate,true));
         // request and save events
         self::saveEvents($user);
-
+        Log::info(var_export($todayDate,true));        
         // get first event date
         $firstDate = Event::where('user', $user->id)
                         ->orderBy('date','asc')
                         ->first()
                         ->date;
-
+        Log::info(var_export($todayDate,true));
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
         // calculate starter mrr and au
