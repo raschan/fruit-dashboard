@@ -81,7 +81,6 @@ class AUStat extends BaseStat {
             // set the new current time
             $timestamp -= 86400;
         }
-        var_dump($historyAU);
         return $historyAU;
     }
 

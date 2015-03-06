@@ -103,7 +103,7 @@ class Calculator
         $todayDate = date('Y-m-d', $timestamp);    
 
         // request and save events
-        //self::saveEvents($user);
+        self::saveEvents($user);
         // get first event date
         $firstDate = Event::where('user', $user->id)
                         ->orderBy('date','asc')
