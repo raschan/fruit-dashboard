@@ -384,7 +384,11 @@
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
+                @if($value == null) 0,
+                @else{{ $value }},
+                @endif 
+                @endforeach]
           }
       ]
     };

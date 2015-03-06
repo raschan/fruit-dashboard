@@ -130,21 +130,4 @@ class UserChurnStat extends BaseStat {
             return null;
         }
     }
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table('au')
-            ->where('user', Auth::user()->id)
-            ->orderBy('date', 'asc')
-            ->first();
-        $firstDay = strtotime($firstDay->date);
-
-        return $firstDay;
-    }
 }
