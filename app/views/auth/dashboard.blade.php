@@ -376,7 +376,7 @@
     @for ($i = 0; $i< count($allFunctions); $i++)
 
     /* {{ $allFunctions[$i]['statName'] }} */
-
+    
     data = {
       labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
       datasets: [

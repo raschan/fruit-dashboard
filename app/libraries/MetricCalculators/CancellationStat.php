@@ -309,6 +309,11 @@ class CancellationStat extends BaseStat {
             $data['fullHistory'][$metric->date] = $metric->$data['id'];
         }
 
+        if(!isset($data['fullHistory']))
+        {
+            $data['fullHistory'] = array();
+        }
+
         // past values (null if not available)
         $lastMonthValue = static::getIndicatorStatOnDay($lastMonthTime);
         $twoMonthValue = static::getIndicatorStatOnDay($twoMonthTime);

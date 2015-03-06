@@ -53,34 +53,39 @@ class ArpuStat extends BaseStat {
         self::$statName = 'Average Revenue Per User';
         self::$statID = 'arpu';
 
-    	$arpuData = array();
+    	$data = array();
 
 
         if ($fullDataNeeded){
 
-            $arpuData = self::showFullStat($metrics);
+            $data = self::showFullStat($metrics);
 
-            foreach($arpuData['fullHistory'] as $date => $value)
+            foreach($data['fullHistory'] as $date => $value)
             {   
                 if ($value) {
-                    $arpuData['fullHistory'][$date] = $value / 100;
+                    $data['fullHistory'][$date] = $value / 100;
                 }
             }
         } else {
-        	$arpuData = self::showSimpleStat($metrics);
+        	$data = self::showSimpleStat($metrics);
         }
 
-        foreach($arpuData['history'] as $date => $value)
-        {   
-            if ($value) {
-                $arpuData['history'][$date] = $value / 100;
+        if (isset($data['history']))
+        {
+            foreach($data['history'] as $date => $value)
+            {   
+                if ($value) {
+                    $data['history'][$date] = $value / 100;
+                }
             }
+        } else {
+            $data['history'] = array();
         }
 
         //converting to money format
-        $arpuData = self::toMoneyFormat($arpuData, $fullDataNeeded);
+        $data = self::toMoneyFormat($data, $fullDataNeeded);
 
-    	return $arpuData;
+    	return $data;
     }
 
     /**

@@ -36,13 +36,12 @@ class BaseStat
         foreach ($metrics as $date => $metric) {
             $data['history'][$date] = $metric;
         }
-/*
-        // building history array for dashboard
-        for ($i = $currentDate-30*86400; $i < $currentDate; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['history'][$date] = static::getStatOnDay($i);
+
+        if(!isset($data['history']))
+        {
+            $data['history'] = array();
         }
-*/
+
         // the last item in the $metrics array is the newest, take that as current
         $data['currentValue'] = end($metrics);
 
@@ -103,12 +102,11 @@ class BaseStat
         foreach ($fullMetricHistory as $metric) {
             $data['fullHistory'][$metric->date] = $metric->$data['id'];
         }
-        /*
-        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['fullHistory'][$date] = static::getStatOnDay($i);
+
+        if(!isset($data['fullHistory']))
+        {
+            $data['fullHistory'] = array();
         }
-        */
 
         // past values (null if not available)
         $lastMonthValue = static::getStatOnDay($lastMonthTime);
