@@ -38,6 +38,7 @@ class CancellationStat extends BaseStat {
                             ->take(29)
                             ->get();
         // lets count them
+
         foreach ($metrics as $metric) 
         {
             $monthlyValue += $metric->dailyCancellations;
@@ -68,7 +69,7 @@ class CancellationStat extends BaseStat {
 
         $events = Event::where('user', $user->id)
                     ->get();
-        // save the first one
+
         foreach ($events as $event) 
         {
             if(!isset($historyCanc['daily'][$event->date]))
@@ -149,21 +150,20 @@ class CancellationStat extends BaseStat {
     public static function getStatOnDay($timestamp)
     {
         $user = Auth::user();
-        $returnValue = Metric::where('user', $user->id)
+        $metric = Metric::where('user', $user->id)
                         ->where('date', date('Y-m-d', $timestamp))
-                        ->first()
-                        ->cancellations;
-        return $returnValue;
+                        ->first();
+
+        return $metric ? $metric->cancellations : null;
     }
-    private static function getIndicatorStatOnDay($timestamp)
+    public static function getIndicatorStatOnDay($timestamp)
     {
         $user = Auth::user();
-        $returnValue = Metric::where('user', $user->id)
+        $metric = Metric::where('user', $user->id)
                         ->where('date', date('Y-m-d',$timestamp))
-                        ->first()
-                        ->monthlyCancellations;
+                        ->first();
 
-        return $returnValue;
+        return $metric ? $metric->monthlyCancellations : null;
     }
         /*
         $beforeValues = array();
@@ -294,16 +294,20 @@ class CancellationStat extends BaseStat {
 
         $data = self::showSimpleStat($metrics);
 
-        // building full mrr history
-        $firstDay = static::getFirstDay();
-        $data['firstDay'] = date('d-m-Y', $firstDay);
+        $firstDate = Event::where('user', Auth::user()->id)
+                        ->orderBy('date', 'asc')
+                        ->first()
+                        ->date;
 
+        $data['firstDay'] = $firstDate;
 
-        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['fullHistory'][$date] = static::getStatOnDay($i);
+        $fullMetricHistory = Metric::where('user', Auth::user()->id)
+                    ->orderBy('date','asc')
+                    ->get();
+
+        foreach ($fullMetricHistory as $metric) {
+            $data['fullHistory'][$metric->date] = $metric->$data['id'];
         }
-        
 
         // past values (null if not available)
         $lastMonthValue = static::getIndicatorStatOnDay($lastMonthTime);

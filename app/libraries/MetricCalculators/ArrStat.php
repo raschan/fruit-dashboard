@@ -70,7 +70,7 @@ class ArrStat extends BaseStat {
         }
         // converting to money format
         $arrData = self::toMoneyFormat($arrData, $fullDataNeeded);
-
+        
         foreach($arrData['history'] as $date => $value)
         {   
             if ($value) {

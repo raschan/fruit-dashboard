@@ -28,12 +28,12 @@ class AUStat extends BaseStat {
             switch ($event->type) {
                 case 'customer.created':
                     // new customer created, increase AU
-                    $currentAU += $currentAU * $direction;
+                    $currentAU += $direction;
                     break;
                 
                 case 'customer.deleted':
                     // customer deleted, decrease AU
-                    $currentAU -= $currentAU * $direction;
+                    $currentAU -= $direction;
                     break;
 
                 default:
@@ -81,6 +81,7 @@ class AUStat extends BaseStat {
             // set the new current time
             $timestamp -= 86400;
         }
+        var_dump($historyAU);
         return $historyAU;
     }
 

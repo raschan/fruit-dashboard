@@ -101,7 +101,7 @@ class StripeHelper
                 // we have last obj -> starting from there
                 $returned_object = Event::all(
                     array(
-                        'limit'          => 50,
+                        'limit'          => 20,
                         'starting_after' => $last_obj
                     )
                 );

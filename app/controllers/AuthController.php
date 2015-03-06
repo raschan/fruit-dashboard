@@ -143,12 +143,14 @@ class AuthController extends BaseController
                                 ->orderBy('date','desc')
                                 ->take(31)
                                 ->get();
+
         foreach ($currentMetrics as $statID => $statClassName) {
 
             $metricsArray = array();
             foreach ($metricValues as $metric) {
                 $metricsArray[$metric->date] = $metric->$statID;
             }
+            ksort($metricsArray);
             $allMetrics[] = $statClassName::show($metricsArray);
         }
 
@@ -456,13 +458,13 @@ class AuthController extends BaseController
                                 ->take(31)
                                 ->get();
         
-        foreach ($currentMetrics as $statID => $statClassName) {
-
+        foreach ($currentMetrics as $metricID => $statClassName) {
             $metricsArray = array();
             foreach ($metricValues as $metric) {
-                $metricsArray[$metric->date] = $metric->$statID;
+                $metricsArray[$metric->date] = $metric->$metricID;
             }
-            $allMetrics[$statID] = $metricsArray;
+            ksort($metricsArray);
+            $allMetrics[$metricID] = $metricsArray;
         }
 
         if (isset($currentMetrics[$statID]))
