@@ -19,36 +19,45 @@ class DemoController extends BaseController
             return Redirect::route('auth.connect');
         } 
         else {
-            $user = User::find(1);
-            Auth::login($user);
+            try { 
+                $user = User::find(1);
+                Auth::login($user);
 
-            $allMetrics = array();
+                $allMetrics = array();
 
-            // get the metrics we are calculating right now
-            $currentMetrics = Calculator::currentMetrics();
+                // get the metrics we are calculating right now
+                $currentMetrics = Calculator::currentMetrics();
 
-            $metricValues = Metric::where('user', Auth::user()->id)
-                                    ->orderBy('date','desc')
-                                    ->take(31)
-                                    ->get();
-            foreach ($currentMetrics as $statID => $statClassName) {
+                $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->orderBy('date','desc')
+                                        ->take(31)
+                                        ->get();
+                foreach ($currentMetrics as $statID => $statClassName) {
 
-                $metricsArray = array();
-                foreach ($metricValues as $metric) {
-                    $metricsArray[$metric->date] = $metric->$statID;
+                    $metricsArray = array();
+                    foreach ($metricValues as $metric) {
+                        $metricsArray[$metric->date] = $metric->$statID;
+                    }
+                    $allMetrics[] = $statClassName::show($metricsArray);
                 }
-                $allMetrics[] = $statClassName::show($metricsArray);
+
+
+                return View::make(
+                    'demo.dashboard',
+                    array(
+                        'allFunctions' => $allMetrics,
+                        'events' => Calculator::formatEvents(Auth::user()),
+                        Auth::logout()
+                    )
+                );
             }
 
+            catch (Exception $e) {
+                Auth::logout();
+                return Redirect::route('auth.signup')
+                        ->with('error', 'Something went wrong, we will return shortly.');
+            }
 
-            return View::make(
-                'demo.dashboard',
-                array(
-                    'allFunctions' => $allMetrics,
-                    'events' => Calculator::formatEvents(Auth::user()),
-                    Auth::logout()
-                )
-            );
         }
     }
 
@@ -62,35 +71,42 @@ class DemoController extends BaseController
             return Redirect::route('auth.connect');
         } 
         else {
-            $user = User::find(1);
-            Auth::login($user);
+            try {
+                $user = User::find(1);
+                Auth::login($user);
 
-            $currentMetrics = Calculator::currentMetrics();
-            $metricValues = Metric::where('user', Auth::user()->id)
-                                    ->orderBy('date','desc')
-                                    ->take(31)
-                                    ->get();
-            
-            foreach ($currentMetrics as $statID => $statClassName) {
+                $currentMetrics = Calculator::currentMetrics();
+                $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->orderBy('date','desc')
+                                        ->take(31)
+                                        ->get();
+                
+                foreach ($currentMetrics as $statID => $statClassName) {
 
-                $metricsArray = array();
-                foreach ($metricValues as $metric) {
-                    $metricsArray[$metric->date] = $metric->$statID;
+                    $metricsArray = array();
+                    foreach ($metricValues as $metric) {
+                        $metricsArray[$metric->date] = $metric->$statID;
+                    }
+                    $allMetrics[$statID] = $metricsArray;
                 }
-                $allMetrics[$statID] = $metricsArray;
-            }
 
-            if (isset($currentMetrics[$statID]))
-            {
-                return View::make('demo.single_stat',
-                    array(
-                        'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
-                    )
-                );
-            }
-
-            return Redirect::route('demo.dashboard')
+                if (isset($currentMetrics[$statID]))
+                {
+                    return View::make('demo.single_stat',
+                        array(
+                            'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
+                        )
+                    );
+                }
+                return Redirect::route('demo.dashboard')
                 ->with('error', 'Statistic does not exist.');
+            }
+
+            catch (Exception $e) {
+                Auth::logout();
+                return Redirect::route('auth.signup')
+                        ->with('error', 'Something went wrong, we will return shortly.');
+            }
         }
     }
     
