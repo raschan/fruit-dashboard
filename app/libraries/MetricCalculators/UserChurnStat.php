@@ -21,10 +21,11 @@ class UserChurnStat extends BaseStat {
         $metrics = Metric::where('user', $user->id)
                     ->where('date', date('Y-m-d', $timestamp - 30 * 86400))
                     ->first();
+        if ($metrics){
         $returnValue = ($metrics->au != 0) 
                         ? $mC / $metrics->au * 100 
                         : null;
-
+        }
         return $returnValue;
     }
 

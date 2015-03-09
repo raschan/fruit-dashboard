@@ -5,7 +5,7 @@ class EventSeeder extends Seeder
 
     public function run()
     {
-        DB::table('event')->delete();    
+        DB::table('events')->delete();    
 
         $currentDay = time();
         $user = User::find(1);
@@ -17,51 +17,56 @@ class EventSeeder extends Seeder
             // timestamp of the current day
             $dailyTimeStamp = $generatedDay + $i*24*60*60;
             $date = date('Y-m-d', $dailyTimeStamp);
-            $monthStats = monthlyStats($dailyTimeStamp);
-            $eventTimes = generateEventTimes($monthStats, $dailyTimeStamp);
+            $monthStats = EventSeeder::monthlyStats($dailyTimeStamp);
+            $eventTimes = EventSeeder::generateEventTimes($monthStats, $dailyTimeStamp);
 
             foreach ($eventTimes as $event){
-            $temparray = getEventType($monthStats, $event);
-                DB::table('event')->insert(
-                    array(
-                        'user' => 1,
-                        'created' => $temparray['created'],
-                        'eventID' => $temparray['id'],
-                        'type' => $temparray['type'],
-                        'object' => $temparray['object'],
-                        'provider' => 'stripe',
-                        'previousAttributes' => $temparray['previousAttributes'],
-                        'date' => $date
-                    )
-                );
+                $temparray = EventSeeder::getEventType($monthStats, $event);
+                    DB::table('events')->insert(
+                        array(
+                            'user' => $user->id,
+                            'created' => date('Y-m-d H:i:s', $event),
+                            'eventID' => $temparray['id'],
+                            'type' => $temparray['type'],
+                            'object' => $temparray['object'],
+                            'provider' => 'stripe',
+                            'previousAttributes' => $temparray['previousAttributes'],
+                            'date' => date('Y-m-d', $event)
+                        )
+                    );
+                }
+                // set time to last timestamp +1 
+                $event++;
+                // calculate all
+                Calculator::calculateMetrics($user, $event);
             }
-            // set time to last timestamp +1 
-            $event++;
-            // calculate all
-            Calculator::calculateMetrics($user, $event);
-        }
+
+    }
         // returns a random event type with the corresponding data array ready for seeding
         public function getEventType($monthStats, $eventTime){
+            $array = array();
             $randomNumber = rand(1,100);
-            if ( $randomNumber > 0 && $randomNumber =< $monthStats['subscriptions']){
-                $array['type'] = 'customer.subsription.created';
-                $array['id'] = generateRandomString();
+            if ( $randomNumber > 0 && $randomNumber <= $monthStats['subscriptions']){
+                $array['type'] = 'customer.subscription.created';
+                $array['id'] = EventSeeder::generateRandomString();
                 $array['created'] = $eventTime;
-                $temparray = fillObject('subscriptions');
-                $array['object'] = $temparray['json']
+                $temparray = EventSeeder::fillObject('subscriptions');
+                $array['object'] = $temparray['json'];
+                $array['previousAttributes'] = $temparray['previous'];
             }
-            elseif ( $randomNumber > $monthStats['subscriptions'] && $randomNumber =< $monthStats['cancels']){
+            elseif ( $randomNumber > $monthStats['subscriptions'] && $randomNumber <= ($monthStats['subscriptions'] + $monthStats['cancels'])){
                 $array['type'] = 'customer.subscription.deleted';
-                $array['id'] = generateRandomString();
+                $array['id'] = EventSeeder::generateRandomString();
                 $array['created'] = $eventTime;
-                $temparray = fillObject('cancels');
-                $array['object'] = $temparray['json']
+                $temparray = EventSeeder::fillObject('cancels');
+                $array['object'] = $temparray['json'];
+                $array['previousAttributes'] = $temparray['previous'];
             }
-            elseif ( $randomNumber >= $monthStats['cancels'] && $randomNumber =< $monthStats['updates']){
+            elseif ( $randomNumber > ($monthStats['subscriptions'] + $monthStats['cancels']) && $randomNumber <= ($monthStats['subscriptions'] + $monthStats['cancels'] + $monthStats['updates'])){
                 $array['type'] = 'customer.subscription.updated';
-                $array['id'] = generateRandomString();
+                $array['id'] = EventSeeder::generateRandomString();
                 $array['created'] = $eventTime;
-                $temparray = fillObject('updates');
+                $temparray = EventSeeder::fillObject('updates');
                 $array['object'] = $temparray['json'];
                 $array['previousAttributes'] = $temparray['previous'];
             }
@@ -70,39 +75,23 @@ class EventSeeder extends Seeder
 
         // fills the event object with the corresponding data
         public function fillObject($type){
-            $name = generateRandomString(8);
-            $plan = getRandomPlan();
-            $object[];
+            $name = EventSeeder::generateRandomString(8);
+            $plan = EventSeeder::getRandomPlan();
+            $object['previous'] = null;
             switch ($type){
                 case 'subscriptions':
                 // jsonencode
-                $object['json'] = json_encode("plan": {
-                    "interval": "month",
-                    "name": $plan['name'],
-                    "amount": $plan['amount'],
-                });
+                $object['json'] = '{"plan":{"interval":"month","currency":"usd","object":"plan","name":"' . $plan['name'] . '","amount":' . $plan['amount'] .'}}';
                 break;
                 case 'cancels':
                 // jsonencode
-                $object['json'] = json_encode("plan": {
-                    "interval": "month",
-                    "name": $plan['name'],
-                    "amount": $plan['amount'],
-                });
+                $object['json'] = '{"plan":{"interval":"month","currency":"usd","object":"plan","name":"' . $plan['name'] . '","amount":' . $plan['amount'] .'}}';
                 break;                
                 case 'updates':
                 // jsonencode
-                $object['json'] = json_encode("plan": {
-                    "interval": "month",
-                    "name": $plan['name'],
-                    "amount": $plan['amount'],
-                });
+                $object['json'] = '{"plan":{"interval":"month","currency":"usd","object":"plan","name":"' . $plan['name'] . '","amount":' . $plan['amount'] .'}}';
                 // i need a previous attributes json
-                $object['previous'] = json_encode("previous_attributes": {
-                    "interval": "month",
-                    "name": $plan['nameChange'],
-                    "amount": $plan['amountChange'],
-                });
+                $object['previous'] = '{"plan":{"id":"' . EventSeeder::generateRandomString(4) . '","interval":"month","name":"' . $plan['nameChange'] . '","amount":' . $plan['amountChange'] .'}}';
                 break;
                 case 'default':
                 break;
@@ -111,13 +100,13 @@ class EventSeeder extends Seeder
         }
 
         // returns an array of timestamps
-        public function generateEventTimes ($monthStats, $dailyTimeStamp){
+        public function generateEventTimes($monthStats, $dailyTimeStamp){
             $min = $dailyTimeStamp;
             $max = $dailyTimeStamp + 24*60*58;
 
             $modulus = ($max - $min) / $monthStats['eventNumber'];
+            $array =[];
 
-            $array[];
             for ($i=0;$i<$monthStats['eventNumber'];$i++){
                 array_push($array, $dailyTimeStamp + ($modulus * $i));
             }
@@ -126,12 +115,11 @@ class EventSeeder extends Seeder
 
         // gives the base number of events on a day and a probability number for event type randomizing
         public function monthlyStats($dailyTimeStamp){
-            $month_name = getMonth($dailyTimeStamp);
-            $array[];
+            $month_name = EventSeeder::getMonth($dailyTimeStamp);
             switch ($month_name){
                 case 'Jan':
                     $array['eventNumber'] = 10;
-                    $array['subscriptions'] = 100;
+                    $array['subscriptions'] = 99;
                     $array['cancels'] = 0;
                     $array['updates'] = 0;
                     break;
@@ -230,7 +218,6 @@ class EventSeeder extends Seeder
         }
 
         public function getRandomPlan(){
-            $plan[];
             // plan
             $random = rand(1,3);
             // plan change from
@@ -238,39 +225,42 @@ class EventSeeder extends Seeder
 
             switch ($random) {
                 case '1':
-                    $plan['name'] = 'ini'
-                    $plan['amount'] = 19;
+                    $plan['name'] = 'ini';
+                    $plan['amount'] = 1900;
                     break;
                 case '2':
-                    $plan['name'] = 'mini'
-                    $plan['amount'] = 29;
+                    $plan['name'] = 'mini';
+                    $plan['amount'] = 2900;
                     break;
                 case '3':
-                    $plan['name'] = 'mino'
-                    $plan['amount'] = 49;
+                    $plan['name'] = 'mino';
+                    $plan['amount'] = 4900;
                     break;
                 default:
+                    error_log('lol');
                     break;
             }
 
             switch ($random2) {
                 case '1':
-                    $plan['nameChange'] = 'ini'
-                    $plan['amountChange'] = 19;
+                    $plan['nameChange'] = 'ini';
+                    $plan['amountChange'] = 1900;
                     break;
                 case '2':
-                    $plan['nameChange'] = 'mini'
-                    $plan['amountChange'] = 29;
+                    $plan['nameChange'] = 'mini';
+                    $plan['amountChange'] = 2900;
                     break;
                 case '3':
-                    $plan['nameChange'] = 'mino'
-                    $plan['amountChange'] = 49;
+                    $plan['nameChange'] = 'mino';
+                    $plan['amountChange'] = 4900;
                     break;
                 default:
+                    error_log('lol');
                     break;
             }
 
             return $plan;
         }
-    }
+
+        
 }
