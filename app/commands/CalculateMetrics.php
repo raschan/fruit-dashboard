@@ -44,7 +44,7 @@ class CalculateMetrics extends Command {
         	if($user->isStripeConnected())
         	{
         		// saving events
-	            Calculator::calculateMetrics($user);
+	            Calculator::calculateMetrics($user,time());
 	        }
         }
 	}
