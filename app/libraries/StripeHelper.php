@@ -130,9 +130,9 @@ class StripeHelper
                 object      - hash map (assoc array)
                 */
 
-                if (isset($event['data']['object']['id'])) {
-                    if ($latestEvent[0]) {
-                        if ($event['id'] == $latestEvent[0]->eventID)
+                if (isset($event['data']['object'])) {
+                    if ($latestEvent) {
+                        if ($event['id'] == $latestEvent->eventID)
                         {
                             $foundLatestEvent = true;
                         }
