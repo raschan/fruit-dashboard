@@ -51,12 +51,14 @@ class Calculator
         $yesterdayMetric = Metric::where('user', $user->id)
                     ->where('date', $yesterday)
                     ->first();
+
         // get today's events
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
                     ->get();
         // events have a provider, needs merging
         // FIXME!!!!
+
 
 
         
@@ -749,6 +751,7 @@ class Calculator
             if ($event->provider == 'stripe')
             {
                 // decoding object
+
                 $tempArray = json_decode(strstr($event->object, '{'), true);
                 $prevTempArray = !is_null($event->previousAttributes)
                                     ? json_decode(strstr($event->previousAttributes , '{'), true)
@@ -861,14 +864,13 @@ class Calculator
                                 $eventArray[$i]['prevPlanInterval'] = 'yearly';
                                 break;
                             default:
-                                // don't do anything}
+                                // don't do anything
                         }
                     }
                 }
             } // end if stripe event
             $i++;
         }// end foreach
-
             return $eventArray;
     }
 

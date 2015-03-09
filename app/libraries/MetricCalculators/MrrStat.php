@@ -22,21 +22,24 @@ class MrrStat extends BaseStat {
     {
         // return var
         $currentMRR = $baseMRR;
+
+
+
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
+            var_dump( $event->type);
             switch ($event->type) {
-                case 'customer.subsription.created':
+                case 'customer.subscription.created':
                     // subscription created, increase MRR
                     $tempArray = json_decode(strstr($event->object, '{'), true);
-
                     $changeValue = Calculator::getMRRContribution($tempArray['plan']);
 
                     // check if there is a problem
                     if (!is_null($changeValue))
                     {
                         // no problems here, add the contribution to yesterdayMRR
-
+                        var_dump('moneymoneymoney');
                         $currentMRR += $changeValue * $direction;
                     } else {
                         // do some error handling here
