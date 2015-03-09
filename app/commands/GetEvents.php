@@ -37,8 +37,8 @@ class GetEvents extends Command {
      */
     public function fire()
     {
-        // going through the users
         Log::info('GetEvents fired');
+        // going through the users
         foreach (User::all() as $user) {
 
             // saving events
