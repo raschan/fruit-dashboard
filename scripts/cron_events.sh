@@ -2,4 +2,4 @@
 
 cd /home/abfinfor/www/startupdashboard-dev.abfinformatika.hu
 
-php artisan events:get
+/usr/local/bin/php artisan events:get
