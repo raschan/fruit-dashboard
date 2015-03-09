@@ -97,9 +97,6 @@ class DemoController extends BaseController
                             'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
                         )
                     );
-                } else {
-                    return Redirect::route('demo.dashboard')
-                        ->with('error', 'Statistic does not exist.');
                 }
                 return Redirect::route('demo.dashboard')
                 ->with('error', 'Statistic does not exist.');
@@ -110,7 +107,6 @@ class DemoController extends BaseController
                 return Redirect::route('auth.signup')
                         ->with('error', 'Something went wrong, we will return shortly.');
             }
-            
         }
     }
     

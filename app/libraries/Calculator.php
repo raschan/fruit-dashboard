@@ -107,22 +107,18 @@ class Calculator
         $timestamp = time();
         $todayDate = date('Y-m-d', $timestamp);    
 
-        Log::info(var_export($todayDate,true));
         // request and save events
         self::saveEvents($user);
-        Log::info(var_export($todayDate,true));        
         // get first event date
         $firstDate = Event::where('user', $user->id)
                         ->orderBy('date','asc')
                         ->first()
                         ->date;
-        Log::info(var_export($todayDate,true));
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
         // calculate starter mrr and au
         $starterAU = count($customers);
         $starterMRR = MrrStat::calculateFirstTime($customers);
-
         
         // reverse calculate from events
         $historyMRR = MrrStat::calculateHistory($timestamp,$user,$firstDate,$starterMRR);
@@ -142,7 +138,6 @@ class Calculator
                         'user'      => $user->id
                     )
                 );
-            var_dump($metrics);
             $metrics->user = $user->id;
             $metrics->date = $date;
 
