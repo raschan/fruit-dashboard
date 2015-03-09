@@ -51,79 +51,38 @@ class ArrStat extends BaseStat {
         self::$statID = 'arr';
 
         // return array
-        $arrData = array();
+        $data = array();
 
         // full ARR data
         if ($fullDataNeeded){
 
-            $arrData = self::showFullStat($metrics);
+            $data = self::showFullStat($metrics);
 
             // correction of the money to dollars from cents
-            foreach($arrData['fullHistory'] as $date => $value)
+            foreach($data['fullHistory'] as $date => $value)
             {   
                 if ($value) {
-                    $arrData['fullHistory'][$date] = $value / 100;
+                    $data['fullHistory'][$date] = $value / 100;
                 }
             }
         } else {
-            $arrData = self::showSimpleStat($metrics);
-        }
-        // converting to money format
-        $arrData = self::toMoneyFormat($arrData, $fullDataNeeded);
-
-        foreach($arrData['history'] as $date => $value)
-        {   
-            if ($value) {
-                $arrData['history'][$date] = $value / 100;
-            }
+            $data = self::showSimpleStat($metrics);
         }
 
-        return $arrData;
-    }
-
-    /**
-    * Get stat on given day, overriding parent function
-    *
-    * @param timestamp, current day timestamp
-    *
-    * @return int (cents) or null if data not exist
-    */
-
-    public static function getStatOnDay($timeStamp)
-    {
-        $day = date('Y-m-d', $timeStamp);
-
-        $stats = DB::table('mrr')
-            ->where('date',$day)
-            ->where('user', Auth::user()->id)
-            ->get();
-
-        if($stats){
-            $statValue = 0;
-            foreach ($stats as $stat) {
-                $statValue += $stat->value;
+        if (isset($data['history']))
+        {
+            foreach($data['history'] as $date => $value)
+            {   
+                if ($value) {
+                    $data['history'][$date] = $value / 100;
+                }
             }
-            return $statValue * 12;
         } else {
-            return null;
+            $data['history'] = array();
         }
+
+        // converting to money format
+        $data = self::toMoneyFormat($data, $fullDataNeeded);
+        return $data;
     }
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table('mrr')
-            ->where('user', Auth::user()->id)
-            ->orderBy('date', 'asc')
-            ->first();
-        $firstDay = strtotime($firstDay->date);
-
-        return $firstDay;
-    }
-
 }

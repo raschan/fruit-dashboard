@@ -28,12 +28,12 @@ class AUStat extends BaseStat {
             switch ($event->type) {
                 case 'customer.created':
                     // new customer created, increase AU
-                    $currentAU += $currentAU * $direction;
+                    $currentAU += $direction;
                     break;
                 
                 case 'customer.deleted':
                     // customer deleted, decrease AU
-                    $currentAU -= $currentAU * $direction;
+                    $currentAU -= $direction;
                     break;
 
                 default:

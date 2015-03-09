@@ -1,5 +1,7 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
+
 class BaseStat
 {
     // later rewrite to be protected
@@ -34,36 +36,31 @@ class BaseStat
         foreach ($metrics as $date => $metric) {
             $data['history'][$date] = $metric;
         }
-/*
-        // building history array for dashboard
-        for ($i = $currentDate-30*86400; $i < $currentDate; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['history'][$date] = static::getStatOnDay($i);
+
+        if(!isset($data['history']))
+        {
+            $data['history'] = array();
         }
-*/
-        // current value, formatted for money
-        if(isset($metrics[$currentDate]))
-        {   
-            $data['currentValue'] = $metrics[$currentDate];
-        } else {
-            $data['currentValue'] = null;
-        }
+
+        // the last item in the $metrics array is the newest, take that as current
+        $data['currentValue'] = end($metrics);
 
         // change in a month
         // check if there is enough data in the array
-        if (isset($metrics[$lastMonthDate]))
+            // $lastMonthValue is an array, 
+            // its empty, if there is not enoguh element in metrics
+        $lastMonthValue = array_slice($metrics,-29,1);
+
+        if(!empty($lastMonthValue) && reset($lastMonthValue) != 0)
         {
-            // check data, so we don't try to divide by zero
-            if ($metrics[$lastMonthDate] != 0)
-            {
-                $changeInPercent = ($metrics[$currentDate] / $metrics[$lastMonthDate] * 100) - 100;
-                $data['oneMonthChange'] = round($changeInPercent) . '%';
-            } else {
-                $data['oneMonthChange'] = null;
-            }
+            // it's not empty, and it's not 0
+            $changeInPercent = ($data['currentValue'] / reset($lastMonthValue) * 100) - 100;
+            $data['oneMonthChange'] = round($changeInPercent) . '%';
+            
         } else {
             $data['oneMonthChange'] = null;
         }
+        
     
         return $data;
 
@@ -92,15 +89,24 @@ class BaseStat
         $data = static::showSimpleStat($metrics);
 
         // building full mrr history
-        $firstDay = static::getFirstDay();
+        $firstDay = Event::where('user', Auth::user()->id)
+                    ->orderBy('date','asc')
+                    ->first();
+        $firstDay = strtotime($firstDay->date);
         $data['firstDay'] = date('d-m-Y', $firstDay);
 
+        $fullMetricHistory = Metric::where('user', Auth::user()->id)
+                    ->orderBy('date','asc')
+                    ->get();
 
-        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['fullHistory'][$date] = static::getStatOnDay($i);
+        foreach ($fullMetricHistory as $metric) {
+            $data['fullHistory'][$metric->date] = $metric->$data['id'];
         }
-        
+
+        if(!isset($data['fullHistory']))
+        {
+            $data['fullHistory'] = array();
+        }
 
         // past values (null if not available)
         $lastMonthValue = static::getStatOnDay($lastMonthTime);
@@ -208,45 +214,15 @@ class BaseStat
     {
     	$day = date('Y-m-d', $timeStamp);
 
-    	$stats = DB::table(self::$statID)
-    		->where('date',$day)
+    	$stats = Metric::where('date',$day)
     		->where('user', Auth::user()->id)
-    		->get();
+    		->first();
 
     	if($stats){
-            $statValue = 0;
-            foreach ($stats as $stat) {
-                $statValue += $stat->value;
-            }
+            $statValue = $stats->{self::$statID};
     		return $statValue;
     	} else {
 			return null;
     	}
     }
-
-
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table(self::$statID)
-            ->where('user', Auth::user()->id)
-            ->orderBy('date', 'asc')
-            ->first();
-
-        if ($firstDay){
-            return strtotime($firstDay->date);
-        }
-        else {
-            // needs review, so it can handle null with new users too
-            // for new users, firstday is today
-            return time();
-        }
-    }
-
 }

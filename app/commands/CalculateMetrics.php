@@ -39,7 +39,7 @@ class CalculateMetrics extends Command {
 	{
 		// going through the users
         foreach (User::all() as $user) {
-
+        	Log::info('CalculateMetrics fired');
         	// check if user is connected
         	if($user->isStripeConnected())
         	{
