@@ -320,14 +320,14 @@
 
                 @if ($events[$i]['type'] == 'customer.discount.updated')  
                   <li class="list-group-item">
-                    <span class="badge badge-success">
+                    <span class="badge badge-info">
                       Coupon changed
                     </span>
                     <span class="provider">
                       <i class="fa icon fa-cc-stripe"></i>
                     </span>         
                     <b>{{ $events[$i]['name'] }}</b> changed coupon
-                    from XXX to YYY                 
+                    from <b>{{$events[$i]['prevCoupon']}}</b> to <b>{{$events[$i]['newCoupon']}}</b>              
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
