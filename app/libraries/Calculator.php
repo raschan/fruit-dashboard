@@ -12,10 +12,15 @@ class Calculator
     * @return null
     */
 
-    public static function calculateMetrics($user) {
+    public static function calculateMetrics($user, $time) {
 
         // get needed time vars
-        $timestamp = time();
+        if ($time){
+            $timestamp = $time;
+        }
+        else {
+            $timestamp = time();
+        }
         $today = date('Y-m-d', $timestamp);
         $yesterday = date('Y-m-d', $timestamp - 86400);
 
