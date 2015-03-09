@@ -92,7 +92,12 @@ class BaseStat
         $firstDay = Event::where('user', Auth::user()->id)
                     ->orderBy('date','asc')
                     ->first();
-        $firstDay = strtotime($firstDay->date);
+        if($firstDay)
+        {
+            $firstDay = strtotime($firstDay->date);
+        } else {
+            $firstDay = time();
+        }
         $data['firstDay'] = date('d-m-Y', $firstDay);
 
         $fullMetricHistory = Metric::where('user', Auth::user()->id)

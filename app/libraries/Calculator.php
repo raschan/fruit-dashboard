@@ -48,10 +48,14 @@ class Calculator
 
         // get yesterday's metrics
         // this should never return an empty array
-        $yesterdayMetric = Metric::where('user', $user->id)
-                    ->where('date', $yesterday)
-                    ->first();
 
+        if(!$yesterdayMetric)
+        {
+            Calculator::calculateMetrics($user, $timestamp-86400);
+            $yesterdayMetric = Metric::where('user', $user->id)
+                    ->where('date', $yesterday)
+                    ->first();            
+        }
         // get today's events
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
@@ -252,86 +256,6 @@ class Calculator
     *
     * @return array
     */
-
-
-    /**
-    * Retreive data relevant to MRR and calculate the current value
-    *
-    * @return array (provider => mrr)
-    */
-
-    public static function retreiveAndCalculateMRR($user)
-    {
-        // getting the plans
-        $plans = TailoredData::getPlans($user);
-
-        // getting current subscriptions (only active subscriptions)
-        $current_subscriptions = self::getCurrentSubscriptions($user);
-
-        // we'll store the relations here
-        $plan_subscriptions = array();
-
-        // dividing subscriptions among the plans and summing the mrr
-        $mrr = array();
-
-        // getting each plan's count
-        foreach ($current_subscriptions as $subscription) {
-            // checking for previous data
-            if (isset($plan_subscriptions[$subscription['plan_id']])) {
-                // has previous data
-                $plan_subscriptions[$subscription['plan_id']]++;
-            } else {
-                // initializing data
-                $plan_subscriptions[$subscription['plan_id']] = 1;
-            }
-        }
-
-        // counting the mrr
-        foreach ($plan_subscriptions as $plan_id => $count) {
-            if (isset($mrr[$plans[$plan_id]['provider']])){
-                // we already met this provider
-                $mrr[$plans[$plan_id]['provider']] += $plans[$plan_id]['amount'] * $count;
-            } else {
-                // this is a new provider
-                $mrr[$plans[$plan_id]['provider']] = $plans[$plan_id]['amount'] * $count;
-            }
-        }
-
-        // returning int
-        return $mrr;
-    }
-
-    /**
-    * Save the daily MRR in database
-    */
-
-    public static function saveMRR($user)
-    {
-        $currentDay = date('Y-m-d', time());
-
-        // checking if we already have data
-        $currentDayMRR = DB::table('mrr')
-            ->where('date', $currentDay)
-            ->where('user', $user->id)
-            ->get();
-
-        if (!$currentDayMRR) {
-            // no previous data
-            $mrrValue = self::retreiveAndCalculateMRR($user);
-
-            foreach ($mrrValue as $provider => $value) {
-                DB::table('mrr')->insert(
-                    array(
-                        'provider'  => $provider,
-                        'value'     => $value,
-                        'user'      => $user->id,
-                        'date'      => $currentDay
-                    )
-                );
-            }
-        }
-    }
-
 
 
     /**
@@ -866,6 +790,18 @@ class Calculator
                             default:
                                 // don't do anything
                         }
+                    }
+                }
+
+                // if the event is a coupon event
+
+                if (isset($tempArray['coupon']))
+                {
+                    $eventArray[$i]['newCoupon'] = $tempArray['coupon']['id'];
+    
+                    if (!is_null($prevTempArray)) 
+                    {
+                        $eventArray[$i]['prevCoupon'] = $prevTempArray['coupon']['id'];
                     }
                 }
             } // end if stripe event

@@ -37,14 +37,14 @@ class CalculateMetrics extends Command {
 	 */
 	public function fire()
 	{
+    	Log::info('CalculateMetrics fired');
 		// going through the users
         foreach (User::all() as $user) {
-        	Log::info('CalculateMetrics fired');
         	// check if user is connected
         	if($user->isStripeConnected())
         	{
         		// saving events
-	            Calculator::calculateMetrics($user);
+	            Calculator::calculateMetrics($user,time());
 	        }
         }
 	}
