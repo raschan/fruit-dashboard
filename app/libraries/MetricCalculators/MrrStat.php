@@ -36,7 +36,6 @@ class MrrStat extends BaseStat {
                     if (!is_null($changeValue))
                     {
                         // no problems here, add the contribution to yesterdayMRR
-                        var_dump('moneymoneymoney');
                         $currentMRR += $changeValue * $direction;
                     } else {
                         // do some error handling here

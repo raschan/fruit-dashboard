@@ -26,12 +26,12 @@ class AUStat extends BaseStat {
         foreach ($events as $event) {
             // check, if event is relevant for the value 
             switch ($event->type) {
-                case 'customer.subscription.created':
+                case 'customer.created':
                     // new customer created, increase AU
                     $currentAU += $direction;
                     break;
                 
-                case 'customer.subscription.deleted':
+                case 'customer.deleted':
                     // customer deleted, decrease AU
                     $currentAU -= $direction;
                     break;
