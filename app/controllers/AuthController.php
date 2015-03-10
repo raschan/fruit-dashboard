@@ -143,14 +143,14 @@ class AuthController extends BaseController
                                 ->take(31)
                                 ->get();
 
-        foreach ($currentMetrics as $statID => $statClassName) {
+        foreach ($currentMetrics as $statID => $statDetails) {
 
             $metricsArray = array();
             foreach ($metricValues as $metric) {
                 $metricsArray[$metric->date] = $metric->$statID;
             }
             ksort($metricsArray);
-            $allMetrics[] = $statClassName::show($metricsArray);
+            $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
         }
 
         return View::make(
@@ -467,7 +467,7 @@ class AuthController extends BaseController
         {
             return View::make('auth.single_stat',
                 array(
-                    'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
+                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true)
                 )
             );
         } else {
