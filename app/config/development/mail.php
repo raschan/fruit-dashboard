@@ -67,7 +67,7 @@ return array(
    |
    */
 
-   'from' => array('address' => 'hello@startupdashboard-dev.abfinformatika.hu', 'name' => 'Development'),
+   'from' => array('address' => null, 'name' => null),
 
    /*
    |--------------------------------------------------------------------------

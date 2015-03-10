@@ -8,6 +8,14 @@ class CalculateFirstTime
 		$user = User::find($data['userID']);
 
         Calculator::calculateMetricsOnConnect($user);
+
+        Auth::login($user);
+        Mail::send('emails.connected', array(), function($message)
+		{
+			$user = Auth::user();
+		    $message->to($user->email, 'John Smith')->subject("You're numbers are ready!");
+		    Auth::logout();
+		});
         
         $job->delete();
 	}
