@@ -427,13 +427,15 @@ class AuthController extends BaseController
                 // saving user
                 $user->save();
 
+                Queue::push('CalculateFirstTime', array('userID' => $user->id));
+
             } catch(Stripe\Error\Authentication $e) {
                 // code was invalid
                 return Redirect::back()->with('error',"Authentication unsuccessful!");
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard')->with('success', "Stripe connected. We're now calculating your numbers, it'll be a few minutes");
+        return Redirect::route('auth.dashboard')->with('success', "Stripe connected. We're now calculating your numbers, it'll be a few minutes. We'll email you when we finished");
 
         }
     }
