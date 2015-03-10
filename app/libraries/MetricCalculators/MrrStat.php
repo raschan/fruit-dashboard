@@ -23,8 +23,6 @@ class MrrStat extends BaseStat {
         // return var
         $currentMRR = $baseMRR;
 
-
-
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
