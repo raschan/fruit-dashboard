@@ -132,6 +132,7 @@ class Calculator
                         'user'      => $user->id
                     )
                 );
+            Log::info('Saving items for user#' . $user->id . 'on ' . $date);
             $metrics->user = $user->id;
             $metrics->date = $date;
 
@@ -166,6 +167,7 @@ class Calculator
 
         if($eventsToSave)
         {
+            Log::info('Saving events for user #'. $user->id);
             foreach ($eventsToSave as $id => $event) {
                 // check, if we already saved this event
                 $newEvent = Event::firstOrNew(

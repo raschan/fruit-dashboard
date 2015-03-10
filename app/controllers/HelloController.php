@@ -179,7 +179,7 @@ class HelloController extends BaseController
         $user = Auth::user();
         // can't push objects to the queue, 
         // push the ID of the user instead
-//        Queue::push('CalculateFirstTime', array('userID' => $user->id));
+        Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
         Calculator::calculateMetricsOnConnect($user);
 

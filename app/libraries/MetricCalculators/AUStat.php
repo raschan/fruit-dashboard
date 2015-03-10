@@ -60,26 +60,23 @@ class AUStat extends BaseStat {
         // return array
         $historyAU = array();
 
+        $currentDate = date('Y-m-d', $timestamp);
         // save the first one
         $historyAU[date('Y-m-d',$timestamp)] = $baseAU;
         
-        // change to yesterday
-        $timestamp -= 86400;
-
         while ($timestamp >= strtotime($firstDate)) 
         {
-            $currentDate = date('Y-m-d', $timestamp);
-
             $events = Event::where('user', $user->id)
                             ->where('date', $currentDate)
                             ->get();
-
+            // set the new current time
+            
+            $timestamp -= 86400;
+            $currentDate = date('Y-m-d', $timestamp);
             $historyAU[$currentDate] = self::calculate($baseAU, $events, -1);
 
             // set the new base value
             $baseAU = $historyAU[$currentDate];
-            // set the new current time
-            $timestamp -= 86400;
         }
         return $historyAU;
     }

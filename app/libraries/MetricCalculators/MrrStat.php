@@ -142,26 +142,24 @@ class MrrStat extends BaseStat {
         // return array
         $historyMRR = array();
 
+        $currentDate = date('Y-m-d', $timestamp);
         // save the first one
         $historyMRR[date('Y-m-d',$timestamp)] = $baseMRR;
         
-        // change to yesterday
-        $timestamp -= 86400;
-
         while ($timestamp >= strtotime($firstDate)) 
         {
-            $currentDate = date('Y-m-d', $timestamp);
 
             $events = Event::where('user', $user->id)
                             ->where('date', $currentDate)
                             ->get();
 
+            // set the new current time
+            $timestamp -= 86400;
+            $currentDate = date('Y-m-d', $timestamp);
             $historyMRR[$currentDate] = self::calculate($baseMRR, $events, -1);
 
             // set the new base value
             $baseMRR = $historyMRR[$currentDate];
-            // set the new current time
-            $timestamp -= 86400;
         }
         return $historyMRR;
     }
