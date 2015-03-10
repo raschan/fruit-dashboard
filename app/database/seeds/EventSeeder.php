@@ -1,5 +1,10 @@
 <?php
 
+// before run
+// change metricstableseeder.php so we have yesterday data
+// change austat.php calculate function so we create new user for customer.subscription.created
+
+
 class EventSeeder extends Seeder
 {
 
@@ -226,8 +231,6 @@ class EventSeeder extends Seeder
             // plan
             $random = rand(1,3);
             // plan change from
-            $random2 = rand(1,3);
-
             switch ($random) {
                 case '1':
                     $plan['name'] = 'ini';
@@ -242,25 +245,24 @@ class EventSeeder extends Seeder
                     $plan['amount'] = 4900;
                     break;
                 default:
-                    error_log('lol');
                     break;
             }
 
-            switch ($random2) {
+            switch ($random) {
                 case '1':
-                    $plan['nameChange'] = 'ini';
-                    $plan['amountChange'] = 1900;
-                    break;
-                case '2':
-                    $plan['nameChange'] = 'mini';
-                    $plan['amountChange'] = 2900;
-                    break;
-                case '3':
                     $plan['nameChange'] = 'mino';
                     $plan['amountChange'] = 4900;
                     break;
+                case '2':
+                    $plan['nameChange'] = 'ini';
+                    $plan['amountChange'] = 1900;
+                    
+                    break;
+                case '3':
+                    $plan['nameChange'] = 'mini';
+                    $plan['amountChange'] = 2900;
+                    break;
                 default:
-                    error_log('lol');
                     break;
             }
 
