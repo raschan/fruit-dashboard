@@ -25,19 +25,6 @@ class Calculator
         $yesterday = date('Y-m-d', $timestamp - 86400);
 
         // get today's metrics
-        /*
-        $metrics = Metric::where('user',$user->id)
-                    ->where('date',$today)
-                    ->first();
-        // check, if querry was succesful
-        if(empty($metrics))
-        {
-            // create metrics object, if it doesn't exist
-            $metrics = new Metric;
-            $metrics->date = date('Y-m-d',$timestamp);
-            $metrics->user = $user->id;
-        }
-        */
 
         $metrics = Metric::firstOrNew(
             array(
@@ -48,6 +35,10 @@ class Calculator
 
         // get yesterday's metrics
         // this should never return an empty array
+
+        $yesterdayMetric = Metric::where('user', $user->id)
+                        ->where('date', $yesterday)
+                        ->first();
 
         if(!$yesterdayMetric)
         {
@@ -62,9 +53,6 @@ class Calculator
                     ->get();
         // events have a provider, needs merging
         // FIXME!!!!
-
-
-
         
         // calculate all the metrics
 

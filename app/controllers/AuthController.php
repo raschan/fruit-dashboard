@@ -1,5 +1,4 @@
 <?php
-use PayPal\Api\OpenIdSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -406,8 +405,8 @@ class AuthController extends BaseController
             try {
 
                 // trying to login with this key
-                Stripe::setApiKey(Input::get('stripe'));
-                $account = Stripe_Account::retrieve(); // catchable line
+                Stripe\Stripe::setApiKey(Input::get('stripe'));
+                $account = Stripe\Account::retrieve(); // catchable line
                 // success
                 $returned_object = json_decode(strstr($account, '{'), true);
 
@@ -428,15 +427,13 @@ class AuthController extends BaseController
                 // saving user
                 $user->save();
 
-            } catch(Stripe_AuthenticationError $e) {
+            } catch(Stripe\Error\Authentication $e) {
                 // code was invalid
-                return Redirect::back()->withErrors(
-                    array('stripe' => "Authentication unsuccessful!")
-                );
+                return Redirect::back()->with('error',"Authentication unsuccessful!");
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.connect')->with('success', 'Stripe connected.');
+        return Redirect::route('auth.dashboard')->with('success', "Stripe connected. We're now calculating your numbers, it'll be a few minutes");
 
         }
     }
