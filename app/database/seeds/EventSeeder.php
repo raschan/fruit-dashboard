@@ -22,18 +22,20 @@ class EventSeeder extends Seeder
 
             foreach ($eventTimes as $event){
                 $temparray = EventSeeder::getEventType($monthStats, $event);
-                    DB::table('events')->insert(
-                        array(
-                            'user' => $user->id,
-                            'created' => date('Y-m-d H:i:s', $event),
-                            'eventID' => $temparray['id'],
-                            'type' => $temparray['type'],
-                            'object' => $temparray['object'],
-                            'provider' => 'stripe',
-                            'previousAttributes' => $temparray['previousAttributes'],
-                            'date' => date('Y-m-d', $event)
-                        )
-                    );
+                if ($temparray){
+                        DB::table('events')->insert(
+                            array(
+                                'user' => $user->id,
+                                'created' => date('Y-m-d H:i:s', $event),
+                                'eventID' => $temparray['id'],
+                                'type' => $temparray['type'],
+                                'object' => $temparray['object'],
+                                'provider' => 'stripe',
+                                'previousAttributes' => $temparray['previousAttributes'],
+                                'date' => date('Y-m-d', $event)
+                            )
+                        );
+                    }
                 }
                 // set time to last timestamp +1 
                 $event++;
@@ -69,6 +71,9 @@ class EventSeeder extends Seeder
                 $temparray = EventSeeder::fillObject('updates');
                 $array['object'] = $temparray['json'];
                 $array['previousAttributes'] = $temparray['previous'];
+            }
+            else {
+                $array = null;
             }
             return $array;
         }
@@ -119,27 +124,27 @@ class EventSeeder extends Seeder
             switch ($month_name){
                 case 'Jan':
                     $array['eventNumber'] = 10;
-                    $array['subscriptions'] = 99;
+                    $array['subscriptions'] = 30;
                     $array['cancels'] = 0;
                     $array['updates'] = 0;
                     break;
                 case 'Feb':
                     $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 80;
+                    $array['subscriptions'] = 20;
                     $array['cancels'] = 5;
                     $array['updates'] = 15;
                     break;
                 case 'Mar':
                     $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 70;
+                    $array['subscriptions'] = 20;
                     $array['cancels'] = 10;
-                    $array['updates'] = 20;
+                    $array['updates'] = 5;
                     break;
                 case 'Apr':
                     $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 65;
-                    $array['cancels'] = 10;
-                    $array['updates'] = 25;
+                    $array['subscriptions'] = 15;
+                    $array['cancels'] = 5;
+                    $array['updates'] = 10;
                     break;
                 case 'May':
                     $array['eventNumber'] = 25;
@@ -149,49 +154,49 @@ class EventSeeder extends Seeder
                     break;
                 case 'Jun':
                     $array['eventNumber'] = 10;
-                    $array['subscriptions'] = 80;
-                    $array['cancels'] = 10;
-                    $array['updates'] = 10;
+                    $array['subscriptions'] = 10;
+                    $array['cancels'] = 5;
+                    $array['updates'] = 5;
                     break;
                 case 'Jul':
                     $array['eventNumber'] = 12;
-                    $array['subscriptions'] = 60;
-                    $array['cancels'] = 25;
-                    $array['updates'] = 15;
+                    $array['subscriptions'] = 10;
+                    $array['cancels'] = 2;
+                    $array['updates'] = 2;
                     break;
                 case 'Aug':
                     $array['eventNumber'] = 10;
-                    $array['subscriptions'] = 50;
-                    $array['cancels'] = 20;
-                    $array['updates'] = 30;
+                    $array['subscriptions'] = 15;
+                    $array['cancels'] = 2;
+                    $array['updates'] = 2;
                     break;
                 case 'Sep':
                     $array['eventNumber'] = 12;
-                    $array['subscriptions'] = 60;
-                    $array['cancels'] = 15;
-                    $array['updates'] = 25;
+                    $array['subscriptions'] = 20;
+                    $array['cancels'] = 5;
+                    $array['updates'] = 5;
                     break;
                 case 'Oct':
                     $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 65;
-                    $array['cancels'] = 15;
-                    $array['updates'] = 20;
+                    $array['subscriptions'] = 20;
+                    $array['cancels'] = 2;
+                    $array['updates'] = 5;
                     break;
                 case 'Nov':
                     $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 70;
-                    $array['cancels'] = 15;
+                    $array['subscriptions'] = 25;
+                    $array['cancels'] = 5;
                     $array['updates'] = 15;
                     break;
                 case 'Dec':
                     $array['eventNumber'] = 30;
-                    $array['subscriptions'] = 80;
+                    $array['subscriptions'] = 30;
                     $array['cancels'] = 10;
                     $array['updates'] = 10;
                     break; 
                 case 'default':
                     $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 85;
+                    $array['subscriptions'] = 40;
                     $array['cancels'] = 5;
                     $array['updates'] = 10;
                     break;

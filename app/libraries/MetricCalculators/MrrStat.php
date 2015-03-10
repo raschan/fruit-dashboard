@@ -28,7 +28,6 @@ class MrrStat extends BaseStat {
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
-            var_dump( $event->type);
             switch ($event->type) {
                 case 'customer.subscription.created':
                     // subscription created, increase MRR
@@ -39,7 +38,6 @@ class MrrStat extends BaseStat {
                     if (!is_null($changeValue))
                     {
                         // no problems here, add the contribution to yesterdayMRR
-                        var_dump('moneymoneymoney');
                         $currentMRR += $changeValue * $direction;
                     } else {
                         // do some error handling here
