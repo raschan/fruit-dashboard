@@ -23,12 +23,9 @@ class MrrStat extends BaseStat {
         // return var
         $currentMRR = $baseMRR;
 
-
-
         // for every event
         foreach ($events as $event) {
             // check, if event is relevant for the value 
-            var_dump( $event->type);
             switch ($event->type) {
                 case 'customer.subscription.created':
                     // subscription created, increase MRR
