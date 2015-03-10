@@ -132,7 +132,7 @@ class Calculator
                         'user'      => $user->id
                     )
                 );
-            Log::info('Saving items for user#' . $user->id . 'on ' . $date);
+            Log::info('Saving items for user # ' . $user->id . ' on ' . $date);
             $metrics->user = $user->id;
             $metrics->date = $date;
 
