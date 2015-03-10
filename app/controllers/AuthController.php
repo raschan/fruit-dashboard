@@ -435,7 +435,8 @@ class AuthController extends BaseController
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard')->with('success', "Stripe connected. We're now calculating your numbers, it'll be a few minutes. We'll email you when we finished");
+        return Redirect::route('auth.dashboard')->with(array('success' => 'Stripe connected.',
+                                                            'connected' => 'connocted'));
 
         }
     }
