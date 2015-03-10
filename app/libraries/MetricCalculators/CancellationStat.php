@@ -296,10 +296,13 @@ class CancellationStat extends BaseStat {
 
         $firstDate = Event::where('user', Auth::user()->id)
                         ->orderBy('date', 'asc')
-                        ->first()
-                        ->date;
-
-        $data['firstDay'] = $firstDate;
+                        ->first();
+        if($firstDate)
+        {
+            $data['firstDay'] = $firstDate;
+        } else {
+            $data['firstDay'] = date('Y-m-d', time());
+        }
 
         $fullMetricHistory = Metric::where('user', Auth::user()->id)
                     ->orderBy('date','asc')

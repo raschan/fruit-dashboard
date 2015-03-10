@@ -132,7 +132,6 @@ class Calculator
                         'user'      => $user->id
                     )
                 );
-            Log::info('Saving items for user # ' . $user->id . ' on ' . $date);
             $metrics->user = $user->id;
             $metrics->date = $date;
 
@@ -167,7 +166,6 @@ class Calculator
 
         if($eventsToSave)
         {
-            Log::info('Saving events for user #'. $user->id);
             foreach ($eventsToSave as $id => $event) {
                 // check, if we already saved this event
                 $newEvent = Event::firstOrNew(
@@ -847,12 +845,18 @@ class Calculator
     public static function currentMetrics()
     {
         return array(
-            'mrr'               => 'MrrStat'
-            ,'au'               => 'AUStat'
-            ,'arr'              => 'ArrStat'
-            ,'arpu'             => 'ArpuStat'
-            ,'cancellations'    => 'CancellationStat'
-            ,'uc'               => 'UserChurnStat'           
+            'mrr'               => array('metricClass'  => 'MrrStat'
+                                        ,'metricName'   => 'Monthly Recurring Revenue')
+            ,'au'               => array('metricClass'  => 'AUStat'
+                                        ,'metricName'   => 'Active Users')
+            ,'arr'              => array('metricClass'  => 'ArrStat'
+                                        ,'metricName'   => 'Annual Recurring Revenue')
+            ,'arpu'             => array('metricClass'  => 'ArpuStat'
+                                        ,'metricName'   => 'Average Revenue Per User')
+            ,'cancellations'    => array('metricClass'  => 'CancellationStat'
+                                        ,'metricName'   => 'Cancellations')
+            ,'uc'               => array('metricClass'  => 'UserChurnStat'
+                                        ,'metricName'   => 'User Churn')           
         );
     }
 }
