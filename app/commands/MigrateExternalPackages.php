@@ -38,7 +38,7 @@ class MigrateExternalPackages extends Command {
 	public function fire()
 	{
 		$this->call('migrate:refresh');
-		$this->call('db:seed');
+		//$this->call('db:seed');
 		$this->call('migrate', array('--package' => 'barryvdh/laravel-async-queue'));
 	}
 }
