@@ -13,3 +13,4 @@
 Artisan::add(new GetEvents);
 Artisan::add(new CalculateMetrics);
 Artisan::add(new SendDailyEmail);
+Artisan::add(new MigrateExternalPackages);
