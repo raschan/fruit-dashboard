@@ -45,7 +45,6 @@ class SendDailyEmail extends Command {
 		$currentMetrics = Calculator::currentMetrics();
 		// for each user send email with their metrics
 		foreach ($users as $user) {
-
 			// check if user finished the connect process
 			if ($user->isConnected())
 			{
@@ -53,7 +52,6 @@ class SendDailyEmail extends Command {
 				$metrics = Metric::where('user', $user->id)	
 								->where('date', $date)
 								->first();
-
 				// format metrics to presentable data
 				$metrics->formatMetrics();
 				$data = array(
@@ -71,7 +69,7 @@ class SendDailyEmail extends Command {
 					// get the currently logged in user
 					$user = Auth::user();
 					$message->to($user->email /*, name of the user*/)
-							->subject('Daily summery');
+							->subject('Daily summary');
 				});
 
 				// logout the user

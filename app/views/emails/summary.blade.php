@@ -7,7 +7,7 @@
 		<div>
 		Hi there,
 
-		Here are your yesterday numbers: <br/>
+		Here are your metrics for yesterday: <br/>
 		<br/>
 
 		<!-- for each calculated metrics -->
@@ -15,6 +15,7 @@
 			<b>{{ $statDetails['metricName'] }}:</b> {{ $metrics->$statID }}
 			<br/>
 		@endforeach
+		<a href="http://startupdashboard.abfinformatika.hu">Startup Dashboard</a>
 		</div>
 	</body>
 </html>
