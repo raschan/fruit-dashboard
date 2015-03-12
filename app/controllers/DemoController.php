@@ -32,13 +32,13 @@ class DemoController extends BaseController
                                         ->orderBy('date','desc')
                                         ->take(31)
                                         ->get();
-                foreach ($currentMetrics as $statID => $statClassName) {
+                foreach ($currentMetrics as $statID => $statDetails) {
 
                     $metricsArray = array();
                     foreach ($metricValues as $metric) {
                         $metricsArray[$metric->date] = $metric->$statID;
                     }
-                    $allMetrics[] = $statClassName::show($metricsArray);
+                    $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
                 }
 
 
@@ -81,23 +81,25 @@ class DemoController extends BaseController
                                         ->take(31)
                                         ->get();
                 
-                foreach ($currentMetrics as $statID => $statClassName) {
-
+                foreach ($currentMetrics as $metricID => $statClassName) {
                     $metricsArray = array();
                     foreach ($metricValues as $metric) {
-                        $metricsArray[$metric->date] = $metric->$statID;
+                        $metricsArray[$metric->date] = $metric->$metricID;
                     }
-                    $allMetrics[$statID] = $metricsArray;
+                    ksort($metricsArray);
+                    $allMetrics[$metricID] = $metricsArray;
                 }
 
                 if (isset($currentMetrics[$statID]))
                 {
                     return View::make('demo.single_stat',
                         array(
-                            'data' => $currentMetrics[$statID]::show($allMetrics[$statID],true)
+                            'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
+                            Auth::logout()
                         )
                     );
                 }
+
                 return Redirect::route('demo.dashboard')
                 ->with('error', 'Statistic does not exist.');
             }
