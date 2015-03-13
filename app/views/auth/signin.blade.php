@@ -91,7 +91,8 @@
   <!-- / Container -->
 
   <div class="not-a-member">
-    Not a member? <a href="{{ URL::route('auth.signup') }}">Sign up now</a>
+    Not a member? <a href="{{ URL::route('auth.signup') }}">Sign up now</a> 
+    or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
   </div>
 </body>
 

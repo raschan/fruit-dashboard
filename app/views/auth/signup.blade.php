@@ -71,6 +71,7 @@
 
 	<div class="have-account">
 		Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign In</a>
+		or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
 	</div>
 
 </body>
