@@ -651,7 +651,7 @@ class Calculator
                                     ,'customer.discount.updated'
                                     ,'customer.discount.deleted'])
                 ->orderBy('created', 'desc')
-                //->take(20)
+                ->take(20)
                 ->get();
 
 

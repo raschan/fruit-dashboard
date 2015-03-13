@@ -81,16 +81,16 @@ class DemoController extends BaseController
                                         ->orderBy('date','desc')
                                         ->take(31)
                                         ->get();
-                
                 foreach ($currentMetrics as $metricID => $statClassName) {
-                    $metricsArray = array();
-                    foreach ($metricValues as $metric) {
-                        $metricsArray[$metric->date] = $metric->$metricID;
+                    if($metricID == $statID){
+                        $metricsArray = array();
+                        foreach ($metricValues as $metric) {
+                            $metricsArray[$metric->date] = $metric->$metricID;
+                        }
+                        ksort($metricsArray);
+                        $allMetrics[$metricID] = $metricsArray;
                     }
-                    ksort($metricsArray);
-                    $allMetrics[$metricID] = $metricsArray;
                 }
-
                 if (isset($currentMetrics[$statID]))
                 {
                     return View::make('demo.single_stat',
@@ -107,6 +107,7 @@ class DemoController extends BaseController
 
             catch (Exception $e) {
                 Auth::logout();
+                Log::error($e);
                 return Redirect::route('auth.signup')
                         ->with('error', 'Something went wrong, we will return shortly.');
             }
