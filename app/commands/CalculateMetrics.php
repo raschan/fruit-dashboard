@@ -40,8 +40,8 @@ class CalculateMetrics extends Command {
     	Log::info('CalculateMetrics fired');
 		// going through the users
         foreach (User::all() as $user) {
-        	// check if user is connected
-        	if($user->isStripeConnected())
+        	// check if user is connected or it's demo user
+        	if($user->isStripeConnected() || $user->id == 1)
         	{
         		// saving events
 	            Calculator::calculateMetrics($user,time());
