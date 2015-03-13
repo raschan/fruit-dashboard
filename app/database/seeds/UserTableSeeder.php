@@ -7,10 +7,11 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->delete();
         User::create(array(
-            'id'       => '5',
-            'email'    => 'rise.hun@gmail.com',
-            'password' => Hash::make('supersecret'),
+            'id'        => '5',
+            'email'     => 'rise.hun@gmail.com',
+            'password'  => Hash::make('supersecret'),
             'stripe_key'=> 'sk_test_YOhLG7AgROpHWUyr62TlGXmg',
+            'ready'     => true
         ));
         User::create(array(
             'id'       => '2',
