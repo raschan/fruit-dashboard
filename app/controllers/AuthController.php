@@ -113,6 +113,7 @@ class AuthController extends BaseController
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
+            $user->ready = false;
             $user->save();
             // signing the user in and redirect to dashboard
             Auth::login($user);

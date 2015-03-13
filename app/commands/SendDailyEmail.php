@@ -44,6 +44,8 @@ class SendDailyEmail extends Command {
 		// currently calculated metrics
 		$currentMetrics = Calculator::currentMetrics();
 		// for each user send email with their metrics
+
+		$emailSent = 0;
 		foreach ($users as $user) {
 			// check if user finished the connect process
 			if ($user->isConnected())
@@ -52,29 +54,34 @@ class SendDailyEmail extends Command {
 				$metrics = Metric::where('user', $user->id)	
 								->where('date', $date)
 								->first();
-				// format metrics to presentable data
-				$metrics->formatMetrics();
-				$data = array(
-					'metrics' => $metrics,
-					'currentMetrics' => $currentMetrics
-					);
 
-				// login the user (necessary to get the email address)	
-				Auth::login($user);
-
-
-				// send the email to the user
-				Mail::send('emails.summary', $data, function($message)
+				if ($metrics)
 				{
-					// get the currently logged in user
-					$user = Auth::user();
-					$message->to($user->email /*, name of the user*/)
-							->subject('Daily summary');
-				});
+					// format metrics to presentable data
+					$metrics->formatMetrics();
+					$data = array(
+						'metrics' => $metrics,
+						'currentMetrics' => $currentMetrics
+						);
 
-				// logout the user
-				Auth::logout();
+					// login the user (necessary to get the email address)	
+					Auth::login($user);
+
+
+					// send the email to the user
+					Mail::send('emails.summary', $data, function($message)
+					{
+						// get the currently logged in user
+						$user = Auth::user();
+						$message->to($user->email /*, name of the user*/)
+								->subject('Daily summary');
+					});
+					// logout the user
+					Auth::logout();
+					$emailSent++;
+				}
 			}
 		}
+		Log::info($emailSent.' daily summary emails sent out of '.count($users).' users');
 	}
 }

@@ -13,10 +13,13 @@ class CalculateFirstTime
         Mail::send('emails.connected', array(), function($message)
 		{
 			$user = Auth::user();
-		    $message->to($user->email, 'John Smith')->subject("You're numbers are ready!");
-		    Auth::logout();
+		    $message->to($user->email /*, name of the user */)
+		    	->subject("Your metrics are ready!");
 		});
-        
+		Auth::logout();
+        $user->ready = true;
+        $user->save();
+
         $job->delete();
 	}
 }

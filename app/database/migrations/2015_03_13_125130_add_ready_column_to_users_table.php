@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddedPaypalKeyToUser extends Migration {
+class AddReadyColumnToUsersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,7 +15,7 @@ class AddedPaypalKeyToUser extends Migration {
 		Schema::table('users', function($table)
         {
              // adding title
-            $table->string('paypal_key', 176)->nullable();
+            $table->boolean('ready')->nullable();
         });
 	}
 
@@ -29,7 +29,8 @@ class AddedPaypalKeyToUser extends Migration {
 		Schema::table('users', function($table)
         {
             // dropping column
-            $table->dropColumn('paypal_key');
+            $table->dropColumn('ready');
         });
 	}
+
 }
