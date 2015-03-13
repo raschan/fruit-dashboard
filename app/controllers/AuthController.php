@@ -41,7 +41,7 @@ class AuthController extends BaseController
         if ($validator->fails()) {
             // validation error -> redirect
             return Redirect::route('auth.signin')
-                ->withErrors($validator) // send back errors
+                ->with('error','Email address or password is incorrect') // send back errors
                 ->withInput(Input::except('password')); // sending back data
         } else {
             // validator success -> signin
@@ -97,9 +97,14 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            
+            $failedAttribute = $validator->invalid();
+
             return Redirect::route('auth.signup')
-                ->withErrors($validator) // send back errors
+                //->withErrors($validator)
+                ->with('error', $validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
+
         } else {
             // validator success -> signup
 
@@ -197,8 +202,9 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            $failedAttribute = $validator->invalid();
             return Redirect::to('/settings')
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success -> edit_profile
@@ -225,8 +231,9 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            $failedAttribute = $validator->invalid();
             return Redirect::to('/settings')
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
 
@@ -255,8 +262,9 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            $failedAttribute = $validator->invalid();
             return Redirect::to('/settings')
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success -> edit_profile
@@ -286,8 +294,9 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            $failedAttribute = $validator->invalid();
             return Redirect::to('/settings')
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success -> edit_profile
@@ -397,8 +406,9 @@ class AuthController extends BaseController
 
         if ($validator->fails()) {
             // validation error -> sending back
+            $failedAttribute = $validator->invalid();
             return Redirect::back()
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success
