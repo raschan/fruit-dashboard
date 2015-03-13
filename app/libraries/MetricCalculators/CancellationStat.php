@@ -294,22 +294,23 @@ class CancellationStat extends BaseStat {
 
         $data = self::showSimpleStat($metrics);
 
-        $firstDate = Event::where('user', Auth::user()->id)
+        $firstDay = Event::where('user', Auth::user()->id)
                         ->orderBy('date', 'asc')
                         ->first();
-        if($firstDate)
+        if($firstDay)
         {
-            $data['firstDay'] = $firstDate;
+            $firstDay = strtotime($firstDay->date);
         } else {
-            $data['firstDay'] = date('Y-m-d', time());
+            $firstDay = time();
         }
+        $data['firstDay'] = date('d-m-Y', $firstDay);
 
         $fullMetricHistory = Metric::where('user', Auth::user()->id)
                     ->orderBy('date','asc')
                     ->get();
 
         foreach ($fullMetricHistory as $metric) {
-            $data['fullHistory'][$metric->date] = $metric->$data['id'];
+            $data['fullHistory'][$metric->date] = $metric->cancellations;
         }
 
         if(!isset($data['fullHistory']))
