@@ -28,7 +28,7 @@
 			    	name: "{{ Auth::user()->email }}",
 			        email: "{{ Auth::user()->email }}",
 			        created_at: "{{ Auth::user()->created_at }}",
-			    	app_id: "c4fds90q"
+			    	app_id: "nch9zmp2"
 		    	};
 			</script>
 			{{ HTML::script('js/intercom_io.js'); }}
