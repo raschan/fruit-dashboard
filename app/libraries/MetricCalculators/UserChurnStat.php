@@ -112,21 +112,15 @@ class UserChurnStat extends BaseStat {
 
     public static function getStatOnDay($timestamp)
     {
-        $lastMonthDay = date('Y-m-d', $timestamp - 30*24*60*60);
+        $day = date('Y-m-d', $timestamp);
 
-        $cancellations = CancellationStat::getIndicatorStatOnDay($timestamp);
-     
-        $activeUsers = DB::table('au')
-        	->where('date',$lastMonthDay)
-        	->where('user', Auth::user()->id)
-        	->get();
+        $stats = Metric::where('date',$day)
+            ->where('user', Auth::user()->id)
+            ->first();
 
-        if($cancellations && $activeUsers){
-            $activeUserValue = 0;
-            foreach ($activeUsers as $data) {
-            	$activeUserValue += $data->value;
-            }
-            return round($cancellations / $activeUserValue * 100,1);
+        if($stats){
+            $statValue = $stats->{self::$statID};
+            return $statValue;
         } else {
             return null;
         }

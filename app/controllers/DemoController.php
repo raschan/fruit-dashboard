@@ -108,7 +108,7 @@ class DemoController extends BaseController
             catch (Exception $e) {
                 Auth::logout();
                 Log::error($e);
-                return Redirect::route('auth.signup')
+                return Redirect::route('demo.dashboard')
                         ->with('error', 'Something went wrong, we will return shortly.');
             }
         }
