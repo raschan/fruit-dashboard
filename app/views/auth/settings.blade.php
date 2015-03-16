@@ -360,10 +360,3 @@
     </script>
 
   @stop
-
-  @section('intercomScript')
-  <script>
-     
-  </script>
-  {{ HTML::script('js/intercom_io.js'); }}
-  @stop
