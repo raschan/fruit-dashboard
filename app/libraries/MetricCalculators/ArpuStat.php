@@ -100,40 +100,15 @@ class ArpuStat extends BaseStat {
     {
         $day = date('Y-m-d', $timeStamp);
 
-        $mrrOnDay = DB::table('mrr')
-            ->where('date',$day)
+        $stats = Metric::where('date',$day)
             ->where('user', Auth::user()->id)
-            ->get();
+            ->first();
 
-        $auOnDay = DB::table('au')
-            ->where('date',$day)
-            ->where('user', Auth::user()->id)
-            ->get();
-
-        if($mrrOnDay && $auOnDay){
-            return round($mrrOnDay[0]->value / $auOnDay[0]->value);
+        if($stats){
+            $statValue = $stats->{self::$statID};
+            return $statValue;
         } else {
             return null;
         }
     }
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table('mrr')->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
-
-        if ($firstDay){
-            return strtotime($firstDay->date);
-        }
-        else {
-            // needs review, so it can handle null with new users too
-            return date('Y-m-d', '2013-12-31');
-        }
-    }
-
 }
