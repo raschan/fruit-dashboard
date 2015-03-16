@@ -9,8 +9,7 @@
 @stop
 
 @section('pageContent')
-	@include('meta.pageAlerts')
-
+	
 <body class="theme-asphalt page-signup" style="">
 
 	<!-- Page background -->
