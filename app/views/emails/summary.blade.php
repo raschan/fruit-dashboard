@@ -15,6 +15,7 @@
 			<b>{{ $statDetails['metricName'] }}:</b> {{ $metrics->$statID }}
 			<br/>
 		@endforeach
+		<br/>
 		<a href="http://startupdashboard.abfinformatika.hu">Startup Dashboard</a>
 		</div>
 	</body>
