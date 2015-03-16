@@ -24,12 +24,11 @@
 		@section('intercomScript')
 			<!-- Intercom Script -->
 			<script>
-
 		    	window.intercomSettings = {
 			    	name: "{{ Auth::user()->email }}",
 			        email: "{{ Auth::user()->email }}",
 			        created_at: "{{ Auth::user()->created_at }}",
-			    	app_id: "fow3wurh"
+			    	app_id: "c4fds90q"
 		    	};
 			</script>
 			{{ HTML::script('js/intercom_io.js'); }}
