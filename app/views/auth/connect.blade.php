@@ -101,7 +101,7 @@
                       {{ Form::submit('Connect', array(
                           'id' => 'id_submit',
                           'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                          'onClick'= '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
+                          'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
                       </div>
 
                     </div> <!-- / .form-group -->

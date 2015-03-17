@@ -53,7 +53,7 @@
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
                         'class' => 'btn btn-primary btn-sm btn-flat',
-                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Name edited"]);mixpanel.track("Name edited");')) }}
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Name edited"]);mixpanel.track("Name edited");')) }}
                   </div>
 
                 </div>
@@ -103,7 +103,7 @@
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
                         'class' => 'btn btn-primary btn-sm btn-flat',
-                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Country edited"]);mixpanel.track("Country edited");')) }} 
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Country edited"]);mixpanel.track("Country edited");')) }} 
                   </div>
 
                 </div>
@@ -158,7 +158,7 @@
                     {{ Form::submit('Save', array(
                       'id' => 'id_submit',
                       'class' => 'btn btn-primary btn-sm btn-flat',
-                      'onClick'= '_gaq.push(["_trackEvent", "Edit", "Email edited"]);mixpanel.track("Email edited");')) }}
+                      'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Email edited"]);mixpanel.track("Email edited");')) }}
                   </div>
 
                 </div>
@@ -224,7 +224,7 @@
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
                         'class' => 'btn btn-primary btn-sm btn-flat',
-                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Password edited"]);mixpanel.track("Password edited");')) }}
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Password edited"]);mixpanel.track("Password edited");')) }}
                   </div>
 
                 </div>
