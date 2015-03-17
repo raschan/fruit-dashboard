@@ -41,7 +41,7 @@ class AuthController extends BaseController
         if ($validator->fails()) {
             // validation error -> redirect
             return Redirect::route('auth.signin')
-                ->with('error','Email address or password is incorrect') // send back errors
+                ->with('error','Email address or password is incorrect.') // send back errors
                 ->withInput(Input::except('password')); // sending back data
         } else {
             // validator success -> signin
@@ -61,7 +61,7 @@ class AuthController extends BaseController
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')
                     ->withInput(Input::except('password'))
-                    ->with('error', 'Signin failed.');
+                    ->with('error', 'Email address or password is incorrect.');
             }
         }
     }

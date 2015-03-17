@@ -54,9 +54,10 @@
         </div> <!-- / Password -->
 
         <div class="form-actions">
-          {{ Form::submit('Submit!' , array(
+          {{ Form::submit('Sign in!' , array(
             'id' => 'id_submit',
-            'class' => 'signin-btn bg-primary')) }}
+            'class' => 'signin-btn bg-primary',
+            'onClick' => '_gaq.push(["_trackEvent", "Signin", "Button Pushed"]);mixpanel.track("Signin");')) }}
           <!-- <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a> -->
         </div> <!-- / .form-actions -->
       {{ Form::close() }}

@@ -29,7 +29,7 @@
                       @else 
                       N/A
                       @endif
-                      <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                      <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing name"]);mixpanel.track("Editing name");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
@@ -52,7 +52,8 @@
                     <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelName">Cancel</button>
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Name edited"]);mixpanel.track("Name edited");')) }}
                   </div>
 
                 </div>
@@ -78,7 +79,7 @@
                       @else 
                       N/A
                       @endif
-                      <button id="editCountry" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                      <button id="editCountry" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing country"]);mixpanel.track("Editing country");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
@@ -101,7 +102,8 @@
                     <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelCountry">Cancel</button> 
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-primary btn-sm btn-flat')) }} 
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Country edited"]);mixpanel.track("Country edited");')) }} 
                   </div>
 
                 </div>
@@ -122,7 +124,7 @@
                   <div class="col-sm-8">
                     <p class="form-control-static">
                       <span>{{ Auth::user()->email }}</span>
-                      <button id="editEmail" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                      <button id="editEmail" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing email"]);mixpanel.track("Editing email");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
@@ -155,7 +157,8 @@
                     <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelEmail">Cancel</button>  
                     {{ Form::submit('Save', array(
                       'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                      'class' => 'btn btn-primary btn-sm btn-flat',
+                      'onClick'= '_gaq.push(["_trackEvent", "Edit", "Email edited"]);mixpanel.track("Email edited");')) }}
                   </div>
 
                 </div>
@@ -177,7 +180,7 @@
                     <div class="col-sm-8">
                       <p class="form-control-static">
                         <span>********</span>
-                        <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                        <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing password"]);mixpanel.track("Editing password");'>Edit</button>
                       </p>
                     </div>
                   </div> <!-- / .form-group -->
@@ -220,8 +223,8 @@
                     <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelPassword">Cancel</button>  
                     {{ Form::submit('Save', array(
                         'id' => 'id_submit',
-                        'class' => 'btn btn-primary btn-sm btn-flat')) }}
-                    
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'= '_gaq.push(["_trackEvent", "Edit", "Password edited"]);mixpanel.track("Password edited");')) }}
                   </div>
 
                 </div>

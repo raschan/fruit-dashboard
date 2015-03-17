@@ -427,6 +427,10 @@
           $('#stopDateStat').datepicker('setStartDate', new Date(arrayStartKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ $data['statName'].' date interval' }}" , "Start date changed"]);
+          mixpanel.track('{{$data["statName"]. " start date changed"}}');
         }
 
       });
@@ -464,6 +468,10 @@
           $('#startDateStat').datepicker('setEndDate', new Date(arrayStopKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ $data['statName'] .' date interval' }}" , "Stop date changed"]);
+          mixpanel.track('{{$data["statName"]. " stop date changed"}}');
         }
       });
 
@@ -604,5 +612,12 @@
     });
 
     </script>
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened" }}' ]);
+      mixpanel.track("{{ $data['statName']. ' opened' }}");
+    </script>
+    <!-- / Analytics -->
 
   @stop
