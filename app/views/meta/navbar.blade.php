@@ -43,7 +43,7 @@
 						</li>
 
 						<li>
-							<a href="{{ URL::route('auth.signout') }}">
+							<a onClick= '_gaq.push(["_trackEvent", "Signout", "Button Pushed"]);mixpanel.track("Signout");' href="{{ URL::route('auth.signout') }}">
 								<i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Sign out
 							</a>
 						</li>
