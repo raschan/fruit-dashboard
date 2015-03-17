@@ -160,12 +160,32 @@
 
               @for ($i = 0; $i< count($events); $i++)
 
-                <!-- Charge events -->
+                 <!-- Charge events -->
 
                 @if ($events[$i]['type'] == 'charge.succeeded')
                   <li class="list-group-item">
                     <span class="badge badge-success">
                       Charged
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>
+                    <span class="text-money up">
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'charge.captured')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Captured
                     </span>
                     <span class="provider">
                       <i class="fa icon fa-cc-stripe"></i>
@@ -213,7 +233,7 @@
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
-                    from <b>{{ $events[$i]['name'] }}</b>
+                    refunded to <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -224,7 +244,45 @@
 
                 <!-- / Charge events -->
 
-                <!-- Subscription events -->
+                <!-- Customer events -->
+                
+                @if ($events[$i]['type'] == 'customer.created')
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      New Customer
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
+                    <b>{{ $events[$i]['name'] }}</b> signed up
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+                
+                @if ($events[$i]['type'] == 'customer.deleted')
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Customer cancelled
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
+                    <b>{{ $events[$i]['name'] }}</b> left
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                <!-- / Customer events -->
+
+                <!-- Customer Subscription events -->
 
                 @if ($events[$i]['type'] == 'customer.subscription.created')
                   <li class="list-group-item">
@@ -245,26 +303,105 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
-                @if ($events[$i]['type'] == 'customer.subscription.updated')
+                @if ($events[$i]['type'] == 'customer.subscription.updated'   // this is not enough for plan change
+                  && isset($events[$i]['prevPlanID'])  /* we know it's a plan change with this */)  
                   <li class="list-group-item">
                     <span class="badge badge-info">
-                      Updated
+                      Changed subscription
                     </span>
                     <span class="provider">
                       <i class="fa icon fa-cc-stripe"></i>
                     </span>         
                     <b>{{ $events[$i]['name'] }}</b>
-                    updated to 
-                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
+                    changed from <b>{{ $events[$i]['prevPlanName'] }}</b> ({{ $events[$i]['prevPlanInterval']}}) 
+                    to <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
                     </span>
                     @endif
                   </li> <!-- / .list-group-item -->
-                @endif   
+                @endif
 
-                <!-- / Subscription events -->
+                @if ($events[$i]['type'] == 'customer.subscription.deleted')  
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Cancelled subscription
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    cancelled <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif                
+
+                <!-- / Customer Subscription events -->
+
+                <!-- Customer Discounts events -->
+
+                <!-- FIXME -->
+
+                @if ($events[$i]['type'] == 'customer.discount.created')  
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Coupon used
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    used a coupon.
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.discount.deleted')  
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      Coupon expired
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>'s
+                    discount ended.                    
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.discount.updated')  
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Coupon changed
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b> changed coupon
+                    from <b>{{$events[$i]['prevCoupon']}}</b> to <b>{{$events[$i]['newCoupon']}}</b>              
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                <!-- / Customer Discounts events -->
 
               @endfor
             @else
