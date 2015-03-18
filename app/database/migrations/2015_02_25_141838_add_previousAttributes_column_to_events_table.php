@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterCreatedCulomnInEventsTable extends Migration {
+class AddPreviousAttributesColumnToEventsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -14,12 +14,8 @@ class AlterCreatedCulomnInEventsTable extends Migration {
 	{
 		Schema::table('events', function($table)
 		{
-		    $table->dropColumn('created');
-		});
-
-		Schema::table('events', function($table)
-		{
-			$table->timestamp('created');
+			$table->longText('previousAttributes')->nullable();
+			$table->date('date');
 		});
 	}
 
@@ -32,12 +28,14 @@ class AlterCreatedCulomnInEventsTable extends Migration {
 	{
 		Schema::table('events', function($table)
 		{
-		    $table->dropColumn('created');
-	    });
-
-		Schema::table('events', function($table)
-		{
-			$table->date('created');
+			if (Schema::hasColumn('events', 'previousAttributes'))
+			{
+				$table->dropColumn('previousAttributes');
+			}
+			if (Schema::hasColumn('events', 'date'))
+			{
+				$table->dropColumn('date');
+			}
 		});
 	}
 

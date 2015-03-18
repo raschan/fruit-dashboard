@@ -48,6 +48,14 @@
       </script>
       <!-- /Pixeladmin js init array -->
       
+      <!-- GoogleAnalyticsEvents -->
+      {{ HTML::script('js/google_events.js'); }}
+      <!-- /GoogleAnalyticsEvents -->
+
+      <!-- Mixpanel -->
+      {{ HTML::script('js/mixpanel.js') }}
+      <!-- / Mixpanel -->
+
       <!-- Page specific stylesheet -->
       @section('pageStylesheet')
       @show
@@ -87,6 +95,10 @@
       window.PixelAdmin.start(init);
     </script>
     <!-- /PixelAdmin js start -->
+
+    <!-- GoogleAnalytics -->
+    {{ HTML::script('js/google_analytics.js'); }}
+    <!-- GoogleAnalytics -->
   @show
      
 </html>

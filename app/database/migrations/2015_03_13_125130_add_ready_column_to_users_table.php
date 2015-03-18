@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddProviderColumnToMrrTable extends Migration {
+class AddReadyColumnToUsersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,10 @@ class AddProviderColumnToMrrTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('mrr', function($table)
+		Schema::table('users', function($table)
         {
-            // adding title
-            $table->string('provider', 64);
-
+             // adding title
+            $table->boolean('ready')->nullable();
         });
 	}
 
@@ -27,10 +26,10 @@ class AddProviderColumnToMrrTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('mrr', function($table)
+		Schema::table('users', function($table)
         {
             // dropping column
-            $table->dropColumn('provider');
+            $table->dropColumn('ready');
         });
 	}
 

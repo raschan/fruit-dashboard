@@ -1,13 +1,20 @@
 @extends('meta.base-user')
 
   @section('pageContent')
-      <!-- <div id="main-menu" role="navigation">
-      </div> -->
     <div id="content-wrapper">
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
       </div> <!-- / .page-header -->
 
+      <!-- Notice on connect -->
+      @if (Session::get('connected'))
+        <div id="pa-page-alerts-box">
+          <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
+            <button type="button" class="close">×</button><strong>We're now calculating your numbers, it'll be a few minutes. We'll email you when we finished.</strong>
+          </div>
+        </div>
+      @endif
+      <!-- / Notice on connect -->
       <!-- STATISTICS BOX -->
 
       <div class="col-md-8 quickstats-box no-padding-hr">
@@ -22,10 +29,18 @@
               <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
               <div class="chart-text-left"> 
                 @if($allFunctions[$i]['currentValue'])
-                  @if(!str_contains($allFunctions[$i]['currentValue'],'-'))
-                    <span class="text-money up">
+                  @if($allFunctions[$i]['positiveIsGood'])
+                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $allFunctions[$i]['currentValue'] }}
                 @else
@@ -36,10 +51,18 @@
               </div>
               <div class="chart-text-right">
                 @if($allFunctions[$i]['oneMonthChange'])
-                  @if(!str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                    <span class="text-money up"><i class="fa fa-angle-up"></i>
+                  @if($allFunctions[$i]['positiveIsGood'])
+                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @else
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @endif
                   @else
-                    <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @else
+                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                    @endif
                   @endif
                   {{ $allFunctions[$i]['oneMonthChange'] }}
                   </span>
@@ -103,6 +126,26 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
+                @if ($events[$i]['type'] == 'charge.captured')
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Captured
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>
+                    <span class="text-money up">
+                      {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
+                    </span>
+                    from <b>{{ $events[$i]['name'] }}</b>
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
                 @if ($events[$i]['type'] == 'charge.failed')
                   <li class="list-group-item">
                     <span class="badge badge-danger">
@@ -134,7 +177,7 @@
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
-                    from <b>{{ $events[$i]['name'] }}</b>
+                    refunded to <b>{{ $events[$i]['name'] }}</b>
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
@@ -145,7 +188,45 @@
 
                 <!-- / Charge events -->
 
-                <!-- Subscription events -->
+                <!-- Customer events -->
+                
+                @if ($events[$i]['type'] == 'customer.created')
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      New Customer
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
+                    <b>{{ $events[$i]['name'] }}</b> signed up
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+                
+                @if ($events[$i]['type'] == 'customer.deleted')
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Customer cancelled
+                    </span> 
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>        
+                    <b>{{ $events[$i]['name'] }}</b> left
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                <!-- / Customer events -->
+
+                <!-- Customer Subscription events -->
 
                 @if ($events[$i]['type'] == 'customer.subscription.created')
                   <li class="list-group-item">
@@ -166,27 +247,105 @@
                   </li> <!-- / .list-group-item -->
                 @endif
 
-                @if ($events[$i]['type'] == 'customer.subscription.updated')
+                @if ($events[$i]['type'] == 'customer.subscription.updated'   // this is not enough for plan change
+                  && isset($events[$i]['prevPlanID'])  /* we know it's a plan change with this */)  
                   <li class="list-group-item">
                     <span class="badge badge-info">
-                      Updated
+                      Changed subscription
                     </span>
                     <span class="provider">
                       <i class="fa icon fa-cc-stripe"></i>
                     </span>         
                     <b>{{ $events[$i]['name'] }}</b>
-                    updated to 
-                    {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
+                    changed from <b>{{ $events[$i]['prevPlanName'] }}</b> ({{ $events[$i]['prevPlanInterval']}}) 
+                    to <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
                     @if ($events[$i]['date'])
                     <span class="timestamp">
                       {{ $events[$i]['date'] }}
                     </span>
                     @endif
                   </li> <!-- / .list-group-item -->
-                @endif   
+                @endif
 
-                <!-- / Subscription events -->
+                @if ($events[$i]['type'] == 'customer.subscription.deleted')  
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Cancelled subscription
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    cancelled <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif                
 
+                <!-- / Customer Subscription events -->
+
+                <!-- Customer Discounts events -->
+
+                <!-- FIXME -->
+
+                @if ($events[$i]['type'] == 'customer.discount.created')  
+                  <li class="list-group-item">
+                    <span class="badge badge-warning">
+                      Coupon used
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>
+                    used a coupon.
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.discount.deleted')  
+                  <li class="list-group-item">
+                    <span class="badge badge-success">
+                      Coupon expired
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b>'s
+                    discount ended.                    
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                @if ($events[$i]['type'] == 'customer.discount.updated')  
+                  <li class="list-group-item">
+                    <span class="badge badge-info">
+                      Coupon changed
+                    </span>
+                    <span class="provider">
+                      <i class="fa icon fa-cc-stripe"></i>
+                    </span>         
+                    <b>{{ $events[$i]['name'] }}</b> changed coupon
+                    from <b>{{$events[$i]['prevCoupon']}}</b> to <b>{{$events[$i]['newCoupon']}}</b>              
+                    @if ($events[$i]['date'])
+                    <span class="timestamp">
+                      {{ $events[$i]['date'] }}
+                    </span>
+                    @endif
+                  </li> <!-- / .list-group-item -->
+                @endif
+
+                <!-- / Customer Discounts events -->
               @endfor
             @else
             <li class="list-group-item">
@@ -226,7 +385,7 @@
     @for ($i = 0; $i< count($allFunctions); $i++)
 
     /* {{ $allFunctions[$i]['statName'] }} */
-
+    
     data = {
       labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
       datasets: [
@@ -234,7 +393,11 @@
               label: "Monthly Recurring Revenue",
               fillColor: "rgba(151,187,205,0.4)",
               strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
+              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
+                @if($value == null) 0,
+                @else{{ $value }},
+                @endif 
+                @endforeach]
           }
       ]
     };
@@ -249,12 +412,5 @@
        
     </script>
 
-  @stop
-
-  @section('intercomScript')
-  <script>
-
-  </script>
-  {{ HTML::script('js/intercom_io.js'); }}
   @stop
 

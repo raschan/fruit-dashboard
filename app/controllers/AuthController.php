@@ -1,5 +1,4 @@
 <?php
-use PayPal\Api\OpenIdSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +41,7 @@ class AuthController extends BaseController
         if ($validator->fails()) {
             // validation error -> redirect
             return Redirect::route('auth.signin')
-                ->withErrors($validator) // send back errors
+                ->with('error','Email address or password is incorrect.') // send back errors
                 ->withInput(Input::except('password')); // sending back data
         } else {
             // validator success -> signin
@@ -54,15 +53,15 @@ class AuthController extends BaseController
 
                 // check if already connected
                 if (Auth::user()->isConnected()) {
-                    return Redirect::route('auth.dashboard')->with('success', 'You have been signed in.');
+                    return Redirect::route('auth.dashboard')->with('success', 'Sign in successful.');
                 } else {
-                    return Redirect::route('auth.connect')->with('success', 'You have been signed in.');
+                    return Redirect::route('auth.connect')->with('success', 'Sign in successful.');
                 }
             } else {
                 // auth unsuccessful -> redirect to login
                 return Redirect::route('auth.signin')
                     ->withInput(Input::except('password'))
-                    ->with('error', 'Signin failed.');
+                    ->with('error', 'Email address or password is incorrect.');
             }
         }
     }
@@ -98,9 +97,14 @@ class AuthController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
+            
+            $failedAttribute = $validator->invalid();
+
             return Redirect::route('auth.signup')
-                ->withErrors($validator) // send back errors
+                //->withErrors($validator)
+                ->with('error', $validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
+
         } else {
             // validator success -> signup
 
@@ -109,6 +113,7 @@ class AuthController extends BaseController
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
+            $user->ready = false;
             $user->save();
             // signing the user in and redirect to dashboard
             Auth::login($user);
@@ -134,16 +139,31 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        $allMetrics = array();
+
+        // get the metrics we are calculating right now
+        $currentMetrics = Calculator::currentMetrics();
+
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
+
+        foreach ($currentMetrics as $statID => $statDetails) {
+
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$statID;
+            }
+            ksort($metricsArray);
+            $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
+        }
+
         return View::make(
             'auth.dashboard',
             array(
-                'allFunctions' => array(
-                    MrrStat::showMRR(false),
-                    AUStat::showAU(false),
-                    ArrStat::showARR(false),
-                    ArpuStat::showARPU(false)
-                ),
-                'events' => Counter::formatEvents(Auth::user())
+                'allFunctions' => $allMetrics
+                ,'events' => Calculator::formatEvents(Auth::user())
             )
         );
     }
@@ -173,77 +193,130 @@ class AuthController extends BaseController
     | <POST> | doSettings: updates user data
     |===================================================
     */
-    public function doSettings()
+    public function doSettingsName()
     {
         // Validation rules
         $rules = array(
-            'email' => 'required_with:password|email',
-            'password' => 'required_with:email|min:4',
-            'oldpassword' => 'required_with: newpassword1, newpassword2|required_with:newpassword1|required_with:newpassword2|min:4',
-            'newpassword1' => 'required_with: oldpassword, newpassword2|required_with:oldpassword|required_with:newpassword2|min:4',
-            'newpassword2' => 'required_with: oldpassword, newpassword1|required_with:oldpassword|required_with:newpassword1|min:4',
-        );
+            'name' => 'required|unique:users,name',
+            );
         // run the validation rules on the inputs
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             // validation error -> redirect
-            return Redirect::route('auth.settings')
-                ->withErrors($validator) // send back errors
+            $failedAttribute = $validator->invalid();
+            return Redirect::to('/settings')
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // validator success -> edit_profile
+            // selecting logged in user
+            $user = Auth::user(); 
+            
+            $user->name = Input::get('name');
+                
+            $user->save();
+            // setting data
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsCountry()
+    {
+        // Validation rules
+        $rules = array(
+            'country' => 'required',
+            );
+
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            $failedAttribute = $validator->invalid();
+            return Redirect::to('/settings')
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
+                ->withInput(); // sending back data
+        } else {
+
+            // selecting logged in user
+            $user = Auth::user();
+            // if we have zoneinfo
+            // changing zoneinfo
+            $user->zoneinfo = Input::get('country');
+            // saving user
+            $user->save();
+
+            // redirect to settings
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsEmail()
+    {
+        // Validation rules
+        $rules = array(
+            'email' => 'required|unique:users,email|email',
+            'email_password' => 'required|min:4',
+            );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            $failedAttribute = $validator->invalid();
+            return Redirect::to('/settings')
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success -> edit_profile
             // selecting logged in user
             $user = Auth::user();
-            // checking actions and updating data
-            // checking if submitted email has registered user
-            $user_to_check = User::where('email', '=', Input::get('email'))->get()->first();
-            // if we do not have data in the email form
-            // and validator has no errors, then password change
-            if (Input::has('password')){
-                // if email is not registered
-                if (is_null($user_to_check)) {
-                    // we have valid email, we need to check password
-                    if (Hash::check(Input::get('password'), $user->password)){
-                        $user->email = Input::get('email');
-                    }
-                    else {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'The password you entered is incorrect.') // send back errors
-                            ->withInput(); // sending back data
-                    }
-                } else {
-                    // if email is registered and changed
-                    if ($user->email != Input::get('email')) {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'This email is already registered.') // send back errors
-                            ->withInput(); // sending back data
-                    }
-                }
-            }
-            // validator has no errors, and password field is not empty
-            // email change
-            else {
-                // if we have data from the password change form
-                // checking if old password is the old password
-                if (Hash::check(Input::get('oldpassword'), $user->password)){
-                    // if new passwords are the same
-                    if (Input::get('newpassword1') === Input::get('newpassword2')){
-                        $user->password = Hash::make(Input::get('newpassword1'));
-                    }
-                    else {
-                        return Redirect::route('auth.settings')
-                            ->with('error', 'The new passwords you entered do not match.'); // send back errors
-                    }
-                }
-                else {
-                    return Redirect::route('auth.settings')
-                        ->with('error', 'The old password you entered is incorrect.'); // send back errors
-                }  
+            
+            // we need to check the password
+            if (Hash::check(Input::get('email_password'), $user->password)){
+                $user->email = Input::get('email');
             }
                 
             $user->save();
             // setting data
-            return Redirect::route('auth.settings')
+            return Redirect::to('/settings')
+                ->with('success', 'Edit was successful.');
+        }
+    }
+
+    public function doSettingsPassword()
+    {
+        // Validation rules
+        $rules = array(
+            'old_password' => 'required|min:4',
+            'new_password' => 'required|confirmed|min:4',
+        );
+        // run the validation rules on the inputs
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            // validation error -> redirect
+            $failedAttribute = $validator->invalid();
+            return Redirect::to('/settings')
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            // validator success -> edit_profile
+            // selecting logged in user
+            $user = Auth::user();
+            
+            // if we have data from the password change form
+            // checking if old password is the old password
+            if (Hash::check(Input::get('old_password'), $user->password)){
+                $user->password = Hash::make(Input::get('new_password'));
+            }
+            else {
+                return Redirect::to('/settings')
+                    ->with('error', 'The old password you entered is incorrect.'); // send back errors
+            }  
+                
+            $user->save();
+            // setting data
+            return Redirect::to('/settings')
                 ->with('success', 'Edit was successful.');
         }
     }
@@ -255,6 +328,7 @@ class AuthController extends BaseController
     */
     public function showConnect()
     {
+        /*
         // getting paypal api context
         $apiContext = PayPalHelper::getApiContext();
 
@@ -267,15 +341,15 @@ class AuthController extends BaseController
             null,
             $apiContext
         );
-
+        */
         // selecting logged in user
         $user = Auth::user();
 
         // returning view
         return View::make('auth.connect',
             array(
-                'redirect_url' => $redirectUrl,
-                'paypal_connected' => $user->isPayPalConnected(),
+                //'redirect_url' => $redirectUrl,
+                //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected' => $user->isStripeConnected()
             )
         );
@@ -333,16 +407,17 @@ class AuthController extends BaseController
 
         if ($validator->fails()) {
             // validation error -> sending back
+            $failedAttribute = $validator->invalid();
             return Redirect::back()
-                ->withErrors($validator) // send back errors
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
                 ->withInput(); // sending back data
         } else {
             // validator success
             try {
 
                 // trying to login with this key
-                Stripe::setApiKey(Input::get('stripe'));
-                $account = Stripe_Account::retrieve(); // catchable line
+                Stripe\Stripe::setApiKey(Input::get('stripe'));
+                $account = Stripe\Account::retrieve(); // catchable line
                 // success
                 $returned_object = json_decode(strstr($account, '{'), true);
 
@@ -363,15 +438,16 @@ class AuthController extends BaseController
                 // saving user
                 $user->save();
 
-            } catch(Stripe_AuthenticationError $e) {
+                Queue::push('CalculateFirstTime', array('userID' => $user->id));
+
+            } catch(Stripe\Error\Authentication $e) {
                 // code was invalid
-                return Redirect::back()->withErrors(
-                    array('stripe' => "Authentication unsuccessful!")
-                );
+                return Redirect::back()->with('error',"Authentication unsuccessful!");
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.connect')->with('success', 'Stripe connected.');
+        return Redirect::route('auth.dashboard')->with(array('success' => 'Stripe connected.',
+                                                            'connected' => 'connocted'));
 
         }
     }
@@ -380,44 +456,34 @@ class AuthController extends BaseController
     | <GET> | showSinglestat: renders the single stats page
     |===================================================
     */
-    public function showSinglestat($statID = 'mainPage')
+    public function showSinglestat($statID)
     {
-        switch($statID){
-            case 'mainPage':
+
+        $currentMetrics = Calculator::currentMetrics();
+        $metricValues = Metric::where('user', Auth::user()->id)
+                                ->orderBy('date','desc')
+                                ->take(31)
+                                ->get();
+        
+        foreach ($currentMetrics as $metricID => $statClassName) {
+            $metricsArray = array();
+            foreach ($metricValues as $metric) {
+                $metricsArray[$metric->date] = $metric->$metricID;
+            }
+            ksort($metricsArray);
+            $allMetrics[$metricID] = $metricsArray;
+        }
+
+        if (isset($currentMetrics[$statID]))
+        {
             return View::make('auth.single_stat',
                 array(
-                    'data' => MrrStat::showMRR(true)
+                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true)
                 )
             );
-            case 'mrr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => MrrStat::showMRR(true)
-                )
-            );
-            break;
-            case 'au':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => AUStat::showAU(true)
-                )
-            );
-            case 'arr':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArrStat::showARR(true)
-                )
-            );
-            case 'arpu':
-            return View::make('auth.single_stat',
-                array(
-                    'data' => ArpuStat::showARPU(true)
-                )
-            );
-            default:
-                return Redirect::route('auth.dashboard')
+        } else {
+            return Redirect::route('auth.dashboard')
                 ->with('error', 'Statistic does not exist.');
-            break;
         }
 
     }

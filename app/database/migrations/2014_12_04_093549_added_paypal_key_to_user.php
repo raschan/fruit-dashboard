@@ -12,7 +12,7 @@ class AddedPaypalKeyToUser extends Migration {
 	 */
 	public function up()
 	{
-		 Schema::table('users', function($table)
+		Schema::table('users', function($table)
         {
              // adding title
             $table->string('paypal_key', 176)->nullable();
@@ -26,7 +26,7 @@ class AddedPaypalKeyToUser extends Migration {
 	 */
 	public function down()
 	{
-		 Schema::table('users', function($table)
+		Schema::table('users', function($table)
         {
             // dropping column
             $table->dropColumn('paypal_key');

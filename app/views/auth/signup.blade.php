@@ -9,8 +9,7 @@
 @stop
 
 @section('pageContent')
-	@include('meta.pageAlerts')
-
+	
 <body class="theme-asphalt page-signup" style="">
 
 	<!-- Page background -->
@@ -71,6 +70,7 @@
 
 	<div class="have-account">
 		Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign In</a>
+		or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
 	</div>
 
 </body>
