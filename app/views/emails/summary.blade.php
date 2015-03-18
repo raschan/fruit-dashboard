@@ -16,7 +16,7 @@
 			<br/>
 		@endforeach
 		<br/>
-		<a href="http://startupdashboard.abfinformatika.hu">Startup Dashboard</a>
+		<a href="http://dashboard.tryfruit.com">Startup Dashboard</a>
 		</div>
 	</body>
 </html>

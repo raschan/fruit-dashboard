@@ -8,7 +8,7 @@
 
 		<div>
 			We've finished with your numbers. Come and check it.
-			<a href='http://startupdashboard-dev.abfinformatika.hu' target='blank'>Let's go!</a> 
+			<a href='http://dashboard.tryfruit.com' target='blank'>Let's go!</a> 
 		</div>
 	</body>
 </html>
