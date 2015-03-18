@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'host' => 'smtp.analytics.tryfruit.com',
+	'host' => 'smtp.abfinformatika.hu',
 
 	/*
 	|--------------------------------------------------------------------------
