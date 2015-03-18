@@ -2,35 +2,37 @@
 
   @section('pageContent')
     <div id="content-wrapper">
-
-      <!-- <div class="page-header text-center">
-        <h1><i class="fa fa-bar-chart-o page-header-icon"></i>&nbsp;&nbsp;Stat Panels (single view)</h1>
-      </div> -->
       <div class="col-md-12">
 
         <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
-              <select class="form-control stat-input" onChange="window.location.href=this.value">
+              <select class="form-control input-lg" onChange="window.location.href=this.value">
                 <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
                 <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
-                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
                 <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
+                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
           <div class="col-md-8 col-lg-6 col-lg-offset-1">
             <small><strong>DATE</strong></small><br>
-            <form class="form-inline">
-              <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
+            <form class="form-inline stat-date">
+              <div class="form-group col-md-5 no-padding-hr">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
+                </div>
               </div>
-              <div class="form-group dash">
-                -
+              <div class="form-group dash col-md-1 no-padding-hr text-center">
+                &ndash;
               </div>
-              <div class="form-group date">
-                <input type="text" class="form-control stat-input" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
+              <div class="form-group col-md-5 no-padding-hr">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
+                </div>
               </div>
             </form>
           </div>
@@ -47,10 +49,18 @@
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>Current</h4></span>
                 @if($data['currentValue'])
-                  @if(!str_contains($data['currentValue'],'-'))
-                    <span class="text-money up">
+                  @if($data['positiveIsGood'])
+                    @if(str_contains($data['currentValue'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($data['currentValue'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $data['currentValue'] }}
                 @else
@@ -62,10 +72,18 @@
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>30 days ago</h4></span>
                 @if($data['oneMonth'])
-                  @if(!str_contains($data['oneMonth'],'-'))
-                    <span class="text-money up">
+                  @if($data['positiveIsGood'])
+                    @if(str_contains($data['oneMonth'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($data['oneMonth'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $data['oneMonth'] }}
                 @else
@@ -77,10 +95,18 @@
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>6 months ago</h4></span>
                 @if($data['sixMonth'])
-                  @if(!str_contains($data['sixMonth'],'-'))
-                    <span class="text-money up">
+                 @if($data['positiveIsGood'])
+                    @if(str_contains($data['sixMonth'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($data['sixMonth'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $data['sixMonth'] }}
                 @else
@@ -92,10 +118,18 @@
               <div class="col-md-3 stat-description-box">
                 <span class="text-date"><h4>1 year ago</h4></span>
                 @if($data['oneYear'])
-                  @if(!str_contains($data['oneYear'],'-'))
-                    <span class="text-money up">
+                 @if($data['positiveIsGood'])
+                    @if(str_contains($data['oneYear'],'-'))
+                      <span class="text-money down">
+                    @else
+                      <span class="text-money up">
+                    @endif
                   @else
-                    <span class="text-money down">
+                    @if(str_contains($data['oneYear'],'-'))
+                      <span class="text-money up">
+                    @else
+                      <span class="text-money down">
+                    @endif
                   @endif
                   {{ $data['oneYear'] }}
                 @else
@@ -114,10 +148,18 @@
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>30 days growth</h4></span>
                   @if($data['oneMonthChange'])
-                    @if(!str_contains($data['oneMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['oneMonthChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['oneMonthChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
                     {{ $data['oneMonthChange'] }}
                   @else
@@ -129,12 +171,20 @@
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>60 days growth</h4></span>
                   @if($data['twoMonthChange'])
-                    @if(!str_contains($data['twoMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['twoMonthChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['twoMonthChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
-                    {{ $data['twoMonthChange'] }}
+                  {{ $data['twoMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -144,12 +194,20 @@
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>3 month growth</h4></span>
                   @if($data['threeMonthChange'])
-                    @if(!str_contains($data['threeMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['threeMonthChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['threeMonthChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
-                    {{ $data['threeMonthChange'] }}
+                  {{ $data['threeMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -159,12 +217,20 @@
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>6 month growth</h4></span>
                   @if($data['sixMonthChange'])
-                    @if(!str_contains($data['sixMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['sixMonthChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['sixMonthChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
-                    {{ $data['sixMonthChange'] }}
+                  {{ $data['sixMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -174,12 +240,20 @@
                   <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>9 month growth</h4></span>
                   @if($data['nineMonthChange'])
-                    @if(!str_contains($data['nineMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['nineMonthChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['nineMonthChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
-                    {{ $data['nineMonthChange'] }}
+                  {{ $data['nineMonthChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -189,12 +263,20 @@
                 <div class="col-md-2 stat-growth-box">
                   <span class="text-date"><h4>1 year growth</h4></span>
                   @if($data['oneYearChange'])
-                    @if(!str_contains($data['oneYearChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
+                    @if($data['positiveIsGood'])
+                      @if(str_contains($data['oneYearChange'],'-'))
+                        <span class="text-money down">
+                      @else
+                        <span class="text-money up">
+                      @endif
                     @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
+                      @if(str_contains($data['oneYearChange'],'-'))
+                        <span class="text-money up">
+                      @else
+                        <span class="text-money down">
+                      @endif
                     @endif
-                    {{ $data['oneYearChange'] }}
+                  {{ $data['oneYearChange'] }}
                   @else
                     <span class="text-money down">
                     N/A
@@ -204,6 +286,10 @@
             </div> <!-- /.statistic-description  -->
         </div> <!-- /.row -->
 
+      {{--    
+
+        <!-- hidden for development, will not be rendered on client side -->        
+  
         <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
@@ -278,6 +364,11 @@
             </div>
           </div> <!-- / .invoice-table -->
         </div> <!-- /. row -->
+        
+        <!-- / hidden for development, will not be rendered on client side -->    
+         
+      --}}
+      
       </div> <!-- . col-md-12 -->
     </div> <!-- / #content-wrapper -->
   @stop
@@ -336,6 +427,10 @@
           $('#stopDateStat').datepicker('setStartDate', new Date(arrayStartKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ $data['statName'].' date interval' }}" , "Start date changed"]);
+          mixpanel.track('{{$data["statName"]. " start date changed"}}');
         }
 
       });
@@ -373,6 +468,10 @@
           $('#startDateStat').datepicker('setEndDate', new Date(arrayStopKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ $data['statName'] .' date interval' }}" , "Stop date changed"]);
+          mixpanel.track('{{$data["statName"]. " stop date changed"}}');
         }
       });
 
@@ -393,12 +492,15 @@
         @if ($data['id'] == 'mrr' || $data['id'] == 'arpu' || $data['id'] == 'arr')
           ,tooltipTemplate: "<%if (label){%><%=label%>: $<%}%><%= value %>"
         @endif
+        @if ($data['id'] == 'uc')
+          ,tooltipTemplate: "<%if (label){%><%=label%>:<%}%> <%= value %>%"
+        @endif
       };
       var ctx = $('#singleStat').get(0).getContext("2d");
       // all labels
       var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
       // all data value
-      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach];
+      var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
 
       // for default view
       var data30 = {
@@ -408,7 +510,7 @@
                 label: "{{$data['statName']}}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value / 100 }},@endif @endforeach]
+                data: [@foreach ($data['history'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach]
             }
         ]
       };
@@ -511,11 +613,11 @@
 
     </script>
 
-  @stop
+    <!-- Analytics -->
+    <script type="text/javascript">
+      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened" }}' ]);
+      mixpanel.track("{{ $data['statName']. ' opened' }}");
+    </script>
+    <!-- / Analytics -->
 
-  @section('intercomScript')
-  <script>
-     
-  </script>
-  {{ HTML::script('js/intercom_io.js'); }}
   @stop

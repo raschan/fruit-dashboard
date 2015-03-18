@@ -12,7 +12,15 @@ class AlterCreatedColumnInEventsTable extends Migration {
 	 */
 	public function up()
 	{
-		//
+		Schema::table('events', function($table)
+		{
+		    $table->dropColumn('created');
+		});
+
+		Schema::table('events', function($table)
+		{
+			$table->timestamp('created');
+		});
 	}
 
 	/**
@@ -22,7 +30,15 @@ class AlterCreatedColumnInEventsTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::table('events', function($table)
+		{
+		    $table->dropColumn('created');
+	    });
+
+		Schema::table('events', function($table)
+		{
+			$table->date('created');
+		});
 	}
 
 }

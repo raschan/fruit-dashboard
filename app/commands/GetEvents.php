@@ -18,7 +18,7 @@ class GetEvents extends Command {
      *
      * @var string
      */
-    protected $description = 'This command saves all the stripe and PayPal events of all users.';
+    protected $description = 'This command saves all the stripe events of all users.';
 
     /**
      * Create a new command instance.
@@ -37,13 +37,13 @@ class GetEvents extends Command {
      */
     public function fire()
     {
+        Log::info('GetEvents fired');
         // going through the users
         foreach (User::all() as $user) {
 
             // saving events
-            Counter::saveEvents($user);
+            Calculator::saveEvents($user);
 
         }
     }
-
 }

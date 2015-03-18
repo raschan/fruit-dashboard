@@ -32,8 +32,10 @@ class HelloController extends BaseController
     public function showStripe()
     {
         //TEMPORARY SOLUTION!!!!
-        Counter::saveMRR(Auth::user());
-
+        Calculator::saveMRR(Auth::user());
+        Calculator::saveCancellations(Auth::user());
+        Calculator::saveAU(Auth::user());
+        
         setlocale(LC_MONETARY,"en_US");
 
         return View::make(
@@ -174,10 +176,15 @@ class HelloController extends BaseController
     */
     public function showRashan()
     {
-        $savedObjects = Counter::saveEvents(Auth::user());
+        $user = Auth::user();
+        // can't push objects to the queue, 
+        // push the ID of the user instead
+        Queue::push('CalculateFirstTime', array('userID' => $user->id));
+
+        Calculator::calculateMetricsOnConnect($user);
+
         return View::make('dev.rashan',array(
                 'name' => 'Rashan',
-                'count' => $savedObjects
             )
         );
     }

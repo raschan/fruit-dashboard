@@ -5,14 +5,7 @@
       <div class="page-header text-center">
         <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
       </div> <!-- / .page-header -->
-<!-- 
-    {{ $errors->first('email') }}
-         {{ var_dump($errors) }}
-        @foreach ($errors->all() as $error)
-        <div>hello</div>
-          <div>{{ $error }}</div>
-        
-        @endforeach -->
+
       <div class="col-md-10 col-md-offset-1">
 
         <!-- Account settings -->
@@ -21,47 +14,117 @@
             <div class="panel-body account-form bordered getHeight">
               <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Change your account settings</h4>
               {{ Form::open(array(
-                'route'=>'auth.settings',
-                'method' => 'post',
-                'id' => 'form-settings',
+                'action' => 'AuthController@doSettingsName',
+                'id' => 'form-settings-name',
                 'role' => 'form',
-                'class' => 'panel-padding form-horizontal' )) }}
+                'class' => 'form-horizontal' )) }}
 
-                <div class="form-group">
-                  {{ Form::label('id_name', 'Name', array(
+                <div class="form-group"  id="editNameForm">
+                  {{ Form::label('id_nameedit', 'Username', array(
                     'class' => 'col-sm-4 control-label')) }}
                   <div class="col-sm-8">
                     <p class="form-control-static">
                       @if(Auth::user()->name)
-                      {{ Auth::user()->name }}
+                        <span>{{ Auth::user()->name }}</span>
                       @else 
                       N/A
                       @endif
+                      <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing name"]);mixpanel.track("Editing name");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
 
-                <div class="form-group">
-                  {{ Form::label('id_country', 'Country', array(
+                <!-- hidden name change form -->
+
+                <div id="changeNameForm" class="hidden-form">
+
+                  <div class="form-group @if ($errors->first('name')) has-error @endif">
+                    {{ Form::label('id_name', 'New username', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::text('name', Auth::user()->name, array(
+                        'id' => 'id_name',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelName">Cancel</button>
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Name edited"]);mixpanel.track("Name edited");')) }}
+                  </div>
+
+                </div>
+
+                <!-- / hidden name change form -->
+
+
+              {{ Form::close() }}
+
+              {{ Form::open(array(
+                'action' => 'AuthController@doSettingsCountry',
+                'id' => 'form-settings-country',
+                'role' => 'form',
+                'class' => 'form-horizontal' )) }}
+
+                <div class="form-group" id="editCountryForm">
+                  {{ Form::label('id_countryedit', 'Country', array(
                     'class' => 'col-sm-4 control-label')) }}
                   <div class="col-sm-8">
                     <p class="form-control-static">
                       @if(Auth::user()->zoneinfo)
-                      {{ Auth::user()->zoneinfo }}
+                        <span>{{ Auth::user()->zoneinfo }}</span>
                       @else 
                       N/A
                       @endif
+                      <button id="editCountry" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing country"]);mixpanel.track("Editing country");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
+
+                <!-- hidden country change form -->
+
+                <div id="changeCountryForm" class="hidden-form">
+
+                  <div class="form-group @if ($errors->first('country')) has-error @endif">
+                    {{ Form::label('id_country', 'New country', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::text('country', Auth::user()->zoneinfo, array(
+                        'id' => 'id_country',
+                        'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelCountry">Cancel</button> 
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Country edited"]);mixpanel.track("Country edited");')) }} 
+                  </div>
+
+                </div>
+
+                <!-- / hidden name change form -->
+
+              {{ Form::close() }}
+
+              {{ Form::open(array(
+                'action' => 'AuthController@doSettingsEmail',
+                'id' => 'form-settings-email',
+                'role' => 'form',
+                'class' => 'form-horizontal' )) }}
 
                 <div class="form-group" id="editEmailForm">
                   {{ Form::label('id_emailedit', 'Email', array(
                     'class' => 'col-sm-4 control-label')) }}
                   <div class="col-sm-8">
                     <p class="form-control-static">
-                      {{ Auth::user()->email }}
-                      <button id="editEmail" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                      <span>{{ Auth::user()->email }}</span>
+                      <button id="editEmail" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing email"]);mixpanel.track("Editing email");'>Edit</button>
                     </p>
                   </div>
                 </div> <!-- / .form-group -->
@@ -80,32 +143,45 @@
                     </div>
                   </div> <!-- / .form-group -->
 
-                  <div class="form-group @if ($errors->first('password')) has-error @endif">
-                    {{ Form::label('id_password', 'Your password', array(
+                  <div class="form-group @if ($errors->first('email_password')) has-error @endif">
+                    {{ Form::label('id_email_password', 'Your password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      {{ Form::password('password', array(
-                        'id' => 'id_password',
+                      {{ Form::password('email_password', array(
+                        'id' => 'id_email_password',
                         'class' => 'form-control')) }}
                     </div>
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelEmail">Cancel</button>  
+                    {{ Form::submit('Save', array(
                       'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                      'class' => 'btn btn-primary btn-sm btn-flat',
+                      'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Email edited"]);mixpanel.track("Email edited");')) }}
                   </div>
 
                 </div>
 
+              {{ Form::close() }}
+
                 <!-- / hidden email change form -->
+
+              {{ Form::open(array(
+                'action' => 'AuthController@doSettingsPassword',
+                'id' => 'form-settings-password',
+                'role' => 'form',
+                'class' => 'form-horizontal' )) }}
 
                 <div id="editPasswordForm">
                   <div class="form-group">
                     {{ Form::label('id_passwordedit', 'Password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button">Edit</button>
+                      <p class="form-control-static">
+                        <span>********</span>
+                        <button id="editPassword" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing password"]);mixpanel.track("Editing password");'>Edit</button>
+                      </p>
                     </div>
                   </div> <!-- / .form-group -->
                 </div>
@@ -113,49 +189,52 @@
                 <!-- hidden password change form -->
 
                 <div id="changePasswordForm" class="hidden-form">
-                  <div class="form-group @if ($errors->first('oldpassword')) has-error @endif">
-                    {{ Form::label('id_oldpassword', 'Old password', array(
+                  <div class="form-group @if ($errors->first('old_password')) has-error @endif">
+                    {{ Form::label('id_old_password', 'Old password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      {{ Form::password('oldpassword', array(
-                        'id' => 'id_oldpassword',
+                      {{ Form::password('old_password', array(
+                        'id' => 'id_old_password',
                         'class' => 'form-control')) }}
                     </div>
                   </div> <!-- / .form-group -->
 
-                  <div class="form-group @if ($errors->first('newpassword1')) has-error @endif">
-                    {{ Form::label('id_newpassword1', 'New password', array(
+                  <div class="form-group @if ($errors->first('new_password')) has-error @endif">
+                    {{ Form::label('id_new_password', 'New password', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      {{ Form::password('newpassword1', array(
-                        'id' => 'id_newpassword1',
+                      {{ Form::password('new_password', array(
+                        'id' => 'id_new_password',
                         'class' => 'form-control')) }}
                     </div>
                   </div> <!-- / .form-group -->
 
-                  <div class="form-group @if ($errors->first('newpassword2')) has-error @endif">
-                    {{ Form::label('id_newpassword2', 'New password again', array(
+                  <div class="form-group @if ($errors->first('new_password_confirmation')) has-error @endif">
+                    {{ Form::label('id_new_password_confirmation', 'New password again', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      {{ Form::password('newpassword2', array(
-                        'id' => 'id_newpassword2',
+                      {{ Form::password('new_password_confirmation', array(
+                        'id' => 'id_new_password_confirmation',
                         'class' => 'form-control')) }}
                     </div>
                   </div> <!-- / .form-group -->
 
                   <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                  {{ Form::submit('Save', array(
-                      'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat')) }}
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelPassword">Cancel</button>  
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Password edited"]);mixpanel.track("Password edited");')) }}
                   </div>
 
                 </div>
+              {{ Form::close() }}
 
                 <!-- hidden password change form -->
 
                 
 
-              {{ Form::close() }}
+              
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
 
@@ -167,6 +246,9 @@
             <div class="panel-body bordered sameHeight">
               <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Select a service to connect</h4>
               <div class="list-group">
+                
+              {{-- 
+                <!-- hidden for development, will not be rendered on client side -->   
                 <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">PayPal</h4>
@@ -178,6 +260,9 @@
                     @endif
                   </p>
                 </a> <!-- / .list-group-item -->
+                <!-- / hidden for development, will not be rendered on client side -->
+              --}}   
+
                 <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
@@ -206,12 +291,24 @@
     <script type="text/javascript">
     init.push(function () {
         // if error slide down
+        @if ($errors->first('name')|| $errors->first('name_password'))
+        $('#editNameForm').slideUp('fast', function (){
+          $('#changeNameForm').slideDown('fast');
+        });
+        @elseif ($errors->first('country'))
+        $('#editCountryForm').slideUp('fast', function (){
+          $('#changeCountryForm').slideDown('fast');
+        });
+        @elseif ($errors->first('email') || $errors->first('email_password'))
         $('#editEmailForm').slideUp('fast', function (){
           $('#changeEmailForm').slideDown('fast');
         });
+        @elseif ($errors->first('old_password') || $errors->first('new_password'))
         $('#editPasswordForm').slideUp('fast', function (){
           $('#changePasswordForm').slideDown('fast');
         });
+        
+        @endif
     });
     </script>
     @endif 
@@ -219,6 +316,16 @@
     <script type="text/javascript">
     init.push(function () {
       // event listeners for hidden forms
+      $('#editName').on('click', function (){
+        $('#editNameForm').slideUp('fast', function (){
+          $('#changeNameForm').slideDown('fast');
+        });
+      })
+      $('#editCountry').on('click', function (){
+        $('#editCountryForm').slideUp('fast', function (){
+          $('#changeCountryForm').slideDown('fast');
+        });
+      })
       $('#editEmail').on('click', function (){
         $('#editEmailForm').slideUp('fast', function (){
           $('#changeEmailForm').slideDown('fast');
@@ -229,15 +336,30 @@
           $('#changePasswordForm').slideDown('fast');
         });
       })
+
+      // event listeners for cancel buttons
+      $('#cancelName').on('click', function (){
+        $('#changeNameForm').slideUp('fast', function (){
+          $('#editNameForm').slideDown('fast');
+        });
+      })
+      $('#cancelCountry').on('click', function (){
+        $('#changeCountryForm').slideUp('fast', function (){
+          $('#editCountryForm').slideDown('fast');
+        });
+      })
+      $('#cancelEmail').on('click', function (){
+        $('#changeEmailForm').slideUp('fast', function (){
+          $('#editEmailForm').slideDown('fast');
+        });
+      })
+      $('#cancelPassword').on('click', function (){
+        $('#changePasswordForm').slideUp('fast', function (){
+          $('#editPasswordForm').slideDown('fast');
+        });
+      })
     });
 
     </script>
 
-  @stop
-
-  @section('intercomScript')
-  <script>
-     
-  </script>
-  {{ HTML::script('js/intercom_io.js'); }}
   @stop

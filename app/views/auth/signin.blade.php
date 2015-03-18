@@ -54,9 +54,10 @@
         </div> <!-- / Password -->
 
         <div class="form-actions">
-          {{ Form::submit('Submit!' , array(
+          {{ Form::submit('Sign in!' , array(
             'id' => 'id_submit',
-            'class' => 'signin-btn bg-primary')) }}
+            'class' => 'signin-btn bg-primary',
+            'onClick' => '_gaq.push(["_trackEvent", "Signin", "Button Pushed"]);mixpanel.track("Signin");')) }}
           <!-- <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a> -->
         </div> <!-- / .form-actions -->
       {{ Form::close() }}
@@ -91,7 +92,8 @@
   <!-- / Container -->
 
   <div class="not-a-member">
-    Not a member? <a href="{{ URL::route('auth.signup') }}">Sign up now</a>
+    Not a member? <a href="{{ URL::route('auth.signup') }}">Sign up now</a> 
+    or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
   </div>
 </body>
 

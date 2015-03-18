@@ -1,5 +1,7 @@
 <?php
 
+use Abf\Event;      // needed because of conflicts with Laravel and Stripe
+
 class BaseStat
 {
     // later rewrite to be protected
@@ -12,11 +14,12 @@ class BaseStat
     * @return array
     */
 
-    public static function showSimpleStat()
+    public static function showSimpleStat($metrics)
     {
         // helpers
-        $currentDay = time();
-        $lastMonthTime = $currentDay - 30*24*60*60;
+        $currentTime = time();
+        $currentDate = date('Y-m-d', $currentTime);
+        $lastMonthDate = date('Y-m-d',$currentTime - 31*86400);
 
         // return array
         $data = array();
@@ -25,26 +28,40 @@ class BaseStat
         // basics, what we are
         $data['id'] = self::$statID;
         $data['statName'] = self::$statName;
+        $data['positiveIsGood'] = true;
 
-        // building history array for dashboard
-        for ($i = $currentDay-30*86400; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['history'][$date] = static::getStatOnDay($i);
+        
+        // building history array for dashboard from values array
+
+        foreach ($metrics as $date => $metric) {
+            $data['history'][$date] = $metric;
         }
 
-        // current value, formatted for money
-        $data['currentValue'] = static::getStatOnDay($currentDay);
+        if(!isset($data['history']))
+        {
+            $data['history'] = array();
+        }
 
-        // change in timeframe
-        $lastMonthValue = static::getStatOnDay($lastMonthTime);
-        // check if data is available, so we don't divide by null
-        if ($lastMonthValue) {
-            $changeInPercent = (static::getStatOnDay($currentDay) / $lastMonthValue * 100) - 100;
+        // the last item in the $metrics array is the newest, take that as current
+        $data['currentValue'] = end($metrics);
+
+        // change in a month
+        // check if there is enough data in the array
+            // $lastMonthValue is an array, 
+            // its empty, if there is not enoguh element in metrics
+        $lastMonthValue = array_slice($metrics,-29,1);
+
+        if(!empty($lastMonthValue) && reset($lastMonthValue) != 0)
+        {
+            // it's not empty, and it's not 0
+            $changeInPercent = ($data['currentValue'] / reset($lastMonthValue) * 100) - 100;
             $data['oneMonthChange'] = round($changeInPercent) . '%';
+            
         } else {
             $data['oneMonthChange'] = null;
         }
-
+        
+    
         return $data;
 
     }
@@ -55,7 +72,7 @@ class BaseStat
     * @return array
     */
 
-    public static function showFullStat()
+    public static function showFullStat($metrics)
     {
         // helpers
         $currentDay = time();
@@ -69,18 +86,32 @@ class BaseStat
         // return array
         $data = array();
 
-        $data = self::showSimpleStat();
+        $data = static::showSimpleStat($metrics);
 
         // building full mrr history
-        $firstDay = static::getFirstDay();
+        $firstDay = Event::where('user', Auth::user()->id)
+                    ->orderBy('date','asc')
+                    ->first();
+        if($firstDay)
+        {
+            $firstDay = strtotime($firstDay->date);
+        } else {
+            $firstDay = time();
+        }
         $data['firstDay'] = date('d-m-Y', $firstDay);
 
+        $fullMetricHistory = Metric::where('user', Auth::user()->id)
+                    ->orderBy('date','asc')
+                    ->get();
 
-        for ($i = $firstDay; $i < $currentDay; $i+=86400) {
-            $date = date('Y-m-d',$i);
-            $data['fullHistory'][$date] = static::getStatOnDay($i);
+        foreach ($fullMetricHistory as $metric) {
+            $data['fullHistory'][$metric->date] = $metric->$data['id'];
         }
-        
+
+        if(!isset($data['fullHistory']))
+        {
+            $data['fullHistory'] = array();
+        }
 
         // past values (null if not available)
         $lastMonthValue = static::getStatOnDay($lastMonthTime);
@@ -146,7 +177,6 @@ class BaseStat
         );
 
         return $data;
-
     }
 
 
@@ -189,41 +219,15 @@ class BaseStat
     {
     	$day = date('Y-m-d', $timeStamp);
 
-    	$stats = DB::table(self::$statID)
-    		->where('date',$day)
+    	$stats = Metric::where('date',$day)
     		->where('user', Auth::user()->id)
-    		->get();
+    		->first();
 
     	if($stats){
-            $statValue = 0;
-            foreach ($stats as $stat) {
-                $statValue += $stat->value;
-            }
+            $statValue = $stats->{self::$statID};
     		return $statValue;
     	} else {
 			return null;
     	}
     }
-
-
-
-    /**
-    * Get day of first recorded data
-    *
-    * @return string with date
-    */
-
-    public static function getFirstDay(){
-
-        $firstDay = DB::table(self::$statID)->where('user', Auth::user()->id)->orderBy('date', 'asc')->first();
-
-        if ($firstDay){
-            return strtotime($firstDay->date);
-        }
-        else {
-            // needs review, so it can handle null with new users too
-            return 1388448000;
-        }
-    }
-
 }
