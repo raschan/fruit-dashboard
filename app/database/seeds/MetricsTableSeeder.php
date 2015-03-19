@@ -16,7 +16,7 @@ class MetricsTableSeeder extends Seeder
                     'uc' => 1,
                     'cancellations' => 1,
                     'monthlyCancellations' => 1,
-                    'date' => '2014-03-04'
+                    'date' => '2014-03-13'
                 )
             );
 
@@ -31,7 +31,7 @@ class MetricsTableSeeder extends Seeder
                     'uc' => 1,
                     'cancellations' => 1,
                     'monthlyCancellations' => 1,
-                    'date' => '2014-03-05'
+                    'date' => '2014-03-14'
                 )
             );
 
@@ -46,7 +46,7 @@ class MetricsTableSeeder extends Seeder
                     'uc' => 1,
                     'cancellations' => 1,
                     'monthlyCancellations' => 1,
-                    'date' => '2014-03-06'
+                    'date' => '2014-03-15'
                 )
             );
 
