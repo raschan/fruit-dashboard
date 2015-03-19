@@ -12,7 +12,8 @@
 		"ext-json" : "*",
 		"stripe/stripe-php": "*",
 		"doctrine/dbal" : "*",
-		"nwidart/db-exporter": "1.0"
+		"nwidart/db-exporter": "1.0",
+		"nesbot/carbon": "~1.14"
 	},
 	"autoload": {
 		"classmap": [
