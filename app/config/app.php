@@ -122,7 +122,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
-		'Barryvdh\Queue\AsyncServiceProvider'
+		'Barryvdh\Queue\AsyncServiceProvider',
+		'Nwidart\DbExporter\DbExportHandlerServiceProvider'
 	),
 
 	/*
