@@ -563,9 +563,6 @@
             finalLabel = newLabel;
           }
           
-          console.log(finalData);
-          console.log(finalLabel);
-          
           // destroying stat
           singleStat.destroy();
           
