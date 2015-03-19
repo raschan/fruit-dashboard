@@ -458,6 +458,7 @@
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){      
+
           // update start datepicker to end datepicker value
           $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
@@ -483,7 +484,7 @@
 
       });
 
-      $('#stopDateStat').datepicker().on("changeDate", function(e){    
+      $('#stopDateStat').datepicker().on("changeDate", function(e){
         selectedStartDate = $('#startDateStat').prop("value");
         selectedStopDate = $('#stopDateStat').prop("value");
 
@@ -492,7 +493,7 @@
         arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
-        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){                        
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
           // update end datepicker to start datepicker value
           $(this).datepicker('update', new Date(arrayStartKey));
           //$(this).prop("value",selectedStartDate);
@@ -562,7 +563,7 @@
       function createNewChart(arrayStart, arrayStop){
       if (arrayStart && arrayStop){
           // search all labels for selected data interval's start and end index value in array
-          for (var i in labels){
+          for (var i=0;labels.length;i++){
             if (arrayStart == labels[i]){
               arrayStart = i;
             }
@@ -572,6 +573,8 @@
             }
           }
           
+          arrayStop = parseInt(arrayStop);
+          arrayStart = parseInt(arrayStart);
           var newLabel = [];
           var newData = [];
           
