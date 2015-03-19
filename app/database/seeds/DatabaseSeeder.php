@@ -11,9 +11,7 @@ class DatabaseSeeder extends Seeder {
     {
         Eloquent::unguard();
 
-        $this->call('UserTableSeeder');
-        $this->call('MetricsTableSeeder');
-        $this->call('EventSeeder');
+        $this->call('supdashboarddbTableSeeder');
     }
 
 }
