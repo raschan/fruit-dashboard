@@ -39,6 +39,7 @@ class DemoController extends BaseController
                     foreach ($metricValues as $metric) {
                         $metricsArray[$metric->date] = $metric->$statID;
                     }
+                    ksort($metricsArray);
                     $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
                 }
 

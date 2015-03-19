@@ -657,7 +657,7 @@ class Calculator
 
         $i = 0;
         
-        foreach ($events as $event)
+        foreach ($events as $id => $event)
         {
             // if stripe event
             if ($event->provider == 'stripe')
@@ -665,6 +665,7 @@ class Calculator
                 // decoding object
 
                 $tempArray = json_decode(strstr($event->object, '{'), true);
+                $tempString = strstr($event->object, '{');
                 $prevTempArray = !is_null($event->previousAttributes)
                                     ? json_decode(strstr($event->previousAttributes , '{'), true)
                                     : null;
