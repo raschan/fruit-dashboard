@@ -20,15 +20,15 @@
     <!-- Left side -->
     <div class="signin-info">
       <a href="/" class="logo">
-        Startup Dashboard
+        Fruit Financial Analytics
       </a> <!-- / .logo -->
       <div class="slogan">
-        Simple. Flexible. Powerful.
+        Understand your business better.
       </div> <!-- / .slogan -->
       <ul>
-        <li><i class="fa fa-sitemap signin-icon"></i> Flexible modular structure</li>
-        <li><i class="fa fa-file-text-o signin-icon"></i> LESS &amp; SCSS source files</li>
-        <li><i class="fa fa-outdent signin-icon"></i> RTL direction support</li>
+        <li><i class="fa fa-sitemap signin-icon"></i> One click, zero setup</li>
+        <li><i class="fa fa-file-text-o signin-icon"></i> Realtime view key metrics</li>
+        <li><i class="fa fa-outdent signin-icon"></i> Email reports</li>
         <li><i class="fa fa-heart signin-icon"></i> Crafted with love</li>
       </ul> <!-- / Info list -->
     </div>
