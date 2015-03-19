@@ -405,7 +405,7 @@
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
         arrayStopKey = getFormattedDate(selectedStopDate);
-        
+
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
           // update start datepicker to end datepicker value
@@ -515,7 +515,7 @@
       function createNewChart(arrayStart, arrayStop){
       if (arrayStart && arrayStop){
           // search all labels for selected data interval's start and end index value in array
-          for (var i in labels){
+          for (var i=0;labels.length;i++){
             if (arrayStart == labels[i]){
               arrayStart = i;
             }
@@ -525,6 +525,8 @@
             }
           }
           
+          arrayStop = parseInt(arrayStop);
+          arrayStart = parseInt(arrayStart);
           var newLabel = [];
           var newData = [];
           
@@ -561,9 +563,12 @@
             finalLabel = newLabel;
           }
           
+          console.log(finalData);
+          console.log(finalLabel);
           
           // destroying stat
           singleStat.destroy();
+          
 
           // for updated view
           var dataFinal = {
