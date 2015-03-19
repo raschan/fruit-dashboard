@@ -29,6 +29,7 @@ class DemoController extends BaseController
                 $currentMetrics = Calculator::currentMetrics();
 
                 $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->where('date','<',Carbon::now())
                                         ->orderBy('date','desc')
                                         ->take(31)
                                         ->get();
@@ -78,6 +79,7 @@ class DemoController extends BaseController
 
                 $currentMetrics = Calculator::currentMetrics();
                 $metricValues = Metric::where('user', Auth::user()->id)
+                                        ->where('date','<',Carbon::now())
                                         ->orderBy('date','desc')
                                         ->take(31)
                                         ->get();

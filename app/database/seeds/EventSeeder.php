@@ -128,82 +128,82 @@ class EventSeeder extends Seeder
             $month_name = EventSeeder::getMonth($dailyTimeStamp);
             switch ($month_name){
                 case 'Jan':
-                    $array['eventNumber'] = 10;
+                    $array['eventNumber'] = 10 * 2;
                     $array['subscriptions'] = 30;
                     $array['cancels'] = 0;
                     $array['updates'] = 0;
                     break;
                 case 'Feb':
-                    $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 20;
-                    $array['cancels'] = 5;
-                    $array['updates'] = 15;
-                    break;
-                case 'Mar':
-                    $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 20;
-                    $array['cancels'] = 10;
-                    $array['updates'] = 5;
-                    break;
-                case 'Apr':
-                    $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 15;
-                    $array['cancels'] = 5;
-                    $array['updates'] = 10;
-                    break;
-                case 'May':
-                    $array['eventNumber'] = 25;
-                    $array['subscriptions'] = 70;
+                    $array['eventNumber'] = 15 * 2;
+                    $array['subscriptions'] = 40;
                     $array['cancels'] = 15;
                     $array['updates'] = 15;
                     break;
-                case 'Jun':
-                    $array['eventNumber'] = 10;
+                case 'Mar':
+                    $array['eventNumber'] = 15 * 2;
+                    $array['subscriptions'] = 30;
+                    $array['cancels'] = 20;
+                    $array['updates'] = 5;
+                    break;
+                case 'Apr':
+                    $array['eventNumber'] = 20 * 2;
+                    $array['subscriptions'] = 20;
+                    $array['cancels'] = 20;
+                    $array['updates'] = 10;
+                    break;
+                case 'May':
+                    $array['eventNumber'] = 25 * 2;
                     $array['subscriptions'] = 10;
-                    $array['cancels'] = 5;
+                    $array['cancels'] = 25;
+                    $array['updates'] = 15;
+                    break;
+                case 'Jun':
+                    $array['eventNumber'] = 10 * 2;
+                    $array['subscriptions'] = 20;
+                    $array['cancels'] = 15;
                     $array['updates'] = 5;
                     break;
                 case 'Jul':
-                    $array['eventNumber'] = 12;
-                    $array['subscriptions'] = 10;
-                    $array['cancels'] = 2;
+                    $array['eventNumber'] = 12 * 2;
+                    $array['subscriptions'] = 30;
+                    $array['cancels'] = 12;
                     $array['updates'] = 2;
                     break;
                 case 'Aug':
-                    $array['eventNumber'] = 10;
-                    $array['subscriptions'] = 15;
-                    $array['cancels'] = 2;
+                    $array['eventNumber'] = 10 * 2;
+                    $array['subscriptions'] = 35;
+                    $array['cancels'] = 22;
                     $array['updates'] = 2;
                     break;
                 case 'Sep':
-                    $array['eventNumber'] = 12;
+                    $array['eventNumber'] = 12 * 2;
                     $array['subscriptions'] = 20;
-                    $array['cancels'] = 5;
+                    $array['cancels'] = 15;
                     $array['updates'] = 5;
                     break;
                 case 'Oct':
-                    $array['eventNumber'] = 15;
-                    $array['subscriptions'] = 20;
-                    $array['cancels'] = 2;
+                    $array['eventNumber'] = 15 * 2;
+                    $array['subscriptions'] = 30;
+                    $array['cancels'] = 12;
                     $array['updates'] = 5;
                     break;
                 case 'Nov':
-                    $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 25;
+                    $array['eventNumber'] = 20 * 2;
+                    $array['subscriptions'] = 45;
                     $array['cancels'] = 5;
                     $array['updates'] = 15;
                     break;
                 case 'Dec':
-                    $array['eventNumber'] = 30;
+                    $array['eventNumber'] = 30 * 2;
                     $array['subscriptions'] = 30;
                     $array['cancels'] = 10;
-                    $array['updates'] = 10;
+                    $array['updates'] = 20;
                     break; 
                 case 'default':
-                    $array['eventNumber'] = 20;
-                    $array['subscriptions'] = 40;
-                    $array['cancels'] = 5;
-                    $array['updates'] = 10;
+                    $array['eventNumber'] = 20 * 2;
+                    $array['subscriptions'] = 20;
+                    $array['cancels'] = 10;
+                    $array['updates'] = 15;
                     break;
                 }
             return $array;               
@@ -250,16 +250,16 @@ class EventSeeder extends Seeder
 
             switch ($random) {
                 case '1':
-                    $plan['nameChange'] = 'mino';
+                    $plan['nameChange'] = 'Maximus';
                     $plan['amountChange'] = 4900;
                     break;
                 case '2':
-                    $plan['nameChange'] = 'ini';
+                    $plan['nameChange'] = 'Minimus';
                     $plan['amountChange'] = 1900;
                     
                     break;
                 case '3':
-                    $plan['nameChange'] = 'mini';
+                    $plan['nameChange'] = 'Minaximus';
                     $plan['amountChange'] = 2900;
                     break;
                 default:
