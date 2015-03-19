@@ -25,10 +25,10 @@
 		<!-- Header -->
 		<div class="signup-header">
 			<a href="/" class="logo">
-				Startup Dashboard
+				Fruit Financial Analytics
 			</a> <!-- / .logo -->
 			<div class="slogan">
-				Simple. Flexible. Powerful.
+				Understand your business better.
 			</div> <!-- / .slogan -->
 		</div>
 		<!-- / Header -->
@@ -58,7 +58,7 @@
 				</div> -->
 
 				<div class="form-actions">
-					{{ Form::submit('Submit!' , array(
+					{{ Form::submit('Sign up' , array(
 						'id' => 'id_submit',
 						'class' => 'signup-btn bg-primary')) }}
 				</div>
