@@ -12,7 +12,7 @@
 
       <!-- Logo -->
       <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
-        Startup Dashboard
+        Fruit Financial Analytics
       </a>
 
       <!-- Main navbar toggle -->
@@ -454,12 +454,10 @@
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
-        console.log(selectedStartDate, selectedStopDate, arrayStartKey, arrayStartKey);
+        arrayStopKey = getFormattedDate(selectedStopDate);    
 
         // if start date is bigger than end date
-        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          console.log("are we here?");
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){      
           // update start datepicker to end datepicker value
           $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
@@ -477,25 +475,24 @@
           $('#stopDateStat').datepicker('setStartDate', new Date(arrayStartKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{'Demo ' . $data['statName'].' date interval' }}" , "Start date changed"]);
+          mixpanel.track('{{"Demo " .$data["statName"]. " start date changed"}}');
         }
 
       });
 
-      $('#stopDateStat').datepicker().on("changeDate", function(e){
-        console.log(e);
+      $('#stopDateStat').datepicker().on("changeDate", function(e){    
         selectedStartDate = $('#startDateStat').prop("value");
         selectedStopDate = $('#stopDateStat').prop("value");
 
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
-        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          console.log(selectedStartDate);
-          console.log(arrayStartKey);
-          console.log(selectedStopDate);
-          console.log(arrayStopKey);
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){                        
           // update end datepicker to start datepicker value
           $(this).datepicker('update', new Date(arrayStartKey));
           //$(this).prop("value",selectedStartDate);
@@ -514,6 +511,10 @@
           $('#startDateStat').datepicker('setEndDate', new Date(arrayStopKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ 'Demo ' . $data['statName'] .' date interval' }}" , "Stop date changed"]);
+          mixpanel.track('{{"Demo " .$data["statName"]. " stop date changed"}}');
         }
       });
 
@@ -651,6 +652,13 @@
     });
 
     </script>
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened on demo page" }}' ]);
+      mixpanel.track("{{ $data['statName']. ' opened on demo page' }}");
+    </script>
+    <!-- / Analytics -->
 
   @stop
 

@@ -404,12 +404,10 @@
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
-        console.log(selectedStartDate, selectedStopDate, arrayStartKey, arrayStartKey);
-
+        arrayStopKey = getFormattedDate(selectedStopDate);
+        
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          console.log("are we here?");
           // update start datepicker to end datepicker value
           $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
@@ -436,20 +434,15 @@
       });
 
       $('#stopDateStat').datepicker().on("changeDate", function(e){
-        console.log(e);
         selectedStartDate = $('#startDateStat').prop("value");
         selectedStopDate = $('#stopDateStat').prop("value");
 
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
-          console.log(selectedStartDate);
-          console.log(arrayStartKey);
-          console.log(selectedStopDate);
-          console.log(arrayStopKey);
           // update end datepicker to start datepicker value
           $(this).datepicker('update', new Date(arrayStartKey));
           //$(this).prop("value",selectedStartDate);
