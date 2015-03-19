@@ -564,6 +564,8 @@
             }
           }
           
+          arrayStop = parseInt(arrayStop);
+          arrayStart = parseInt(arrayStart);
           var newLabel = [];
           var newData = [];
           
