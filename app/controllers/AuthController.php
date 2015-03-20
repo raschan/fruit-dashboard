@@ -114,6 +114,7 @@ class AuthController extends BaseController
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
             $user->ready = false;
+            $user->summaryEmailFrequency = 'daily';
             $user->save();
             // signing the user in and redirect to dashboard
             Auth::login($user);
