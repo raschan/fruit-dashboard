@@ -109,7 +109,7 @@ class SendDailyEmail extends Command {
 							$weeklyMetrics = array();
 							foreach ($metrics as $metric) {
 								$metric->formatMetrics();
-								$weeklyMetrics[$metric->date] = $metric,
+								$weeklyMetrics[$metric->date] = $metric;
 							}
 							$data = array(
 								'metrics' => $weeklyMetrics,
