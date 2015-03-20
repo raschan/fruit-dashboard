@@ -13,6 +13,7 @@
         	<div class="col-sm-6 account-form-wrapper">
             <div class="panel-body account-form bordered getHeight">
               <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Change your account settings</h4>
+              <!-- Name -->
               {{ Form::open(array(
                 'action' => 'AuthController@doSettingsName',
                 'id' => 'form-settings-name',
@@ -63,6 +64,7 @@
 
               {{ Form::close() }}
 
+              <!-- Country -->
               {{ Form::open(array(
                 'action' => 'AuthController@doSettingsCountry',
                 'id' => 'form-settings-country',
@@ -112,6 +114,7 @@
 
               {{ Form::close() }}
 
+              <!-- Email -->
               {{ Form::open(array(
                 'action' => 'AuthController@doSettingsEmail',
                 'id' => 'form-settings-email',
@@ -167,6 +170,7 @@
 
                 <!-- / hidden email change form -->
 
+              <!-- Password -->
               {{ Form::open(array(
                 'action' => 'AuthController@doSettingsPassword',
                 'id' => 'form-settings-password',
@@ -232,8 +236,61 @@
 
                 <!-- hidden password change form -->
 
-                
+              <!-- Summary Email Frequency -->
+              <!-- choose from dropdown -->
+              {{ Form::open(array(
+                'action' => 'AuthController@doSettingsFrequency',
+                'id' => 'form-settings-frequency',
+                'role' => 'form',
+                'class' => 'form-horizontal' )) }}
 
+                <div id="editFrequencyForm">
+                  <div class="form-group">
+                    {{ Form::label('id_frequencyedit', 'Summary email frequency', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      <p class="form-control-static">
+                        <span>{{ Auth::user()->summaryEmailFrequency }}</span>
+                        <button id="editFrequency" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing frequency"]);mixpanel.track("Editing frequency");'>Edit</button>
+                      </p>
+                    </div>
+                  </div> <!-- / .form-group -->
+                </div>
+
+                <!-- hidden password change form -->
+
+                <div id="changeFrequencyForm" class="hidden-form">
+                  <div class="form-group @if ($errors->first('new_frequency')) has-error @endif">
+                    {{ Form::label('id_frequency', 'New Frequency', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      {{ Form::select('new_frequency',
+                        // dropdown options
+                        array(
+                          'none' => 'No summary emails', 
+                          'daily' => 'Daily summary emails',
+                          'weekly' => 'Weekly summary emails'), 
+                        // highlighted option
+                        Auth::user()->summaryEmailFrequency,
+                        array(                                       
+                          'id' => 'id_frequency',
+                          'class' => 'form-control')) }}
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelFrequency">Cancel</button>  
+                    {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Frequency edited"]);
+                                      mixpanel.track("Frequency edited");')) }}
+                  </div>
+
+                </div>
+              {{ Form::close() }}
+
+              <!-- 3 buttons for 3 options -->
               
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
@@ -336,6 +393,11 @@
           $('#changePasswordForm').slideDown('fast');
         });
       })
+      $('#editFrequency').on('click', function (){
+        $('#editFrequencyForm').slideUp('fast', function (){
+          $('#changeFrequencyForm').slideDown('fast');
+        });
+      })
 
       // event listeners for cancel buttons
       $('#cancelName').on('click', function (){
@@ -356,6 +418,11 @@
       $('#cancelPassword').on('click', function (){
         $('#changePasswordForm').slideUp('fast', function (){
           $('#editPasswordForm').slideDown('fast');
+        });
+      })
+      $('#cancelFrequency').on('click', function (){
+        $('#changeFrequencyForm').slideUp('fast', function (){
+          $('#editFrequencyForm').slideDown('fast');
         });
       })
     });

@@ -322,6 +322,18 @@ class AuthController extends BaseController
         }
     }
 
+    public function doSettingsFrequency()
+    {
+        $user = Auth::user();
+
+        $user->summaryEmailFrequency = Input::get('new_frequency');
+
+        $user->save();
+
+        return Redirect::to('/settings')
+            ->with('success', 'Edit was succesful.');
+        }
+
     /*
     |===================================================
     | <GET> | showConnect: renders the connect page

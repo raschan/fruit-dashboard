@@ -114,6 +114,11 @@ Route::post('settingsPassword', array(
     'uses' => 'AuthController@doSettingsPassword'
 ));
 
+Route::post('settingsFrequency', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsFrequency'
+));
+
 // connect routes
 
 Route::get('connect', array(
