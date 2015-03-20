@@ -177,16 +177,39 @@ class HelloController extends BaseController
     public function showRashan()
     {
         $user = Auth::user();
-        // can't push objects to the queue, 
-        // push the ID of the user instead
-        Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
-        Calculator::calculateMetricsOnConnect($user);
+        $previousDayDate = Carbon::yesterday()->toDateString();
+        // currently calculated metrics
+        $currentMetrics = Calculator::currentMetrics();
 
-        return View::make('dev.rashan',array(
-                'name' => 'Rashan',
-            )
-        );
+        $metrics = Metric::where('user', $user->id) 
+                        ->where('date','<=', $previousDayDate)
+                        ->orderBy('date','desc')
+                        ->take(7)
+                        ->get();
+
+        // format metrics to presentable data
+        $weeklyMetrics = array();
+        foreach ($metrics as $metric) {
+            $metric->formatMetrics();
+            $weeklyMetrics[$metric->date] = $metric;
+        }
+
+        $data = array(
+            'metrics' => $weeklyMetrics,
+            'currentMetrics' => $currentMetrics
+            );
+
+       if(Carbon::now()->dayOfWeek == Carbon::FRIDAY)
+        {
+            return View::make('emails.summaryWeekly',array(
+                    'metrics' => $weeklyMetrics,
+                    'currentMetrics' => $currentMetrics
+                )
+            );
+        } else {
+            return View::make('emails.connected');
+        }
     }
 
     /*
