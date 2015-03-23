@@ -2,6 +2,8 @@
 
 class ArrStat extends BaseStat {
     
+    const POSITIVE_IS_GOOD = true;
+
     /**
     * calculate current ARR from current MRR
     *

@@ -5,6 +5,8 @@ use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
 class AUStat extends BaseStat {
 
+    const POSITIVE_IS_GOOD = true;
+
     /**
     * calculate today's AU from yesterday value and changes
     * relevant changes:

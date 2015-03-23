@@ -2,6 +2,8 @@
 
 class UserChurnStat extends BaseStat {
 
+    const POSITIVE_IS_GOOD = false;
+    
     /**
     * calculate today's UC from today's monthly cancellations, and 30 days ago AU
     *
@@ -47,7 +49,7 @@ class UserChurnStat extends BaseStat {
         {
             $date30DaysAgo = date('Y-m-d', strtotime($date) - 30 * 86400);
             $historyUC[$date] = (isset($au[$date30DaysAgo]) && $au[$date30DaysAgo] != 0) 
-                                    ? $cancellations / $au[$date30DaysAgo]
+                                    ? $cancellations / $au[$date30DaysAgo] * 100
                                     : null;
         }
 
