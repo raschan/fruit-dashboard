@@ -7,6 +7,7 @@ class BaseStat
     // later rewrite to be protected
     public static $statName;
     public static $statID;
+    public static $positiveIsGood;
 
     /**
     * Prepare data for simple statistics (for dashboard)

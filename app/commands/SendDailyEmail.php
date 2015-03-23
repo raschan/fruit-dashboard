@@ -57,19 +57,45 @@ class SendDailyEmail extends Command {
 						break;
 
 					case 'daily': // default behavior, send yesterday's data
-
 						// get the user's metrics
-						$metrics = Metric::where('user', $user->id)	
+						$metric = Metric::where('user', $user->id)	
 										->where('date', $previousDayDate)
 										->first();
 
-						if ($metrics)
+						if ($metric)
 						{
+							$previousMetrics = Metric::where('user', $user->id)
+					                        ->where('date','<=', Carbon::yesterday()->subDays(30)->toDateString())
+					                        ->orderBy('date','desc')
+					                        ->first();
+					        $changes = array();
+					        foreach ($currentMetrics as $metricID => $metricDetails) {
+					            // get the correct color
+					            $changes[$metricID]['positiveIsGood'] = $metricDetails['metricClass']::POSITIVE_IS_GOOD;
+				                $date = $metric->date;
+
+					            if ($previousMetrics) {
+					                if($previousMetrics->$metricID != 0)
+					                {
+					                    $value = ($metric->$metricID / $previousMetrics->$metricID) * 100 - 100;
+					                    $changes[$metricID][$date]['value'] = round($value).' %';
+					                }
+					                else
+					                    $changes[$metricID][$date]['value'] = null;
+					            } else {
+					            	$changes[$metricID][$date]['value'] = null;
+					            } 
+					        }
 							// format metrics to presentable data
-							$metrics->formatMetrics();
+							$metric->formatMetrics();
+							// this line is for making the daily email the same format as the weekly
+							// so we only need one email template
+							$metrics = array($metric->date => $metric);
 							$data = array(
 								'metrics' => $metrics,
-								'currentMetrics' => $currentMetrics
+			                    'currentMetrics' => $currentMetrics,
+			                    'changes' => $changes,
+			                    'isDaily' => true
 								);
 
 							// login the user (necessary to get the email address)	
@@ -77,7 +103,7 @@ class SendDailyEmail extends Command {
 
 
 							// send the email to the user
-							Mail::send('emails.summaryDaily', $data, function($message)
+							Mail::send('emails.summary', $data, function($message)
 							{
 								// get the currently logged in user
 								$user = Auth::user();
@@ -104,6 +130,27 @@ class SendDailyEmail extends Command {
 											->orderBy('date','desc')
 											->take(7)
 											->get();
+							$previousMetrics = Metric::where('user', $user->id)
+					                        ->where('date','<=', Carbon::yesterday()->subDays(30)->toDateString())
+					                        ->orderBy('date','desc')
+					                        ->take(7)
+					                        ->get();
+					        $changes = array();
+					        foreach ($currentMetrics as $metricID => $metricDetails) {
+					            // get the correct color
+					            $changes[$metricID]['positiveIsGood'] = $metricDetails['metricClass']::POSITIVE_IS_GOOD;
+
+					            foreach ($previousMetrics as $id => $prevMetric) {
+					                $date = $metrics[$id]->date;
+					                if($prevMetric->$metricID != 0)
+					                {
+					                    $value = ($metrics[$id]->$metricID / $prevMetric->$metricID) * 100 - 100;
+					                    $changes[$metricID][$date]['value'] = round($value).' %';
+					                }
+					                else
+					                    $changes[$metricID][$date]['value'] = null;
+					            }
+					        }
 
 							// format metrics to presentable data
 							$weeklyMetrics = array();
@@ -113,14 +160,16 @@ class SendDailyEmail extends Command {
 							}
 							$data = array(
 								'metrics' => $weeklyMetrics,
-								'currentMetrics' => $currentMetrics
+								'currentMetrics' => $currentMetrics,
+								'changes' => $changes,
+								'isDaily' => false
 								);
 							// login the user (necessary to get the email address)	
 							Auth::login($user);
 
 
 							// send the email to the user
-							Mail::send('emails.summaryWeekly', $data, function($message)
+							Mail::send('emails.summary', $data, function($message)
 							{
 								// get the currently logged in user
 								$user = Auth::user();

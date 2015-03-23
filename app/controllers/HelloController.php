@@ -182,46 +182,60 @@ class HelloController extends BaseController
         // currently calculated metrics
         $currentMetrics = Calculator::currentMetrics();
 
+        
+        //DAILY MOCKUP
+        /*
+        $metric = Metric::where('user', $user->id)  
+                        ->where('date', $previousDayDate)
+                        ->first();
+        $metric->formatMetrics();
+        // this line is for making the daily email the same format as the weekly
+        // so we only need one email template
+        $weeklyMetrics = array($metric->date => $metric);
+        */
+        //WEEKLY MOCKUP
         $metrics = Metric::where('user', $user->id) 
                         ->where('date','<=', $previousDayDate)
                         ->orderBy('date','desc')
                         ->take(7)
                         ->get();
+        // to calculate change in 30 days
+        $previousMetrics = Metric::where('user', $user->id)
+                        ->where('date','<=', Carbon::yesterday()->subDays(30)->toDateString())
+                        ->orderBy('date','desc')
+                        ->take(7)
+                        ->get();
+        $changes = array();
+        foreach ($currentMetrics as $metricID => $metricDetails) {
+            // get the correct color
+            $changes[$metricID]['positiveIsGood'] = $metricDetails['metricClass']::POSITIVE_IS_GOOD;
+
+            foreach ($previousMetrics as $id => $prevMetric) {
+                $date = $metrics[$id]->date;
+                if($prevMetric->$metricID != 0)
+                {
+                    $value = ($metrics[$id]->$metricID / $prevMetric->$metricID) * 100 - 100;
+                    $changes[$metricID][$date]['value'] = round($value).' %';
+                }
+                else
+                    $changes[$metricID][$date]['value'] = null;
+            }
+        }
 
         // format metrics to presentable data
         $weeklyMetrics = array();
-        foreach ($metrics as $metric) {
+        foreach ($metrics as $id => $metric) {
             $metric->formatMetrics();
             $weeklyMetrics[$metric->date] = $metric;
         }
 
-        $data = array(
-            'metrics' => $weeklyMetrics,
-            'currentMetrics' => $currentMetrics
-            );
 
-       if(Carbon::now()->dayOfWeek == Carbon::FRIDAY)
-        {
-            return View::make('emails.summaryWeekly',array(
+        return View::make('emails.summary',array(
                     'metrics' => $weeklyMetrics,
-                    'currentMetrics' => $currentMetrics
+                    'currentMetrics' => $currentMetrics,
+                    'changes' => $changes,
+                    'isDaily' => false
                 )
-            );
-        } else {
-            return View::make('emails.connected');
-        }
+        );
     }
-
-    /*
-    |========================================================
-    | <AJAX/POST> | ajaxGetMrr: gets the logged in user's mrr
-    |========================================================
-    */
-    public function ajaxGetMrr()
-    {
-        $mrr = Auth::user()->getMRR();
-        Log::info("ready");
-        return "test";
-    }
-
 }
