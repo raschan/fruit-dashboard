@@ -133,6 +133,12 @@ Route::post('connect', array(
     'uses' => 'AuthController@doConnect'
 ));
 
+Route::post('suggest', array(
+    'before' => 'auth',
+    'as' => 'auth.suggest',
+    'uses' => 'AuthController@doSaveSuggestion'
+));
+
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',
