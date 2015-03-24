@@ -4,6 +4,7 @@ use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
 class MrrStat extends BaseStat {
 
+    const POSITIVE_IS_GOOD = true;
     /**
     * calculate today's MRR from yesterday value and changes
     * relevant changes:

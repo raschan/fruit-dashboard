@@ -177,28 +177,65 @@ class HelloController extends BaseController
     public function showRashan()
     {
         $user = Auth::user();
-        // can't push objects to the queue, 
-        // push the ID of the user instead
-        Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
-        Calculator::calculateMetricsOnConnect($user);
+        $previousDayDate = Carbon::yesterday()->toDateString();
+        // currently calculated metrics
+        $currentMetrics = Calculator::currentMetrics();
 
-        return View::make('dev.rashan',array(
-                'name' => 'Rashan',
-            )
+        
+        //DAILY MOCKUP
+        /*
+        $metric = Metric::where('user', $user->id)  
+                        ->where('date', $previousDayDate)
+                        ->first();
+        $metric->formatMetrics();
+        // this line is for making the daily email the same format as the weekly
+        // so we only need one email template
+        $weeklyMetrics = array($metric->date => $metric);
+        */
+        //WEEKLY MOCKUP
+        $metrics = Metric::where('user', $user->id) 
+                        ->where('date','<=', $previousDayDate)
+                        ->orderBy('date','desc')
+                        ->take(7)
+                        ->get();
+        // to calculate change in 30 days
+        $previousMetrics = Metric::where('user', $user->id)
+                        ->where('date','<=', Carbon::yesterday()->subDays(30)->toDateString())
+                        ->orderBy('date','desc')
+                        ->take(7)
+                        ->get();
+        $changes = array();
+        foreach ($currentMetrics as $metricID => $metricDetails) {
+            // get the correct color
+            $changes[$metricID]['positiveIsGood'] = $metricDetails['metricClass']::POSITIVE_IS_GOOD;
+
+            foreach ($previousMetrics as $id => $prevMetric) {
+                $date = $metrics[$id]->date;
+                if($prevMetric->$metricID != 0)
+                {
+                    $value = ($metrics[$id]->$metricID / $prevMetric->$metricID) * 100 - 100;
+                    $changes[$metricID][$date]['value'] = round($value).' %';
+                }
+                else
+                    $changes[$metricID][$date]['value'] = null;
+            }
+        }
+
+        // format metrics to presentable data
+        $weeklyMetrics = array();
+        foreach ($metrics as $id => $metric) {
+            $metric->formatMetrics();
+            $weeklyMetrics[$metric->date] = $metric;
+        }
+
+
+        return View::make('emails.summary',array(
+                    'metrics' => $weeklyMetrics,
+                    'currentMetrics' => $currentMetrics,
+                    'changes' => $changes,
+                    'isDaily' => false
+                )
         );
     }
-
-    /*
-    |========================================================
-    | <AJAX/POST> | ajaxGetMrr: gets the logged in user's mrr
-    |========================================================
-    */
-    public function ajaxGetMrr()
-    {
-        $mrr = Auth::user()->getMRR();
-        Log::info("ready");
-        return "test";
-    }
-
 }

@@ -9,6 +9,7 @@ class Metric extends Eloquent
 		// get currently calculated metrics
 		$currentMetrics = Calculator::currentMetrics();
 
+		$this->date = Carbon::createFromFormat('Y-m-d', $this->date)->format('Y-m-d, l');
 		// go through them
 		foreach ($currentMetrics as $statID => $statName) {
 			switch ($statID) {

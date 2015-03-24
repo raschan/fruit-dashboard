@@ -50,6 +50,10 @@ class EventSeeder extends Seeder
 
     }
         // returns a random event type with the corresponding data array ready for seeding
+
+        // TODO 
+            // customer.created
+            // customer.deleted
         public function getEventType($monthStats, $eventTime){
             $array = array();
             $randomNumber = rand(1,100);

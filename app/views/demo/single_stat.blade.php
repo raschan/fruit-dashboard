@@ -12,7 +12,7 @@
 
       <!-- Logo -->
       <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
-        Startup Dashboard
+        Fruit Financial Analytics
       </a>
 
       <!-- Main navbar toggle -->
@@ -454,10 +454,11 @@
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);    
 
         // if start date is bigger than end date
-        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){      
+
           // update start datepicker to end datepicker value
           $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
@@ -475,6 +476,10 @@
           $('#stopDateStat').datepicker('setStartDate', new Date(arrayStartKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{'Demo ' . $data['statName'].' date interval' }}" , "Start date changed"]);
+          mixpanel.track('{{"Demo " .$data["statName"]. " start date changed"}}');
         }
 
       });
@@ -485,7 +490,7 @@
 
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
@@ -507,6 +512,10 @@
           $('#startDateStat').datepicker('setEndDate', new Date(arrayStopKey));
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
+
+          // send event to analytics
+          _gaq.push(["_trackEvent", "{{ 'Demo ' . $data['statName'] .' date interval' }}" , "Stop date changed"]);
+          mixpanel.track('{{"Demo " .$data["statName"]. " stop date changed"}}');
         }
       });
 
@@ -646,6 +655,13 @@
     });
 
     </script>
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened on demo page" }}' ]);
+      mixpanel.track("{{ $data['statName']. ' opened on demo page' }}");
+    </script>
+    <!-- / Analytics -->
 
   @stop
 

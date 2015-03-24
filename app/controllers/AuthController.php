@@ -114,6 +114,7 @@ class AuthController extends BaseController
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
             $user->ready = false;
+            $user->summaryEmailFrequency = 'daily';
             $user->save();
             // signing the user in and redirect to dashboard
             Auth::login($user);
@@ -321,6 +322,18 @@ class AuthController extends BaseController
         }
     }
 
+    public function doSettingsFrequency()
+    {
+        $user = Auth::user();
+
+        $user->summaryEmailFrequency = Input::get('new_frequency');
+
+        $user->save();
+
+        return Redirect::to('/settings')
+            ->with('success', 'Edit was succesful.');
+        }
+
     /*
     |===================================================
     | <GET> | showConnect: renders the connect page
@@ -399,7 +412,7 @@ class AuthController extends BaseController
     {
         // Validation
         $rules = array(
-            'stripe' => 'min:16|max:64|required',
+            'stripe' => 'min:16|max:64|required'
         );
 
         // run the validation rules on the inputs
@@ -446,10 +459,40 @@ class AuthController extends BaseController
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard')->with(array('success' => 'Stripe connected.',
-                                                            'connected' => 'connocted'));
+        return Redirect::route('auth.dashboard')
+                        ->with(array('success' => 'Stripe connected.',
+                            'connected' => 'connected'));
 
         }
+    }
+
+    /*
+    |===================================================
+    | <POST> | doSaveSuggestion: updates user service data stripe only
+    |===================================================
+    */
+    public function doSaveSuggestion()
+    {
+        $rules = array(
+            'suggestion' => 'required'
+            );
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            // validation error -> sending back
+            $failedAttribute = $validator->invalid();
+            return Redirect::back()
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
+                ->withInput(); // sending back data
+        } else {
+            DB::table('suggestions')->insert(array(
+                'suggestion' => Input::get('suggestion'),
+                'email' => Auth::user()->email));
+        }
+
+        return Redirect::route('auth.connect')
+                        ->with(array('success' => "Thank you, we'll get in touch"));
     }
     /*
     |===================================================
