@@ -246,11 +246,17 @@
 
                 <div id="editFrequencyForm">
                   <div class="form-group">
-                    {{ Form::label('id_frequencyedit', 'Summary email frequency', array(
+                    {{ Form::label('id_frequencyedit', 'Notifications', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       <p class="form-control-static">
-                        <span>{{ Auth::user()->summaryEmailFrequency }}</span>
+                        @if (Auth::user()->summaryEmailFrequency == 'none')
+                          <span>No email</span>
+                        @elseif (Auth::user()->summaryEmailFrequency == 'daily')
+                          <span>Daily email</span>
+                        @else
+                          <span>Weekly email</span>
+                        @endif
                         <button id="editFrequency" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing frequency"]);mixpanel.track("Editing frequency");'>Edit</button>
                       </p>
                     </div>
@@ -261,15 +267,15 @@
 
                 <div id="changeFrequencyForm" class="hidden-form">
                   <div class="form-group @if ($errors->first('new_frequency')) has-error @endif">
-                    {{ Form::label('id_frequency', 'New Frequency', array(
+                    {{ Form::label('id_frequency', 'Notifications', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       {{ Form::select('new_frequency',
                         // dropdown options
                         array(
-                          'none' => 'No summary emails', 
-                          'daily' => 'Daily summary emails',
-                          'weekly' => 'Weekly summary emails'), 
+                          'none' => 'No email', 
+                          'daily' => 'Daily email',
+                          'weekly' => 'Weekly email'), 
                         // highlighted option
                         Auth::user()->summaryEmailFrequency,
                         array(                                       
