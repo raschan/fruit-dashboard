@@ -7,7 +7,7 @@
       </div> <!-- / .page-header -->
 
       <!-- Notice on connect -->
-      @if (Session::get('connected'))
+      @if (Session::get('connected') || !Auth::user()->ready)
         <div id="pa-page-alerts-box">
           <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
             <button type="button" class="close">×</button><strong>We're now calculating your numbers, it'll be a few minutes. We'll email you when we finished.</strong>

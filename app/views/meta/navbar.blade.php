@@ -7,9 +7,13 @@
 		<div class="navbar-header">
 
 			<!-- Logo -->
-			<a href="{{ URL::route('auth.dashboard') }}" class="navbar-brand">
-				Startup Dashboard
-			</a>
+			@if (Auth::user())
+				<a href="{{ URL::route('auth.dashboard') }}" class="navbar-brand">
+			@else
+				<a href="http://analytics.tryfruit.com" class="navbar-brand">
+			@endif
+				Fruit Analytics
+				</a>
 
 			<!-- Main navbar toggle -->
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse"><i class="navbar-icon fa fa-bars"></i></button>

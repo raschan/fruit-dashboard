@@ -11,8 +11,8 @@
     <div class="navbar-header">
 
       <!-- Logo -->
-      <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
-        Fruit Financial Analytics
+      <a href="http://analytics.tryfruit.com" class="navbar-brand">
+        Fruit Analytics
       </a>
 
       <!-- Main navbar toggle -->
