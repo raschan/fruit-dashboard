@@ -3,6 +3,8 @@
 
 class ArpuStat extends BaseStat {
 
+    const POSITIVE_IS_GOOD = true;
+
     /**
     * calculate today's ARPU from today's MRR and AU
     *

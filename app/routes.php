@@ -114,6 +114,11 @@ Route::post('settingsPassword', array(
     'uses' => 'AuthController@doSettingsPassword'
 ));
 
+Route::post('settingsFrequency', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsFrequency'
+));
+
 // connect routes
 
 Route::get('connect', array(
@@ -126,6 +131,12 @@ Route::post('connect', array(
     'before' => 'auth',
     'as' => 'auth.connect',
     'uses' => 'AuthController@doConnect'
+));
+
+Route::post('suggest', array(
+    'before' => 'auth',
+    'as' => 'auth.suggest',
+    'uses' => 'AuthController@doSaveSuggestion'
 ));
 
 // disconnect

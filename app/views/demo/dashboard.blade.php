@@ -12,7 +12,7 @@
 
       <!-- Logo -->
       <a href="{{ URL::route('demo.dashboard') }}" class="navbar-brand">
-        Startup Dashboard
+        Fruit Financial Analytics
       </a>
 
       <!-- Main navbar toggle -->

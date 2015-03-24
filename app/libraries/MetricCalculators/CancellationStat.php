@@ -5,6 +5,7 @@ use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
 class CancellationStat extends BaseStat {
 
+    const POSITIVE_IS_GOOD = false;
     /**
     * calculate today's Cancellations from today's changes
     * relevant changes:

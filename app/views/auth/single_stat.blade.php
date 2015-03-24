@@ -404,7 +404,7 @@
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
@@ -439,7 +439,7 @@
 
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate (selectedStopDate);
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
         if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
@@ -562,9 +562,6 @@
             finalData = newData;
             finalLabel = newLabel;
           }
-          
-          console.log(finalData);
-          console.log(finalLabel);
           
           // destroying stat
           singleStat.destroy();
