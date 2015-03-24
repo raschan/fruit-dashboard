@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
-    <title>Fruit Financial Analytics | 
+    <title>Fruit Analytics | 
       @section('pageTitle')
       @show
     </title>

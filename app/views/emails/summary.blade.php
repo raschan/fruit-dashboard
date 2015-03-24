@@ -8,9 +8,9 @@
 		Hi there,
 		<br/>
 		@if ($isDaily)
-			Here are your metrics for yesterday: <br/>
+			here are your metrics for yesterday: <br/>
 		@else
-			Here are your metrics for the last week: <br/>
+			here are your metrics for the last week: <br/>
 		@endif
 			<br/>
 			<!-- for every day -->
@@ -38,7 +38,7 @@
 				<br/>
 			@endforeach 
 		<br/>
-		<a href="http://dashboard.tryfruit.com">Fruit Financial Analytics</a>
+		<a href="http://dashboard.tryfruit.com">Fruit Analytics</a>
 		</div>
 	</body>
 </html>

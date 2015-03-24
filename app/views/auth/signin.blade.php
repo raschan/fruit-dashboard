@@ -5,9 +5,10 @@
 
 @section('pageContent')
 
-<body class="theme-asphalt page-signin" style="">
+<body class="theme-asphalt page-signup" style="">
+
   <!-- Page background -->
-  <div id="page-signin-bg">
+  <div id="page-signup-bg">
     <!-- Background overlay -->
     <div class="overlay"></div>
     {{ HTML::image('img/backgrounds/advertise_background.jpg','', array('class' => 'image')) }}
@@ -15,86 +16,57 @@
   <!-- / Page background -->
 
   <!-- Container -->
-  <div class="signin-container">
-
-    <!-- Left side -->
-    <div class="signin-info">
-      <a href="/" class="logo">
-        Fruit Financial Analytics
+  <div class="signup-container">
+    <!-- Header -->
+    <div class="signup-header">
+      <a href="http://analytics.tryfruit.com" class="logo">
+        Fruit Analytics
       </a> <!-- / .logo -->
       <div class="slogan">
         Understand your business better.
       </div> <!-- / .slogan -->
-      <ul>
-        <li><i class="fa fa-sitemap signin-icon"></i> One click, zero setup</li>
-        <li><i class="fa fa-file-text-o signin-icon"></i> Realtime view key metrics</li>
-        <li><i class="fa fa-outdent signin-icon"></i> Email reports</li>
-        <li><i class="fa fa-heart signin-icon"></i> Crafted with love</li>
-      </ul> <!-- / Info list -->
     </div>
-    <!-- / Left side -->
-
-    <!-- Right side -->
-    <div class="signin-form">
-
-      <!-- Form -->
-      {{ Form::open(array('route' => 'auth.signin', 'id' => 'signin-form_id' )) }}
-        <div class="signin-text">
+    <!-- Form -->
+    <div class="signup-form">
+      {{ Form::open(array('route' => 'auth.signin', 'id' => 'signin-form_id' )) }}        
+        <div class="signup-text">
           <span>Sign In to your account</span>
-        </div> <!-- / .signin-text -->
+        </div>
 
         <div class="form-group w-icon">
-          {{ Form::text('email', Input::old('email'), array('placeholder' => 'Email@provider.com', 'class' => 'form-control input-lg', 'id' => 'username_id')) }}
-          <span class="fa fa-user signin-form-icon"></span>
-        </div> <!-- / Username -->
+          {{ Form::text('email', Input::old('email'), array('placeholder' => 'Email@provider.com', 'class' => 'form-control input-lg', 'id' => 'email_id')) }}
+          <span class="fa fa-envelope signup-form-icon"></span>
+        </div>
 
         <div class="form-group w-icon">
           {{ Form::password('password', array('placeholder' => 'Password', 'class' => 'form-control input-lg', 'id' => 'password_id')) }}
-          <span class="fa fa-lock signin-form-icon"></span>
-        </div> <!-- / Password -->
+          <span class="fa fa-lock signup-form-icon"></span>
+        </div>
+
+        <!-- <div class="form-group" style="margin-top: 20px;margin-bottom: 20px;">
+          <label class="checkbox-inline">
+            <input type="checkbox" name="signup_confirm" class="px" id="confirm_id">
+            <span class="lbl">I agree with the <a href="#" target="_blank">Terms and Conditions</a></span>
+          </label>
+        </div> -->
 
         <div class="form-actions">
-          {{ Form::submit('Sign in!' , array(
+          {{ Form::submit('Sign in' , array(
             'id' => 'id_submit',
-            'class' => 'signin-btn bg-primary',
-            'onClick' => '_gaq.push(["_trackEvent", "Signin", "Button Pushed"]);mixpanel.track("Signin");')) }}
-          <!-- <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a> -->
-        </div> <!-- / .form-actions -->
+            'class' => 'signup-btn bg-primary',
+            'onClick' => '_gaq.push(["_trackEvent", "Signup", "Button Pushed"]);mixpanel.track("Signup");' )) }}
+        </div>
       {{ Form::close() }}
-      <!-- / Form -->
-
-      <!-- Password reset form -->
-      <div class="password-reset-form" id="password-reset-form">
-        <div class="header">
-          <div class="signin-text">
-            <span>Password reset</span>
-            <div class="close">×</div>
-          </div> <!-- / .signin-text -->
-        </div> <!-- / .header -->
-        
-        <!-- Form -->
-        <form action="index.html" id="password-reset-form_id" novalidate="novalidate">
-          <div class="form-group w-icon">
-            <input type="text" name="password_reset_email" id="p_email_id" class="form-control input-lg" placeholder="Enter your email">
-            <span class="fa fa-envelope signin-form-icon"></span>
-          </div> <!-- / Email -->
-
-          <div class="form-actions">
-            <input type="submit" value="SEND PASSWORD RESET LINK" class="signin-btn bg-primary">
-          </div> <!-- / .form-actions -->
-        </form>
-        <!-- / Form -->
-      </div>
-      <!-- / Password reset form -->
     </div>
-    <!-- Right side -->
+    <!-- / Form -->
   </div>
   <!-- / Container -->
 
-  <div class="not-a-member">
-    Not a member? <a href="{{ URL::route('auth.signup') }}">Sign up now</a> 
+  <div class="have-account">
+    Not a member yet? <a href="{{ URL::route('auth.signup') }}">Sign Un now</a>
     or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
   </div>
+
 </body>
 
 @stop
@@ -104,7 +76,7 @@
 <script type="text/javascript">
   // Resize BG
   init.push(function () {
-    var $ph  = $('#page-signin-bg'),
+    var $ph  = $('#page-signup-bg'),
         $img = $ph.find('> img');
 
     $(window).on('resize', function () {

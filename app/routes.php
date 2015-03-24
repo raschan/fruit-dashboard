@@ -180,6 +180,11 @@ Route::get('demo/statistics/{statID}', array(
     'uses' => 'DemoController@showSinglestat'
 ));
 
+Route::get('demo', array(
+    'as' => 'demo.dashboard',
+    'uses' => 'DemoController@showDashboard'
+));
+
 // dashboard route
 Route::get('demo/dashboard', array(
     'as' => 'demo.dashboard',
