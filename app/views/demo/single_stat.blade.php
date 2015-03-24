@@ -86,7 +86,7 @@
             <form class="form-inline stat-date">
               <div class="form-group col-md-5 no-padding-hr">
                 <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
+                  <span class="input-group-addon date"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
                 </div>
               </div>
               <div class="form-group dash col-md-1 no-padding-hr text-center">
@@ -94,7 +94,7 @@
               </div>
               <div class="form-group col-md-5 no-padding-hr">
                 <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
+                  <span class="input-group-addon date"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
                 </div>
               </div>
             </form>
