@@ -22,16 +22,16 @@
             <small><strong>DATE</strong></small><br>
             <form class="form-inline stat-date">
               <div class="form-group col-md-5 no-padding-hr">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
+                <div class="input-group date" id="startDateStat">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" value="{{ $data['dateInterval']['startDate'] }}">
                 </div>
               </div>
               <div class="form-group dash col-md-1 no-padding-hr text-center">
                 &ndash;
               </div>
               <div class="form-group col-md-5 no-padding-hr">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
+                <div class="input-group date" id="stopDateStat">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" value="{{ $data['dateInterval']['stopDate'] }}">
                 </div>
               </div>
             </form>
