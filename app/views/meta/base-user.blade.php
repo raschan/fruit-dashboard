@@ -42,12 +42,16 @@
 		@show
 		@section('mixpanelUserTracking')
 			<script type="text/javascript">
-				mixpanel.identify( "{{ Auth::user()->id}}" );
-				mixpanel.people.set({
-					"$email": "{{ Auth::user()->email }}",    
-				    "$created": "{{ Auth::user()->created_at }}",
-				    "$last_login": "{{ Carbon::now() }}"        
-				});
+				@if(Auth::user())
+					mixpanel.identify( "{{ Auth::user()->id}}" );
+					mixpanel.people.set({
+						"$email": "{{ Auth::user()->email }}",    
+					    "$created": "{{ Auth::user()->created_at }}",
+					    "$last_login": "{{ Carbon::now() }}"        
+					});
+				@else
+					mixpanel.identify( "Demo" );
+				@endif
 			</script>
 		@show
 	</body>
