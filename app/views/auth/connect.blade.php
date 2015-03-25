@@ -91,10 +91,11 @@
 
                       {{ Form::label('id_stripe', 'Your Stripe key:', array(
                         'class' => 'col-sm-3 control-label text-left-always')) }}
-                      <div class="col-sm-7">
+                      <div class="col-sm-7">      
                         {{ Form::text('stripe', '', array(
                           'id' => 'id_stripe',
-                          'class' => 'form-control ')) }}
+                          'class' => 'form-control',
+                          'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
                       </div>
 
                       <div class="col-sm-2 text-center">
@@ -107,6 +108,7 @@
                     </div> <!-- / .form-group -->
 
                 {{ Form::close() }}
+                <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys, Secret key</p>
 
                 @endif
 
