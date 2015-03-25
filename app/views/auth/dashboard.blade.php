@@ -67,11 +67,17 @@
                 <h6 class="no-margin">Not enough data</h6>
                 @endif
               </div>
-              <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
-                <div class="chart-overlay">
-                  <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+              @if (Auth::user()->ready)
+                <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
+                  <div class="chart-overlay">
+                      <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                  </div>
+                </a>
+              @else
+                <div class="chart-connecting">
+                  <span class="text-connecting">We are importing your data <br> just a minute</span>
                 </div>
-              </a>
+              @endif
               <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
             </div> <!-- / .chart-wrapper -->
           </div> <!-- / .chart-box -->

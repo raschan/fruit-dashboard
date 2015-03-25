@@ -215,6 +215,35 @@
 	top: 0;
 }
 
+.chart-connecting {
+	text-align: center;
+	position: absolute;
+	background: rgba(36,46,53,0.2);
+	z-index: 3;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-transition-property: opacity;
+	transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	transition-duration: 1s;
+	opacity: 1;
+	margin: 0 11px 15px 11px;
+}
+
+.chart-connecting .text-connecting {
+	padding: 0px 3px 3px 3px;
+	color: white;
+	font-weight: bold;
+	background: rgba(44,62,80,0.5);
+	position: relative;
+	top: 40px;
+	font-size: 18px;
+	font-weight: 300;
+	line-height: 1.5em;
+}
+
 .chart-text-left {
 	position: absolute;
 	z-index: 1;
