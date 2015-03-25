@@ -22,15 +22,25 @@
 						<tr style="padding-top: 10px">
 							<td style="padding: 0;">{{ $statDetails['metricName'] }}</td>
 							<td style="text-align: right;margin: 0 10px;">{{ $metric->$statID }}</td>
-							@if ($changes[$statID][Carbon::createFromFormat('Y-m-d, l', $date)->format('Y-m-d')]['value'])
+							
+							@if ($changes[$statID][date('Y-m-d', strtotime($date))]['value'])
 								@if ($changes[$statID]['positiveIsGood'])
-									<td style="text-align: right;color: green">
+									@if ($changes[$statID][date('Y-m-d', strtotime($date))]['isBigger'])
+										<td style="text-align: right;color: #27ae60"> {{--green--}}
+									@else
+										<td style="text-align: right;color: #c0392b"> {{--red--}}
+									@endif
 								@else
-									<td style="text-align: right;color: red"> 
+									@if ($changes[$statID][date('Y-m-d', strtotime($date))]['isBigger'])
+										<td style="text-align: right;color: #c0392b"> {{--red--}}
+									@else
+										<td style="text-align: right;color: #27ae60"> {{--green--}}
+									@endif
 								@endif
-									{{ $changes[$statID][Carbon::createFromFormat('Y-m-d, l', $date)->format('Y-m-d')]['value'] }} </td>
+
+									{{ $changes[$statID][date('Y-m-d', strtotime($date))]['value'] }} </td>
 							@else
-								<td style="text-align: right;color: blue"> N/A </td>
+								<td style="text-align: right;color: #3498db"> -- </td> {{--blue--}}
 							@endif
 						<tr/>
 					@endforeach

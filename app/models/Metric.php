@@ -12,35 +12,42 @@ class Metric extends Eloquent
 		$this->date = Carbon::createFromFormat('Y-m-d', $this->date)->format('Y-m-d, l');
 		// go through them
 		foreach ($currentMetrics as $statID => $statName) {
-			switch ($statID) {
+			
+			if (is_null($this->$statID))
+			{
+				$this->$statID = 'Not enough data';
+			} else {
 
-				// money formats fall through
-				case 'mrr':
-				case 'arr':
-				case 'arpu':
-					// divide the value by 100
-					$this->$statID /= 100;
+				switch ($statID) {
 
-					// format it into money
-					setlocale(LC_MONETARY, 'en_US');
-					$this->$statID = money_format('%n',$this->$statID);
-					break;
+					// money formats fall through
+					case 'mrr':
+					case 'arr':
+					case 'arpu':
+						// divide the value by 100
+						$this->$statID /= 100;
 
-				// percent formats fall through
-				case 'uc':
-					$this->$statID = $this->$statID.'%';
-					break;
+						// format it into money
+						setlocale(LC_MONETARY, 'en_US');
+						$this->$statID = money_format('%n',$this->$statID);
+						break;
 
-				// pieces formats fall through
-				case 'cancellations':
-				case 'au':
-					break;
+					// percent formats fall through
+					case 'uc':
+						$this->$statID = $this->$statID.'%';
+						break;
 
-				default:
-					break;
-			}
-		}
-	}
+					// pieces formats fall through
+					case 'cancellations':
+					case 'au':
+						break;
+
+					default:
+						break;
+				}// /switch
+			}// /if
+		}// /foreach
+	}// /formatMetrics()
 }
 
 ?>

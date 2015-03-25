@@ -78,6 +78,7 @@ class SendDailyEmail extends Command {
 					                if($previousMetrics->$metricID != 0)
 					                {
 					                    $value = ($metric->$metricID / $previousMetrics->$metricID) * 100 - 100;
+					                    $changes[$metricID][$date]['isBigger'] = $value > 0 ? true : false;
 					                    $changes[$metricID][$date]['value'] = round($value).' %';
 					                }
 					                else
@@ -162,7 +163,7 @@ class SendDailyEmail extends Command {
 								'metrics' => $weeklyMetrics,
 								'currentMetrics' => $currentMetrics,
 								'changes' => $changes,
-								'isDaily' => false
+								'isDaily' => false,
 								);
 							// login the user (necessary to get the email address)	
 							Auth::login($user);
