@@ -52,9 +52,13 @@
       {{ HTML::script('js/google_events.js'); }}
       <!-- /GoogleAnalyticsEvents -->
 
-      <!-- Mixpanel -->
-      {{ HTML::script('js/mixpanel.js') }}
-      <!-- / Mixpanel -->
+      <!-- Mixpanel event -->
+      {{ HTML::script('js/mixpanel_event.js') }}
+      <!-- / Mixpanel event -->
+
+      <!-- Mixpanel user tracking -->
+      {{ HTML::script('js/mixpanel_user.js') }}
+      <!-- / Mixpanel user tracking -->
 
       <!-- Page specific stylesheet -->
       @section('pageStylesheet')
