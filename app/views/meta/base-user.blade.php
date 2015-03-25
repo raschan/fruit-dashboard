@@ -40,6 +40,16 @@
 			{{ HTML::script('js/intercom_io.js'); }}
 			<!-- / Intercom Script -->
 		@show
+		@section('mixpanelUserTracking')
+			<script type="text/javascript">
+				mixpanel.identify( "{{ Auth::user()->id}}" );
+				mixpanel.people.set({
+					"$email": "{{ Auth::user()->email }}",    
+				    "$created": "{{ Auth::user()->created_at }}",
+				    "$last_login": "{{ Carbon::now() }}"        
+				});
+			</script>
+		@show
 	</body>
 
 @stop
