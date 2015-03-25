@@ -1,10 +1,12 @@
 @extends('meta.base-user')
 
   @section('pageContent')
+    
     <div id="content-wrapper">
       <div class="page-header text-center">
         <h1><i class="fa fa-link page-header-icon"></i>&nbsp;&nbsp;Connect a service</h1>
       </div> <!-- / .page-header -->
+      @parent
 
       <div class="col-md-10 col-md-offset-1">
 

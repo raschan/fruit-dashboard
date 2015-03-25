@@ -1,7 +1,9 @@
 @extends('meta.base-user')
 
   @section('pageContent')
+
     <div id="content-wrapper">
+      @parent
       <div class="col-md-12">
 
         <div class="row no-margin-hr panel-padding stat-header bordered">

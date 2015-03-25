@@ -395,6 +395,8 @@ class AuthController extends BaseController
 
         }
 
+        $user->ready = false;
+
         // saving modification on user
         $user->save();
 
