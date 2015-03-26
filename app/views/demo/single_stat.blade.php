@@ -59,25 +59,22 @@
 @stop
 
   @section('pageContent')
+
     <div id="content-wrapper">
-
-      <div id="pa-page-alerts-box">
-        <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">
-          <button type="button" class="close">×</button><strong>This is a demo site.</strong>&nbsp;<a href="{{ URL::route('auth.signup') }}" class="demo-link">Sign up now!</a>
-        </div>
-      </div>
-
+      @parent
       <div class="col-md-12">
+
         <div class="row no-margin-hr panel-padding stat-header bordered">
+
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control input-lg" onChange="window.location.href=this.value">
-                <option value="{{ URL::route('demo.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
-                <option value="{{ URL::route('demo.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
-                <option value="{{ URL::route('demo.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
-                <option value="{{ URL::route('demo.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
-                <option value="{{ URL::route('demo.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
-                <option value="{{ URL::route('demo.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
+                <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
+                <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
+                <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
+                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
@@ -85,16 +82,16 @@
             <small><strong>DATE</strong></small><br>
             <form class="form-inline stat-date">
               <div class="form-group col-md-5 no-padding-hr">
-                <div class="input-group">
-                  <span class="input-group-addon date"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="startDateStat" value="{{ $data['dateInterval']['startDate'] }}">
+                <div class="input-group date" id="startDateStat">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" value="{{ $data['dateInterval']['startDate'] }}">
                 </div>
               </div>
               <div class="form-group dash col-md-1 no-padding-hr text-center">
                 &ndash;
               </div>
               <div class="form-group col-md-5 no-padding-hr">
-                <div class="input-group">
-                  <span class="input-group-addon date"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" id="stopDateStat" value="{{ $data['dateInterval']['stopDate'] }}">
+                <div class="input-group date" id="stopDateStat">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-lg" value="{{ $data['dateInterval']['stopDate'] }}">
                 </div>
               </div>
             </form>
@@ -102,8 +99,7 @@
 
         </div> <!-- / .stat-header -->
 
-          
-                <!-- Statistics graph -->
+        <!-- Statistics graph -->
         <div class="row panel-body bordered">
           <div class="single-statistic-wrapper">
             <canvas id="singleStat"></canvas>
@@ -1044,16 +1040,9 @@
 
     <!-- Analytics -->
     <script type="text/javascript">
-      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened on demo page" }}' ]);
-      mixpanel.track("{{ $data['statName']. ' opened on demo page' }}");
+      _gaq.push(["_trackEvent", "Metrics", '{{ $data["statName"]." opened" }}' ]);
+      mixpanel.track("{{ $data['statName']. ' opened' }}");
     </script>
     <!-- / Analytics -->
 
-  @stop
-
-  @section('intercomScript')
-  <script>
-     
-  </script>
-  {{ HTML::script('js/intercom_io.js'); }}
   @stop
