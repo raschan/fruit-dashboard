@@ -182,6 +182,9 @@ class SendDailyEmail extends Command {
 							$weeklyEmailSent++;
 						}
 						break;
+					default:
+						Log::error('notifications string has been changed, check the email sending code');
+						break;
 				} // /switch
 			} // /isConnected
 		} // /foreach

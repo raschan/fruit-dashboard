@@ -69,12 +69,12 @@
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control input-lg" onChange="window.location.href=this.value">
-                <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
-                <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
-                <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
-                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
-                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
-                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
+                <option value="{{ URL::route('demo.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
+                <option value="{{ URL::route('demo.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
+                <option value="{{ URL::route('demo.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
+                <option value="{{ URL::route('demo.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
+                <option value="{{ URL::route('demo.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
+                <option value="{{ URL::route('demo.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
               </select>
           </div>
                   
@@ -111,7 +111,7 @@
           <div class="statistic-description">
             <div class="row">
               <div class="col-md-3 stat-description-box">
-                <span class="text-date"><h4>Current</h4></span>
+                <span class="text-date"><h4>Current <small id='currentDate'>({{ $data['dateInterval']['stopDate'] }})</small></h4></span>
                 @if($data['currentValue'])
                   @if($data['positiveIsGood'])
                     @if(str_contains($data['currentValue'],'-'))
@@ -204,7 +204,9 @@
               </div>
             </div> <!-- / .row -->
           </div> <!-- / .statistic-description -->
-        
+        </div>
+
+        <div class="row panel-body margin-vr-sm bordered">
           <div class="statistic-description">
             <div class="col-md-2 stat-growth-box">
               <span class="text-date"><h4>30 days growth</h4></span>
@@ -686,7 +688,7 @@
         // all data value
         var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
 
-        var positiveIsGood = {{ $data['positiveIsGood'] }};
+        var positiveIsGood = @if ($data['positiveIsGood']) true @else false @endif;
         // statistic number
         var currentValue, oneMonth, sixMonth, oneYear;
         // changes
@@ -702,6 +704,8 @@
             break;
           }
         }
+        // set new cuurentDate
+        $('#currentDate').html('('+labels[index]+')');
         // set new current value
         currentValue = addCommas(data[index].toFixed(2));
         $('#currentValue').removeClass('down');
