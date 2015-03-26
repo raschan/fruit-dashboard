@@ -103,10 +103,15 @@
         </div> <!-- / .stat-header -->
 
           
+        <!-- Statistics graph -->
         <div class="row panel-body bordered">
           <div class="single-statistic-wrapper">
             <canvas id="singleStat"></canvas>
           </div>
+        </div> <!-- / .row .panel-body -->
+
+        <!-- Change numbers -->
+        <div class="row panel-body margin-vr-sm bordered">
           <div class="statistic-description">
             <div class="row">
               <div class="col-md-3 stat-description-box">
@@ -203,152 +208,159 @@
               </div>
             </div> <!-- / .row -->
           </div> <!-- / .statistic-description -->
-        </div> <!-- / .row .panel-body -->
-           
-
-        <div class="row panel-body margin-vr-sm bordered">
-            <div class="statistic-description">
-                <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>30 days growth</h4></span>
-                  @if($data['oneMonthChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['oneMonthChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['oneMonthChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                    {{ $data['oneMonthChange'] }}
+        
+          <div class="statistic-description">
+            <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>30 days growth</h4></span>
+              @if($data['oneMonthChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['oneMonthChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['oneMonthChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-                <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>60 days growth</h4></span>
-                  @if($data['twoMonthChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['twoMonthChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['twoMonthChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                  {{ $data['twoMonthChange'] }}
+                @endif
+                {{ $data['oneMonthChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+            <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>60 days growth</h4></span>
+              @if($data['twoMonthChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['twoMonthChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['twoMonthChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-                <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>3 month growth</h4></span>
-                  @if($data['threeMonthChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['threeMonthChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['threeMonthChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                  {{ $data['threeMonthChange'] }}
+                @endif
+              {{ $data['twoMonthChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+            <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>3 month growth</h4></span>
+              @if($data['threeMonthChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['threeMonthChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['threeMonthChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-                <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>6 month growth</h4></span>
-                  @if($data['sixMonthChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['sixMonthChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['sixMonthChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                  {{ $data['sixMonthChange'] }}
+                @endif
+              {{ $data['threeMonthChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+            <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>6 month growth</h4></span>
+              @if($data['sixMonthChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['sixMonthChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['sixMonthChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-                  <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>9 month growth</h4></span>
-                  @if($data['nineMonthChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['nineMonthChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['nineMonthChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                  {{ $data['nineMonthChange'] }}
+                @endif
+              {{ $data['sixMonthChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+              <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>9 month growth</h4></span>
+              @if($data['nineMonthChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['nineMonthChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['nineMonthChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-                <div class="col-md-2 stat-growth-box">
-                  <span class="text-date"><h4>1 year growth</h4></span>
-                  @if($data['oneYearChange'])
-                    @if($data['positiveIsGood'])
-                      @if(str_contains($data['oneYearChange'],'-'))
-                        <span class="text-money down">
-                      @else
-                        <span class="text-money up">
-                      @endif
-                    @else
-                      @if(str_contains($data['oneYearChange'],'-'))
-                        <span class="text-money up">
-                      @else
-                        <span class="text-money down">
-                      @endif
-                    @endif
-                  {{ $data['oneYearChange'] }}
+                @endif
+              {{ $data['nineMonthChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+            <div class="col-md-2 stat-growth-box">
+              <span class="text-date"><h4>1 year growth</h4></span>
+              @if($data['oneYearChange'])
+                @if($data['positiveIsGood'])
+                  @if(str_contains($data['oneYearChange'],'-'))
+                    <span class="text-money down">
+                  @else
+                    <span class="text-money up">
+                  @endif
+                @else
+                  @if(str_contains($data['oneYearChange'],'-'))
+                    <span class="text-money up">
                   @else
                     <span class="text-money down">
-                    N/A
                   @endif
-                  </span>
-                </div>
-            </div> <!-- /.statistic-description  -->
+                @endif
+              {{ $data['oneYearChange'] }}
+              @else
+                <span class="text-money down">
+                N/A
+              @endif
+              </span>
+            </div>
+          </div> <!-- /.statistic-description  -->
         </div> <!-- /.row -->
 
+
+        <!-- Metric description -->
+        <div class="row panel-body margin-vr-sm bordered">
+          <div class="col-md-4">
+            <span class="text-date"><h4>{{ $metricDetails['metricName'] }}</h4></span>
+          </div>
+          <div class="col-md-11">
+            <span>{{ $metricDetails['metricDescription'] }}</span>            
+          </div>
+        </div>
       {{-- 
         <!-- hidden for development, will not be rendered on client side -->   
 
