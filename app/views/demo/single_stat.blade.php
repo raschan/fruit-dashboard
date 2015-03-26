@@ -103,7 +103,7 @@
         </div> <!-- / .stat-header -->
 
           
-        <!-- Statistics graph -->
+                <!-- Statistics graph -->
         <div class="row panel-body bordered">
           <div class="single-statistic-wrapper">
             <canvas id="singleStat"></canvas>
@@ -119,20 +119,20 @@
                 @if($data['currentValue'])
                   @if($data['positiveIsGood'])
                     @if(str_contains($data['currentValue'],'-'))
-                      <span class="text-money down">
+                      <span id="currentValue" class="text-money down">
                     @else
-                      <span class="text-money up">
+                      <span id="currentValue" class="text-money up">
                     @endif
                   @else
                     @if(str_contains($data['currentValue'],'-'))
-                      <span class="text-money up">
+                      <span id="currentValue" class="text-money up">
                     @else
-                      <span class="text-money down">
+                      <span id="currentValue" class="text-money down">
                     @endif
                   @endif
                   {{ $data['currentValue'] }}
                 @else
-                  <span class="text-money down">
+                  <span id="currentValue" class="text-money down">
                   N/A
                 @endif
                 </span>
@@ -142,20 +142,20 @@
                 @if($data['oneMonth'])
                   @if($data['positiveIsGood'])
                     @if(str_contains($data['oneMonth'],'-'))
-                      <span class="text-money down">
+                      <span id="oneMonth" class="text-money down">
                     @else
-                      <span class="text-money up">
+                      <span id="oneMonth" class="text-money up">
                     @endif
                   @else
                     @if(str_contains($data['oneMonth'],'-'))
-                      <span class="text-money up">
+                      <span id="oneMonth" class="text-money up">
                     @else
-                      <span class="text-money down">
+                      <span id="oneMonth" class="text-money down">
                     @endif
                   @endif
                   {{ $data['oneMonth'] }}
                 @else
-                  <span class="text-money down">
+                  <span id="oneMonth" class="text-money down">
                   N/A
                 @endif
                 </span>
@@ -165,20 +165,20 @@
                 @if($data['sixMonth'])
                  @if($data['positiveIsGood'])
                     @if(str_contains($data['sixMonth'],'-'))
-                      <span class="text-money down">
+                      <span id="sixMonth" class="text-money down">
                     @else
-                      <span class="text-money up">
+                      <span id="sixMonth" class="text-money up">
                     @endif
                   @else
                     @if(str_contains($data['sixMonth'],'-'))
-                      <span class="text-money up">
+                      <span id="sixMonth" class="text-money up">
                     @else
-                      <span class="text-money down">
+                      <span id="sixMonth" class="text-money down">
                     @endif
                   @endif
                   {{ $data['sixMonth'] }}
                 @else
-                  <span class="text-money down">
+                  <span id="sixMonth" class="text-money down">
                   N/A
                 @endif
                 </span>
@@ -188,20 +188,20 @@
                 @if($data['oneYear'])
                  @if($data['positiveIsGood'])
                     @if(str_contains($data['oneYear'],'-'))
-                      <span class="text-money down">
+                      <span id="oneYear" class="text-money down">
                     @else
-                      <span class="text-money up">
+                      <span id="oneYear" class="text-money up">
                     @endif
                   @else
                     @if(str_contains($data['oneYear'],'-'))
-                      <span class="text-money up">
+                      <span id="oneYear" class="text-money up">
                     @else
-                      <span class="text-money down">
+                      <span id="oneYear" class="text-money down">
                     @endif
                   @endif
                   {{ $data['oneYear'] }}
                 @else
-                  <span class="text-money down">
+                  <span id="oneYear" class="text-money down">
                   N/A
                 @endif
                 </span>
@@ -215,20 +215,20 @@
               @if($data['oneMonthChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['oneMonthChange'],'-'))
-                    <span class="text-money down">
+                    <span id="oneMonthChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="oneMonthChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['oneMonthChange'],'-'))
-                    <span class="text-money up">
+                    <span id="oneMonthChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="oneMonthChange" class="text-money down">
                   @endif
                 @endif
                 {{ $data['oneMonthChange'] }}
               @else
-                <span class="text-money down">
+                <span id="oneMonthChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -238,20 +238,20 @@
               @if($data['twoMonthChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['twoMonthChange'],'-'))
-                    <span class="text-money down">
+                    <span id="twoMonthChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="twoMonthChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['twoMonthChange'],'-'))
-                    <span class="text-money up">
+                    <span id="twoMonthChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="twoMonthChange" class="text-money down">
                   @endif
                 @endif
               {{ $data['twoMonthChange'] }}
               @else
-                <span class="text-money down">
+                <span id="twoMonthChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -261,20 +261,20 @@
               @if($data['threeMonthChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['threeMonthChange'],'-'))
-                    <span class="text-money down">
+                    <span id="threeMonthChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="threeMonthChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['threeMonthChange'],'-'))
-                    <span class="text-money up">
+                    <span id="threeMonthChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="threeMonthChange" class="text-money down">
                   @endif
                 @endif
               {{ $data['threeMonthChange'] }}
               @else
-                <span class="text-money down">
+                <span id="threeMonthChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -284,20 +284,20 @@
               @if($data['sixMonthChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['sixMonthChange'],'-'))
-                    <span class="text-money down">
+                    <span id="sixMonthChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="sixMonthChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['sixMonthChange'],'-'))
-                    <span class="text-money up">
+                    <span id="sixMonthChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="sixMonthChange" class="text-money down">
                   @endif
                 @endif
               {{ $data['sixMonthChange'] }}
               @else
-                <span class="text-money down">
+                <span id="sixMonthChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -307,20 +307,20 @@
               @if($data['nineMonthChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['nineMonthChange'],'-'))
-                    <span class="text-money down">
+                    <span id="nineMonthChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="nineMonthChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['nineMonthChange'],'-'))
-                    <span class="text-money up">
+                    <span id="nineMonthChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="nineMonthChange" class="text-money down">
                   @endif
                 @endif
               {{ $data['nineMonthChange'] }}
               @else
-                <span class="text-money down">
+                <span id="nineMonthChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -330,20 +330,20 @@
               @if($data['oneYearChange'])
                 @if($data['positiveIsGood'])
                   @if(str_contains($data['oneYearChange'],'-'))
-                    <span class="text-money down">
+                    <span id="oneYearChange" class="text-money down">
                   @else
-                    <span class="text-money up">
+                    <span id="oneYearChange" class="text-money up">
                   @endif
                 @else
                   @if(str_contains($data['oneYearChange'],'-'))
-                    <span class="text-money up">
+                    <span id="oneYearChange" class="text-money up">
                   @else
-                    <span class="text-money down">
+                    <span id="oneYearChange" class="text-money down">
                   @endif
                 @endif
               {{ $data['oneYearChange'] }}
               @else
-                <span class="text-money down">
+                <span id="oneYearChange" class="text-money down">
                 N/A
               @endif
               </span>
@@ -361,9 +361,11 @@
             <span>{{ $metricDetails['metricDescription'] }}</span>            
           </div>
         </div>
-      {{-- 
-        <!-- hidden for development, will not be rendered on client side -->   
 
+      {{--    
+
+        <!-- hidden for development, will not be rendered on client side -->        
+  
         <div class="row no-margin-hr panel-padding stat-header bordered">
 
           <div class="col-md-4 col-lg-5">
@@ -395,10 +397,18 @@
           <div class="invoice-info">
             <div class="invoice-recipient">
               <strong>
-               Demo site
+                @if(Auth::user()->name)
+                {{ Auth::user()->name }}
+                @else
+                N/A
+                @endif
               </strong><br>
-               United States
-            </div> / .invoice-recipient
+              @if(Auth::user()->zoneinfo)
+              {{ Auth::user()->zoneinfo }}
+              @else
+              N/A
+              @endif<br>
+            </div> <!-- / .invoice-recipient -->
             <div class="invoice-total">
               CURRENT:
               <span>{{ $data['currentValue'] }}</span>
@@ -430,10 +440,11 @@
             </div>
           </div> <!-- / .invoice-table -->
         </div> <!-- /. row -->
-
+        
         <!-- / hidden for development, will not be rendered on client side -->    
+         
       --}}
-
+      
       </div> <!-- . col-md-12 -->
     </div> <!-- / #content-wrapper -->
   @stop
@@ -459,21 +470,20 @@
         autoclose: true
       });
 
-      var selectedStartDate, selectedStopDate,arrayStartKey, arrayStopKey;
+      var selectedStartDate, selectedStopDate, arrayStartKey, arrayStopKey;
 
       // datepicker event listeners, needs work, methods doesnt work
       $('#startDateStat').datepicker().on("changeDate", function(e){
         // getting the input
-        selectedStartDate = $('#startDateStat').prop("value");
-        selectedStopDate = $('#stopDateStat').prop("value");
+        selectedStartDate = $('#startDateStat input').prop("value");
+        selectedStopDate = $('#stopDateStat input').prop("value");
         
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
-        arrayStopKey = getFormattedDate(selectedStopDate);    
+        arrayStopKey = getFormattedDate(selectedStopDate);
 
         // if start date is bigger than end date
-        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){      
-
+        if (getFormattedDate(arrayStartKey, "unix") > getFormattedDate(arrayStopKey, "unix")){
           // update start datepicker to end datepicker value
           $(this).datepicker('update', new Date(arrayStopKey));
           //$(this).prop("value",selectedStopDate);
@@ -493,15 +503,15 @@
           createNewChart(arrayStartKey, arrayStopKey);
 
           // send event to analytics
-          _gaq.push(["_trackEvent", "{{'Demo ' . $data['statName'].' date interval' }}" , "Start date changed"]);
-          mixpanel.track('{{"Demo " .$data["statName"]. " start date changed"}}');
+          _gaq.push(["_trackEvent", "{{ $data['statName'].' date interval' }}" , "Start date changed"]);
+          mixpanel.track('{{$data["statName"]. " start date changed"}}');
         }
 
       });
 
       $('#stopDateStat').datepicker().on("changeDate", function(e){
-        selectedStartDate = $('#startDateStat').prop("value");
-        selectedStopDate = $('#stopDateStat').prop("value");
+        selectedStartDate = $('#startDateStat input').prop("value");
+        selectedStopDate = $('#stopDateStat input').prop("value");
 
         // formatting for array keys
         arrayStartKey = getFormattedDate(selectedStartDate);
@@ -528,9 +538,12 @@
           // create new chart
           createNewChart(arrayStartKey, arrayStopKey);
 
+          // change the displayed metrick numbers
+          changeStatNumbers(arrayStopKey);
+
           // send event to analytics
-          _gaq.push(["_trackEvent", "{{ 'Demo ' . $data['statName'] .' date interval' }}" , "Stop date changed"]);
-          mixpanel.track('{{"Demo " .$data["statName"]. " stop date changed"}}');
+          _gaq.push(["_trackEvent", "{{ $data['statName'] .' date interval' }}" , "Stop date changed"]);
+          mixpanel.track('{{$data["statName"]. " stop date changed"}}');
         }
       });
 
@@ -550,6 +563,9 @@
         pointHitDetectionRadius : 5
         @if ($data['id'] == 'mrr' || $data['id'] == 'arpu' || $data['id'] == 'arr')
           ,tooltipTemplate: "<%if (label){%><%=label%>: $<%}%><%= value %>"
+        @endif
+        @if ($data['id'] == 'uc')
+          ,tooltipTemplate: "<%if (label){%><%=label%>:<%}%> <%= value %>%"
         @endif
       };
       var ctx = $('#singleStat').get(0).getContext("2d");
@@ -578,7 +594,7 @@
       function createNewChart(arrayStart, arrayStop){
       if (arrayStart && arrayStop){
           // search all labels for selected data interval's start and end index value in array
-          for (var i=0;labels.length;i++){
+          for (var i=0;i<labels.length;i++){
             if (arrayStart == labels[i]){
               arrayStart = i;
             }
@@ -626,9 +642,9 @@
             finalLabel = newLabel;
           }
           
-          
           // destroying stat
           singleStat.destroy();
+          
 
           // for updated view
           var dataFinal = {
@@ -665,6 +681,361 @@
         }
 
         return formattedDate;
+      }
+
+      function changeStatNumbers(date){
+
+        // all labels
+        var labels = [@foreach ($data['fullHistory'] as $date => $value)"{{ $date }}", @endforeach];
+        // all data value
+        var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
+
+        var positiveIsGood = {{ $data['positiveIsGood'] }};
+        // statistic number
+        var currentValue, oneMonth, sixMonth, oneYear;
+        // changes
+        var oneMonthChange, twoMonthChange, threeMonthChange, sixMonthChange, nineMonthChange, oneYearChange;
+
+        // search for new current value
+        var index; // currentValue index
+        for(i = 0; i < labels.length; i++)
+        {
+          if (labels[i] == date)
+          {
+            index = i;
+            break;
+          }
+        }
+        // set new current value
+        currentValue = addCommas(data[index].toFixed(2));
+        $('#currentValue').removeClass('down');
+        $('#currentValue').removeClass('up');
+        if(positiveIsGood)
+        {
+          if(data[index] > 0)
+          {
+            $('#currentValue').addClass('up');
+          } else {
+            $('#currentValue').addClass('down');
+          }
+        } else {
+          if(data[index] > 0)
+          {
+            $('#currentValue').addClass('down');
+          } else {
+            $('#currentValue').addClass('up');
+          }
+        }
+        $('#currentValue').html(currentValue);
+
+        //set new 30 days ago
+        // set correct classes
+        $('#oneMonth').removeClass('up');
+        $('#oneMonth').removeClass('down');
+        if(index - 30 >= 0)
+        {
+          oneMonth = addCommas(data[index - 30].toFixed(2));
+          if(positiveIsGood)
+          {
+            if(data[index - 30] > 0)
+            {
+              $('#oneMonth').addClass('up');
+            } else {
+              $('#oneMonth').addClass('down');
+            }
+          } else {
+            if(data[index - 30] > 0)
+            {
+              $('#oneMonth').addClass('down');
+            } else {
+              $('#oneMonth').addClass('up');
+            }
+          }
+        } else {
+          oneMonth = 'N/A';
+          $('#oneMonth').addClass('down');
+        }
+        $('#oneMonth').html(oneMonth);
+
+         
+        //set new 6 months ago
+        $('#sixMonth').removeClass('down');
+        $('#sixMonth').removeClass('up');
+        if(index - 180 >= 0)
+        {
+          sixMonth = addCommas(data[index - 180].toFixed(2));
+          if(positiveIsGood)
+          {
+            if(data[index - 180] > 0)
+            {
+              $('#sixMonth').addClass('up');
+            } else {
+              $('#sixMonth').addClass('down');
+            }
+          } else {
+            if(data[index - 180] > 0)
+            {
+              $('#sixMonth').addClass('down');
+            } else {
+              $('#sixMonth').addClass('up');
+            }
+          }
+        } else {
+          sixMonth = 'N/A';
+          $('#sixMonth').addClass('down');
+        }
+        $('#sixMonth').html(sixMonth);
+        
+        //set new 1 year ago
+        $('#oneYear').removeClass('down');
+        $('#oneYear').removeClass('up');
+        if(index - 365 >= 0)
+        {
+          oneYear = addCommas(data[index - 365].toFixed(2));
+          if(positiveIsGood)
+          {
+            if(data[index - 365] > 0)
+            {
+              $('#oneYear').addClass('up');
+            } else {
+              $('#oneYear').addClass('down');
+            }
+          } else {
+            if(data[index - 365] > 0)
+            {
+              $('#oneYear').addClass('down');
+            } else {
+              $('#oneYear').addClass('up');
+            }
+          }
+        } else {
+          oneYear = 'N/A';
+          $('#oneYear').addClass('down');
+        }
+        $('#oneYear').html(oneYear);
+
+        //set new 30 days growth
+        $('#oneMonthChange').removeClass('down');
+        $('#oneMonthChange').removeClass('up');
+        if (index - 30 >= 0)
+        {
+          if (data[index - 30] != 0)
+          {
+            oneMonthChange = ((data[index] / data[index - 30] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(oneMonthChange > 0)
+              {
+                $('#oneMonthChange').addClass('up');
+              } else {
+                $('#oneMonthChange').addClass('down');
+              }
+            } else {
+              if(oneMonthChange > 0)
+              {
+                $('#oneMonthChange').addClass('down');
+              } else {
+                $('#oneMonthChange').addClass('up');
+              }
+            }
+            oneMonthChange += '%';
+          } else {
+            oneMonthChange = 'N/A';
+            $('#oneMonthChange').addClass('down');
+          }
+        } else {
+          oneMonthChange = 'N/A';
+          $('#oneMonthChange').addClass('down');
+        }
+        $('#oneMonthChange').html(oneMonthChange);
+        
+        //set new 60 days growth
+        $('#twoMonthChange').removeClass('down');
+        $('#twoMonthChange').removeClass('up');
+        if (index - 60 >= 0)
+        {
+          if (data[index - 60] != 0)
+          {
+            twoMonthChange = ((data[index] / data[index - 60] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(twoMonthChange > 0)
+              {
+                $('#twoMonthChange').addClass('up');
+              } else {
+                $('#twoMonthChange').addClass('down');
+              }
+            } else {
+              if(twoMonthChange > 0)
+              {
+                $('#twoMonthChange').addClass('down');
+              } else {
+                $('#twoMonthChange').addClass('up');
+              }
+            }
+            twoMonthChange += '%';
+          } else {
+            twoMonthChange = 'N/A';
+            $('#twoMonthChange').addClass('down');
+          }
+        } else {
+          twoMonthChange = 'N/A';
+          $('#twoMonthChange').addClass('down');
+        }
+        $('#twoMonthChange').html(twoMonthChange);
+
+        //set new 3 months growth
+        $('#threeMonthChange').removeClass('down');
+        $('#threeMonthChange').removeClass('up');
+        if (index - 90 >= 0)
+        {
+          if (data[index - 90] != 0)
+          {
+            threeMonthChange = ((data[index] / data[index - 90] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(threeMonthChange > 0)
+              {
+                $('#threeMonthChange').addClass('up');
+              } else {
+                $('#threeMonthChange').addClass('down');
+              }
+            } else {
+              if(threeMonthChange > 0)
+              {
+                $('#threeMonthChange').addClass('down');
+              } else {
+                $('#threeMonthChange').addClass('up');
+              }
+            }
+            threeMonthChange += '%';
+          } else {
+            threeMonthChange = 'N/A';
+            $('#threeMonthChange').addClass('down');
+          }
+        } else {
+          threeMonthChange = 'N/A';
+          $('#threeMonthChange').addClass('down');
+        }
+        $('#threeMonthChange').html(threeMonthChange);
+        
+        //set new 6 months growth
+        $('#sixMonthChange').removeClass('down');
+        $('#sixMonthChange').removeClass('up');
+        if (index - 180 >= 0)
+        {
+          if (data[index - 180] != 0)
+          {
+            sixMonthChange = ((data[index] / data[index - 180] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(sixMonthChange > 0)
+              {
+                $('#sixMonthChange').addClass('up');
+              } else {
+                $('#sixMonthChange').addClass('down');
+              }
+            } else {
+              if(sixMonthChange > 0)
+              {
+                $('#sixMonthChange').addClass('down');
+              } else {
+                $('#sixMonthChange').addClass('up');
+              }
+            }
+            sixMonthChange += '%';
+          } else {
+            sixMonthChange = 'N/A';
+            $('#sixMonthChange').addClass('down');
+          }
+        } else {
+          sixMonthChange = 'N/A';
+          $('#sixMonthChange').addClass('down');
+        }
+        $('#sixMonthChange').html(sixMonthChange);
+        
+        //set new 9 months growth
+        $('#nineMonthChange').removeClass('down');
+        $('#nineMonthChange').removeClass('up');
+        if (index - 270 >= 0)
+        {
+          if (data[index - 270] != 0)
+          {
+            nineMonthChange = ((data[index] / data[index - 270] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(nineMonthChange > 0)
+              {
+                $('#nineMonthChange').addClass('up');
+              } else {
+                $('#nineMonthChange').addClass('down');
+              }
+            } else {
+              if(nineMonthChange > 0)
+              {
+                $('#nineMonthChange').addClass('down');
+              } else {
+                $('#nineMonthChange').addClass('up');
+              }
+            }
+            nineMonthChange += '%';
+          } else {
+            nineMonthChange = 'N/A';
+            $('#nineMonthChange').addClass('down');
+          }
+        } else {
+          nineMonthChange = 'N/A';
+          $('#nineMonthChange').addClass('down');
+        }
+        $('#nineMonthChange').html(nineMonthChange);
+        
+        //set new 1 year growth
+        $('#oneYearChange').removeClass('down');
+        $('#oneYearChange').removeClass('up');
+        if (index - 365 >= 0)
+        {
+          if (data[index - 365] != 0)
+          {
+            oneYearChange = ((data[index] / data[index - 365] * 100) - 100).toFixed(1);
+            if(positiveIsGood)
+            {
+              if(oneYearChange > 0)
+              {
+                $('#oneYearChange').addClass('up');
+              } else {
+                $('#oneYearChange').addClass('down');
+              }
+            } else {
+              if(oneYearChange > 0)
+              {
+                $('#oneYearChange').addClass('down');
+              } else {
+                $('#oneYearChange').addClass('up');
+              }
+            }
+            oneYearChange += '%';
+          } else {
+            oneYearChange = 'N/A';
+            $('#oneYearChange').addClass('down');
+          }
+        } else {
+          oneYearChange = 'N/A';
+          $('#oneYearChange').addClass('down');
+        }
+        $('#oneYearChange').html(oneYearChange);
+      }
+
+      function addCommas(nStr)
+      {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+          x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return '$'+ x1 + x2;
       }
 
     });

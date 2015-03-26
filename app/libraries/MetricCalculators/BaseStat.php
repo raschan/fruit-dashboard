@@ -90,7 +90,7 @@ class BaseStat
         $data = static::showSimpleStat($metrics);
 
         // building full mrr history
-        $firstDay = Event::where('user', Auth::user()->id)
+        $firstDay = Metric::where('user', Auth::user()->id)
                     ->orderBy('date','asc')
                     ->first();
         if($firstDay)
@@ -221,12 +221,11 @@ class BaseStat
     	$day = date('Y-m-d', $timeStamp);
 
     	$stats = Metric::where('date',$day)
-    		->where('user', Auth::user()->id)
-    		->first();
+            		->where('user', Auth::user()->id)
+            		->first();
 
     	if($stats){
-            $statValue = $stats->{self::$statID};
-    		return $statValue;
+            return $stats->{self::$statID};
     	} else {
 			return null;
     	}

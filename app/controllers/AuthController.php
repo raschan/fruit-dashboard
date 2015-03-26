@@ -395,8 +395,6 @@ class AuthController extends BaseController
 
         }
 
-        $user->ready = false;
-
         // saving modification on user
         $user->save();
 
@@ -438,6 +436,7 @@ class AuthController extends BaseController
 
                 // updating the user
                 $user = Auth::user();
+                $user->ready = false;
 
                 // setting key
                 $user->stripe_key = Input::get('stripe');
