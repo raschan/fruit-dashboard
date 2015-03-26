@@ -8,89 +8,89 @@
       </div> <!-- / .page-header -->
       @parent
 
-      <!-- STATISTICS BOX -->
-
+        <!-- STATISTICS BOX -->
       <div class="col-md-8 quickstats-box no-padding-hr">
+        @if (Auth::user()->ready != 'notConnected')
 
-      @for ($i = 0; $i< count($allFunctions); $i++)
-        @if($i == 0 || $i % 3 == 0)
-        <div class="row">
-        <!-- {{ $allFunctions[$i]['statName'] }} -->
-        @endif
-          <div class="col-md-4 chart-box">
-            <div class="chart-wrapper bordered">
-              <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
-              <div class="chart-text-left"> 
-                @if($allFunctions[$i]['currentValue'])
-                  @if($allFunctions[$i]['positiveIsGood'])
-                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
-                      <span class="text-money down">
+          @for ($i = 0; $i< count($allFunctions); $i++)
+            @if($i == 0 || $i % 3 == 0)
+            <div class="row">
+            <!-- {{ $allFunctions[$i]['statName'] }} -->
+            @endif
+              <div class="col-md-4 chart-box">
+                <div class="chart-wrapper bordered">
+                  <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
+                  <div class="chart-text-left"> 
+                    @if($allFunctions[$i]['currentValue'])
+                      @if($allFunctions[$i]['positiveIsGood'])
+                        @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                          <span class="text-money down">
+                        @else
+                          <span class="text-money up">
+                        @endif
+                      @else
+                        @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                          <span class="text-money up">
+                        @else
+                          <span class="text-money down">
+                        @endif
+                      @endif
+                      {{ $allFunctions[$i]['currentValue'] }}
                     @else
-                      <span class="text-money up">
+                      <span class="text-money nochange">
+                      --
                     @endif
-                  @else
-                    @if(str_contains($allFunctions[$i]['currentValue'],'-'))
-                      <span class="text-money up">
-                    @else
-                      <span class="text-money down">
-                    @endif
-                  @endif
-                  {{ $allFunctions[$i]['currentValue'] }}
-                @else
-                  <span class="text-money nochange">
-                  --
-                @endif
-                </span>
-              </div>
-              <div class="chart-text-right">
-                @if($allFunctions[$i]['oneMonthChange'])
-                  @if($allFunctions[$i]['positiveIsGood'])
-                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
-                    @else
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
-                    @endif
-                  @else
-                    @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                      <span class="text-money up"><i class="fa fa-angle-up"></i>
-                    @else
-                      <span class="text-money down"><i class="fa fa-angle-down"></i>
-                    @endif
-                  @endif
-                  {{ $allFunctions[$i]['oneMonthChange'] }}
-                  </span>
-                <h6 class="no-margin">Previous 30 days</h6>
-                @else
-                  <span class="text-money nochange">
-                  --
-                  </span>
-                <h6 class="no-margin">Not enough data</h6>
-                @endif
-              </div>
-              @if (Auth::user()->ready)
-                <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
-                  <div class="chart-overlay">
-                      <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                    </span>
                   </div>
-                </a>
-              @else
-                <div class="chart-connecting">
-                  <span class="text-connecting">We are importing your data <br> just a minute</span>
-                </div>
-              @endif
-              <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
-            </div> <!-- / .chart-wrapper -->
-          </div> <!-- / .chart-box -->
-        @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
-        </div> <!-- / .row -->
-        @endif
-        <!-- /{{ $allFunctions[$i]['statName'] }} -->
-      @endfor
+                  <div class="chart-text-right">
+                    @if($allFunctions[$i]['oneMonthChange'])
+                      @if($allFunctions[$i]['positiveIsGood'])
+                        @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                          <span class="text-money down"><i class="fa fa-angle-down"></i>
+                        @else
+                          <span class="text-money up"><i class="fa fa-angle-up"></i>
+                        @endif
+                      @else
+                        @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                          <span class="text-money up"><i class="fa fa-angle-up"></i>
+                        @else
+                          <span class="text-money down"><i class="fa fa-angle-down"></i>
+                        @endif
+                      @endif
+                      {{ $allFunctions[$i]['oneMonthChange'] }}
+                      </span>
+                    <h6 class="no-margin">Previous 30 days</h6>
+                    @else
+                      <span class="text-money nochange">
+                      --
+                      </span>
+                    <h6 class="no-margin">Not enough data</h6>
+                    @endif
+                  </div>
+                  @if (Auth::user()->ready == 'connecting')
+                    <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
+                      <div class="chart-overlay">
+                          <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                      </div>
+                    </a>
+                  @else
+                    <div class="chart-connecting">
+                      <span class="text-connecting">We are importing your data <br> just a minute</span>
+                    </div>
+                  @endif
+                  <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+                </div> <!-- / .chart-wrapper -->
+              </div> <!-- / .chart-box -->
+            @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
+            </div> <!-- / .row -->
+            @endif
+            <!-- /{{ $allFunctions[$i]['statName'] }} -->
+          @endfor
 
+        @endif
       </div> <!-- / .col-sm-8 -->
 
       <!-- /STATISTICS BOX -->
-
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
