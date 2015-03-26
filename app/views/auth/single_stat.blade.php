@@ -53,7 +53,7 @@
           <div class="statistic-description">
             <div class="row">
               <div class="col-md-3 stat-description-box">
-                <span class="text-date"><h4>Current</h4></span>
+                <span class="text-date"><h4>Current <small id='currentDate'>({{ $data['dateInterval']['stopDate'] }})</small></h4></span>
                 @if($data['currentValue'])
                   @if($data['positiveIsGood'])
                     @if(str_contains($data['currentValue'],'-'))
@@ -146,7 +146,9 @@
               </div>
             </div> <!-- / .row -->
           </div> <!-- / .statistic-description -->
-        
+        </div>
+
+        <div class="row panel-body margin-vr-sm bordered">
           <div class="statistic-description">
             <div class="col-md-2 stat-growth-box">
               <span class="text-date"><h4>30 days growth</h4></span>
@@ -628,7 +630,7 @@
         // all data value
         var data = [@foreach ($data['fullHistory'] as $date => $value)@if($value == null)0,@else{{ $value }},@endif @endforeach];
 
-        var positiveIsGood = {{ $data['positiveIsGood'] }};
+        var positiveIsGood = @if ($data['positiveIsGood']) true @else false @endif;
         // statistic number
         var currentValue, oneMonth, sixMonth, oneYear;
         // changes
@@ -644,6 +646,8 @@
             break;
           }
         }
+        // set new cuurentDate
+        $('#currentDate').html('('+labels[index]+')');
         // set new current value
         currentValue = addCommas(data[index].toFixed(2));
         $('#currentValue').removeClass('down');

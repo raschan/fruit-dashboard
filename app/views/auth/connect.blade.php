@@ -91,7 +91,7 @@
 
                     <div class="form-group">
 
-                      {{ Form::label('id_stripe', 'Your Stripe key:', array(
+                      {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
                         'class' => 'col-sm-3 control-label text-left-always')) }}
                       <div class="col-sm-7">      
                         {{ Form::text('stripe', '', array(
@@ -110,7 +110,7 @@
                     </div> <!-- / .form-group -->
 
                 {{ Form::close() }}
-                <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys, Secret key</p>
+                <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
 
                 @endif
 
