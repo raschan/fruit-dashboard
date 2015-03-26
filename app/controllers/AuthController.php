@@ -523,7 +523,8 @@ class AuthController extends BaseController
         {
             return View::make('auth.single_stat',
                 array(
-                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true)
+                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
+                    'metricDetails' => $currentMetrics[$statID]
                 )
             );
         } else {

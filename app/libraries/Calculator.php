@@ -544,6 +544,10 @@ class Calculator
 
     public static function currentMetrics()
     {
+
+        // on the dashboard the metrics are shown 
+        // in the same order as this array
+        
         return array(
             'mrr'               => array('metricClass'          => 'MrrStat'
                                         ,'metricName'           => 'Monthly Recurring Revenue'

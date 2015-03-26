@@ -99,6 +99,7 @@ class DemoController extends BaseController
                     return View::make('demo.single_stat',
                         array(
                             'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
+                            'metricDetails' => $currentMetrics[$statID],
                             Auth::logout()
                         )
                     );
