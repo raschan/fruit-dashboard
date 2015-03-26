@@ -17,7 +17,7 @@ class CalculateFirstTime
 		    	->subject("Your metrics are ready!");
 		});
 		Auth::logout();
-        $user->ready = true;
+        $user->ready = 'connected';
         $user->save();
 
         $job->delete();

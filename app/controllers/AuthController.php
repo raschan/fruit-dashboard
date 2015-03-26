@@ -113,7 +113,7 @@ class AuthController extends BaseController
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
-            $user->ready = false;
+            $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
             $user->save();
             // signing the user in and redirect to dashboard
@@ -140,6 +140,10 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        if (Auth::user()->ready == 'notConnected')
+        {
+            return Redirect::route('auth.connect');
+        }
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -436,7 +440,7 @@ class AuthController extends BaseController
 
                 // updating the user
                 $user = Auth::user();
-                $user->ready = false;
+                $user->ready = 'connecting';
 
                 // setting key
                 $user->stripe_key = Input::get('stripe');

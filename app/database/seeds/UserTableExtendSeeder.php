@@ -9,6 +9,13 @@ class UserTableExtendSeeder extends Seeder
 
         foreach ($users as $user) {
             $user->summaryEmailFrequency = 'daily';
+
+            if($user->isConnected()){
+            	$user->ready = 'connected';
+            } else {
+            	$user->ready = 'notConnected';
+            }
+
             $user->save();
         }
     }
