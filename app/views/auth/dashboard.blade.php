@@ -68,15 +68,15 @@
                     @endif
                   </div>
                   @if (Auth::user()->ready == 'connecting')
+                    <div class="chart-connecting">
+                      <span class="text-connecting">We are importing your data <br> just a minute</span>
+                    </div>
+                  @else
                     <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
                       <div class="chart-overlay">
                           <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                       </div>
                     </a>
-                  @else
-                    <div class="chart-connecting">
-                      <span class="text-connecting">We are importing your data <br> just a minute</span>
-                    </div>
                   @endif
                   <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
                 </div> <!-- / .chart-wrapper -->
