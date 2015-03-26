@@ -298,7 +298,7 @@
             <span class="text-date"><h4>{{ $metricDetails['metricName'] }}</h4></span>
           </div>
           <div class="col-md-11">
-            <span>{{ $metricDetails['metricDescription'] }}</span>            
+            <p class='lead'>{{ $metricDetails['metricDescription'] }}</p>            
           </div>
         </div>
 
@@ -977,7 +977,19 @@
         while (rgx.test(x1)) {
           x1 = x1.replace(rgx, '$1' + ',' + '$2');
         }
-        return '$'+ x1 + x2;
+        
+        var id = '{{ $data["id"] }}';
+        if ( id == 'mrr' || id == 'arr' || id == 'arpu' )
+        {
+          return '$'+ x1 + x2;
+        } else if ( id == 'au' || id == 'cancellations')
+        {
+          return x1;
+        } else if (id == 'uc')
+        {
+          return x1 + x2.slice(0,2) + '%';
+        }
+        return 'Something is not right'
       }
 
     });
