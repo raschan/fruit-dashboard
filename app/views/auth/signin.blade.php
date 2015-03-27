@@ -63,7 +63,7 @@
   <!-- / Container -->
 
   <div class="have-account">
-    Not a member yet? <a href="{{ URL::route('auth.signup') }}">Sign Un now</a>
+    Not a member yet? <a href="{{ URL::route('auth.signup') }}">Sign Up now</a>
     or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
   </div>
 
