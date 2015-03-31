@@ -67,6 +67,7 @@
     or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
   </div>
 
+  <img class="center-block img-responsive" src="img/PositiveSSL_tl_trans.gif">
 </body>
 
 @stop

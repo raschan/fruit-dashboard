@@ -95,11 +95,12 @@
 			<!-- Right side -->
 		</div>
 		<!-- / Container -->
-
 		<div class="not-a-member">
 			Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign in</a> 
 			or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
 		</div>
+
+		<img class="center-block img-responsive" src="img/PositiveSSL_tl_trans.gif">
 	</body>
 	
 	@stop
