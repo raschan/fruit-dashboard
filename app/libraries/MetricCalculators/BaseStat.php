@@ -132,35 +132,35 @@ class BaseStat
         // check if data is available, so we don't divide by null
         // we have 30 days change
 
-        if ($twoMonthValue) {
+        if ($twoMonthValue && $twoMonthValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $twoMonthValue * 100) - 100;
             $data['twoMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['twoMonthChange'] = null;
         }
 
-        if ($threeMonthValue) {
+        if ($threeMonthValue && $threeMonthValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $threeMonthValue * 100) - 100;
             $data['threeMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['threeMonthChange'] = null;
         }
 
-        if ($sixMonthValue) {
+        if ($sixMonthValue && $sixMonthValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $sixMonthValue * 100) - 100;
             $data['sixMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['sixMonthChange'] = null;
         }
 
-        if ($nineMonthValue) {
+        if ($nineMonthValue && $nineMonthValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $nineMonthValue * 100) - 100;
             $data['nineMonthChange'] = round($changeInPercent) . '%';
         } else {
             $data['nineMonthChange'] = null;
         }
 
-        if ($oneYearValue) {
+        if ($oneYearValue && $oneMonthValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $oneYearValue * 100) - 100;
             $data['oneYearChange'] = round($changeInPercent) . '%';
         } else {
