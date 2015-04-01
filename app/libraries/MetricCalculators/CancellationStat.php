@@ -71,20 +71,25 @@ class CancellationStat extends BaseStat {
         $events = Event::where('user', $user->id)
                     ->get();
 
-        foreach ($events as $event) 
-        {
-            if(!isset($historyCanc['daily'][$event->date]))
+        if(isset($events[0])) {
+            foreach ($events as $event) 
             {
-                // we have no data on this date yet,
-                // initialize it
-                $historyCanc['daily'][$event->date] = 0;
+                if(!isset($historyCanc['daily'][$event->date]))
+                {
+                    // we have no data on this date yet,
+                    // initialize it
+                    $historyCanc['daily'][$event->date] = 0;
+                }
+                // if its a subscription cancellation event, count it
+                if($event->type == 'customer.subscription.deleted')
+                {
+                    $historyCanc['daily'][$event->date]++;
+                }
             }
-            // if its a subscription cancellation event, count it
-            if($event->type == 'customer.subscription.deleted')
-            {
-                $historyCanc['daily'][$event->date]++;
-            }
+        } else {
+            $historyCanc['daily'] = array();
         }
+
 
         $historyCanc['monthly'] = self::monthlyCancellations($historyCanc['daily']);
 
