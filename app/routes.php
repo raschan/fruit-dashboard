@@ -127,6 +127,11 @@ Route::get('connect', array(
     'uses' => 'AuthController@showConnect'
 ));
 
+Route::get('connect/{provider}', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@connectProvider'
+));
+
 Route::post('connect', array(
     'before' => 'auth',
     'as' => 'auth.connect',

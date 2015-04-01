@@ -13,7 +13,8 @@
 		"stripe/stripe-php": "*",
 		"doctrine/dbal" : "*",
 		"nwidart/db-exporter": "1.0",
-		"nesbot/carbon": "~1.14"
+		"nesbot/carbon": "~1.14",
+		"guzzlehttp/guzzle": "~5.2"
 	},
 	"autoload": {
 		"classmap": [
