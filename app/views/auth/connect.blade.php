@@ -93,7 +93,11 @@
                     <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
               @else
-                <div style="display:none;" class="col-sm-10">
+                <div class="col-sm-10">
+                  <a href="{{$stripeButtonUrl}}"><button class="sm-pull-right btn btn-primary btn-lg btn-flat">Connect stripe</button></a>
+              
+
+              {{--
                   {{ Form::open(array(
                     'route'=>'auth.connect',
                     'method' => 'post',
@@ -119,6 +123,7 @@
                       </div> <!-- / .form-group -->
                   {{ Form::close() }}
                   <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
+              --}}
               @endif
               </div> <!-- /. col-sm-10 -->
 

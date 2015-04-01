@@ -647,7 +647,7 @@
           }
         }
         // set new cuurentDate
-        $('#currentDate').html('('+labels[index]+')');
+        $('#currentDate').html('('+labels[index].split('-').reverse().join('-')+')');
         // set new current value
         currentValue = addCommas(data[index].toFixed(2));
         $('#currentValue').removeClass('down');
