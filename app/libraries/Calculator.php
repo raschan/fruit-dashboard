@@ -106,8 +106,13 @@ class Calculator
         // get first event date
         $firstDate = Event::where('user', $user->id)
                         ->orderBy('date','asc')
-                        ->first()
-                        ->date;
+                        ->first();
+        
+        if($firstDate) {
+            $firstDate = $firstDate->date;
+        } else {
+            $firstDate = date('Y-m-d',time());
+        }
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
         // calculate starter mrr and au
