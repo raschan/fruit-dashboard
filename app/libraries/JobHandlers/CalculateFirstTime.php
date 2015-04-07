@@ -13,6 +13,7 @@ class CalculateFirstTime
         Mail::send('emails.connected', array(), function($message)
 		{
 			$user = Auth::user();
+			Log::info('Sending "ready" email for user: '.$user->email);
 		    $message->to($user->email /*, name of the user */)
 		    	->subject("Your metrics are ready!");
 		});

@@ -19,7 +19,7 @@ class TailoredData
         // get customers from Stripe if connected
         if ($user->isStripeConnected())
         {
-            $stripeCustomers = StripeHelper::getCustomers($user->stripe_key);
+            $stripeCustomers = StripeHelper::getCustomers($user);
         }
 
         // get customers from Paypal if connected
