@@ -21,7 +21,7 @@ class StripeHelper
         $out_charges = array();
 
         // telling stripe who we are
-        Stripe::setApiKey($key);
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         // getting the charges
         // https://stripe.com/docs/api/php#charges
@@ -91,30 +91,56 @@ class StripeHelper
             $previous_last_obj = $last_obj;
 
             // telling stripe who we are
-            Stripe::setApiKey($user->stripe_key);
+            if (strlen($user->stripe_key) > 2)
+            {
+                Stripe::setApiKey($user->stripe_key);
+                if ($last_obj) {
+
+                    // we have last obj -> starting from there
+                    $returned_object = Event::all(
+                        array(
+                            'limit'          => 20,
+                            'starting_after' => $last_obj
+                        )
+                    );
+
+                } else {
+
+                    // starting from zero
+                    $returned_object = Event::all(
+                        array(
+                            'limit' => 100
+                            )
+                    );
+                }
+            } else {
+                Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+                if ($last_obj) {
+
+                    // we have last obj -> starting from there
+                    $returned_object = Event::all(
+                        array(
+                            'limit'          => 20,
+                            'starting_after' => $last_obj
+                        ),
+                        array('stripe_account' => $user->stripeUserId)
+                    );
+
+                } else {
+
+                    // starting from zero
+                    $returned_object = Event::all(
+                        array(
+                            'limit' => 100
+                            ),
+                        array('stripe_account' => $user->stripeUserId)
+                    );
+                }
+            }
 
             // getting the events
             // https://stripe.com/docs/api/php#events
             // pagination....
-            if ($last_obj) {
-
-                // we have last obj -> starting from there
-                $returned_object = Event::all(
-                    array(
-                        'limit'          => 20,
-                        'starting_after' => $last_obj
-                    )
-                );
-
-            } else {
-
-                // starting from zero
-                $returned_object = Event::all(
-                    array(
-                        'limit' => 100
-                        )
-                );
-            }
 
             // extractin json (this is not the best approach)
             $events = json_decode(strstr($returned_object, '{'), true);
@@ -221,16 +247,16 @@ class StripeHelper
      * @return an array with the customers
     */
 
-    public static function getCustomers($key)
+    public static function getCustomers($user)
     {
         // init out array
         $out_customers = array();
 
         // setting stripe key
-        Stripe::setApiKey($key);
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         // getting the customers
-        $returned_object = Customer::all();
+        $returned_object = Customer::all(array(('stripe_account' => $user->stripeUserId));
 
         // extracting data
         $customers = json_decode(strstr($returned_object, '{'), true);
