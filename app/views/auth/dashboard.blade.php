@@ -52,9 +52,9 @@
                         @endif
                       @else
                         @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                          <span class="text-money up"><i class="fa fa-angle-up"></i>
+                          <span class="text-money up"><i class="fa fa-angle-down"></i>
                         @else
-                          <span class="text-money down"><i class="fa fa-angle-down"></i>
+                          <span class="text-money down"><i class="fa fa-angle-up"></i>
                         @endif
                       @endif
                       {{ $allFunctions[$i]['oneMonthChange'] }}
