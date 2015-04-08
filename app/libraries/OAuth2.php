@@ -7,9 +7,9 @@ class OAuth2
 		$endpoint = 'https://connect.stripe.com/oauth/authorize';
 		$params = array(
 			'response_type' => 'code',
-			'client_id' => 'ca_5GWsCM72IcIz9vtWMMR7PnzQwHENneZE',
+			'client_id' => $_ENV['STRIPE_CLIENT_ID'] ,
 			'scope' => 'read_only',
-			'redirect_uri' => 'http://localhost:8001/connect/stripe',
+			'redirect_uri' => $_ENV['STRIPE_REDIRECT_URI'],
 			'stripe_landing' => 'login'
 			);
 
@@ -21,7 +21,7 @@ class OAuth2
 	{
 		$endpoint = 'https://connect.stripe.com/oauth/token';
 		$params = array(
-			'client_secret' => 'sk_test_YOhLG7AgROpHWUyr62TlGXmg',
+			'client_secret' => $_ENV['STRIPE_SECRET_KEY'],
 			'code' => $code,
 			'grant_type' => 'authorization_code');
 
@@ -41,6 +41,7 @@ class OAuth2
 			$url .= $key.'='.$value.'&';
 		}
 
+		// stripe the last unnecessary character
 		$url = rtrim($url, "&");
 
 		return $url;

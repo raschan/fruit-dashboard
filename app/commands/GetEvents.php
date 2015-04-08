@@ -43,7 +43,7 @@ class GetEvents extends Command {
 
             // saving events
             Calculator::saveEvents($user);
-
         }
+        Log::info('GetEvents finished');
     }
 }

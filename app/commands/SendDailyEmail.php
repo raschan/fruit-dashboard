@@ -49,7 +49,7 @@ class SendDailyEmail extends Command {
 		$weeklyEmailSent = 0;
 		foreach ($users as $user) {
 			// check if user finished the connect process
-			if ($user->isConnected())
+			if ($user->isConnected() && $user->ready == 'connected')
 			{
 				switch ($user->summaryEmailFrequency) {
 

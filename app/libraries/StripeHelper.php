@@ -7,69 +7,12 @@ use Stripe\Customer;
 class StripeHelper
 {
 
-
-
-	/**
-	 * Getting all the charges for the user
-	 * @param stripe key
-	 *
-	 * @return an array with the charges
-	*/
-
-	public static function getCharges($key)
-    {
-        $out_charges = array();
-
-        // telling stripe who we are
-        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-
-        // getting the charges
-        // https://stripe.com/docs/api/php#charges
-        $returned_object = Stripe_Charge::all();
-
-        // extractin json (this is not the best approach)
-        $charges = json_decode(strstr($returned_object, '{'), true);
-
-        // getting relevant fields
-        foreach ($charges['data'] as $charge) {
-            // updating array
-
-            /*
-            id                      - string
-            created                 - timestamp
-            amount                  - non negative integer
-            currency                - string, 3 letter ISO currency code
-            paid                    - boolean
-            captured                - boolean
-            description             - string
-            statement_description   - string
-            failure_code            - string (see https://stripe.com/docs/api#errors for a list of codes)
-            */
-
-            $out_charges[$charge['id']] =
-                array(
-                    'created'               => $charge['created'],
-                    'amount'                => $charge['amount'],
-                    'currency'              => $charge['currency'],
-                    'paid'                  => $charge['paid'],
-                    'captured'              => $charge['captured'],
-                    'description'           => $charge['description'],
-                    'statement_description' => $charge['statement_description'],
-                    'failure_code'          => $charge['failure_code']
-                );
-        } //foreach
-
-        // returning object
-        return $out_charges;
-    }
-
-
-	/**
-	 * Getting specific events for the user (null = all)
-	 * @param stripe key
-	 * 
-	 * @return an array with the events
-	*/
+/**
+     * Getting specific events for the user (null = all)
+     * @param user object
+     * 
+     * @return an array with the events
+    */
 
     public static function getEvents($user)
     {
@@ -188,6 +131,123 @@ class StripeHelper
     }
 
 
+    /**
+     * Getting all the customers for the user
+     * @param user object
+     *
+     * @return an array with the customers
+    */
+
+    public static function getCustomers($user)
+    {
+        // init out array
+        $out_customers = array();
+
+        // setting stripe key
+        $returned_object = null;
+        if (strlen($user->stripe_key) > 2)
+        {
+            // we have secret key
+            Stripe::setApiKey($user->stripe_key);
+            $returned_object = Customer::all();
+        
+        } else {
+            // we have permission to connect
+            Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+            $returned_object = Customer::all(array(),array('stripe_account' => $user->stripeUserId));
+        }
+
+        // getting the customers
+
+        // extracting data
+        $customers = json_decode(strstr($returned_object, '{'), true);
+
+        // setting the data to our own format
+        foreach ($customers['data'] as $customer) {
+            // updating array
+
+            /*
+            livemode        - valid customer
+            subscriptions   - all the subscription a user has
+            */
+
+            $out_customers[$customer['id']] =
+                array(
+                    'zombie'        => $customer['livemode'],
+                    'email'         => $customer['email'],
+                    'subscriptions' => $customer['subscriptions']['data']
+                );
+        } //foreach
+
+        // return with the customers
+        return $out_customers;
+    }
+
+
+    /*
+    |---------------------------
+    | Not in use currently
+    |---------------------------
+    */
+
+	/**
+	 * Getting all the charges for the user
+	 * @param stripe key
+	 *
+	 * @return an array with the charges
+	*/
+
+	public static function getCharges($key)
+    {
+        $out_charges = array();
+
+        // telling stripe who we are
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
+        // getting the charges
+        // https://stripe.com/docs/api/php#charges
+        $returned_object = Stripe_Charge::all();
+
+        // extractin json (this is not the best approach)
+        $charges = json_decode(strstr($returned_object, '{'), true);
+
+        // getting relevant fields
+        foreach ($charges['data'] as $charge) {
+            // updating array
+
+            /*
+            id                      - string
+            created                 - timestamp
+            amount                  - non negative integer
+            currency                - string, 3 letter ISO currency code
+            paid                    - boolean
+            captured                - boolean
+            description             - string
+            statement_description   - string
+            failure_code            - string (see https://stripe.com/docs/api#errors for a list of codes)
+            */
+
+            $out_charges[$charge['id']] =
+                array(
+                    'created'               => $charge['created'],
+                    'amount'                => $charge['amount'],
+                    'currency'              => $charge['currency'],
+                    'paid'                  => $charge['paid'],
+                    'captured'              => $charge['captured'],
+                    'description'           => $charge['description'],
+                    'statement_description' => $charge['statement_description'],
+                    'failure_code'          => $charge['failure_code']
+                );
+        } //foreach
+
+        // returning object
+        return $out_charges;
+    }
+
+
+	
+
+
 	/**
 	 * Getting all the plans for the user
 	 * @param stripe key
@@ -240,45 +300,5 @@ class StripeHelper
         return $out_plans;
     }
 
-    /**
-     * Getting all the customers for the user
-     * @param stripe key
-     *
-     * @return an array with the customers
-    */
 
-    public static function getCustomers($user)
-    {
-        // init out array
-        $out_customers = array();
-
-        // setting stripe key
-        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-
-        // getting the customers
-        $returned_object = Customer::all(array(('stripe_account' => $user->stripeUserId));
-
-        // extracting data
-        $customers = json_decode(strstr($returned_object, '{'), true);
-
-        // setting the data to our own format
-        foreach ($customers['data'] as $customer) {
-            // updating array
-
-            /*
-            livemode        - valid customer
-            subscriptions   - all the subscription a user has
-            */
-
-            $out_customers[$customer['id']] =
-                array(
-                    'zombie'        => $customer['livemode'],
-                    'email'         => $customer['email'],
-                    'subscriptions' => $customer['subscriptions']['data']
-                );
-        } //foreach
-
-        // return with the customers
-        return $out_customers;
-    }
 }
