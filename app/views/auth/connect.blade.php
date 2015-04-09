@@ -94,36 +94,37 @@
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
               @else
                 <div class="col-sm-10">
-                  <a href="{{$stripeButtonUrl}}"><button class="sm-pull-right btn btn-primary btn-lg btn-flat">Connect stripe</button></a>
-              
+                  <a href="{{$stripeButtonUrl}}"><button class="sm-pull-right btn btn-primary btn-lg btn-flat" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'>Connect stripe</button></a>
+                  
+                  <!--
+                  <div style='display:none;'>
+                    {{ Form::open(array(
+                      'route'=>'auth.connect',
+                      'method' => 'post',
+                      'id' => 'form-settings',
+                      'class' => 'form-horizontal',
+                      'role' => 'form' )) }}
 
-              {{--
-                  {{ Form::open(array(
-                    'route'=>'auth.connect',
-                    'method' => 'post',
-                    'id' => 'form-settings',
-                    'class' => 'form-horizontal',
-                    'role' => 'form' )) }}
-
-                      <div class="form-group">
-                        {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
-                          'class' => 'col-sm-3 control-label text-left-always')) }}
-                        <div class="col-sm-7">      
-                          {{ Form::text('stripe', '', array(
-                            'id' => 'id_stripe',
-                            'class' => 'form-control',
-                            'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
+                        <div class="form-group">
+                          {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
+                            'class' => 'col-sm-3 control-label text-left-always')) }}
+                          <div class="col-sm-7">      
+                            {{ Form::text('stripe', '', array(
+                              'id' => 'id_stripe',
+                              'class' => 'form-control',
+                              'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
+                          </div>
+                          <div class="col-sm-2 text-center">
+                          {{ Form::submit('Connect', array(
+                              'id' => 'id_submit',
+                              'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
+                              'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
+                          </div>
                         </div>
-                        <div class="col-sm-2 text-center">
-                        {{ Form::submit('Connect', array(
-                            'id' => 'id_submit',
-                            'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                            'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
-                        </div>
-                      </div> <!-- / .form-group -->
-                  {{ Form::close() }}
-                  <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
-              --}}
+                    {{ Form::close() }}
+                    <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
+                  </div>
+                  -->
               @endif
               </div> <!-- /. col-sm-10 -->
 

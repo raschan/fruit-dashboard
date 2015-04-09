@@ -14,7 +14,8 @@
 		"doctrine/dbal" : "*",
 		"nwidart/db-exporter": "1.0",
 		"nesbot/carbon": "~1.14",
-		"guzzlehttp/guzzle": "~5.2"
+		"guzzlehttp/guzzle": "~5.2",
+		"waavi/mailman": "*"
 	},
 	"autoload": {
 		"classmap": [
