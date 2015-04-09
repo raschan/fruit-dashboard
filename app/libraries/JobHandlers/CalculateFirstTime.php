@@ -9,15 +9,12 @@ class CalculateFirstTime
 
         Calculator::calculateMetricsOnConnect($user);
 
-        Auth::login($user);
-        Mail::send('emails.connected', array(), function($message)
-		{
-			$user = Auth::user();
-			Log::info('Sending "ready" email for user: '.$user->email);
-		    $message->to($user->email /*, name of the user */)
-		    	->subject("Your metrics are ready!");
-		});
-		Auth::logout();
+		Log::info('Sending "ready" email for user: '.$user->email);
+        $email = Mailman::make('emails.connected')
+        	->to($user->email)
+        	->subject('Your metrics are ready!')
+        	->send();
+
         $user->ready = 'connected';
         $user->save();
 

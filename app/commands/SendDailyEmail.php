@@ -96,23 +96,35 @@ class SendDailyEmail extends Command {
 								'metrics' => $metrics,
 			                    'currentMetrics' => $currentMetrics,
 			                    'changes' => $changes,
-			                    'isDaily' => true
+			                    'isDaily' => true,
+			                    'index'	  => 0,		// for striping
 								);
 
+							
+							$email = Mailman::make('emails.summary')
+								->with($data)
+								//->setCss('bootstrap.min.css')
+								->to($user->email)
+								->subject('Daily summary')
+								->show();
+								//->send();
+
+							File::put(public_path().'/summary_email.html',$email);
+
 							// login the user (necessary to get the email address)	
-							Auth::login($user);
+							// Auth::login($user);
 
 
-							// send the email to the user
-							Mail::send('emails.summary', $data, function($message)
-							{
-								// get the currently logged in user
-								$user = Auth::user();
-								$message->to($user->email /*, name of the user*/)
-										->subject('Daily summary');
-							});
-							// logout the user
-							Auth::logout();
+							// // send the email to the user
+							// Mail::send('emails.summary', $data, function($message)
+							// {
+							// 	// get the currently logged in user
+							// 	$user = Auth::user();
+							// 	$message->to($user->email /*, name of the user*/)
+							// 			->subject('Daily summary');
+							// });
+							// // logout the user
+							// Auth::logout();
 							$dailyEmailSent++;
 						}
 						break;
@@ -164,21 +176,30 @@ class SendDailyEmail extends Command {
 								'currentMetrics' => $currentMetrics,
 								'changes' => $changes,
 								'isDaily' => false,
+								'index'	  => 0,
 								);
 							// login the user (necessary to get the email address)	
-							Auth::login($user);
+							// Auth::login($user);
 
 
 							// send the email to the user
-							Mail::send('emails.summary', $data, function($message)
-							{
-								// get the currently logged in user
-								$user = Auth::user();
-								$message->to($user->email /*, name of the user*/)
-										->subject('Weekly summary');
-							});
+							Mailman::make('emails.summary')
+								->with($data)
+								->setCss('bootstrap.min.css')
+								->to($user->email)
+								->subject('Weekly summary')
+								->send();
+								
+							// Mail::send('emails.summary', $data, function($message)
+							// {
+							// 	// get the currently logged in user
+							// 	$user = Auth::user();
+							// 	$message->to($user->email /*, name of the user*/)
+							// 			->subject('Weekly summary');
+							// });
+							
 							// logout the user
-							Auth::logout();
+							// Auth::logout();
 							$weeklyEmailSent++;
 						}
 						break;

@@ -402,7 +402,7 @@ class AuthController extends BaseController
                     $user->stripeUserId = $response['stripe_user_id'];
 
 	    			Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-    	            $account = Stripe\Account::retrieve($user->stripeUserId); // catchable line
+    	            $account = Stripe\Account::retrieve($user->stripeUserId);
         	        // success
             	    $returned_object = json_decode(strstr($account, '{'), true);
 

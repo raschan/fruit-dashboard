@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en-US">
-	<head>
-		<meta charset="utf-8">
-	</head>
-	<body>
-		<h2>Calculations finished</h2>
+@extends('emails.meta.meta')
+	@section('emailContent')
 
-		<div>
-			We've finished with your numbers. Come and check it.
-			<a href='http://dashboard.tryfruit.com' target='blank'>Let's go!</a> 
+		<p class='text-center lead'>You're metrics are ready.</p>
+		<div class='text-center'>
+		{{ HTML::link('/dashboard','Visit my dashboard',array('class' => 'btn btn-primary btn-lg')) }}
 		</div>
-	</body>
-</html>
+
+	@stop
