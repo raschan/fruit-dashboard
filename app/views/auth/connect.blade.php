@@ -15,7 +15,9 @@
           <div class="certificate-wrapper bordered">
             <div class="panel-body certificate">
               <span class="lead col-sm-6">Don't worry we're using secure protocols here.</span>
-              <img class="sm-pull-right img-responsive" src="img/PositiveSSL_tl_trans.gif">
+              <a href="https://www.positivessl.com" class='sm-pull-right text-center'>
+                <img src="https://www.positivessl.com/images-new/PositiveSSL_tl_white2.png" alt="SSL Certificate" title="SSL Certificate" border="0"/>
+              </a>
             </div>
           </div>
         </div>
@@ -94,7 +96,7 @@
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
               @else
                 <div class="col-sm-10">
-                  <a href="{{$stripeButtonUrl}}"><button class="sm-pull-right btn btn-primary btn-lg btn-flat" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'>Connect stripe</button></a>
+                  <a href="#" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                   
                   <!--
                   <div style='display:none;'>
