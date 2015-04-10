@@ -5,8 +5,12 @@
 	</head>
 	<body>
 		{{-- header --}}
-		<h3 class='text-center'>{{ HTML::image('img/fruit_logo.png','',array('class'=>'header-image')) }}</h3>
-		<p class='text-right'>{{ Carbon::now()->format('l, F j, Y') }}</p>
+		<div class='text-center'>
+			{{ HTML::image('img/fruit_logo.png','',array('class'=>'header-image')) }}
+		</div>
+		<div class='text-right'>
+			{{ Carbon::now()->format('l, F j, Y') }}
+		</div>
 		{{-- /header --}}
 		{{-- content --}}
 		@section('emailContent')
