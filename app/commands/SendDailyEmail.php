@@ -103,28 +103,13 @@ class SendDailyEmail extends Command {
 							
 							$email = Mailman::make('emails.summary')
 								->with($data)
-								//->setCss('bootstrap.min.css')
 								->to($user->email)
 								->subject('Daily summary')
-								->show();
-								//->send();
+								//->show();
+								->send();
 
-							File::put(public_path().'/summary_email.html',$email);
+							//File::put(public_path().'/summary_email.html',$email);
 
-							// login the user (necessary to get the email address)	
-							// Auth::login($user);
-
-
-							// // send the email to the user
-							// Mail::send('emails.summary', $data, function($message)
-							// {
-							// 	// get the currently logged in user
-							// 	$user = Auth::user();
-							// 	$message->to($user->email /*, name of the user*/)
-							// 			->subject('Daily summary');
-							// });
-							// // logout the user
-							// Auth::logout();
 							$dailyEmailSent++;
 						}
 						break;
@@ -135,7 +120,7 @@ class SendDailyEmail extends Command {
 							change this if to switch-case with days
 							for user controlled daily send
 						*/
-						if(Carbon::now()->dayOfWeek == Carbon::MONDAY)
+						if(Carbon::now()->dayOfWeek == Carbon::FRIDAY)
 						{
 							// get the user's metrics
 							$metrics = Metric::where('user', $user->id)	
@@ -158,6 +143,7 @@ class SendDailyEmail extends Command {
 					                if($prevMetric->$metricID != 0)
 					                {
 					                    $value = ($metrics[$id]->$metricID / $prevMetric->$metricID) * 100 - 100;
+					                    $changes[$metricID][$date]['isBigger'] = $value > 0 ? true : false;
 					                    $changes[$metricID][$date]['value'] = round($value).' %';
 					                }
 					                else
@@ -190,16 +176,6 @@ class SendDailyEmail extends Command {
 								->subject('Weekly summary')
 								->send();
 								
-							// Mail::send('emails.summary', $data, function($message)
-							// {
-							// 	// get the currently logged in user
-							// 	$user = Auth::user();
-							// 	$message->to($user->email /*, name of the user*/)
-							// 			->subject('Weekly summary');
-							// });
-							
-							// logout the user
-							// Auth::logout();
 							$weeklyEmailSent++;
 						}
 						break;

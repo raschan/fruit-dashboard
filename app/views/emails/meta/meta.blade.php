@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		{{-- header --}}
-		<h3 class='text-center'>ANALYTICS {{ HTML::image('img/fruit_icon.png','',array('class'=>'header-image')) }} REPORT</h3>
+		<h3 class='text-center'>{{ HTML::image('img/fruit_logo.png','',array('class'=>'header-image')) }}</h3>
 		<p class='text-right'>{{ Carbon::now()->format('l, F j, Y') }}</p>
 		{{-- /header --}}
 		{{-- content --}}
