@@ -18,3 +18,7 @@
 p {
   padding:0px;
 }
+
+.email-container {
+  max-width: 800px;
+}

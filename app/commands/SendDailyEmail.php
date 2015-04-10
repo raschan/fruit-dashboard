@@ -120,7 +120,7 @@ class SendDailyEmail extends Command {
 							change this if to switch-case with days
 							for user controlled daily send
 						*/
-						if(Carbon::now()->dayOfWeek == Carbon::FRIDAY)
+						if(Carbon::now()->dayOfWeek == Carbon::MONDAY)
 						{
 							// get the user's metrics
 							$metrics = Metric::where('user', $user->id)	
