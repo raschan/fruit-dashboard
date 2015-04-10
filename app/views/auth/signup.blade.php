@@ -11,14 +11,6 @@
 @section('pageContent')
 
 <body class="theme-asphalt page-signin" style="">
-	<!-- Page background -->
-	<div id="page-signin-bg">
-		<!-- Background overlay -->
-		<div class="overlay"></div>
-		{{ HTML::image('img/backgrounds/advertise_background.jpg','', array('class' => 'image')) }}
-	</div>
-	<!-- / Page background -->
-
 	<!-- Container -->
 	<div class="signin-container">
 
@@ -99,9 +91,6 @@
 			Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign in</a> 
 			or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
 		</div>
-
-		<img class="center-block img-responsive" src="img/PositiveSSL_tl_trans.gif">
-	</body>
 	
 	@stop
 
