@@ -23,8 +23,11 @@
 			{{-- /content --}}
 			
 			{{-- footer, 3rd row of table --}}
-			<h3 class='text-center lead'>{{ HTML::link('/dashboard','Fruit Analytics') }}</h3>
-			<p class='text-center'>Copyright © {{Carbon::now()->year}} All rights reserved</p>
+			<div class='text-center'>
+				<h3>{{ HTML::link('/dashboard','Fruit Analytics') }}</h3>
+				<p>Copyright © {{Carbon::now()->year}} All rights reserved</p>
+				<small class='text-muted'>You can change your notification settings {{ HTML::link('/settings','here')}}.</small>
+			</div>
 			{{-- /footer --}}
 		</div>
 	</body>
