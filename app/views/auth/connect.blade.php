@@ -96,7 +96,7 @@
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
               @else
                 <div class="col-sm-10">
-                  <a href="#" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
+                  <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                   
                   <!--
                   <div style='display:none;'>
