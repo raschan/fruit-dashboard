@@ -66,14 +66,15 @@
         <div class="row">
           <div class="stripe-form-wrapper bordered">
             <div class="panel-body stripe-form">
-              <h4>Connect stripe</h4>
-
-              <div class="col-sm-2 text-center">
-                <i class="fa icon fa-cc-stripe fa-4x"></i>
+              <div class='col-sm-4'>
+                <h4>Connect stripe</h4>
+              </div>
+              <div class="col-sm-2 col-sm-offset-1 text-center">
+                <span class="icon pf-big pf-stripe"></span>
               </div> <!-- /. connect-icon -->
 
               @if ($stripe_connected)
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <!-- Modal box -->
                     <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                       <div class="modal-dialog modal-sm">
@@ -135,10 +136,55 @@
         </div> <!-- /. row -->
         <!-- / Stripe connect -->
 
+        {{-- 
+        <!-- Braintree connect -->
+        <div class="row">
+          <div class="braintree-form-wrapper bordered">
+            <div class="panel-body braintree-form">
+              <div class='col-sm-4'>
+                <h4>Connect Braintree</h4>
+              </div>
+              <div class="col-sm-2 col-sm-offset-1 text-center">
+                <span class="icon pf-big pf-braintree"></span>
+              </div> <!-- /. connect-icon -->
+              @if ($braintree_connected)
+                <div class="col-sm-5">
+                    <!-- Modal box -->
+                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                      <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Warning</h4>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to disconnect Braintree from your account? <br>
+                            After disconnecting we will not receive any more data from Braintree.</div>
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                        </div>
+                        </div> <!-- / .modal-content -->
+                      </div> <!-- / .modal-dialog -->
+                    </div>
+                    <!-- /Modal box -->
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+              @else
+                <div class="col-sm-5">
+                  <a href="" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
+              @endif
+              </div> <!-- /. col-sm-10 -->
+
+            </div> <!-- /. panel-body braintree-from -->
+          </div> <!-- /. col-sm-6 braintree-form-wrapper -->
+        </div> <!-- /. row -->
+        <!-- / Braintree connect -->
+        --}}
+
         <!-- Suggestion -->
         <div class="row">
-          <div class="stripe-form-wrapper bordered">
-            <div class="panel-body stripe-form">
+          <div class="suggestion-form-wrapper bordered">
+            <div class="panel-body suggestion-form">
               <h4>Using a different payment processor?</h4>
               <p>Please tell us and we'll get in touch with you.</p>
 
@@ -172,8 +218,8 @@
               {{ Form::close() }}
 
               </div> <!-- /. col-sm-10 -->
-            </div> <!-- /. panel-body stripe-from -->
-          </div> <!-- /. col-sm-6 stripe-form-wrapper -->
+            </div> <!-- /. panel-body suggestion-from -->
+          </div> <!-- /. col-sm-6 suggestion-form-wrapper -->
         </div> <!-- /. row -->
         <!-- / Suggestion -->
 
