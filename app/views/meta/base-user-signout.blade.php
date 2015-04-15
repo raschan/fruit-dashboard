@@ -13,6 +13,7 @@
 @section('pageContent')
 @show
 
+{{--
 <div class="row no-margin">
   <div class="col-md-2 col-md-offset-5">
     <a href="https://www.positivessl.com">
@@ -20,6 +21,7 @@
     </a>
   </div>
 </div>
+--}}
 
 @section('footer')
 @include('meta.footer')
