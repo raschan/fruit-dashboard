@@ -10,6 +10,7 @@
 
       <div class="col-md-10 col-md-offset-1">
 
+        {{--
         <!-- SSL cert. -->
         <div class="row">
           <div class="certificate-wrapper bordered">
@@ -22,7 +23,7 @@
           </div>
         </div>
         <!-- /SSL cert. -->
-
+        --}}
       {{-- 
         <!-- hidden for development, will not be rendered on client side -->   
         <!-- PayPal connect-->
