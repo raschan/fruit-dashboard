@@ -15,7 +15,8 @@
 		"nwidart/db-exporter": "1.0",
 		"nesbot/carbon": "~1.14",
 		"guzzlehttp/guzzle": "~5.2",
-		"waavi/mailman": "*"
+		"waavi/mailman": "*",
+		"bradleyboy/laravel-braintree": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

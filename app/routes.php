@@ -6,40 +6,34 @@
 |--------------------------------------------------------------------------
 */
 
-Route::get('/rashan', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.rashan',
-    'uses' => 'HelloController@showRashan'
-));
+if(isset($_ENV['development']))
+{
+    // braintree development routes
+    Route::get('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@showBraintree'
+    ));
 
-Route::get('/users', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.users',
-    'uses' => 'HelloController@showUsers'
-));
+    Route::post('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@doBraintreePayment'
+    ));
 
-Route::get('/gyt', array(
-    'as' => 'dev.gyt',
-    'uses' => 'HelloController@showGYT'
-));
 
-Route::get('/stripe', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.stripe',
-    'uses' => 'HelloController@showStripe'
-));
-Route::post('/stripe', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.stripe',
-    'uses' => 'HelloController@ajaxGetMrr'
-));
+    Route::get('/users', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.users',
+        'uses' => 'HelloController@showUsers'
+    ));
 
-Route::get('/paypal', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.paypal',
-    'uses' => 'HelloController@showPaypal'
-));
-
+    Route::get('/paypal', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.paypal',
+        'uses' => 'HelloController@showPaypal'
+    ));
+}
 
 /*
 |--------------------------------------------------------------------------
