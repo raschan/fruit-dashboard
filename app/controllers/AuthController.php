@@ -376,7 +376,7 @@ class AuthController extends BaseController
             array(
                 //'redirect_url' => $redirectUrl,
                 //'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected'      => $user->isStripeConnected()
+                'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
             )
         );
