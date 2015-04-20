@@ -16,6 +16,18 @@ if(isset($_ENV['development']))
         'uses'      => 'HelloController@showPlans'
     ));
 
+    Route::get('/plans/{planName}', array(
+        'before'    => 'auth|api_key',
+        'as'        => 'dev.payplan',
+        'uses'      => 'HelloController@showPayPlan'
+    ));
+
+    Route::post('/plans/{planName}', array(
+        'before'    => 'auth|api_key',
+        'as'        => 'dev.payplan',
+        'uses'      => 'HelloController@doPayPlan'
+    ));
+
     Route::get('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
