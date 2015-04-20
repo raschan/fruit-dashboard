@@ -9,6 +9,13 @@
 if(isset($_ENV['development']))
 {
     // braintree development routes
+
+    Route::get('/plans', array(
+        'before'    => 'auth|api_key',
+        'as'        => 'dev.plan',
+        'uses'      => 'HelloController@showPlans'
+    ));
+
     Route::get('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
