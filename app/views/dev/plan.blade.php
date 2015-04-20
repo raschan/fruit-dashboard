@@ -1,24 +1,38 @@
+@extends('meta.base-user')
 
+  @section('pageContent')
 
+  <div id="content-wrapper" class='page-pricing'>
+    <div class="page-header text-center">
+      <h1><i class="page-header-icon"></i>Plans and Pricing</h1>
+    </div> <!-- / .page-header -->
+    @parent
+    <div class='plans-panel'>
+      <div class='plans-container'>
+        <!-- Free Plan -->
+        <div class='plan-col col-md-4'>
+          <div class='plan-header bg-light-green darken'>FREE</div>
+          <div class='plan-pricing bg-light-green'>Free of charge</div>
+          <ul class='plan-features'>
+            <li>public data</li>
+            <li>good for you</li>
+            <a href='/plans/free' class='bg-light-green darker'>ORDER NOW</a>
+          </ul>
+        </div>
+        <!-- /Free Plan -->
 
+        <!-- Basic Plan -->
+        <button class="btn-link sm-pull-right">Disconnect</button>
+        <!-- /Basic Plan -->
 
-<!-- Modal box -->
-<div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4 class="modal-title">Warning</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to disconnect stripe from your account? <br>
-        After disconnecting we will not receive any more data from stripe.</div>
-      <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-    </div>
-    </div> <!-- / .modal-content -->
-  </div> <!-- / .modal-dialog -->
-</div>
-<!-- /Modal box -->
-<button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+        <!-- Elite Plan -->
+        <button class="btn-link sm-pull-right">Disconnect</button>
+        <!-- /Elite Plan -->
+      </div> <!-- /.plans-container -->
+    </div> <!-- /.plans-panel -->
+  </div> <!-- /.content-wrapper -->
+  @stop
+
+  @section('pageScripts')
+
+  @stop

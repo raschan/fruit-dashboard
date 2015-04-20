@@ -4,7 +4,7 @@
 	<title>Braintree testing</title>
 
 	<!-- Braintree JS library -->
-	{{ HTML::script('https://js.braintreegateway.com/v2/braintree.js')}}
+	{{ HTML::script('https://js.braintreegateway.com/v2/braintree.js') }}
 </head>
 
 <body>

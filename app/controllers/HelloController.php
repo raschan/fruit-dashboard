@@ -19,12 +19,7 @@ A Controller for testing stuff
 
 class HelloController extends BaseController
 {
-    public function showHello()
-    {
-
-    }
-
-
+    
     /*
     |====================================================
     | <GET> | showUsers: showing the current users
@@ -125,6 +120,60 @@ class HelloController extends BaseController
     public function showPlans()
     {
         return View::make('dev.plan');
+    }
+
+    public function showPayPlan($planName) 
+    {
+        if($planName == 'free')
+        {
+            try {
+                $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
+            }
+            catch(Braintree_Exception_NotFound $e) {
+
+                $result = Braintree_Customer::create(array(
+                    'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
+                    'email' => Auth::user()->email,
+                ));
+                if($result->success)
+                {
+                    $customer = $result->customer;
+                } else {
+                    // needs error handling
+                }
+            }
+            $clientToken = Braintree_ClientToken::generate(array(
+                "customerId" => $customer->id
+            ));
+
+            return View::make('dev.payplan', array(
+                'planName'      =>$planName,
+                'clientToken'   =>$clientToken,
+            )); 
+        }
+    }
+
+    public function doPayPlan($planName)
+    {
+        if($planName == 'free')
+        {
+            if(Input::has('payment_method_nonce'))
+            {
+                $result = Braintree_Subscription::create(array(
+                    'planId' => 'development_fruit_analytics_free',
+                    'paymentMethodNonce' => Input::get('payment_method_nonce'))
+                );
+                
+                if($result->success)
+                {
+                    return Redirect::route('auth.dashboard')
+                        ->with('success','Subscribed to Free plan.');
+                } else {
+                    return Redirect::route('dev.plan')
+                        ->with('error',"Couldn't process payment, try again later.");
+                }
+            }
+        }
     }
 
     public function showBraintree()
