@@ -24,34 +24,7 @@ class HelloController extends BaseController
 
     }
 
-    /*
-    |====================================================
-    | <GET> | showStripe: renders the stripe testing page
-    |====================================================
-    */
-    public function showStripe()
-    {
-        //TEMPORARY SOLUTION!!!!
-        Calculator::saveMRR(Auth::user());
-        Calculator::saveCancellations(Auth::user());
-        Calculator::saveAU(Auth::user());
-        
-        setlocale(LC_MONETARY,"en_US");
 
-        return View::make(
-            'dev.stripe'
-        );
-    }
-
-    /*
-    |====================================================
-    | <GET> | showGYT: imports xls to database
-    |====================================================
-    */
-    public function showGYT()
-    {
-        return View::make('dev.gyt');
-    }
     /*
     |====================================================
     | <GET> | showUsers: showing the current users
@@ -149,40 +122,20 @@ class HelloController extends BaseController
 
     }
 
-
-    /*
-    |====================================================
-    | <GET> | showStripe: renders the stripe testing page
-    |====================================================
-    */
-    public function doStripe()
+    public function showPlans()
     {
-
-        //check if its our form
-        if (Session::token() !== Input::get('_token')) {
-            return Response::json(array(
-                'msg' => 'Unauthorized attempt to create setting'
-            ));
-        }
-        $charges = Auth::user()->getCharges();
-
-        return Response::json($charges);
+        return View::make('dev.plan');
     }
 
-    /*
-    |====================================================
-    | <GET> | showRashan: renders the testing page
-    |====================================================
-    */
     public function showBraintree()
     {
         try {
-            $customer = Braintree_Customer::find('development_analytics_user_'.Auth::user()->id);
+            $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
         }
         catch(Braintree_Exception_NotFound $e) {
 
             $result = Braintree_Customer::create(array(
-                'id' => 'development_analytics_user_'.Auth::user()->id,
+                'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
                 'email' => Auth::user()->email,
             ));
             if($result->success)
