@@ -119,59 +119,83 @@ class HelloController extends BaseController
 
     public function showPlans()
     {
-        return View::make('dev.plan');
+        return View::make('dev.plan',array(
+            'plans' => Braintree_Plan::all()
+        ));
     }
 
-    public function showPayPlan($planName) 
+
+    public function showPayPlan($planId)
     {
-        if($planName == 'free')
-        {
-            try {
-                $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
-            }
-            catch(Braintree_Exception_NotFound $e) {
-
-                $result = Braintree_Customer::create(array(
-                    'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
-                    'email' => Auth::user()->email,
-                ));
-                if($result->success)
-                {
-                    $customer = $result->customer;
-                } else {
-                    // needs error handling
-                }
-            }
-            $clientToken = Braintree_ClientToken::generate(array(
-                "customerId" => $customer->id
-            ));
-
-            return View::make('dev.payplan', array(
-                'planName'      =>$planName,
-                'clientToken'   =>$clientToken,
-            )); 
+        try {
+            $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
         }
+        catch(Braintree_Exception_NotFound $e) {
+
+            $result = Braintree_Customer::create(array(
+                'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
+                'email' => Auth::user()->email,
+            ));
+            if($result->success)
+            {
+                $customer = $result->customer;
+            } else {
+                // needs error handling
+            }
+        }
+
+        // generate clientToken for the user to make payment
+        $clientToken = Braintree_ClientToken::generate(array(
+            "customerId" => $customer->id
+        ));
+        // get the detials of the plan
+        $plans = Braintree_Plan::all();
+
+        // find the correct plan to show
+        // no way currently to get only one plan
+        foreach ($plans as $plan) {
+            // the plan id needs to be in .env.php (or any other assocc array) for easy access
+            if($plan->id == 'development_fruit_analytics_'.$planId)
+            {
+                $planName = $plan->name;
+            }
+        }
+
+        return View::make('dev.payplan', array(
+            'planName'      =>$planName,
+            'clientToken'   =>$clientToken,
+        )); 
     }
 
-    public function doPayPlan($planName)
+    public function doPayPlan($planId)
     {
-        if($planName == 'free')
+        if(Input::has('payment_method_nonce'))
         {
-            if(Input::has('payment_method_nonce'))
-            {
-                $result = Braintree_Subscription::create(array(
-                    'planId' => 'development_fruit_analytics_free',
-                    'paymentMethodNonce' => Input::get('payment_method_nonce'))
-                );
-                
-                if($result->success)
+            // get the detials of the plan
+            $plans = Braintree_Plan::all();
+            
+            // find the correct plan to show
+            // no way currently to get only one plan
+            foreach ($plans as $plan) {
+                if($plan->id == 'development_fruit_analytics_'.$planId)
                 {
-                    return Redirect::route('auth.dashboard')
-                        ->with('success','Subscribed to Free plan.');
-                } else {
-                    return Redirect::route('dev.plan')
-                        ->with('error',"Couldn't process payment, try again later.");
+                    $planName = $plan->name;
                 }
+            }
+            
+            // create the new subscription
+            $result = Braintree_Subscription::create(array(
+                'planId' => 'development_fruit_analytics_'.$planId,
+                'paymentMethodNonce' => Input::get('payment_method_nonce'))
+            );
+            
+            if($result->success)
+            {
+                return Redirect::route('auth.dashboard')
+                    ->with('success','Subscribed to '.$planName);
+            } else {
+                return Redirect::route('dev.plan')
+                    ->with('error',"Couldn't process payment, try again later.");
             }
         }
     }
