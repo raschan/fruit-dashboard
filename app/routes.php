@@ -10,24 +10,6 @@ if(isset($_ENV['development']))
 {
     // braintree development routes
 
-    Route::get('/plans', array(
-        'before'    => 'auth|api_key',
-        'as'        => 'dev.plan',
-        'uses'      => 'HelloController@showPlans'
-    ));
-
-    Route::get('/plans/{planName}', array(
-        'before'    => 'auth|api_key',
-        'as'        => 'dev.payplan',
-        'uses'      => 'HelloController@showPayPlan'
-    ));
-
-    Route::post('/plans/{planName}', array(
-        'before'    => 'auth|api_key',
-        'as'        => 'dev.payplan',
-        'uses'      => 'HelloController@doPayPlan'
-    ));
-
     Route::get('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
@@ -170,6 +152,24 @@ Route::get('statistics/{statID}', array(
     'before' => 'auth',
     'as' => 'auth.single_stat',
     'uses' => 'AuthController@showSinglestat'
+));
+
+Route::get('/plans', array(
+    'before'    => 'auth|api_key',
+    'as'        => 'auth.plan',
+    'uses'      => 'AuthController@showPlans'
+));
+
+Route::get('/plans/{planName}', array(
+    'before'    => 'auth|api_key',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@showPayPlan'
+));
+
+Route::post('/plans/{planName}', array(
+    'before'    => 'auth|api_key',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@doPayPlan'
 ));
 
 

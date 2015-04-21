@@ -51,9 +51,10 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
-                if (Auth::user()->plan == 'trial' && Auth::user()->created_at >= Carbon::now()->subDays(15))
+                // check if trial period is ended
+                if (Auth::user()->isTrialEnded())
                 {
-                    return Redirect::route('dev.plan')
+                    return Redirect::route('auth.plan')
                         ->with('error','Trial period ended.');
                 }
                 // check if already connected
@@ -161,6 +162,14 @@ class AuthController extends BaseController
         {
             return Redirect::route('auth.connect');
         }
+
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
+
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -199,12 +208,19 @@ class AuthController extends BaseController
     {
         // checking connections for the logged in user
         $user = Auth::user();
+        $plans = Braintree_Plan::all();
 
-        return View::make(
-            'auth.settings',
+        foreach ($plans as $plan) {
+            if ($plan->id =='fruit_analytics_plan_'.$user->plan) {
+                $planName = $plan->name;
+            }
+        }
+
+        return View::make('auth.settings',
             array(
-                'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected' => $user->isStripeConnected()
+                'paypal_connected'  => $user->isPayPalConnected(),
+                'stripe_connected'  => $user->isStripeConnected(),
+                'planName'          => $planName,
             )
         );
     }
@@ -595,6 +611,12 @@ class AuthController extends BaseController
     */
     public function showSinglestat($statID)
     {
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
 
         $currentMetrics = Calculator::currentMetrics();
         $metricValues = Metric::where('user', Auth::user()->id)
@@ -626,4 +648,108 @@ class AuthController extends BaseController
 
     }
 
+    public function showPlans()
+    {
+        return View::make('auth.plan',array(
+            'plans' => Braintree_Plan::all()
+        ));
+    }
+
+
+    public function showPayPlan($planId)
+    {
+        try {
+            $customer = Braintree_Customer::find('fruit_analytics_user_'.Auth::user()->id);
+        }
+        catch(Braintree_Exception_NotFound $e) {
+
+            $result = Braintree_Customer::create(array(
+                'id' => 'fruit_analytics_user_'.Auth::user()->id,
+                'email' => Auth::user()->email,
+            ));
+            if($result->success)
+            {
+                $customer = $result->customer;
+            } else {
+                // needs error handling
+            }
+        }
+
+        // generate clientToken for the user to make payment
+        $clientToken = Braintree_ClientToken::generate(array(
+            "customerId" => $customer->id
+        ));
+        // get the detials of the plan
+        $plans = Braintree_Plan::all();
+
+        // find the correct plan to show
+        // no way currently to get only one plan
+        foreach ($plans as $plan) {
+            // the plan id needs to be in .env.php (or any other assocc array) for easy access
+            if($plan->id == 'fruit_analytics_plan_'.$planId)
+            {
+                $planName = $plan->name;
+            }
+        }
+
+        return View::make('auth.payplan', array(
+            'planName'      =>$planName,
+            'clientToken'   =>$clientToken,
+        )); 
+    }
+
+    public function doPayPlan($planId)
+    {
+        if(Input::has('payment_method_nonce'))
+        {
+            // get the detials of the plan
+            $plans = Braintree_Plan::all();
+
+            $user = Auth::user();
+            
+            
+            // find the correct plan to show
+            // no way currently to get only one plan
+            foreach ($plans as $plan) {
+                if($plan->id == 'fruit_analytics_plan_'.$planId)
+                {
+                    $planName = $plan->name;
+                }
+            }
+
+            // lets see, if the user already has a subscripton
+            if ($user->subscriptionId)
+            {
+                try
+                {
+                    $result = Braintree_Subscription::cancel($user->subscriptionId);
+                }
+                catch (Exception $e)
+                {
+                    return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+                }
+            }   
+            
+            // create the new subscription
+            $result = Braintree_Subscription::create(array(
+                'planId' => 'fruit_analytics_plan_'.$planId,
+                'paymentMethodNonce' => Input::get('payment_method_nonce'))
+            );
+            
+            if($result->success)
+            {
+                // update user plan to subscrition
+                $user->plan = $planId;
+                $user->subscriptionId = $result->subscription->id;
+                $user->save();
+
+                return Redirect::route('auth.dashboard')
+                    ->with('success','Subscribed to '.$planName);
+            } else {
+                return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+            }
+        }
+    }
 }
