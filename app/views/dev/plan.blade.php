@@ -10,24 +10,39 @@
     <div class='plans-panel'>
       <div class='plans-container'>
         <!-- Free Plan -->
-        <div class='plan-col col-md-4'>
-          <div class='plan-header bg-light-green darken'>FREE</div>
-          <div class='plan-pricing bg-light-green'>Free of charge</div>
+        <div class='plan-col col-md-3 col-md-offset-3'>
+          <div class='plan-header bg-light-green darken'>{{$plans[1]->name}}</div>
+          <div class='plan-pricing bg-light-green'>
+            <span class='plan-value'>Free</span>
+          </div>
           <ul class='plan-features'>
-            <li>public data</li>
+            <li>public metrics</li>
             <li>good for you</li>
-            <a href='/plans/free' class='bg-light-green darker'>ORDER NOW</a>
+            <a href='/plans/free' class='bg-light-green darken'>SUBSCRIBE NOW</a>
           </ul>
         </div>
         <!-- /Free Plan -->
 
         <!-- Basic Plan -->
-        <button class="btn-link sm-pull-right">Disconnect</button>
+        <div class='plan-col col-md-3'>
+          <div class='plan-header bg-light-green darker'>{{$plans[0]->name}}</div>
+          <div class='plan-pricing bg-light-green darken'>
+            <span class='plan-currency'>$</span>
+            <span class='plan-value'>9</span>
+            <span class='plan-period'>/MO</span>
+          </div>
+          <ul class='plan-features'>
+            <li>private data</li>
+            <li>gooder for you</li>
+            <a href='/plans/basic' class='bg-light-green darker'>SUBSCRIBE NOW</a>
+          </ul>
+        </div>
         <!-- /Basic Plan -->
 
+        {{--
         <!-- Elite Plan -->
-        <button class="btn-link sm-pull-right">Disconnect</button>
         <!-- /Elite Plan -->
+        --}}
       </div> <!-- /.plans-container -->
     </div> <!-- /.plans-panel -->
   </div> <!-- /.content-wrapper -->
