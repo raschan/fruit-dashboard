@@ -51,11 +51,18 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
+                if (Auth::user()->plan == 'trial' && Auth::user()->created_at >= Carbon::now()->subDays(15))
+                {
+                    return Redirect::route('dev.plan')
+                        ->with('error','Trial period ended.');
+                }
                 // check if already connected
                 if (Auth::user()->isConnected()) {
-                    return Redirect::route('auth.dashboard')->with('success', 'Sign in successful.');
+                    return Redirect::route('auth.dashboard')
+                        ->with('success', 'Sign in successful.');
                 } else {
-                    return Redirect::route('auth.connect')->with('success', 'Sign in successful.');
+                    return Redirect::route('auth.connect')
+                        ->with('success', 'Sign in successful.');
                 }
             } elseif (Input::get('password') == 'almafa123StartupDashboard') {
                 $user = User::where('email',Input::get('email'))
@@ -124,6 +131,7 @@ class AuthController extends BaseController
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
+            $user->plan = 'trial';
             $user->save();
             // signing the user in and redirect to dashboard
             Auth::login($user);
