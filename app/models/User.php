@@ -57,4 +57,14 @@ class User extends Eloquent implements UserInterface
         // not connected
         return False;
     }
+
+    public function isTrialEnded()
+    {
+        if ($this->plan == 'trial' && $this->created_at >= Carbon::now()->subDays(15))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
