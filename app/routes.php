@@ -118,25 +118,25 @@ Route::post('settingsFrequency', array(
 
 Route::get('connect', array(
     'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@showConnect'
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
     'before' => 'auth',
-    'uses' => 'AuthController@connectProvider'
+    'uses' => 'ConnectController@connectProvider'
 ));
 
 Route::post('connect', array(
     'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@doConnect'
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@doConnect'
 ));
 
 Route::post('suggest', array(
     'before' => 'auth',
-    'as' => 'auth.suggest',
-    'uses' => 'AuthController@doSaveSuggestion'
+    'as'    => 'auth.suggest',
+    'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
 // disconnect
