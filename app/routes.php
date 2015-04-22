@@ -127,6 +127,11 @@ Route::get('connect/{provider}', array(
     'uses' => 'ConnectController@connectProvider'
 ));
 
+Route::post('connectBraintree',array(
+    'before'    => 'auth',
+    'uses'      => 'ConnectController@doBraintreeConnect'
+));
+
 Route::post('connect', array(
     'before' => 'auth',
     'as' => 'connect.connect',
@@ -154,6 +159,8 @@ Route::get('statistics/{statID}', array(
     'uses' => 'AuthController@showSinglestat'
 ));
 
+
+// subscribe routes
 Route::get('/plans', array(
     'before'    => 'auth|api_key',
     'as'        => 'auth.plan',

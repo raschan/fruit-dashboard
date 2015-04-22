@@ -49,13 +49,24 @@ class User extends Eloquent implements UserInterface
     public function isConnected()
     {
         if ($this->isStripeConnected() 
-            || $this->isPayPalConnected()) 
+            || $this->isPayPalConnected()
+            || $this->isBraintreeConnected()) 
         {
             // connected
             return True;
         }
         // not connected
         return False;
+    }
+
+    public function isBraintreeConnected()
+    {
+        if (strlen($this->btPublicKey) > 2)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public function isTrialEnded()

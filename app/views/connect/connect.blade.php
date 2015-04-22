@@ -68,7 +68,7 @@
           <div class="stripe-form-wrapper bordered">
             <div class="panel-body stripe-form">
               <div class='col-sm-4'>
-                <h4>Connect stripe</h4>
+                <h4>Connect Stripe</h4>
               </div>
               <div class="col-sm-2 col-sm-offset-1 text-center">
                 <span class="icon pf-big pf-stripe"></span>
@@ -137,7 +137,6 @@
         </div> <!-- /. row -->
         <!-- / Stripe connect -->
 
-        {{-- 
         <!-- Braintree connect -->
         <div class="row">
           <div class="braintree-form-wrapper bordered">
@@ -151,7 +150,7 @@
               @if ($braintree_connected)
                 <div class="col-sm-5">
                     <!-- Modal box -->
-                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                    <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                       <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -169,10 +168,10 @@
                       </div> <!-- / .modal-dialog -->
                     </div>
                     <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
               @else
                 <div class="col-sm-5">
-                  <a href="" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
+                  <a href="/connect/braintree" class="sm-pull-right btn btn-info" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
               @endif
               </div> <!-- /. col-sm-10 -->
 
@@ -180,7 +179,6 @@
           </div> <!-- /. col-sm-6 braintree-form-wrapper -->
         </div> <!-- /. row -->
         <!-- / Braintree connect -->
-        --}}
 
         <!-- Suggestion -->
         <div class="row">

@@ -34,10 +34,10 @@ class ConnectController extends BaseController
         // returning view
         return View::make('connect.connect',
             array(
-                //'redirect_url' => $redirectUrl,
-                //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
+
+                'braintree_connected'	=> $user->isBraintreeConnected(),
             )
         );
     }
@@ -82,6 +82,8 @@ class ConnectController extends BaseController
 
                     Queue::push('CalculateFirstTime', array('userID' => $user->id));
             	    
+			    	return Redirect::route('auth.dashboard')
+			    		->with('success', ucfirst($provider).' connected.');
     			} else if (isset($response['error'])) {
 
     				Log::error($response['error_description']);
@@ -107,8 +109,14 @@ class ConnectController extends BaseController
     				->with('error', 'Something went wrong, try again');
     		}
     	}
-    	return Redirect::route('auth.dashboard')
-    		->with('success', ucfirst($provider).' connected.');
+
+    	if ($provider == 'braintree')
+    	{
+    		return View::make('connect.braintreeConnect');
+    	}
+
+    	return Redirect::route('connect.connect')
+    		->with('error','Invalid payment provider.');
     }
 
     /*
@@ -130,18 +138,24 @@ class ConnectController extends BaseController
             $user->stripe_key = "";
             $user->stripeUserId = "";
             $user->stripeRefreshToken = "";
-            $user->ready = 'notConnected';
 
         } else if ($service == "braintree") {
-            // disconnecting paypal
+            // disconnecting braintree
 
-            // removing paypal refresh token
-            $user->paypal_key = "";
-
+            $user->btPrivateKey = '';
+            $user->btPublicKey = '';
+            $user->btEnvironment = '';
+            $user->btMerchantId = '';
+            
         }
-
         // saving modification on user
         $user->save();
+
+        if (!$user->isConnected())
+        {
+        	$user->ready = 'notConnected';
+        	$user->save();
+        }
 
         // redirect to connect
         return Redirect::route('connect.connect')
@@ -212,6 +226,62 @@ class ConnectController extends BaseController
         }
     }
 
+    public function doBraintreeConnect()
+    {
+    	// Validation
+    	// this one need better checks
+    	$rules = array(
+    		'publicKey' 	=> 'required',
+    		'privateKey'	=> 'required',
+    		'merchantId'	=> 'required');
+
+    	// run the validation rules on the inputs
+    	$validator = Validator::make(Input::all(), $rules);
+	   	
+	   	if ($validator->fails()) {
+            // validation error -> sending back
+            $failedAttribute = $validator->invalid();
+            return Redirect::back()
+                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
+                ->withInput(); // sending back data
+        } else {
+        	// data validated, now check if its braintree data
+
+        	Braintree_Configuration::environment(Input::get('environment'));
+        	Braintree_Configuration::merchantId(Input::get('merchantId'));
+        	Braintree_Configuration::publicKey(Input::get('publicKey'));
+        	Braintree_Configuration::privateKey(Input::get('privateKey'));
+
+        	try
+        	{
+        		Braintree_Plan::all();
+        	} 
+        	catch (Exception $e) 
+        	{
+        		return Redirect::back()
+        			->with('error','Authentication failed.');
+        	}
+
+        	$user = Auth::user();
+
+        	$user->btEnvironment = Input::get('environment');
+        	$user->btPublicKey = Input::get('publicKey');
+        	$user->btPrivateKey = Input::get('privatKey');
+        	$user->btMerchantId = Input::get('merchantId');
+
+//        	$user->ready = 'connecting';
+
+        	$user->save();
+
+        }
+
+    	return Redirect::route('auth.dashboard')
+    		->with('success','Braintree connected');
+
+    	return Redirect::back()
+    		->with('error','Connect failed');
+    }
+
     /*
     |===================================================
     | <POST> | doSaveSuggestion: updates user service data stripe only
@@ -219,6 +289,7 @@ class ConnectController extends BaseController
     */
     public function doSaveSuggestion()
     {
+    	// Validation
         $rules = array(
             'suggestion' => 'required'
             );
