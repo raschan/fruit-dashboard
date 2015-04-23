@@ -161,13 +161,13 @@ Route::get('/plans', array(
 ));
 
 Route::get('/plans/{planName}', array(
-    'before'    => 'auth|api_key',
+    'before'    => 'auth',
     'as'        => 'auth.payplan',
     'uses'      => 'AuthController@showPayPlan'
 ));
 
 Route::post('/plans/{planName}', array(
-    'before'    => 'auth|api_key',
+    'before'    => 'auth',
     'as'        => 'auth.payplan',
     'uses'      => 'AuthController@doPayPlan'
 ));

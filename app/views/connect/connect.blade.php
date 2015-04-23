@@ -85,7 +85,7 @@
                         <h4 class="modal-title">Warning</h4>
                         </div>
                         <div class="modal-body">
-                          Are you sure you want to disconnect stripe from your account? <br>
+                          Are you sure you want to disconnect Stripe from your account? <br>
                           After disconnecting we will not receive any more data from Stripe.</div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -204,7 +204,7 @@
                       {{ Form::text('suggestion', '', array(
                         'id' => 'id_suggestion',
                         'class' => 'form-control',
-                        'placeholder' => 'e.g: Braintree')) }}
+                        'placeholder' => 'e.g: PayPal')) }}
                     </div>
 
                     <div class="col-sm-2 text-center">
