@@ -13,26 +13,26 @@ if(isset($_ENV['development']))
     Route::get('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
-        'uses' => 'HelloController@showBraintree'
+        'uses' => 'DevController@showBraintree'
     ));
 
     Route::post('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
-        'uses' => 'HelloController@doBraintreePayment'
+        'uses' => 'DevController@doBraintreePayment'
     ));
 
 
     Route::get('/users', array(
         'before' => 'auth|api_key',
         'as' => 'dev.users',
-        'uses' => 'HelloController@showUsers'
+        'uses' => 'DevController@showUsers'
     ));
 
     Route::get('/paypal', array(
         'before' => 'auth|api_key',
         'as' => 'dev.paypal',
-        'uses' => 'HelloController@showPaypal'
+        'uses' => 'DevController@showPaypal'
     ));
 }
 

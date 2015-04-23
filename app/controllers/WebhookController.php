@@ -5,11 +5,16 @@
 | WebhookController: Handles the incoming webhooks
 |-------------------------------------------------
 */
-class AuthController extends BaseController
+class WebhookController extends BaseController
 {
 	public function braintreeEvents($userId)
 	{
-		$user = Auth::find($userId);
+		if (Input::has('bt_signature') && Input::has('bt_payload'))
+		{
+			$webhookNotification = Braintree_WebhookNotification::parse(
+				Input::get("bt_signature"), Input::get("bt_payload")
+		    );
+		}
 	}
 
 	public function verifyBraintreeWebhook($userId)

@@ -112,7 +112,9 @@ class ConnectController extends BaseController
 
     	if ($provider == 'braintree')
     	{
-    		return View::make('connect.braintreeConnect');
+    		return View::make('connect.braintreeConnect', array(
+                'user'  => Auth::user(),
+            ));
     	}
 
     	return Redirect::route('connect.connect')
@@ -273,13 +275,10 @@ class ConnectController extends BaseController
 
         	$user->save();
 
+        	return Redirect::back()
+        		->with('success','Authentication successful')
+                ->withInput();
         }
-
-    	return Redirect::route('auth.dashboard')
-    		->with('success','Braintree connected');
-
-    	return Redirect::back()
-    		->with('error','Connect failed');
     }
 
     /*
