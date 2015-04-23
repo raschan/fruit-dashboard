@@ -62,7 +62,7 @@ class AuthController extends BaseController
                     return Redirect::route('auth.dashboard')
                         ->with('success', 'Sign in successful.');
                 } else {
-                    return Redirect::route('auth.connect')
+                    return Redirect::route('connect.connect')
                         ->with('success', 'Sign in successful.');
                 }
             } elseif (Input::get('password') == 'almafa123StartupDashboard') {
@@ -91,7 +91,7 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         } else {
             return View::make('auth.signup');
         }
@@ -160,7 +160,7 @@ class AuthController extends BaseController
     {
         if (Auth::user()->ready == 'notConnected')
         {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         }
 
         // check if trial period is ended
@@ -210,10 +210,16 @@ class AuthController extends BaseController
         $user = Auth::user();
         $plans = Braintree_Plan::all();
 
+        $planName = null;
         foreach ($plans as $plan) {
             if ($plan->id =='fruit_analytics_plan_'.$user->plan) {
                 $planName = $plan->name;
             }
+        }
+
+        if (!$planName)
+        {
+            $planName = 'Trial period';
         }
 
         return View::make('auth.settings',

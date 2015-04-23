@@ -330,7 +330,7 @@
                 
               {{-- 
                 <!-- hidden for development, will not be rendered on client side -->   
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">PayPal</h4>
                   <p class="list-group-item-text">
@@ -344,7 +344,7 @@
                 <!-- / hidden for development, will not be rendered on client side -->
               --}}   
 
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
                   <p class="list-group-item-text">

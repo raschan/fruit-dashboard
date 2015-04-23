@@ -59,7 +59,7 @@ Route::filter('api_key', function()
     if (!Auth::user()->isConnected())
     {
         // no valid key
-        return Redirect::route('auth.connect');
+        return Redirect::route('connect.connect');
     }
 });
 
