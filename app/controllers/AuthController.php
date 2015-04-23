@@ -210,10 +210,16 @@ class AuthController extends BaseController
         $user = Auth::user();
         $plans = Braintree_Plan::all();
 
+        $planName = null;
         foreach ($plans as $plan) {
             if ($plan->id =='fruit_analytics_plan_'.$user->plan) {
                 $planName = $plan->name;
             }
+        }
+
+        if (!$planName)
+        {
+            $planName = 'Trial period';
         }
 
         return View::make('auth.settings',

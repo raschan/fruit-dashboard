@@ -16,9 +16,10 @@
             <span class='plan-value'>Free</span>
           </div>
           <ul class='plan-features'>
-            <li>public metrics</li>
-            <li>good for you</li>
-            <a href='/plans/free' class='bg-light-green darken'>SUBSCRIBE NOW</a>
+            <li>Create graphs</li>
+            <li>Create dashboards</li>
+            <li>100 Mb data storage</li>
+            <a href='/plans/free' class='bg-light-green darken'><h4>SIGN UP</h4></a>
           </ul>
         </div>
         <!-- /Free Plan -->
@@ -32,9 +33,13 @@
             <span class='plan-period'>/MO</span>
           </div>
           <ul class='plan-features'>
-            <li>private data</li>
-            <li>gooder for you</li>
-            <a href='/plans/basic' class='bg-light-green darker'>SUBSCRIBE NOW</a>
+            <li>Create graphs</li>
+            <li>Create dashboards</li>
+            <li>1000 Mb data storage</li>
+            <li>Control privacy settings</li>
+            <li>Add custom logo</li>
+            <li>Premium support</li>
+            <a href='/plans/basic' class='bg-light-green darker'><h4>SIGN UP</h4></a>
           </ul>
         </div>
         <!-- /Basic Plan -->
