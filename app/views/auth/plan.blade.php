@@ -11,7 +11,10 @@
       <div class='plans-container'>
         <!-- Free Plan -->
         <div class='plan-col col-md-3 col-md-offset-3'>
-          <div class='plan-header bg-light-green darken'>{{$plans[1]->name}}</div>
+          <div class='plan-header bg-light-green darken'>
+            <h4>{{$plans[1]->name}}</h4>
+            <span>{{$plans[1]->description}}</span>
+          </div>
           <div class='plan-pricing bg-light-green'>
             <span class='plan-value'>Free</span>
           </div>
@@ -26,7 +29,10 @@
 
         <!-- Basic Plan -->
         <div class='plan-col col-md-3'>
-          <div class='plan-header bg-light-green darker'>{{$plans[0]->name}}</div>
+          <div class='plan-header bg-light-green darker'>
+            <h4>{{$plans[0]->name}}</h4>
+            <span>{{$plans[0]->description}}</span>
+          </div>
           <div class='plan-pricing bg-light-green darken'>
             <span class='plan-currency'>$</span>
             <span class='plan-value'>9</span>
