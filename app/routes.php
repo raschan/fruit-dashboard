@@ -46,6 +46,7 @@ Route::get('/', function()
     return Redirect::route('auth.dashboard');
 });
 
+
 // sign up routes
 Route::get('signup', array(
     'as' => 'auth.signup',
@@ -56,6 +57,7 @@ Route::post('signup', array(
     'as' => 'auth.signup',
     'uses' => 'AuthController@doSignup'
 ));
+
 
 // sign in routes
 Route::get('signin', array(
@@ -68,21 +70,29 @@ Route::post('signin', array(
     'uses' => 'AuthController@doSignin'
 ));
 
+
 // sign out route
 Route::any('signout', array(
     'as' => 'auth.signout',
     'uses' => 'AuthController@doSignout'
 ));
 
-// dashboard route
+
+// metric graph routes
 Route::get('dashboard', array(
     'before' => 'auth',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
 
-// settings routes
+Route::get('statistics/{statID}', array(
+    'before' => 'auth',
+    'as' => 'auth.single_stat',
+    'uses' => 'AuthController@showSinglestat'
+));
 
+
+// settings routes
 Route::get('settings', array(
     'before' => 'auth',
     'as' => 'auth.settings',
@@ -114,8 +124,8 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
-// connect routes
 
+// connect routes
 Route::get('connect', array(
     'before' => 'auth',
     'as' => 'connect.connect',
@@ -144,19 +154,12 @@ Route::post('suggest', array(
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
+
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',
     'as' => 'auth.disconnect',
-    'uses' => 'AuthController@doDisconnect'
-));
-
-// single_stat route
-
-Route::get('statistics/{statID}', array(
-    'before' => 'auth',
-    'as' => 'auth.single_stat',
-    'uses' => 'AuthController@showSinglestat'
+    'uses' => 'ConnectController@doDisconnect'
 ));
 
 
@@ -176,21 +179,17 @@ Route::get('/plans/{planName}', array(
 Route::post('/plans/{planName}', array(
     'before'    => 'auth|api_key',
     'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@doPayPlan'
+    'uses'      => 'AuthController@doPayPlan',
 ));
 
 
-// adding a key to a user
-Route::get('addkey', array(
-    'as' => 'auth.addkey',
-    'before' => 'auth',
-    'uses' => 'AuthController@showAddKey'
+// webhook endpoints
+Route::get('/api/braintree/{userId}', array(
+    'uses'      => 'WebhookController@verifyBraintreeWebhook',
 ));
 
-Route::post('addkey', array(
-    'as' => 'auth.addkey',
-    'before' => 'auth',
-    'uses' => 'AuthController@doAddKey'
+Route::post('/api/braintree/{userId}', array(
+    'uses'      => 'WebhookController@braintreeEvents',
 ));
 
 /*
@@ -199,19 +198,17 @@ Route::post('addkey', array(
 |--------------------------------------------------------------------------
 */
 
-// single_stat
-Route::get('demo/statistics/{statID}', array(
-    'as' => 'demo.single_stat',
-    'uses' => 'DemoController@showSinglestat'
-));
-
 Route::get('demo', array(
     'as' => 'demo.dashboard',
     'uses' => 'DemoController@showDashboard'
 ));
 
-// dashboard route
 Route::get('demo/dashboard', array(
     'as' => 'demo.dashboard',
     'uses' => 'DemoController@showDashboard'
+));
+
+Route::get('demo/statistics/{statID}', array(
+    'as' => 'demo.single_stat',
+    'uses' => 'DemoController@showSinglestat'
 ));
