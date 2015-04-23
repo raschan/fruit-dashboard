@@ -74,36 +74,35 @@
                 <span class="icon pf-big pf-stripe"></span>
               </div> <!-- /. connect-icon -->
 
-              @if ($stripe_connected)
-                <div class="col-sm-5">
-                    <!-- Modal box -->
-                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                      <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h4 class="modal-title">Warning</h4>
+              <div class="col-sm-5">
+                @if ($stripe_connected)
+                      <!-- Modal box -->
+                      <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Warning</h4>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure you want to disconnect stripe from your account? <br>
+                              After disconnecting we will not receive any more data from stripe.</div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
                           </div>
-                          <div class="modal-body">
-                            Are you sure you want to disconnect stripe from your account? <br>
-                            After disconnecting we will not receive any more data from stripe.</div>
-                          <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                        </div>
-                        </div> <!-- / .modal-content -->
-                      </div> <!-- / .modal-dialog -->
-                    </div>
-                    <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-              @else
-                <div class="col-sm-10">
+                          </div> <!-- / .modal-content -->
+                        </div> <!-- / .modal-dialog -->
+                      </div>
+                      <!-- /Modal box -->
+                    <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                @else
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                   
                   <!--
                   <div style='display:none;'>
                     {{ Form::open(array(
-                      'route'=>'auth.connect',
+                      'route'=>'connect.connect',
                       'method' => 'post',
                       'id' => 'form-settings',
                       'class' => 'form-horizontal',
@@ -129,8 +128,8 @@
                     <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
                   </div>
                   -->
-              @endif
-              </div> <!-- /. col-sm-10 -->
+                @endif
+              </div> <!-- /. col-sm-5 -->
 
             </div> <!-- /. panel-body stripe-from -->
           </div> <!-- /. col-sm-6 stripe-form-wrapper -->
@@ -147,33 +146,32 @@
               <div class="col-sm-2 col-sm-offset-1 text-center">
                 <span class="icon pf-big pf-braintree"></span>
               </div> <!-- /. connect-icon -->
-              @if ($braintree_connected)
-                <div class="col-sm-5">
-                    <!-- Modal box -->
-                    <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                      <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h4 class="modal-title">Warning</h4>
-                          </div>
-                          <div class="modal-body">
-                            Are you sure you want to disconnect Braintree from your account? <br>
-                            After disconnecting we will not receive any more data from Braintree.</div>
-                          <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+              <div class="col-sm-5">
+                @if ($braintree_connected)
+                  <!-- Modal box -->
+                  <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Warning</h4>
                         </div>
-                        </div> <!-- / .modal-content -->
-                      </div> <!-- / .modal-dialog -->
-                    </div>
-                    <!-- /Modal box -->
+                        <div class="modal-body">
+                          Are you sure you want to disconnect Braintree from your account? <br>
+                          After disconnecting we will not receive any more data from Braintree.</div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                      </div>
+                      </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                  </div>
+                  <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
-              @else
-                <div class="col-sm-5">
+                @else
                   <a href="/connect/braintree" class="sm-pull-right btn btn-info" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
-              @endif
-              </div> <!-- /. col-sm-10 -->
+                @endif
+              </div> <!-- /. col-sm-5 -->
 
             </div> <!-- /. panel-body braintree-from -->
           </div> <!-- /. col-sm-6 braintree-form-wrapper -->

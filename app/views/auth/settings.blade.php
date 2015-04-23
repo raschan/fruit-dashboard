@@ -345,10 +345,22 @@
               --}}   
 
                 <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
-                  <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
+                  <i class="icon pf-big pf-stripe pull-left right-space"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
                   <p class="list-group-item-text">
                     @if($stripe_connected)
+                      <span class="up">Connected.</span>
+                    @else
+                      <span class="down">Not connected.</span>
+                    @endif
+                  </p>
+                </a> <!-- / .list-group-item -->
+
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
+                  <i class="icon pf-big pf-braintree pull-left right-space"></i>
+                  <h4 class="list-group-item-heading">Braintree</h4>
+                  <p class="list-group-item-text">
+                    @if($braintree_connected)
                       <span class="up">Connected.</span>
                     @else
                       <span class="down">Not connected.</span>
