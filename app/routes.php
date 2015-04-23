@@ -155,7 +155,7 @@ Route::get('statistics/{statID}', array(
 ));
 
 Route::get('/plans', array(
-    'before'    => 'auth|api_key',
+    'before'    => 'auth',
     'as'        => 'auth.plan',
     'uses'      => 'AuthController@showPlans'
 ));
