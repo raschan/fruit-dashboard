@@ -63,6 +63,15 @@ Route::filter('api_key', function()
     }
 });
 
+Route::filter('trial_ended', function()
+{
+    if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter
