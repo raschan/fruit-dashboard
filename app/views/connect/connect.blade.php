@@ -201,7 +201,7 @@
                       {{ Form::text('suggestion', '', array(
                         'id' => 'id_suggestion',
                         'class' => 'form-control',
-                        'placeholder' => 'e.g: Braintree')) }}
+                        'placeholder' => 'e.g: Paymill')) }}
                     </div>
 
                     <div class="col-sm-2 text-center">
