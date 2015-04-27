@@ -60,7 +60,7 @@ class User extends Eloquent implements UserInterface
 
     public function isTrialEnded()
     {
-        if ($this->plan == 'trial' && $this->created_at >= Carbon::now()->subDays(15))
+        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS']))
         {
             return true;
         } else {

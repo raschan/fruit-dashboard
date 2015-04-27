@@ -76,7 +76,7 @@ Route::any('signout', array(
 
 // dashboard route
 Route::get('dashboard', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
@@ -117,13 +117,13 @@ Route::post('settingsFrequency', array(
 // connect routes
 
 Route::get('connect', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'as' => 'connect.connect',
     'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'uses' => 'ConnectController@connectProvider'
 ));
 
@@ -149,7 +149,7 @@ Route::get('/disconnect/{service}', array(
 // single_stat route
 
 Route::get('statistics/{statID}', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'as' => 'auth.single_stat',
     'uses' => 'AuthController@showSinglestat'
 ));

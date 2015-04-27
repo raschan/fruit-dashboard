@@ -163,12 +163,6 @@ class AuthController extends BaseController
             return Redirect::route('connect.connect');
         }
 
-        // check if trial period is ended
-        if (Auth::user()->isTrialEnded())
-        {
-            return Redirect::route('auth.plan')
-                ->with('error','Trial period ended.');
-        }
 
         $allMetrics = array();
 
