@@ -13,7 +13,8 @@
 		"stripe/stripe-php": "*",
 		"doctrine/dbal" : "*",
 		"nwidart/db-exporter": "1.0",
-		"nesbot/carbon": "~1.14"
+		"nesbot/carbon": "~1.14",
+		"intercom/intercom-php": "~1.0"
 	},
 	"autoload": {
 		"classmap": [

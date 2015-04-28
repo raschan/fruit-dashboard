@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | AuthController: Handles the authentication related sites
@@ -50,7 +51,7 @@ class AuthController extends BaseController
             // attempt to do the login
             if (Auth::attempt($credentials)) {
                 // auth successful!
-
+                
                 // check if already connected
                 if (Auth::user()->isConnected()) {
                     return Redirect::route('auth.dashboard')->with('success', 'Sign in successful.');
@@ -119,12 +120,17 @@ class AuthController extends BaseController
 
             // create user
             $user = new User;
+
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
             $user->save();
+            
+            // create user on intercom
+            IntercomHelper::signup($user);
+
             // signing the user in and redirect to dashboard
             Auth::login($user);
             return Redirect::route('auth.signup')->with('success', 'Signup was successful.');
@@ -464,6 +470,8 @@ class AuthController extends BaseController
 
                 // saving user
                 $user->save();
+
+                IntercomHelper::connect($user,'stripe');
 
                 Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
