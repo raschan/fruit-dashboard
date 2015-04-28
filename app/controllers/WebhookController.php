@@ -14,6 +14,8 @@ class WebhookController extends BaseController
 			$webhookNotification = Braintree_WebhookNotification::parse(
 				Input::get("bt_signature"), Input::get("bt_payload")
 		    );
+
+		    Log::info($webhookNotification);
 		}
 	}
 
