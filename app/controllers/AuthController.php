@@ -376,8 +376,8 @@ class AuthController extends BaseController
 
         return Redirect::to('/settings')
             ->with('success', 'Edit was succesful.');
-        }
     }
+    
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page
