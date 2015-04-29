@@ -82,10 +82,10 @@
         <div class='col-md-6 col-md-offset-3'>
           <p class='lead'>Then add this webhook to keep your data synced</p>
         </div>
-        <div class='col-md-4 col-md-offset-3'>
+        <div class='col-md-6 col-md-offset-3'>
           <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
         </div>
-      </div>
+      </div> <!-- /row -->
     </div>
 
   @stop
