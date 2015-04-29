@@ -139,7 +139,7 @@ class AuthController extends BaseController
             $user->save();
             
             // create user on intercom
-            IntercomHelper::signup($user);
+            IntercomHelper::signedup($user);
 
             // signing the user in and redirect to dashboard
             Auth::login($user);
@@ -438,8 +438,9 @@ class AuthController extends BaseController
         catch(Braintree_Exception_NotFound $e) {
 
             $result = Braintree_Customer::create(array(
-                'id' => 'fruit_analytics_user_'.Auth::user()->id,
-                'email' => Auth::user()->email,
+                'id'        => 'fruit_analytics_user_'.Auth::user()->id,
+                'email'     => Auth::user()->email,
+                'firstName' => Auth::user()->email,
             ));
             if($result->success)
             {
@@ -507,9 +508,9 @@ class AuthController extends BaseController
             
             // create the new subscription
             $result = Braintree_Subscription::create(array(
-                'planId' => 'fruit_analytics_plan_'.$planId,
-                'paymentMethodNonce' => Input::get('payment_method_nonce'))
-            );
+                'planId'                => 'fruit_analytics_plan_'.$planId,
+                'paymentMethodNonce'    => Input::get('payment_method_nonce'),
+            ));
             
             if($result->success)
             {
@@ -517,6 +518,8 @@ class AuthController extends BaseController
                 $user->plan = $planId;
                 $user->subscriptionId = $result->subscription->id;
                 $user->save();
+
+                IntercomHelper::subscribed($user,$planId);
 
                 return Redirect::route('auth.dashboard')
                     ->with('success','Subscribed to '.$planName);
