@@ -160,7 +160,7 @@ class BaseStat
             $data['nineMonthChange'] = null;
         }
 
-        if ($oneYearValue && $oneMonthValue != 0) {
+        if ($oneYearValue && $oneYearValue != 0) {
             $changeInPercent = (static::getStatOnDay($currentDay) / $oneYearValue * 100) - 100;
             $data['oneYearChange'] = round($changeInPercent) . '%';
         } else {
