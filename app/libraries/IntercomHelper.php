@@ -16,12 +16,10 @@ class IntercomHelper {
 	{
 		$intercom = self::createInstance();
 
-		$intercom->createUser(array('email' => $user->email));
-
-		$intercom->createEvent(array(
-			'event_name' 	=> 'signed-up',
-			'created_at' 	=> time(),
-			'email'			=> $user->email,
+		$intercom->createUser(array(
+			'name'			=> $user->email,
+			'email' 		=> $user->email,
+			'created_at'	=> Carbon::parse($user->created_at)->timestamp,
 		));
 	}
 
@@ -29,6 +27,14 @@ class IntercomHelper {
 	{
 		$intercom = self::createInstance();
 		
+		// general connect
+		$intercom->createEvent(array(
+			'event_name'	=> 'connected',
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+
+		// witch provider
 		$intercom->createEvent(array(
 			'event_name' 	=> 'connected-'.$provider,
 			'created_at' 	=> time(),
