@@ -80,7 +80,7 @@ class ConnectController extends BaseController
                     // saving user
                     $user->save();
 
-                    IntercomHelper::connect($user,'stripe');
+                    IntercomHelper::connected($user,'stripe');
 
                     Queue::push('CalculateFirstTime', array('userID' => $user->id));
             	    
@@ -200,7 +200,7 @@ class ConnectController extends BaseController
                 // saving user
                 $user->save();
 
-                IntercomHelper::connect($user,'stripe');
+                IntercomHelper::connected($user,'stripe');
 
                 Queue::push('CalculateFirstTime', array('userID' => $user->id));
 
