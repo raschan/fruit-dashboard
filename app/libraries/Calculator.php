@@ -405,141 +405,137 @@ class Calculator
         
         foreach ($events as $id => $event)
         {
-            // if stripe event
-            if ($event->provider == 'stripe')
-            {
-                // decoding object
+            // decoding object
 
-                $tempArray = json_decode(strstr($event->object, '{'), true);
-                $tempString = strstr($event->object, '{');
-                $prevTempArray = !is_null($event->previousAttributes)
-                                    ? json_decode(strstr($event->previousAttributes , '{'), true)
-                                    : null;
+            $tempArray = json_decode(strstr($event->object, '{'), true);
+            $tempString = strstr($event->object, '{');
+            $prevTempArray = !is_null($event->previousAttributes)
+                                ? json_decode(strstr($event->previousAttributes , '{'), true)
+                                : null;
 
-                // formatting and creating data for return array
-                // type eg. 'charge.succeeded'
-                $eventArray[$i]['type'] = $event->type;
-                // provider eg. 'stripe'
-                $eventArray[$i]['provider'] = $event->provider;
-                // date eg. '02-11 20:44'
-                $eventArray[$i]['date'] = date('m-d H:i', strtotime($event->created));
+            // formatting and creating data for return array
+            // type eg. 'charge.succeeded'
+            $eventArray[$i]['type'] = $event->type;
+            // provider eg. 'stripe'
+            $eventArray[$i]['provider'] = $event->provider;
+            // date eg. '02-11 20:44'
+            $eventArray[$i]['date'] = date('m-d H:i', strtotime($event->created));
 
-                // name eg. 'chris'
-                if (array_key_exists('card', $tempArray)){
-                    if(array_key_exists('name', $tempArray['card'])){
-                        if($tempArray['card']['name']){
-                            $eventArray[$i]['name'] = $tempArray['card']['name'];
-                        }
-                        else {
-                            $eventArray[$i]['name'] = 'Someone';
-                        }
+            // name eg. 'chris'
+            if (array_key_exists('card', $tempArray)){
+                if(array_key_exists('name', $tempArray['card'])){
+                    if($tempArray['card']['name']){
+                        $eventArray[$i]['name'] = $tempArray['card']['name'];
                     }
                     else {
-                        $eventArray[$i]['name'] = 'Another guy';
+                        $eventArray[$i]['name'] = 'Someone';
                     }
                 }
                 else {
-                    $eventArray[$i]['name'] = 'Some company';
+                    $eventArray[$i]['name'] = 'Another guy';
                 }
-                // currency
-                if (array_key_exists('currency', $tempArray)){
-                    $eventArray[$i]['currency'] = $tempArray['currency'];
+            }
+            else {
+                $eventArray[$i]['name'] = 'Some company';
+            }
+            // currency
+            if (array_key_exists('currency', $tempArray)){
+                $eventArray[$i]['currency'] = $tempArray['currency'];
+            }
+            elseif (array_key_exists('plan', $tempArray)){
+                if (array_key_exists('currency', $tempArray['plan'])){
+                    $eventArray[$i]['currency'] = $tempArray['plan']['currency'];
                 }
-                elseif (array_key_exists('plan', $tempArray)){
-                    if (array_key_exists('currency', $tempArray['plan'])){
-                        $eventArray[$i]['currency'] = $tempArray['plan']['currency'];
-                    }
+            }
+            else {
+                $eventArray[$i]['currency'] = null;
+            }
+            
+            // amount paid
+            if(array_key_exists('amount', $tempArray)){
+                $eventArray[$i]['amount'] = $tempArray['amount'];
+            }
+            elseif (array_key_exists('amount_due', $tempArray)){
+                $eventArray[$i]['amount'] = $tempArray['amount_due'];
+            }
+            elseif (array_key_exists('plan', $tempArray)){
+                if (array_key_exists('amount', $tempArray['plan'])){
+                    $eventArray[$i]['amount'] = $tempArray['plan']['amount'];
                 }
-                else {
-                    $eventArray[$i]['currency'] = null;
+            }
+            elseif (array_key_exists('amount_refunded', $tempArray)){
+                $eventArray[$i]['amount'] = $tempArray['amount_refunded'];
+            }
+            else {
+                $eventArray[$i]['amount'] = null;
+            }
+            // plan name
+            if (array_key_exists('plan', $tempArray)){
+                if (array_key_exists('name', $tempArray['plan'])){
+                    $eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
                 }
-                
-                // amount paid
-                if(array_key_exists('amount', $tempArray)){
-                    $eventArray[$i]['amount'] = $tempArray['amount'];
-                }
-                elseif (array_key_exists('amount_due', $tempArray)){
-                    $eventArray[$i]['amount'] = $tempArray['amount_due'];
-                }
-                elseif (array_key_exists('plan', $tempArray)){
-                    if (array_key_exists('amount', $tempArray['plan'])){
-                        $eventArray[$i]['amount'] = $tempArray['plan']['amount'];
-                    }
-                }
-                elseif (array_key_exists('amount_refunded', $tempArray)){
-                    $eventArray[$i]['amount'] = $tempArray['amount_refunded'];
-                }
-                else {
-                    $eventArray[$i]['amount'] = null;
-                }
-                // plan name
-                if (array_key_exists('plan', $tempArray)){
-                    if (array_key_exists('name', $tempArray['plan'])){
-                        $eventArray[$i]['plan_name'] = $tempArray['plan']['name'];
-                    }
-                }
-                // plan interval
-                if (array_key_exists('plan', $tempArray))
+            }
+            // plan interval
+            if (array_key_exists('plan', $tempArray))
+            {
+            switch ($tempArray['plan']['interval']) 
                 {
-                switch ($tempArray['plan']['interval']) 
+                    case 'day':
+                        $eventArray[$i]['plan_interval'] = 'daily';
+                        break;
+                    case 'week':
+                        $eventArray[$i]['plan_interval'] = 'weekly';
+                        break;
+                    case 'month':
+                        $eventArray[$i]['plan_interval'] = 'daily';
+                        break;
+                    case 'year':
+                        $eventArray[$i]['plan_interval'] = 'yearly';
+                        break;
+                    default:
+                        // don't do anything
+                }
+            }
+            // previous plan ID, name, interval and amount
+            if (!is_null($prevTempArray))
+            {
+                if (array_key_exists('plan', $prevTempArray))
+                {
+                    $eventArray[$i]['prevPlanID'] = $prevTempArray['plan']['id'];
+                    $eventArray[$i]['prevPlanName'] = $prevTempArray['plan']['name'];
+                    $eventArray[$i]['prevPlanAmount'] = $prevTempArray['plan']['amount'];
+
+                    switch ($prevTempArray['plan']['interval']) 
                     {
                         case 'day':
-                            $eventArray[$i]['plan_interval'] = 'daily';
+                            $eventArray[$i]['prevPlanInterval'] = 'daily';
                             break;
                         case 'week':
-                            $eventArray[$i]['plan_interval'] = 'weekly';
+                            $eventArray[$i]['prevPlanInterval'] = 'weekly';
                             break;
                         case 'month':
-                            $eventArray[$i]['plan_interval'] = 'daily';
+                            $eventArray[$i]['prevPlanInterval'] = 'daily';
                             break;
                         case 'year':
-                            $eventArray[$i]['plan_interval'] = 'yearly';
+                            $eventArray[$i]['prevPlanInterval'] = 'yearly';
                             break;
                         default:
                             // don't do anything
                     }
                 }
-                // previous plan ID, name, interval and amount
-                if (!is_null($prevTempArray))
-                {
-                    if (array_key_exists('plan', $prevTempArray))
-                    {
-                        $eventArray[$i]['prevPlanID'] = $prevTempArray['plan']['id'];
-                        $eventArray[$i]['prevPlanName'] = $prevTempArray['plan']['name'];
-                        $eventArray[$i]['prevPlanAmount'] = $prevTempArray['plan']['amount'];
-    
-                        switch ($prevTempArray['plan']['interval']) 
-                        {
-                            case 'day':
-                                $eventArray[$i]['prevPlanInterval'] = 'daily';
-                                break;
-                            case 'week':
-                                $eventArray[$i]['prevPlanInterval'] = 'weekly';
-                                break;
-                            case 'month':
-                                $eventArray[$i]['prevPlanInterval'] = 'daily';
-                                break;
-                            case 'year':
-                                $eventArray[$i]['prevPlanInterval'] = 'yearly';
-                                break;
-                            default:
-                                // don't do anything
-                        }
-                    }
-                }
+            }
 
-                // if the event is a coupon event
+            // if the event is a coupon event
 
-                if (isset($tempArray['coupon']))
+            if (isset($tempArray['coupon']))
+            {
+                $eventArray[$i]['newCoupon'] = $tempArray['coupon']['id'];
+
+                if (!is_null($prevTempArray)) 
                 {
-                    $eventArray[$i]['newCoupon'] = $tempArray['coupon']['id'];
-    
-                    if (!is_null($prevTempArray)) 
-                    {
-                        $eventArray[$i]['prevCoupon'] = $prevTempArray['coupon']['id'];
-                    }
+                    $eventArray[$i]['prevCoupon'] = $prevTempArray['coupon']['id'];
                 }
-            } // end if stripe event
+            }
             $i++;
         }// end foreach
         return $eventArray;

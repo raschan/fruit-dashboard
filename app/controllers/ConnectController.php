@@ -249,7 +249,7 @@ class ConnectController extends BaseController
         } else {
         	// data validated, now check if its braintree data
 
-        	Braintree_Configuration::environment(Input::get('environment'));
+            Braintree_Configuration::environment(Input::get('environment'));
         	Braintree_Configuration::merchantId(Input::get('merchantId'));
         	Braintree_Configuration::publicKey(Input::get('publicKey'));
         	Braintree_Configuration::privateKey(Input::get('privateKey'));

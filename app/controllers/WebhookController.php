@@ -16,27 +16,27 @@ class WebhookController extends BaseController
 			$user = User::find($userId);
 			Log::info('Incoming webhook for user: '.$user->email);
 			
-			$webhookNoti = Braintree_WebhookNotification::parse(
+			$notification = Braintree_WebhookNotification::parse(
 				Input::get("bt_signature"), Input::get("bt_payload")
 		    );
 
 			// format the event to the common format
 		    $event = array();
-		    $event['created'] = $webhookNoti->timestamp->getTimestamp();
+		    $event['created'] = $notification->timestamp->getTimestamp();
 		    
 
 		    // converting braintree event types to stripe event types
 		    try {
-		    	$event['type'] = BraintreeHelper::setEventType($webhookNoti->kind);
+		    	$event['type'] = BraintreeHelper::setEventType($notification->kind);
 		    } catch (Exception $e) {
-		    	Log::info('New type of event is introduced: '.$webhookNoti->kind);
-		    	$event['type'] = $webhookNoti->kind;
+		    	Log::info('New type of event is introduced: '.$notification->kind);
+		    	$event['type'] = $notification->kind;
 		    }
 
 
 		    // convert braintree object to stripe object
 		    try {
-		    	$event['data']['object'] = BraintreeHelper::convertObjectFormat($webhookNoti->subject, $event['type']);
+		    	$event['data'] = BraintreeHelper::convertObjectFormat($notification, $event['type'], $user);
 		    } catch (Exception $e) {
 		    	Log::error($e);
 		    	$event['data']['object'] = null;
@@ -55,8 +55,8 @@ class WebhookController extends BaseController
             $newEvent->previousAttributes   = isset($event['data']['previous_attributes'])
                                                 ? json_encode($event['data']['previous_attributes'])
                                                 : null;
+            $newEvent->original				= json_encode($notification);
             $newEvent->save();
-
 		}
 	}
 
