@@ -7,14 +7,6 @@
 
 <body class="theme-asphalt page-signup" style="">
 
-  <!-- Page background -->
-  <div id="page-signup-bg">
-    <!-- Background overlay -->
-    <div class="overlay"></div>
-    {{ HTML::image('img/backgrounds/advertise_background.jpg','', array('class' => 'image')) }}
-  </div>
-  <!-- / Page background -->
-
   <!-- Container -->
   <div class="signup-container">
     <!-- Header -->

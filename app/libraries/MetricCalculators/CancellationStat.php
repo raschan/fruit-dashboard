@@ -63,7 +63,7 @@ class CancellationStat extends BaseStat {
     * @return array of int
     */
 
-    public static function calculateHistory($timestamp, $user, $firstDate)
+    public static function calculateHistory($timestamp, $user)
     {
         // return array
         $historyCanc = array();

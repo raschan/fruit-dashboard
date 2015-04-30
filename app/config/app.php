@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => 'http://localhost:8001',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -123,7 +123,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
 		'Barryvdh\Queue\AsyncServiceProvider',
-		'Nwidart\DbExporter\DbExportHandlerServiceProvider'
+		'Nwidart\DbExporter\DbExportHandlerServiceProvider',
+		'Waavi\Mailman\MailmanServiceProvider',
 	),
 
 	/*
@@ -190,8 +191,11 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+		
 		'Carbon'			=> 'Carbon\Carbon',
-
+		'Client'			=> 'GuzzleHttp\Client',
+		'Mailman' 			=> 'Waavi\Mailman\Facades\Facade',
+		
 	),
 
 );
