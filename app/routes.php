@@ -6,40 +6,35 @@
 |--------------------------------------------------------------------------
 */
 
-Route::get('/rashan', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.rashan',
-    'uses' => 'HelloController@showRashan'
-));
+if(isset($_ENV['development']))
+{
+    // braintree development routes
 
-Route::get('/users', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.users',
-    'uses' => 'HelloController@showUsers'
-));
+    Route::get('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@showBraintree'
+    ));
 
-Route::get('/gyt', array(
-    'as' => 'dev.gyt',
-    'uses' => 'HelloController@showGYT'
-));
+    Route::post('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@doBraintreePayment'
+    ));
 
-Route::get('/stripe', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.stripe',
-    'uses' => 'HelloController@showStripe'
-));
-Route::post('/stripe', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.stripe',
-    'uses' => 'HelloController@ajaxGetMrr'
-));
 
-Route::get('/paypal', array(
-    'before' => 'auth|api_key',
-    'as' => 'dev.paypal',
-    'uses' => 'HelloController@showPaypal'
-));
+    Route::get('/users', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.users',
+        'uses' => 'HelloController@showUsers'
+    ));
 
+    Route::get('/paypal', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.paypal',
+        'uses' => 'HelloController@showPaypal'
+    ));
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +76,7 @@ Route::any('signout', array(
 
 // dashboard route
 Route::get('dashboard', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
@@ -122,26 +117,26 @@ Route::post('settingsFrequency', array(
 // connect routes
 
 Route::get('connect', array(
-    'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@showConnect'
+    'before' => 'auth|trial_ended',
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
-    'before' => 'auth',
-    'uses' => 'AuthController@connectProvider'
+    'before' => 'auth|trial_ended',
+    'uses' => 'ConnectController@connectProvider'
 ));
 
 Route::post('connect', array(
     'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@doConnect'
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@doConnect'
 ));
 
 Route::post('suggest', array(
     'before' => 'auth',
-    'as' => 'auth.suggest',
-    'uses' => 'AuthController@doSaveSuggestion'
+    'as'    => 'auth.suggest',
+    'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
 // disconnect
@@ -154,9 +149,27 @@ Route::get('/disconnect/{service}', array(
 // single_stat route
 
 Route::get('statistics/{statID}', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended',
     'as' => 'auth.single_stat',
     'uses' => 'AuthController@showSinglestat'
+));
+
+Route::get('/plans', array(
+    'before'    => 'auth',
+    'as'        => 'auth.plan',
+    'uses'      => 'AuthController@showPlans'
+));
+
+Route::get('/plans/{planName}', array(
+    'before'    => 'auth',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@showPayPlan'
+));
+
+Route::post('/plans/{planName}', array(
+    'before'    => 'auth',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@doPayPlan'
 ));
 
 

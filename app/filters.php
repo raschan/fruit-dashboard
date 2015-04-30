@@ -59,8 +59,17 @@ Route::filter('api_key', function()
     if (!Auth::user()->isConnected())
     {
         // no valid key
-        return Redirect::route('auth.connect');
+        return Redirect::route('connect.connect');
     }
+});
+
+Route::filter('trial_ended', function()
+{
+    if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
 });
 
 /*

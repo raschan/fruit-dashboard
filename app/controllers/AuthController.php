@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | AuthController: Handles the authentication related sites
@@ -51,11 +52,20 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
+                // check if trial period is ended
+                if (Auth::user()->isTrialEnded())
+                {
+                    return Redirect::route('auth.plan')
+                        ->with('error','Trial period ended.');
+                }
+
                 // check if already connected
                 if (Auth::user()->isConnected()) {
-                    return Redirect::route('auth.dashboard')->with('success', 'Sign in successful.');
+                    return Redirect::route('auth.dashboard')
+                        ->with('success', 'Sign in successful.');
                 } else {
-                    return Redirect::route('auth.connect')->with('success', 'Sign in successful.');
+                    return Redirect::route('connect.connect')
+                        ->with('success', 'Sign in successful.');
                 }
             } elseif (Input::get('password') == 'almafa123StartupDashboard') {
                 $user = User::where('email',Input::get('email'))
@@ -83,7 +93,7 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         } else {
             return View::make('auth.signup');
         }
@@ -119,12 +129,18 @@ class AuthController extends BaseController
 
             // create user
             $user = new User;
+
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
+            $user->plan = 'trial';
             $user->save();
+            
+            // create user on intercom
+            IntercomHelper::signedup($user);
+
             // signing the user in and redirect to dashboard
             Auth::login($user);
             return Redirect::route('auth.signup')->with('success', 'Signup was successful.');
@@ -151,8 +167,10 @@ class AuthController extends BaseController
     {
         if (Auth::user()->ready == 'notConnected')
         {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         }
+
+
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -191,12 +209,25 @@ class AuthController extends BaseController
     {
         // checking connections for the logged in user
         $user = Auth::user();
+        $plans = Braintree_Plan::all();
 
-        return View::make(
-            'auth.settings',
+        $planName = null;
+        foreach ($plans as $plan) {
+            if ($plan->id =='fruit_analytics_plan_'.$user->plan) {
+                $planName = $plan->name;
+            }
+        }
+
+        if (!$planName)
+        {
+            $planName = 'Trial period';
+        }
+
+        return View::make('auth.settings',
             array(
-                'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected' => $user->isStripeConnected()
+                'paypal_connected'  => $user->isPayPalConnected(),
+                'stripe_connected'  => $user->isStripeConnected(),
+                'planName'          => $planName,
             )
         );
     }
@@ -345,241 +376,8 @@ class AuthController extends BaseController
 
         return Redirect::to('/settings')
             ->with('success', 'Edit was succesful.');
-        }
-
-    /*
-    |===================================================
-    | <GET> | showConnect: renders the connect page
-    |===================================================
-    */
-    public function showConnect()
-    {
-        /*
-        // getting paypal api context
-        $apiContext = PayPalHelper::getApiContext();
-
-        // building up redirect url
-        $redirectUrl = OpenIdSession::getAuthorizationUrl(
-            route('paypal.buildToken'),
-            array('profile', 'email', 'phone'),
-            null,
-            null,
-            null,
-            $apiContext
-        );
-        */
-        // selecting logged in user
-        $user = Auth::user();
-        
-        // returning view
-        return View::make('auth.connect',
-            array(
-                //'redirect_url' => $redirectUrl,
-                //'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected'  => $user->isStripeConnected(),
-                'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
-            )
-        );
     }
-
-    /*
-    |===================================================
-    | <GET> | connectProvider: return route for connecting a provider
-    |===================================================
-    */
-    public function connectProvider($provider)
-    {
-    	if ($provider == 'stripe') {
-    		$user = Auth::user();
-            if(Input::has('code'))
-            {
-    			// get the token with the code
-    			$response = OAuth2::getRefreshToken(Input::get('code'));
-
-    			if(isset($response['refresh_token']))
-    			{
-	    			$user->stripeRefreshToken = $response['refresh_token'];
-                    $user->stripeUserId = $response['stripe_user_id'];
-
-	    			Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-    	            $account = Stripe\Account::retrieve($user->stripeUserId);
-        	        // success
-            	    $returned_object = json_decode(strstr($account, '{'), true);
-
-                    // save user
-                    $user->ready = 'connecting';
-
-                    // setting name if is null
-                    if (strlen($user->name) == 0) {
-                        $user->name = $returned_object['display_name'];
-                    }
-                    if (strlen($user->zoneinfo) == 0) {
-                        $user->zoneinfo = $returned_object['country'];
-                    }
-
-                    // saving user
-                    $user->save();
-
-                    Queue::push('CalculateFirstTime', array('userID' => $user->id));
-            	    
-    			} else if (isset($response['error'])) {
-
-    				Log::error($response['error_description']);
-    				return Redirect::route('auth.connect')
-    					->with('error', 'Something went wrong, try again later');
-    			} else {
-
-    				Log::error("Something went wrong with stripe connect, don't know what");
-    				return Redirect::route('auth.connect')
-    					->with('error', 'Something went wrong, try again later');
-    			}
-
-    		} else if (Input::has('error')) {
-    			// there was an error in the request
-
-                Log::error(Input::get('error_description'));
-    			return Redirect::route('auth.connect')
-    				->with('error',Input::get('error_description'));
-    		} else {
-    			// we don't know what happened
-                Log:error('Unknown error with user: '.$user->email);
-    			return Redirect::route('auth.connect')
-    				->with('error', 'Something went wrong, try again');
-    		}
-    	}
-    	return Redirect::route('auth.dashboard')
-    		->with('success', ucfirst($provider).' connected.');
-    }
-
-    /*
-    |===================================================
-    | <GET> | doDisconnect: disconnects the active user
-    |===================================================
-    */
-    public function doDisconnect($service)
-    {
-        // NOTE: should we also remove the colleced DB data?
-
-        // selecting the logged in User
-        $user = Auth::user();
-
-        if ($service == "stripe") {
-            // disconnecting stripe
-
-            // removing stripe key
-            $user->stripe_key = "";
-            $user->stripeUserId = "";
-            $user->stripeRefreshToken = "";
-            $user->ready = 'notConnected';
-
-        } else if ($service == "paypal") {
-            // disconnecting paypal
-
-            // removing paypal refresh token
-            $user->paypal_key = "";
-
-        }
-
-        // saving modification on user
-        $user->save();
-
-        // redirect to connect
-        return Redirect::route('auth.connect')
-        	->with('success', 'Disconnected from ' . $service . '.');
-    }
-
-
-    /*
-    |===================================================
-    | <POST> | doConnect: updates user service data stripe only
-    |===================================================
-    */
-    public function doConnect()
-    {
-        // Validation
-        $rules = array(
-            'stripe' => 'min:16|max:64|required'
-        );
-
-        // run the validation rules on the inputs
-        $validator = Validator::make(Input::all(), $rules);
-
-        if ($validator->fails()) {
-            // validation error -> sending back
-            $failedAttribute = $validator->invalid();
-            return Redirect::back()
-                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
-                ->withInput(); // sending back data
-        } else {
-            // validator success
-            try {
-
-                // trying to login with this key
-                Stripe\Stripe::setApiKey(Input::get('stripe'));
-                $account = Stripe\Account::retrieve(); // catchable line
-                // success
-                $returned_object = json_decode(strstr($account, '{'), true);
-
-                // updating the user
-                $user = Auth::user();
-                $user->ready = 'connecting';
-
-                // setting key
-                $user->stripe_key = Input::get('stripe');
-
-                // setting name if is null
-                if (strlen($user->name) == 0) {
-                    $user->name = $returned_object['display_name'];
-                }
-                if (strlen($user->zoneinfo) == 0) {
-                    $user->zoneinfo = $returned_object['country'];
-                }
-
-                // saving user
-                $user->save();
-
-                Queue::push('CalculateFirstTime', array('userID' => $user->id));
-
-            } catch(Stripe\Error\Authentication $e) {
-                // code was invalid
-                return Redirect::back()->with('error',"Authentication unsuccessful!");
-            }
-
-        // redirect to get stripe
-        return Redirect::route('auth.dashboard')
-                        ->with(array('success' => 'Stripe connected.'));
-
-        }
-    }
-
-    /*
-    |===================================================
-    | <POST> | doSaveSuggestion: updates user service data stripe only
-    |===================================================
-    */
-    public function doSaveSuggestion()
-    {
-        $rules = array(
-            'suggestion' => 'required'
-            );
-
-        $validator = Validator::make(Input::all(), $rules);
-
-        if ($validator->fails()) {
-            // validation error -> sending back
-            $failedAttribute = $validator->invalid();
-            return Redirect::back()
-                ->with('error',$validator->errors()->get(key($failedAttribute))[0]) // send back errors
-                ->withInput(); // sending back data
-        } else {
-            DB::table('suggestions')->insert(array(
-                'suggestion' => Input::get('suggestion'),
-                'email' => Auth::user()->email));
-        }
-
-        return Redirect::route('auth.connect')
-                        ->with(array('success' => "Thank you, we'll get in touch"));
-    }
+    
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page
@@ -587,6 +385,12 @@ class AuthController extends BaseController
     */
     public function showSinglestat($statID)
     {
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
 
         $currentMetrics = Calculator::currentMetrics();
         $metricValues = Metric::where('user', Auth::user()->id)
@@ -618,4 +422,111 @@ class AuthController extends BaseController
 
     }
 
+    public function showPlans()
+    {
+        return View::make('auth.plan',array(
+            'plans' => Braintree_Plan::all()
+        ));
+    }
+
+
+    public function showPayPlan($planId)
+    {
+        try {
+            $customer = Braintree_Customer::find('fruit_analytics_user_'.Auth::user()->id);
+        }
+        catch(Braintree_Exception_NotFound $e) {
+
+            $result = Braintree_Customer::create(array(
+                'id'        => 'fruit_analytics_user_'.Auth::user()->id,
+                'email'     => Auth::user()->email,
+                'firstName' => Auth::user()->email,
+            ));
+            if($result->success)
+            {
+                $customer = $result->customer;
+            } else {
+                // needs error handling
+            }
+        }
+
+        // generate clientToken for the user to make payment
+        $clientToken = Braintree_ClientToken::generate(array(
+            "customerId" => $customer->id
+        ));
+        // get the detials of the plan
+        $plans = Braintree_Plan::all();
+
+        // find the correct plan to show
+        // no way currently to get only one plan
+        foreach ($plans as $plan) {
+            // the plan id needs to be in .env.php (or any other assocc array) for easy access
+            if($plan->id == 'fruit_analytics_plan_'.$planId)
+            {
+                $planName = $plan->name;
+            }
+        }
+
+        return View::make('auth.payplan', array(
+            'planName'      =>$planName,
+            'clientToken'   =>$clientToken,
+        )); 
+    }
+
+    public function doPayPlan($planId)
+    {
+        if(Input::has('payment_method_nonce'))
+        {
+            // get the detials of the plan
+            $plans = Braintree_Plan::all();
+
+            $user = Auth::user();
+            
+            
+            // find the correct plan to show
+            // no way currently to get only one plan
+            foreach ($plans as $plan) {
+                if($plan->id == 'fruit_analytics_plan_'.$planId)
+                {
+                    $planName = $plan->name;
+                }
+            }
+
+            // lets see, if the user already has a subscripton
+            if ($user->subscriptionId)
+            {
+                try
+                {
+                    $result = Braintree_Subscription::cancel($user->subscriptionId);
+                }
+                catch (Exception $e)
+                {
+                    return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+                }
+            }   
+            
+            // create the new subscription
+            $result = Braintree_Subscription::create(array(
+                'planId'                => 'fruit_analytics_plan_'.$planId,
+                'paymentMethodNonce'    => Input::get('payment_method_nonce'),
+            ));
+            
+            if($result->success)
+            {
+                // update user plan to subscrition
+                $user->plan = $planId;
+                $user->subscriptionId = $result->subscription->id;
+                $user->save();
+
+                IntercomHelper::subscribed($user,$planId);
+
+                return Redirect::route('auth.dashboard')
+                    ->with('success','Subscribed to '.$planName);
+            } else {
+                return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+            }
+        }
+    }
 }
