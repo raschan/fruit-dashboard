@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://dashboard.tryfruit.com',
+	'url' => 'https://dashboard.tryfruit.com',
 
 	/*
 	|--------------------------------------------------------------------------

@@ -26,5 +26,5 @@ return array(
    |
    */
 
-   'url' => 'http://startupdashboard-dev.abfinformatika.hu',
+   'url' => 'https://development-dash.tryfruit.com',
 );
