@@ -16,7 +16,8 @@ class User extends Eloquent implements UserInterface
     public function isStripeConnected()
     {
         // at this point validation like this is all right
-        if (strlen($this->stripe_key) > 16) {
+        if (strlen($this->stripe_key) > 16 
+            || strlen($this->stripeUserId) > 1) {
             // long enough key
             return True;
         }

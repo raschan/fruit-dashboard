@@ -26,5 +26,5 @@ return array(
    |
    */
 
-   'url' => 'http://supdashboard-dev.abfinformatika.hu',
+   'url' => 'http://startupdashboard-dev.abfinformatika.hu',
 );

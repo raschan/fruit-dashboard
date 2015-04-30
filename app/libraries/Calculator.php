@@ -102,16 +102,20 @@ class Calculator
         $todayDate = date('Y-m-d', $timestamp);    
 
         // request and save events
+        Log::info('Connecting user: '.$user->email);
+        Log::info('Saving events');
         self::saveEvents($user);
+        Log::info('Events saved, calculating metrics');
         // get first event date
         $firstDate = Event::where('user', $user->id)
                         ->orderBy('date','asc')
                         ->first();
-        
-        if($firstDate) {
+
+        if($firstDate)
+        {
             $firstDate = $firstDate->date;
         } else {
-            $firstDate = date('Y-m-d',time());
+            $firstDate = date('Y-m-d', time());
         }
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
@@ -122,7 +126,7 @@ class Calculator
         // reverse calculate from events
         $historyMRR = MrrStat::calculateHistory($timestamp,$user,$firstDate,$starterMRR);
         $historyAU = AUStat::calculateHistory($timestamp,$user,$firstDate,$starterAU);
-        $historyCancellation = CancellationStat::calculateHistory($timestamp,$user,$firstDate);
+        $historyCancellation = CancellationStat::calculateHistory($timestamp,$user);
         // calculate arr, arpu, uc
         $historyUC = UserChurnStat::calculateHistory($historyCancellation['monthly'], $historyAU);
         $historyARR = ArrStat::calculateHistory($historyMRR);
@@ -155,6 +159,7 @@ class Calculator
 
             $metrics->save();
         }
+        Log::info('Calculations done');
     }
 
     /**

@@ -42,11 +42,12 @@ class CalculateMetrics extends Command {
         foreach (User::all() as $user) {
         	// check if user is connected and ready (in case he is just connecting)
         	// or it's demo user
-        	if(($user->isStripeConnected() && $user->ready) || $user->id == 1)
+        	if(($user->isStripeConnected() && $user->ready == 'connected') || $user->id == 1)
         	{
         		// saving events
 	            Calculator::calculateMetrics($user,time());
 	        }
         }
+        Log::info('CalculateMetrics finished');
 	}
 }

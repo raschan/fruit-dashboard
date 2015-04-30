@@ -10,6 +10,20 @@
 
       <div class="col-md-10 col-md-offset-1">
 
+        {{--
+        <!-- SSL cert. -->
+        <div class="row">
+          <div class="certificate-wrapper bordered">
+            <div class="panel-body certificate">
+              <span class="lead col-sm-6">Don't worry we're using secure protocols here.</span>
+              <a href="https://www.positivessl.com" class='sm-pull-right text-center'>
+                <img src="https://www.positivessl.com/images-new/PositiveSSL_tl_white2.png" alt="SSL Certificate" title="SSL Certificate" border="0"/>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- /SSL cert. -->
+        --}}
       {{-- 
         <!-- hidden for development, will not be rendered on client side -->   
         <!-- PayPal connect-->
@@ -59,62 +73,64 @@
                 <i class="fa icon fa-cc-stripe fa-4x"></i>
               </div> <!-- /. connect-icon -->
 
-              <div class="col-sm-10">
-                @if ($stripe_connected)
-                  <!-- Modal box -->
-                  <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Warning</h4>
+              @if ($stripe_connected)
+                <div class="col-sm-10">
+                    <!-- Modal box -->
+                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                      <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Warning</h4>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to disconnect stripe from your account? <br>
+                            After disconnecting we will not receive any more data from stripe.</div>
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
                         </div>
-                        <div class="modal-body">
-                          Are you sure you want to disconnect stripe from your account? <br>
-                          After disconnecting we will not receive any more data from stripe.</div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                      </div>
-                      </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
+                        </div> <!-- / .modal-content -->
+                      </div> <!-- / .modal-dialog -->
+                    </div>
+                    <!-- /Modal box -->
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+              @else
+                <div class="col-sm-10">
+                  <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
+                  
+                  <!--
+                  <div style='display:none;'>
+                    {{ Form::open(array(
+                      'route'=>'auth.connect',
+                      'method' => 'post',
+                      'id' => 'form-settings',
+                      'class' => 'form-horizontal',
+                      'role' => 'form' )) }}
+
+                        <div class="form-group">
+                          {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
+                            'class' => 'col-sm-3 control-label text-left-always')) }}
+                          <div class="col-sm-7">      
+                            {{ Form::text('stripe', '', array(
+                              'id' => 'id_stripe',
+                              'class' => 'form-control',
+                              'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
+                          </div>
+                          <div class="col-sm-2 text-center">
+                          {{ Form::submit('Connect', array(
+                              'id' => 'id_submit',
+                              'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
+                              'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
+                          </div>
+                        </div>
+                    {{ Form::close() }}
+                    <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
                   </div>
-                  <!-- /Modal box -->
-                <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-                @else
-                {{ Form::open(array(
-                  'route'=>'auth.connect',
-                  'method' => 'post',
-                  'id' => 'form-settings',
-                  'class' => 'form-horizontal',
-                  'role' => 'form' )) }}
-
-                    <div class="form-group">
-
-                      {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
-                        'class' => 'col-sm-3 control-label text-left-always')) }}
-                      <div class="col-sm-7">      
-                        {{ Form::text('stripe', '', array(
-                          'id' => 'id_stripe',
-                          'class' => 'form-control',
-                          'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
-                      </div>
-
-                      <div class="col-sm-2 text-center">
-                      {{ Form::submit('Connect', array(
-                          'id' => 'id_submit',
-                          'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                          'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
-                      </div>
-
-                    </div> <!-- / .form-group -->
-
-                {{ Form::close() }}
-                <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
-
-                @endif
-
+                  -->
+              @endif
               </div> <!-- /. col-sm-10 -->
+
             </div> <!-- /. panel-body stripe-from -->
           </div> <!-- /. col-sm-6 stripe-form-wrapper -->
         </div> <!-- /. row -->

@@ -370,17 +370,86 @@ class AuthController extends BaseController
         */
         // selecting logged in user
         $user = Auth::user();
-
+        
         // returning view
         return View::make('auth.connect',
             array(
                 //'redirect_url' => $redirectUrl,
                 //'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected' => $user->isStripeConnected()
+                'stripe_connected'  => $user->isStripeConnected(),
+                'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
             )
         );
     }
 
+    /*
+    |===================================================
+    | <GET> | connectProvider: return route for connecting a provider
+    |===================================================
+    */
+    public function connectProvider($provider)
+    {
+    	if ($provider == 'stripe') {
+    		$user = Auth::user();
+            if(Input::has('code'))
+            {
+    			// get the token with the code
+    			$response = OAuth2::getRefreshToken(Input::get('code'));
+
+    			if(isset($response['refresh_token']))
+    			{
+	    			$user->stripeRefreshToken = $response['refresh_token'];
+                    $user->stripeUserId = $response['stripe_user_id'];
+
+	    			Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+    	            $account = Stripe\Account::retrieve($user->stripeUserId);
+        	        // success
+            	    $returned_object = json_decode(strstr($account, '{'), true);
+
+                    // save user
+                    $user->ready = 'connecting';
+
+                    // setting name if is null
+                    if (strlen($user->name) == 0) {
+                        $user->name = $returned_object['display_name'];
+                    }
+                    if (strlen($user->zoneinfo) == 0) {
+                        $user->zoneinfo = $returned_object['country'];
+                    }
+
+                    // saving user
+                    $user->save();
+
+                    Queue::push('CalculateFirstTime', array('userID' => $user->id));
+            	    
+    			} else if (isset($response['error'])) {
+
+    				Log::error($response['error_description']);
+    				return Redirect::route('auth.connect')
+    					->with('error', 'Something went wrong, try again later');
+    			} else {
+
+    				Log::error("Something went wrong with stripe connect, don't know what");
+    				return Redirect::route('auth.connect')
+    					->with('error', 'Something went wrong, try again later');
+    			}
+
+    		} else if (Input::has('error')) {
+    			// there was an error in the request
+
+                Log::error(Input::get('error_description'));
+    			return Redirect::route('auth.connect')
+    				->with('error',Input::get('error_description'));
+    		} else {
+    			// we don't know what happened
+                Log:error('Unknown error with user: '.$user->email);
+    			return Redirect::route('auth.connect')
+    				->with('error', 'Something went wrong, try again');
+    		}
+    	}
+    	return Redirect::route('auth.dashboard')
+    		->with('success', ucfirst($provider).' connected.');
+    }
 
     /*
     |===================================================
@@ -399,6 +468,9 @@ class AuthController extends BaseController
 
             // removing stripe key
             $user->stripe_key = "";
+            $user->stripeUserId = "";
+            $user->stripeRefreshToken = "";
+            $user->ready = 'notConnected';
 
         } else if ($service == "paypal") {
             // disconnecting paypal
@@ -412,7 +484,8 @@ class AuthController extends BaseController
         $user->save();
 
         // redirect to connect
-        return Redirect::route('auth.connect')->with('success', 'Disconnected from ' . $service . '.');;
+        return Redirect::route('auth.connect')
+        	->with('success', 'Disconnected from ' . $service . '.');
     }
 
 
@@ -474,8 +547,7 @@ class AuthController extends BaseController
 
         // redirect to get stripe
         return Redirect::route('auth.dashboard')
-                        ->with(array('success' => 'Stripe connected.',
-                            'connected' => 'connected'));
+                        ->with(array('success' => 'Stripe connected.'));
 
         }
     }
