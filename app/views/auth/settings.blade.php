@@ -235,8 +235,6 @@
                 </div>
               {{ Form::close() }}
 
-                <!-- hidden password change form -->
-
               <!-- Summary Email Frequency -->
               <!-- choose from dropdown -->
               {{ Form::open(array(
@@ -264,7 +262,7 @@
                   </div> <!-- / .form-group -->
                 </div>
 
-                <!-- hidden password change form -->
+                <!-- hidden notification change form -->
 
                 <div id="changeFrequencyForm" class="hidden-form">
                   <div class="form-group @if ($errors->first('new_frequency')) has-error @endif">
@@ -297,7 +295,26 @@
                 </div>
               {{ Form::close() }}
 
-              <!-- 3 buttons for 3 options -->
+            <!-- Subscription -->
+
+            {{ Form::open(array(
+              'action' => 'AuthController@showPlans',
+              'role' => 'form',
+              'class' => 'form-horizontal' )) }}
+
+              <div id="">
+                <div class="form-group">
+                  {{ Form::label('id_plan', 'Subscription', array(
+                    'class' => 'col-sm-4 control-label')) }}
+                  <div class="col-sm-8">
+                    <p class="form-control-static">
+                      {{ $planName }} 
+                      <a href='plans'><button id="editPlan" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Changing subscription"]);mixpanel.track("Changing subscription");'>Edit</button></a>
+                    </p>
+                  </div>
+                </div> <!-- / .form-group -->
+              </div>
+            {{ Form::close() }}
               
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
@@ -313,7 +330,7 @@
                 
               {{-- 
                 <!-- hidden for development, will not be rendered on client side -->   
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">PayPal</h4>
                   <p class="list-group-item-text">
@@ -327,7 +344,7 @@
                 <!-- / hidden for development, will not be rendered on client side -->
               --}}   
 
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
                   <p class="list-group-item-text">
