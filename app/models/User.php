@@ -67,4 +67,14 @@ class User extends Eloquent implements UserInterface
             return false;
         }
     }
+
+    public function trialWillEndInDays($days)
+    {
+        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS'] - $days))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
