@@ -53,4 +53,16 @@ class IntercomHelper {
 			'email'			=> $user->email,
 		));
 	}
+
+	public static function cancelled($user)
+	{
+		$intercom = self::createInstance();
+
+		// subscription cancelled
+		$intercom->createEvent(array(
+			'event_name'	=> 'cancelled-subscription',
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
 }

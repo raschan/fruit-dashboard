@@ -11,10 +11,13 @@
 |
 */
 
-App::before(function($request)
+if (!App::environment('local'))
 {
-    //
-});
+    App::before(function($request)
+    {
+        //
+    });
+}
 
 
 App::after(function($request, $response)
@@ -66,10 +69,19 @@ Route::filter('api_key', function()
 Route::filter('trial_ended', function()
 {
     if (Auth::user()->isTrialEnded())
-        {
-            return Redirect::route('auth.plan')
-                ->with('error','Trial period ended.');
-        }
+    {
+        return Redirect::route('auth.plan')
+            ->with('error','Trial period ended.');
+    }
+});
+
+Route::filter('cancelled', function()
+{
+    if (Auth::user()->plan = 'cancelled')
+    {
+        return Redirect::route('auth.plan')
+            ->with('error','Please subscribe.');
+    }
 });
 
 /*

@@ -220,7 +220,14 @@ class AuthController extends BaseController
 
         if (!$planName)
         {
-            $planName = 'Trial period';
+            if($user->plan == 'trial')
+            {
+               $planName = 'Trial period';
+            }
+            if($user->plan == 'cancelled')
+            {
+                $planName = 'No subscription';
+            }
         }
 
         return View::make('auth.settings',
@@ -528,5 +535,36 @@ class AuthController extends BaseController
                     ->with('error',"Couldn't process subscription, try again later.");
             }
         }
+    }
+    public function doCancelSubscription()
+    {
+        $user = Auth::user();
+
+        if ($user->subscriptionId)
+        {
+            try
+            {
+                $result = Braintree_Subscription::cancel($user->subscriptionId);
+            }
+            catch (Exception $e)
+            {
+                return Redirect::back()
+                    ->with('error',"Couldn't process subscription, try again later.");
+            }
+
+            $user->subscriptionId = '';
+            $user->plan = 'cancelled';
+
+            $user->save();
+
+            IntercomHelper::cancelled($user);
+
+            return Redirect::route('auth.plan')
+                ->with('success','Unsubscribed successfully');
+        } else {
+            Redirect::back()
+                ->with('error','No valid subscription');
+        }
+
     }
 }
