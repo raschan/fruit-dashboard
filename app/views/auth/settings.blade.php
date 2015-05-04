@@ -323,7 +323,9 @@
                     {{ Form::label('id_plan', 'Subscription', array(
                       'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
-                      @if($planName == 'No subscription' || $planName == 'Trial period')
+                      @if($planName == 'No subscription' 
+                          || $planName == 'Trial period' 
+                          || $planName == 'Trial period ended')
                         <a href='/plans'><button class='btn btn-success btn-flat pull-right' type='button' id='changePlan'>
                           Subscribe
                         </button></a>

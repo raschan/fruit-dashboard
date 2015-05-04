@@ -226,7 +226,11 @@ class AuthController extends BaseController
             }
             if($user->plan == 'cancelled')
             {
-                $planName = 'No subscription';
+                $planName = 'Not subscribed';
+            }
+            if($user->plan == 'trial_ended')
+            {
+                $planName = 'Trial period ended';
             }
         }
 

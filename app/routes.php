@@ -34,6 +34,11 @@ if(App::environment('local', 'development'))
         'as' => 'dev.paypal',
         'uses' => 'HelloController@showPaypal'
     ));
+
+    Route::get('test', array(
+        'as'    => 'dev.test',
+        'uses'  => 'HelloController@showTest'
+    ));
 }
 
 /*
