@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 */
 
-if(isset($_ENV['development']))
+if(App::environment('local', 'development'))
 {
     // braintree development routes
 
@@ -76,7 +76,7 @@ Route::any('signout', array(
 
 // dashboard route
 Route::get('dashboard', array(
-    'before' => 'auth|trial_ended',
+    'before' => 'auth|trial_ended|cancelled',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
@@ -114,16 +114,21 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
+Route::post('cancelSubscription', array(
+    'before'    => 'auth',
+    'uses'      => 'AuthController@doCancelSubscription'
+));
+
 // connect routes
 
 Route::get('connect', array(
-    'before' => 'auth|trial_ended',
+    'before' => 'auth|trial_ended|cancelled',
     'as' => 'connect.connect',
     'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
-    'before' => 'auth|trial_ended',
+    'before' => 'auth|trial_ended|cancelled',
     'uses' => 'ConnectController@connectProvider'
 ));
 
@@ -149,7 +154,7 @@ Route::get('/disconnect/{service}', array(
 // single_stat route
 
 Route::get('statistics/{statID}', array(
-    'before' => 'auth|trial_ended',
+    'before' => 'auth|trial_ended|cancelled',
     'as' => 'auth.single_stat',
     'uses' => 'AuthController@showSinglestat'
 ));
