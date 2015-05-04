@@ -19,7 +19,12 @@ A Controller for testing stuff
 
 class HelloController extends BaseController
 {
-    
+    public function showTest()
+    {
+        return View::make('dev.test',array(
+        //    'time' => $time
+        ));
+    }
     /*
     |====================================================
     | <GET> | showUsers: showing the current users

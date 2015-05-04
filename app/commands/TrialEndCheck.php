@@ -43,21 +43,28 @@ class TrialEndCheck extends Command {
 		{
 			if($user->isTrialEnded())
 			{
-				// 'trial ended' actions come here
+				if ($user->plan == 'trial')
+				{ 
+					// this is the first time we are checking it
+					$user->plan = 'trial_ended';
+	            	$user->save();
+					
+					// 'trial ended' actions come here
+				} 
 			}
-			if($user->trialWillEndInDays(3)) 
+			if($user->trialWillEndExactlyInDays(3)) 
 			{
 				// 'trial will end' actions come here
 			}
-			if($user->trialWillEndInDays(-1))
+			if($user->trialWillEndExactlyInDays(-1))
 			{
 				// 'after 1 day' action
 			}
-			if($user->trialWillEndInDays(-7))
+			if($user->trialWillEndExactlyInDays(-7))
 			{
 				// 'after 7 days' action
 			}
-			if($user->trialWillEndInDays(-14))
+			if($user->trialWillEndExactlyInDays(-14))
 			{
 				// 'after 17 days' action
 			}

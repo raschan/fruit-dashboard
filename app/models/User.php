@@ -60,7 +60,10 @@ class User extends Eloquent implements UserInterface
 
     public function isTrialEnded()
     {
-        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS']))
+        $trialEndDate = Carbon::parse($this->created_at)->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']);
+
+        if ($this->plan == 'trial_ended' 
+            || ($this->plan == 'trial' && $trialEndDate->isPast()))
         {
             return true;
         } else {
@@ -69,12 +72,38 @@ class User extends Eloquent implements UserInterface
     }
 
     public function trialWillEndInDays($days)
-    {
-        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS'] - $days))
+    {   
+        $daysRemaining = $this->daysRemaining();
+
+        if ($this->plan == 'trial' && $daysRemaining < $days)
         {
             return true;
         } else {
             return false;
         }
+    }
+
+    public function trialWillEndExactlyInDays($days)
+    {
+        $daysRemaining = $this->daysRemaining();
+
+        if ($this->plan == 'trial' && $daysRemaining == $days)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function daysRemaining()
+    {
+        $days = 100;
+
+        $now = Carbon::now();
+        $signup = Carbon::parse($this->created_at);
+
+        $days = $now->diffInDays($signup->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']), false);
+
+        return $days;
     }
 }
