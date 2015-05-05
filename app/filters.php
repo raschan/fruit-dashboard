@@ -11,14 +11,13 @@
 |
 */
 
-App::before(function($request)
+if (!App::environment('local'))
 {
     if(!Request::secure())
     {
         return Redirect::secure(Request::path());
     }
-});
-
+}
 
 App::after(function($request, $response)
 {
@@ -62,7 +61,25 @@ Route::filter('api_key', function()
     if (!Auth::user()->isConnected())
     {
         // no valid key
-        return Redirect::route('auth.connect');
+        return Redirect::route('connect.connect');
+    }
+});
+
+Route::filter('trial_ended', function()
+{
+    if (Auth::user()->isTrialEnded())
+    {
+        return Redirect::route('auth.plan')
+            ->with('error','Trial period ended.');
+    }
+});
+
+Route::filter('cancelled', function()
+{
+    if (Auth::user()->plan = 'cancelled')
+    {
+        return Redirect::route('auth.plan')
+            ->with('error','Please subscribe.');
     }
 });
 
