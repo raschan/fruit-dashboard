@@ -37,6 +37,7 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
+    Log::info('accessing auth page');
     if (Auth::guest())
     {
         if (Request::ajax())
@@ -47,6 +48,10 @@ Route::filter('auth', function()
         {
             return Redirect::route('auth.signin');
         }
+    } else {
+        var_dump(Auth::guest());
+        Log::info('not guest');
+        exit();
     }
 });
 
