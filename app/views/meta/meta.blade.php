@@ -27,6 +27,10 @@
       {{ HTML::style('css/font-awesome.min.css') }}
       <!-- /FontAwesome -->
 
+      <!-- PaymentFonts CSS -->
+      {{ HTML::style('css/paymentfont.min.css') }}
+      <!-- /PaymentFonts CSS -->
+
       <!-- PixelAdmin -->
       {{ HTML::style('css/pixel-admin.min.css') }}
       {{ HTML::style('css/themes.min.css') }}
