@@ -45,8 +45,8 @@ class GenerateEmails extends Command {
 				->with($data)
 				->to('rashan86@gmail.com')
 				->subject('[Fruit Analytics] Your free trial is ending.')
-				//->show();
-				->send();
+				->show();
+				//->send();
 
 		File::put(public_path().'/development_email.html',$email);
 	}

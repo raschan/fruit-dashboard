@@ -7,7 +7,7 @@
     <div class='email-container'>
     {{-- Turn this into a table --}}
     {{-- 3x3 size, 1st and 3rd column are just for correct middle alignment --}}
-      <table>
+      <table style='width:100%;'>
         {{-- header, 1st row of table --}}
         <tr>
           <td class='email-filler'></td>
