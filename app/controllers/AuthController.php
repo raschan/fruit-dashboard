@@ -165,12 +165,6 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
-        if (Auth::user()->ready == 'notConnected')
-        {
-            return Redirect::route('connect.connect');
-        }
-
-
         $allMetrics = array();
 
         // get the metrics we are calculating right now
