@@ -19,38 +19,11 @@ A Controller for testing stuff
 
 class HelloController extends BaseController
 {
-    public function showHello()
+    public function showTest()
     {
-
-    }
-
-    /*
-    |====================================================
-    | <GET> | showStripe: renders the stripe testing page
-    |====================================================
-    */
-    public function showStripe()
-    {
-        //TEMPORARY SOLUTION!!!!
-        Calculator::saveMRR(Auth::user());
-        Calculator::saveCancellations(Auth::user());
-        Calculator::saveAU(Auth::user());
-        
-        setlocale(LC_MONETARY,"en_US");
-
-        return View::make(
-            'dev.stripe'
-        );
-    }
-
-    /*
-    |====================================================
-    | <GET> | showGYT: imports xls to database
-    |====================================================
-    */
-    public function showGYT()
-    {
-        return View::make('dev.gyt');
+        return View::make('dev.test',array(
+        //    'time' => $time
+        ));
     }
     /*
     |====================================================
@@ -149,93 +122,48 @@ class HelloController extends BaseController
 
     }
 
+    
 
-    /*
-    |====================================================
-    | <GET> | showStripe: renders the stripe testing page
-    |====================================================
-    */
-    public function doStripe()
+    public function showBraintree()
     {
-
-        //check if its our form
-        if (Session::token() !== Input::get('_token')) {
-            return Response::json(array(
-                'msg' => 'Unauthorized attempt to create setting'
-            ));
+        try {
+            $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
         }
-        $charges = Auth::user()->getCharges();
+        catch(Braintree_Exception_NotFound $e) {
 
-        return Response::json($charges);
-    }
-
-    /*
-    |====================================================
-    | <GET> | showRashan: renders the testing page
-    |====================================================
-    */
-    public function showRashan()
-    {
-        $user = Auth::user();
-
-        $previousDayDate = Carbon::yesterday()->toDateString();
-        // currently calculated metrics
-        $currentMetrics = Calculator::currentMetrics();
-
-        
-        //DAILY MOCKUP
-        /*
-        $metric = Metric::where('user', $user->id)  
-                        ->where('date', $previousDayDate)
-                        ->first();
-        $metric->formatMetrics();
-        // this line is for making the daily email the same format as the weekly
-        // so we only need one email template
-        $weeklyMetrics = array($metric->date => $metric);
-        */
-        //WEEKLY MOCKUP
-        $metrics = Metric::where('user', $user->id) 
-                        ->where('date','<=', $previousDayDate)
-                        ->orderBy('date','desc')
-                        ->take(7)
-                        ->get();
-        // to calculate change in 30 days
-        $previousMetrics = Metric::where('user', $user->id)
-                        ->where('date','<=', Carbon::yesterday()->subDays(30)->toDateString())
-                        ->orderBy('date','desc')
-                        ->take(7)
-                        ->get();
-        $changes = array();
-        foreach ($currentMetrics as $metricID => $metricDetails) {
-            // get the correct color
-            $changes[$metricID]['positiveIsGood'] = $metricDetails['metricClass']::POSITIVE_IS_GOOD;
-
-            foreach ($previousMetrics as $id => $prevMetric) {
-                $date = $metrics[$id]->date;
-                if($prevMetric->$metricID != 0)
-                {
-                    $value = ($metrics[$id]->$metricID / $prevMetric->$metricID) * 100 - 100;
-                    $changes[$metricID][$date]['value'] = round($value).' %';
-                }
-                else
-                    $changes[$metricID][$date]['value'] = null;
+            $result = Braintree_Customer::create(array(
+                'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
+                'email' => Auth::user()->email,
+            ));
+            if($result->success)
+            {
+                $customer = $result->customer;
+            } else {
+                // needs error handling
             }
         }
+        $clientToken = Braintree_ClientToken::generate(array(
+            "customerId" => $customer->id
+        ));
 
-        // format metrics to presentable data
-        $weeklyMetrics = array();
-        foreach ($metrics as $id => $metric) {
-            $metric->formatMetrics();
-            $weeklyMetrics[$metric->date] = $metric;
+
+        return View::make('dev.braintree',array(
+            'clientToken' => $clientToken, 
+        ));
+    }
+
+    public function doBraintreePayment()
+    {
+        if(Input::get('payment_method_nonce'))
+        {
+            $result = Braintree_Transaction::sale(array(
+                'amount' => '10.00',
+                'paymentMethodNonce' => Input::get('payment_method_nonce'))
+            );
+
+            return View::make('dev.braintree',array(
+                'result' => $result
+            ));
         }
-
-
-        return View::make('emails.summary',array(
-                    'metrics' => $weeklyMetrics,
-                    'currentMetrics' => $currentMetrics,
-                    'changes' => $changes,
-                    'isDaily' => false
-                )
-        );
     }
 }

@@ -125,6 +125,7 @@ return array(
 		'Barryvdh\Queue\AsyncServiceProvider',
 		'Nwidart\DbExporter\DbExportHandlerServiceProvider',
 		'Waavi\Mailman\MailmanServiceProvider',
+		'Bradleyboy\Laravel\BraintreeServiceProvider',
 	),
 
 	/*

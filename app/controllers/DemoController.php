@@ -16,7 +16,7 @@ class DemoController extends BaseController
     public function showDashboard()
     {
         if (Auth::check()) {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         } 
         else {
             try { 
@@ -71,7 +71,7 @@ class DemoController extends BaseController
     */
     public function showSinglestat($statID)
     {   if (Auth::check()) {
-            return Redirect::route('auth.connect');
+            return Redirect::route('connect.connect');
         } 
         else {
             try {
