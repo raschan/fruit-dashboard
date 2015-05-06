@@ -52,10 +52,6 @@ Route::filter('auth', function()
         {
             return Redirect::route('auth.signin');
         }
-    } else {
-        var_dump(Auth::guest());
-        Log::info('not guest');
-        exit();
     }
 });
 
