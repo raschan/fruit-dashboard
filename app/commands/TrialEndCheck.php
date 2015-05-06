@@ -56,13 +56,21 @@ class TrialEndCheck extends Command {
 
 				} 
 			}
+
 			if($user->trialWillEndExactlyInDays(3)) 
 			{
 				// create intercom event
 				IntercomHelper::trialWillEnd($user,3);
 
 				// send email
+				$email = Mailman::make('emails.trialWillEnd')
+						->with($data)
+						->to($user->email)
+						->subject('[Fruit Analytics] Your free trial is ending.')
+						//->show();
+						->send();
 			}
+
 			if($user->trialWillEndExactlyInDays(-1))
 			{
 				// create intercom event

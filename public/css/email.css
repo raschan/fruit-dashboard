@@ -21,4 +21,13 @@ p {
 
 .email-container {
   max-width: 800px;
+  background-color: #f0f0f0;
+}
+
+.email-content {
+	max-width: 74%;
+}
+
+.email-filler {
+	width: 13%;
 }
