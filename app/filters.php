@@ -41,7 +41,6 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-    Log::info('accessing auth page');
     if (Auth::guest())
     {
         if (Request::ajax())
@@ -81,7 +80,7 @@ Route::filter('trial_ended', function()
 
 Route::filter('cancelled', function()
 {
-    if (Auth::user()->plan = 'cancelled')
+    if (Auth::user()->plan == 'cancelled')
     {
         return Redirect::route('auth.plan')
             ->with('error','Please subscribe.');
