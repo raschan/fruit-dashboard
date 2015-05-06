@@ -8,13 +8,8 @@ class UserTableExtendSeeder extends Seeder
         $users = User::all();
 
         foreach ($users as $user) {
-            $user->summaryEmailFrequency = 'daily';
-
-            if($user->isConnected()){
-            	$user->ready = 'connected';
-            } else {
-            	$user->ready = 'notConnected';
-            }
+            
+            $user->plan = 'free';
 
             $user->save();
         }
