@@ -1,5 +1,14 @@
 @extends('meta.base-user')
 
+  @section('pageTitle')
+    @if($data['id'] == "au") Active Users @endif
+    @if($data['id'] == "arr") Annual Run Rate @endif
+    @if($data['id'] == "arpu") Average Revenue Per User @endif
+    @if($data['id'] == "cancellations") Cancellations @endif
+    @if($data['id'] == "mrr") Monthly Recurring Revenue @endif
+    @if($data['id'] == "uc") User Churn @endif
+  @stop
+
 @section('navbar')
 
 <div id="main-navbar" class="navbar" role="navigation">

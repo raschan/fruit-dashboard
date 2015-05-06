@@ -1,5 +1,9 @@
 @extends('meta.base-user-signout')
 
+  @section('pageTitle')
+    Sign in
+  @stop
+
 @section('navbar')
 @stop
 
