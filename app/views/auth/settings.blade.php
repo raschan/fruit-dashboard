@@ -1,5 +1,9 @@
 @extends('meta.base-user')
 
+  @section('pageTitle')
+    Settings
+  @stop
+
   @section('pageContent')
     <div id="content-wrapper">
       <div class="page-header text-center">
