@@ -87,7 +87,6 @@ Route::get('dashboard', array(
 ));
 
 // settings routes
-
 Route::get('settings', array(
     'before' => 'auth',
     'as' => 'auth.settings',
@@ -125,7 +124,6 @@ Route::post('cancelSubscription', array(
 ));
 
 // connect routes
-
 Route::get('connect', array(
     'before' => 'auth|trial_ended|cancelled',
     'as' => 'connect.connect',
@@ -157,7 +155,6 @@ Route::get('/disconnect/{service}', array(
 ));
 
 // single_stat route
-
 Route::get('statistics/{statID}', array(
     'before' => 'auth|trial_ended|cancelled',
     'as' => 'auth.single_stat',
