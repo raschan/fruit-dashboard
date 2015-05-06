@@ -73,18 +73,27 @@ Route::post('signin', array(
     'uses' => 'AuthController@doSignin'
 ));
 
+
 // sign out route
 Route::any('signout', array(
     'as' => 'auth.signout',
     'uses' => 'AuthController@doSignout'
 ));
 
-// dashboard route
+
+// dashboard routes
 Route::get('dashboard', array(
-    'before' => 'auth|trial_ended|cancelled',
+    'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
+
+Route::get('statistics/{statID}', array(
+    'before' => 'auth|trial_ended|cancelled|api_key',
+    'as' => 'auth.single_stat',
+    'uses' => 'AuthController@showSinglestat'
+));
+
 
 // settings routes
 Route::get('settings', array(
@@ -123,6 +132,7 @@ Route::post('cancelSubscription', array(
     'uses'      => 'AuthController@doCancelSubscription'
 ));
 
+
 // connect routes
 Route::get('connect', array(
     'before' => 'auth|trial_ended|cancelled',
@@ -147,20 +157,16 @@ Route::post('suggest', array(
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
+
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',
     'as' => 'auth.disconnect',
-    'uses' => 'AuthController@doDisconnect'
+    'uses' => 'ConnectController@doDisconnect'
 ));
 
-// single_stat route
-Route::get('statistics/{statID}', array(
-    'before' => 'auth|trial_ended|cancelled',
-    'as' => 'auth.single_stat',
-    'uses' => 'AuthController@showSinglestat'
-));
 
+// subscription routes
 Route::get('/plans', array(
     'before'    => 'auth',
     'as'        => 'auth.plan',

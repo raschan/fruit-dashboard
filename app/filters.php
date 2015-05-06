@@ -65,7 +65,9 @@ Route::filter('api_key', function()
     if (!Auth::user()->isConnected())
     {
         // no valid key
-        return Redirect::route('connect.connect');
+        return Redirect::route('connect.connect')
+            ->with(Session::all())
+            ->with('error','Connect a payment provider');
     }
 });
 
