@@ -49,24 +49,40 @@ class TrialEndCheck extends Command {
 					$user->plan = 'trial_ended';
 	            	$user->save();
 					
-					// 'trial ended' actions come here
+					// create intercom event
+					IntercomHelper::trialEnded($user,'now');
+
+					// send email
+
 				} 
 			}
 			if($user->trialWillEndExactlyInDays(3)) 
 			{
-				// 'trial will end' actions come here
+				// create intercom event
+				IntercomHelper::trialWillEnd($user,3);
+
+				// send email
 			}
 			if($user->trialWillEndExactlyInDays(-1))
 			{
-				// 'after 1 day' action
+				// create intercom event
+				IntercomHelper::trialEnded($user,'1-day-ago');
+
+				// send email
 			}
 			if($user->trialWillEndExactlyInDays(-7))
 			{
-				// 'after 7 days' action
+				// create intercom event
+				IntercomHelper::trialEnded($user,'7-days-ago');
+
+				// send email
 			}
 			if($user->trialWillEndExactlyInDays(-14))
 			{
-				// 'after 17 days' action
+				/// create intercom event
+				IntercomHelper::trialEnded($user,'14-days-ago');
+
+				// send email
 			}
 		}
 	}
