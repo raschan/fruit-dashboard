@@ -11,13 +11,16 @@
 |
 */
 
-App::before(function($request)
+if (!App::environment('local'))
 {
-    if(!Request::secure())
+    App::before(function($request)
     {
-        return Redirect::secure(Request::path());
-    }
-});
+        if(!Request::secure())
+        {
+            return Redirect::secure(Request::path());
+        }
+    });
+}
 
 
 App::after(function($request, $response)
