@@ -30,7 +30,14 @@ class ConnectController extends BaseController
         */
         // selecting logged in user
         $user = Auth::user();
-        
+
+        // prepare stuff for google drive auth        
+        $client = new Google_Client();
+        $client->setClientId($_ENV['GOOGLE_CLIENTID']);
+        $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
+        $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
+        $client->setScopes(array('https://spreadsheets.google.com/feeds'));
+
         // returning view
         return View::make('connect.connect',
             array(
@@ -38,6 +45,8 @@ class ConnectController extends BaseController
                 //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
+                'googlespreadsheet_connected'      => false,
+                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
             )
         );
     }
@@ -49,6 +58,7 @@ class ConnectController extends BaseController
     */
     public function connectProvider($provider)
     {
+
     	if ($provider == 'stripe') {
     		$user = Auth::user();
             if(Input::has('code'))
@@ -104,11 +114,37 @@ class ConnectController extends BaseController
     				->with('error',Input::get('error_description'));
     		} else {
     			// we don't know what happened
-                Log:error('Unknown error with user: '.$user->email);
+                Log::error('Unknown error with user: '.$user->email);
     			return Redirect::route('connect.connect')
     				->with('error', 'Something went wrong, try again');
     		}
     	}
+
+        if ($provider == 'googlespreadsheet') {
+            $user = Auth::user();
+
+            if (Input::has('code')) {
+                $client = new Google_Client();
+                $client->setClientId($_ENV['GOOGLE_CLIENTID']);
+                $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
+                $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
+                $client->setScopes(array('https://spreadsheets.google.com/feeds'));
+                $client->authenticate(Input::get('code'));
+                $access_stuff = json_decode($client->getAccessToken(), true);
+
+/*
+                $user->googleSpreadsheetRefreshToken = $access_stuff;
+                $user->ready = 'connecting';
+                $user->save();
+                
+                IntercomHelper::connected($user,'googlespreadsheet');
+*/
+
+                return Redirect::route('connect.connect')
+                    ->with('success', ucfirst($provider).' connected.');
+            }
+        }
+
     	return Redirect::route('auth.dashboard')
     		->with('success', ucfirst($provider).' connected.');
     }

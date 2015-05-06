@@ -41,6 +41,18 @@ class User extends Eloquent implements UserInterface
         return False;
     }
 
+    public function isGoogleSpreadsheetConnected()
+    {
+        // at this point validation like this is all right
+        if (strlen($this->googlespreadsheet_key) > 16) {
+            // long enough key
+            return True;
+        }
+        // no key is given
+        return False;
+    }
+
+
     /**
      * Testing if the user has connected at least one account
      *
@@ -49,7 +61,9 @@ class User extends Eloquent implements UserInterface
     public function isConnected()
     {
         if ($this->isStripeConnected() 
-            || $this->isPayPalConnected()) 
+            || $this->isPayPalConnected()
+            || $this->isGoogleSpreadsheetConnected()
+            ) 
         {
             // connected
             return True;

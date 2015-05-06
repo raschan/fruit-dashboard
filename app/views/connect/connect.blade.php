@@ -181,6 +181,50 @@
         <!-- / Braintree connect -->
         --}}
 
+        <!-- Google Spreadsheet connect -->
+        <div class="row">
+          <div class="googlespreadsheet-form-wrapper bordered">
+            <div class="panel-body googlespreadsheet-form">
+              <div class='col-sm-4'>
+                <h4>Connect Google Spreadsheets</h4>
+              </div>
+              <div class="col-sm-2 col-sm-offset-1 text-center">
+                <span class="icon pf-big pf-googlespreadsheet"></span>
+              </div> <!-- /. connect-icon -->
+              @if ($googlespreadsheet_connected)
+                <div class="col-sm-5">
+                    <!-- Modal box -->
+                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                      <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Warning</h4>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to disconnect Google Spreadsheet from your account? <br>
+                            After disconnecting we will not receive any more data from Google Spreadsheet.</div>
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Google Spreadsheet disconnected"]);mixpanel.track("Disconnect",{"service":"google spreadsheet"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                        </div>
+                        </div> <!-- / .modal-content -->
+                      </div> <!-- / .modal-dialog -->
+                    </div>
+                    <!-- /Modal box -->
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+              @else
+                <div class="col-sm-5">
+                  <a href="{{$googleSpreadsheetButtonUrl}}" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
+              @endif
+              </div> <!-- /. col-sm-10 -->
+
+            </div> <!-- /. panel-body googlespreadsheet-from -->
+          </div> <!-- /. col-sm-6 googlespreadsheet-form-wrapper -->
+        </div> <!-- /. row -->
+        <!-- / Google Spreadsheet connect -->
+
+
         <!-- Suggestion -->
         <div class="row">
           <div class="suggestion-form-wrapper bordered">
