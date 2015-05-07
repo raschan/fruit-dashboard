@@ -1,5 +1,9 @@
 @extends('meta.base-user')
 
+  @section('pageTitle')
+    Connect
+  @stop
+
   @section('pageContent')
     
     <div id="content-wrapper">
