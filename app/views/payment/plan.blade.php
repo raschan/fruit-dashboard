@@ -22,7 +22,7 @@
             <li>Create graphs</li>
             <li>Create dashboards</li>
             <li>100 Mb data storage</li>
-            <a href='/plans/free' class='bg-light-green darken'><h4>SIGN UP</h4></a>
+            <a href='/plans/{{snake_case(camel_case($plans[1]->name))}}' class='bg-light-green darken'><h4>SIGN UP</h4></a>
           </ul>
         </div>
         <!-- /Free Plan -->
@@ -45,7 +45,7 @@
             <li>Control privacy settings</li>
             <li>Add custom logo</li>
             <li>Premium support</li>
-            <a href='/plans/basic' class='bg-light-green darker'><h4>SIGN UP</h4></a>
+            <a href='/plans/{{snake_case(camel_case($plans[0]->name))}}' class='bg-light-green darker'><h4>SIGN UP</h4></a>
           </ul>
         </div>
         <!-- /Basic Plan -->

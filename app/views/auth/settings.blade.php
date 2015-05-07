@@ -298,7 +298,7 @@
               <!-- Subscription -->
 
               {{ Form::open(array(
-                'action' => 'AuthController@doCancelSubscription',
+                'action' => 'PaymentController@doCancelSubscription',
                 'id' => 'form-settings-subscription',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}

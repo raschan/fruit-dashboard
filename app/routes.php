@@ -129,7 +129,7 @@ Route::post('settingsFrequency', array(
 
 Route::post('cancelSubscription', array(
     'before'    => 'auth',
-    'uses'      => 'AuthController@doCancelSubscription'
+    'uses'      => 'PaymentController@doCancelSubscription'
 ));
 
 
@@ -169,20 +169,20 @@ Route::get('/disconnect/{service}', array(
 // subscription routes
 Route::get('/plans', array(
     'before'    => 'auth',
-    'as'        => 'auth.plan',
-    'uses'      => 'AuthController@showPlans'
+    'as'        => 'payment.plan',
+    'uses'      => 'PaymentController@showPlans'
 ));
 
 Route::get('/plans/{planName}', array(
     'before'    => 'auth',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@showPayPlan'
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@showPayPlan'
 ));
 
 Route::post('/plans/{planName}', array(
     'before'    => 'auth',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@doPayPlan'
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@doPayPlan'
 ));
 
 
