@@ -120,7 +120,7 @@ class SendDailyEmail extends Command {
 							change this if to switch-case with days
 							for user controlled daily send
 						*/
-						if(Carbon::now()->dayOfWeek == Carbon::MONDAY)
+						if(Carbon::now()->dayOfWeek == Carbon::WEDNESDAY)
 						{
 							// get the user's metrics
 							$metrics = Metric::where('user', $user->id)	
@@ -169,12 +169,14 @@ class SendDailyEmail extends Command {
 
 
 							// send the email to the user
-							Mailman::make('emails.summary')
+							$email = Mailman::make('emails.summary')
 								->with($data)
-								->setCss('bootstrap.min.css')
 								->to($user->email)
 								->subject('Weekly summary')
+								//->show();
 								->send();
+
+							//File::put(public_path().'/summary_email.html',$email);
 								
 							$weeklyEmailSent++;
 						}

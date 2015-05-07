@@ -65,4 +65,27 @@ class IntercomHelper {
 			'email'			=> $user->email,
 		));
 	}
+
+	public static function trialEnded($user,$when)
+	{
+		$intercom = self::createInstance();
+
+		// trial ended
+		$intercom->createEvent(array(
+			'event_name'	=> 'trial-ended-'.$when,
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
+
+	public static function trialWillEnd($user,$days)
+	{
+		$intercom = self::createInstance();
+
+		$intercom->createEvent(array(
+			'event_name'	=> 'trial-will-end-in-'.$days.'-days',
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
 }
