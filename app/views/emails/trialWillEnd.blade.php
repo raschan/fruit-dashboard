@@ -6,9 +6,9 @@
       there,
     @endif</p>
 
-    <p>Your trial of Fruit Analytics ... is almost over.</p> 
+    <p>Your trial of Fruit Analytics is almost over.</p> 
 
-    <p>Please update your payment information to keep your account active by going {{ HTML::secureLink('/plans','here') }} within the next 3 days or your account will be suspended.</p>  
+    <p>Please choose from one of our plans to keep your account active ({{ HTML::secureLink('/plans','click here') }}) within the next 3 days or your account will be suspended.</p>  
 
     <p>Either way, thanks for trying Fruit Analytics!</p>
   @stop

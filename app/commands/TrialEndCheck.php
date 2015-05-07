@@ -61,14 +61,14 @@ class TrialEndCheck extends Command {
 			{
 				// create intercom event
 				IntercomHelper::trialWillEnd($user,3);
-
+				
 				// send email
-				$email = Mailman::make('emails.trialWillEnd')
-						->with($data)
-						->to($user->email)
-						->subject('[Fruit Analytics] Your free trial is ending.')
-						//->show();
-						->send();
+				$data = array('user' => $user);
+				Mailman::make('emails.trialWillEnd')
+					->with($data)
+					->to($user->email)
+					->subject('[Fruit Analytics] Your free trial is ending.')
+					->send();
 			}
 
 			if($user->trialWillEndExactlyInDays(-1))
@@ -77,6 +77,12 @@ class TrialEndCheck extends Command {
 				IntercomHelper::trialEnded($user,'1-day-ago');
 
 				// send email
+				$data = array('user' => $user);
+				Mailman::make('emails.trialEndedFirst')
+					->with($data)
+					->to($user->email)
+					->subject('[Fruit Analytics] Your free trial is ended')
+					->send();
 			}
 			if($user->trialWillEndExactlyInDays(-7))
 			{
@@ -84,6 +90,12 @@ class TrialEndCheck extends Command {
 				IntercomHelper::trialEnded($user,'7-days-ago');
 
 				// send email
+				$data = array('user' => $user);
+				Mailman::make('emails.trialEndedSecond')
+					->with($data)
+					->to($user->email)
+					->subject('[Fruit Analytics] ')
+					->send();
 			}
 			if($user->trialWillEndExactlyInDays(-14))
 			{
@@ -91,6 +103,12 @@ class TrialEndCheck extends Command {
 				IntercomHelper::trialEnded($user,'14-days-ago');
 
 				// send email
+				$data = array('user' => $user);
+				Mailman::make('emails.trialEndedThird')
+					->with($data)
+					->to($user->email)
+					->subject('[Fruit Analytics]')
+					->send();
 			}
 		}
 	}

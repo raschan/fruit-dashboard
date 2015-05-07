@@ -16,7 +16,7 @@
               {{ HTML::image('img/fruit_logo.png','',array('class'=>'header-image')) }}
             </div>
             <div class='text-right'>
-              {{ Carbon::now()->format('l, F j, Y') }}
+              <small>{{ Carbon::now()->format('l, F j, Y') }}</small>
             </div>
           </td>
           <td class='email-filler'></td>
