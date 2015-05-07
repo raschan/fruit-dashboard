@@ -75,7 +75,7 @@ Route::filter('trial_ended', function()
 {
     if (Auth::user()->isTrialEnded())
     {
-        return Redirect::route('auth.plan')
+        return Redirect::route('payment.plan')
             ->with('error','Trial period ended.');
     }
 });
@@ -84,7 +84,7 @@ Route::filter('cancelled', function()
 {
     if (Auth::user()->plan == 'cancelled')
     {
-        return Redirect::route('auth.plan')
+        return Redirect::route('payment.plan')
             ->with('error','Please subscribe.');
     }
 });
