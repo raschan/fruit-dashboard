@@ -15,3 +15,5 @@ Artisan::add(new CalculateMetrics);
 Artisan::add(new SendDailyEmail);
 Artisan::add(new MigrateExternalPackages);
 Artisan::add(new GenerateEmailConnect);
+Artisan::add(new GenerateEmails);
+Artisan::add(new TrialEndCheck);

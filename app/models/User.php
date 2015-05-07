@@ -87,7 +87,7 @@ class User extends Eloquent implements UserInterface
     {
         $daysRemaining = $this->daysRemaining();
 
-        if ($this->plan == 'trial' && $daysRemaining == $days)
+        if (($this->plan == 'trial' || $this->plan == 'trial_ended') && $daysRemaining == $days)
         {
             return true;
         } else {
