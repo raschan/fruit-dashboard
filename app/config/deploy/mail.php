@@ -15,9 +15,8 @@ return array(
    |
    */
 
-   //'driver' => 'log',
    'driver' => 'smtp',
-
+   
    /*
    |--------------------------------------------------------------------------
    | Mail "Pretend"
@@ -68,7 +67,7 @@ return array(
    |
    */
 
-   'from' => array('address' => 'hello@tryfruit.com', 'name' => 'Local'),
+   'from' => array('address' => 'hello@tryfruit.com', 'name' => 'Testing'),
 
    /*
    |--------------------------------------------------------------------------
