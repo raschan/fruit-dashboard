@@ -28,9 +28,10 @@ $env = $app->detectEnvironment(function()
 {
 	$hostname = gethostname();
 	if ($hostname == 'server.abfinformatika.hu') {
-		if (basename(dirname(__DIR__)) == 'startupdashboard-dev.abfinformatika.hu'
-			|| basename(dirname(__DIR__)) == 'development-dash.tryfruit.com') {
+		if (basename(dirname(__DIR__)) == 'development-dash.tryfruit.com') {
 			return 'development';
+		} elseif (basename(dirname(__DIR__)) == 'testing-dashboard.tryfruit.com') {
+			return 'deploy';
 		} else {
 			return 'production';
 		}
