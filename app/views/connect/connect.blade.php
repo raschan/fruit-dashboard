@@ -147,29 +147,46 @@
                 <span class="icon pf-big pf-braintree"></span>
               </div> <!-- /. connect-icon -->
               <div class="col-sm-5">
+                <!-- Braintree details modal box -->
+                <div id='modal-sizes-3' class='modal fade' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
+                  <div class='modal-dialog modal-lg'>
+                    <div>
+                      <div class='modal-header'>
+                        <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
+                        <h4 class='modal-title'>Connect Braintree</h4>
+                      </div>
+                      @include('connect.braintreeConnect',array('user'=>$user))
+                      <div class='modal-footer'>
+                        <button type="button" class='btn btn-info'>Done</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Braintree details modal box -->
                 @if ($braintree_connected)
                   <!-- Modal box -->
                   <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                       <div class="modal-content">
                         <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Warning</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Warning</h4>
                         </div>
                         <div class="modal-body">
                           Are you sure you want to disconnect Braintree from your account? <br>
                           After disconnecting we will not receive any more data from Braintree.</div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
                       </div>
                       </div> <!-- / .modal-content -->
                     </div> <!-- / .modal-dialog -->
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-3">Details</button>
                 @else
-                  <a href="/connect/braintree" class="sm-pull-right btn btn-info" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
+                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-sizes-3'>Connect with Braintree</button>
                 @endif
               </div> <!-- /. col-sm-5 -->
 

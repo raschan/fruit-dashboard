@@ -1,99 +1,66 @@
-@extends('meta.base-user')
-
-  @section('pageContent')
-
-    <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1>Connect Braintree</h1>
-      </div> <!-- / .page-header -->
-      @parent
-
-      <div class='row'>
-        <div class='col-md-offset-3'>
-          <p class='lead'>First input and save your Braintree API keys</p>
-        </div>
+<div class='modal-body text-center' style='background:white;'>
+  <p class='lead'>First input and save your Braintree API keys</p>
+  {{ Form::open(array(
+          'action' => 'ConnectController@doBraintreeConnect',
+          'id' => 'form-connect-braintree',
+          'role' => 'form',
+          'class' => 'form-horizontal' )) }}
+    <div class="form-group">
+      {{ Form::label('id_environment','Environment:', array(
+        'class' => 'col-sm-5 control-label')) }}
+      <div class="col-sm-2">
+        {{ Form::select('environment',
+          // dropdown options
+          array(
+            'sandbox' => 'Sandbox', 
+            'production' => 'Production'),
+          // highlighted option
+          isset($user->btEnvironment)?$user->btEnvironment:'production',
+          array(                                       
+            'id' => 'id_environment',
+            'class' => 'form-control')) }}
       </div>
-      <div class='row'>
-        <div class="col-md-10 col-md-offset-1">
-          {{ Form::open(array(
-                  'action' => 'ConnectController@doBraintreeConnect',
-                  'id' => 'form-connect-braintree',
-                  'role' => 'form',
-                  'class' => 'form-horizontal' )) }}
-            <div class="form-group">
-              {{ Form::label('id_environment','Environment:', array(
-                'class' => 'col-sm-4 control-label')) }}
-              <div class="col-sm-2">
-                {{ Form::select('environment',
-                  // dropdown options
-                  array(
-                    'sandbox' => 'Sandbox', 
-                    'production' => 'Production'),
-                  // highlighted option
-                  'production',
-                  array(                                       
-                    'id' => 'id_environment',
-                    'class' => 'form-control')) }}
-              </div>
-            </div>
-            
-            <div class='form-group'>
-              {{ Form::label('id_publicKey','Public key:',array(
-                'class' => 'col-sm-4 control-label')) }}
-              <div class='col-sm-3'>
-                {{ Form::text('publicKey','',array(
-                  'id' => 'id_publicKey',
-                  'class' => 'form-control')) }}
-              </div>
-            </div>
-
-            <div class='form-group'>
-              {{ Form::label('id_privateKey','Private key:',array(
-                'class' => 'col-sm-4 control-label')) }}
-              <div class='col-sm-3'>
-                {{ Form::text('privateKey','',array(
-                  'id' => 'id_privateKey',
-                  'class' => 'form-control')) }}
-              </div>
-            </div>
-
-            <div class='form-group'>
-              {{ Form::label('id_merchantId','Merchant ID:',array(
-                'class' => 'col-sm-4 control-label')) }}
-              <div class='col-sm-3'>
-                {{ Form::text('merchantId','',array(
-                  'id' => 'id_merchantId',
-                  'class' => 'form-control')) }}
-              </div>
-            </div>
-
-            <div class='form-group'>
-              <div class='col-sm-2 col-sm-offset-4'>
-                {{ Form::submit('Save', array(
-                    'id' => 'id_submit',
-                    'class' => 'btn btn-primary btn-sm btn-flat',)) }}
-              </div>
-            </div>
-          {{ Form::close() }}
-
-        </div>
-      </div> <!-- /row -->
-      <div class='row'>
-        <div class='col-md-6 col-md-offset-3'>
-          <p class='lead'>Then add this webhook to keep your data synced</p>
-        </div>
-        <div class='col-md-6 col-md-offset-3'>
-          <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
-        </div>
-      </div> <!-- /row -->
+    </div>
+    
+    <div class='form-group'>
+      {{ Form::label('id_publicKey','Public key:',array(
+        'class' => 'col-sm-5 control-label')) }}
+      <div class='col-sm-3'>
+        {{ Form::text('publicKey',isset($user->btPublicKey)?$user->btPublicKey:'',array(
+          'id' => 'id_publicKey',
+          'class' => 'form-control',)) }}
+      </div>
     </div>
 
-  @stop
+    <div class='form-group'>
+      {{ Form::label('id_privateKey','Private key:',array(
+        'class' => 'col-sm-5 control-label')) }}
+      <div class='col-sm-3'>
+        {{ Form::text('privateKey',isset($user->btPrivateKey)?$user->btPrivateKey:'',array(
+          'id' => 'id_privateKey',
+          'class' => 'form-control')) }}
+      </div>
+    </div>
 
-  @section('pageScripts')
+    <div class='form-group'>
+      {{ Form::label('id_merchantId','Merchant ID:',array(
+        'class' => 'col-sm-5 control-label')) }}
+      <div class='col-sm-3'>
+        {{ Form::text('merchantId',isset($user->btMerchantId)?$user->btMerchantId:'',array(
+          'id' => 'id_merchantId',
+          'class' => 'form-control')) }}
+      </div>
+    </div>
 
-    <script type="text/javascript">
+    <div class='form-group'>
+      <div class='text-center'>
+        {{ Form::submit('Save', array(
+            'id' => 'id_submit',
+            'class' => 'btn btn-primary btn-sm btn-flat',)) }}
+      </div>
+    </div>
+  {{ Form::close() }}
 
-    </script>
-
-  @stop
+  <p class='lead'>Then add this webhook to keep your data synced</p>
+  <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
+</div>

@@ -34,6 +34,7 @@ class ConnectController extends BaseController
         // returning view
         return View::make('connect.connect',
             array(
+                'user'                  => $user,
                 'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
 
@@ -144,10 +145,10 @@ class ConnectController extends BaseController
         } else if ($service == "braintree") {
             // disconnecting braintree
 
-            $user->btPrivateKey = '';
-            $user->btPublicKey = '';
-            $user->btEnvironment = '';
-            $user->btMerchantId = '';
+            $user->btPrivateKey = null;
+            $user->btPublicKey = null;
+            $user->btEnvironment = null;
+            $user->btMerchantId = null;
             
         }
         // saving modification on user
@@ -268,7 +269,7 @@ class ConnectController extends BaseController
 
         	$user->btEnvironment = Input::get('environment');
         	$user->btPublicKey = Input::get('publicKey');
-        	$user->btPrivateKey = Input::get('privatKey');
+        	$user->btPrivateKey = Input::get('privateKey');
         	$user->btMerchantId = Input::get('merchantId');
 
 //        	$user->ready = 'connecting';
