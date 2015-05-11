@@ -15,10 +15,12 @@
 		"nwidart/db-exporter": "1.0",
 		"nesbot/carbon": "~1.14",
 		"guzzlehttp/guzzle": "~5.2",
-		"waavi/mailman": "*",
+		"waavi/mailman": "1.1.*@dev",
 		"bradleyboy/laravel-braintree": "dev-master",
 		"intercom/intercom-php": "~1.0"
 	},
+
+
 	"autoload": {
 		"classmap": [
 			"app/libraries",
