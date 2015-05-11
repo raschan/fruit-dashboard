@@ -9,7 +9,7 @@ class BraintreeHelper {
 
 	public static function setEventType($kind)
 	{
-		Log::info('setting event type');
+		Log::info('setting event type :"'.$kind.'"');
 		switch ($kind) 
 		{
 	    	case 'subscription_expired':
@@ -18,6 +18,10 @@ class BraintreeHelper {
 
 	    	case 'subscription_canceled':
 	    		return 'customer.subscription.deleted';
+	    		break;
+
+	    	case 'subscription_went_active':
+	    		return 'customer.subscription.created';
 	    		break;
 
 	    	case 'subscription_trial_ended':
@@ -56,10 +60,9 @@ class BraintreeHelper {
 	    		throw new Exception("New event type", 1);
 	       		break;
 	    }
-	    Log::info('Event type set');
 	}
 
-	public static function convertObjectFormat($notification, $type, $user);
+	public static function convertObjectFormat($notification, $type, $user)
 	{
 		$object = array();
 
@@ -69,24 +72,25 @@ class BraintreeHelper {
 			case 'customer.subscription.deleted':
 
 				// get the plan the user is subscribed for
-				$plan = self::getPlan($notification->subject->subscription->planId, $user);
+				$plan = self::getPlan($notification->subscription->planId, $user);
 
 				$object['object']['plan'] = array(
 					'currency' 	=> $plan->currencyIsoCode,
 					'interval' 	=> 'monthly',
 					'name'		=> $plan->name,
 					'id'		=> $plan->id,
-					'amount'	=> $notification->subject->subscription->price * 100 //braintree prices are in float, e.g: 9.99
+					'amount'	=> $notification->subscription->price * 100 //braintree prices are in float, e.g: 9.99
 				);
 				break;
 			case 'charge.succeeded':
 			case 'charge.failed':
 				switch ($notification->kind)
+				{
 					case 'disbursement':
 						$object['object'] = array(
-							'id' 		=> $notification->subject->disbursement->id,
-							'amount' 	=> $notification->subject->disbursement->amount,
-							'currency'	=> Braintree_Transaction::find($notification->subject->disbursement->transactionIds[0])
+							'id' 		=> $notification->disbursement->id,
+							'amount' 	=> $notification->disbursement->amount,
+							'currency'	=> Braintree_Transaction::find($notification->disbursement->transactionIds[0])
 												->currencyIsoCode,
 							'kind'		=> 'disbursement',
 						);
@@ -94,16 +98,17 @@ class BraintreeHelper {
 					case 'subscription_charged_successfully':
 					case 'subscription_charged_unsuccessfully':
 
-						$plan = self::getPlan($notification->subject->subscription->planId, $user);
+						$plan = self::getPlan($notification->subscription->planId, $user);
 						$object['object'] = array(
-							'id'		=> $notification->subject->subscription->id,
-							'amount'	=> $notification->subject->subscription->price * 100,
+							'id'		=> $notification->subscription->id,
+							'amount'	=> $notification->subscription->price * 100,
 							'currency'  => $plan->currencyIsoCode,
 							'kind'		=> 'subscription',
 						);
 						break;
 					default:
 						break;
+				}
 				break;
 			default:
 				break;
@@ -115,9 +120,9 @@ class BraintreeHelper {
 	private static function getPlan($planId, $user)
 	{
 		Braintree_Configuration::environment($user->btEnvironment);
-    	Braintree_Configuration::merchantId($user->btPublicKey);
-    	Braintree_Configuration::publicKey($user->btPrivateKey);
-    	Braintree_Configuration::privateKey($user->btMerchantId);
+    	Braintree_Configuration::merchantId($user->btMerchantId);
+    	Braintree_Configuration::publicKey($user->btPublicKey);
+    	Braintree_Configuration::privateKey($user->btPrivateKey);
 
     	$plans = Braintree_Plan::all();
 

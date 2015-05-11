@@ -20,6 +20,7 @@ class WebhookController extends BaseController
 				Input::get("bt_signature"), Input::get("bt_payload")
 		    );
 
+
 			// format the event to the common format
 		    $event = array();
 		    $event['created'] = $notification->timestamp->getTimestamp();
