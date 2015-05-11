@@ -9,6 +9,7 @@ class BraintreeHelper {
 
 	public static function setEventType($kind)
 	{
+		Log::info('setting event type');
 		switch ($kind) 
 		{
 	    	case 'subscription_expired':
@@ -55,6 +56,7 @@ class BraintreeHelper {
 	    		throw new Exception("New event type", 1);
 	       		break;
 	    }
+	    Log::info('Event type set');
 	}
 
 	public static function convertObjectFormat($notification, $type, $user);
