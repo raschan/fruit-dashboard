@@ -102,7 +102,7 @@ class PaymentController extends BaseController
             if($result->success)
             {
                 // update user plan to subscrition
-                $user->plan = $plans[$planName]['id'];
+                $user->plan = $plans[$planName]->id;
                 $user->subscriptionId = $result->subscription->id;
                 $user->save();
 
