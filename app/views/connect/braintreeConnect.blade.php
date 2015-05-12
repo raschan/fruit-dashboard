@@ -104,8 +104,15 @@
     </div> {{-- /braintree-connect-step-1 --}}
     
     <div class='wizard-pane' id='braintree-connect-step-2' @if($stepNumber==2)style='display:block;opacity:1;'@endif>
-      <p class='lead'>Then add this webhook to keep your data synced</p>
-      <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
+      <div class='row'>
+        <div class='col-sm-7'>
+          <p class='lead'>Then add this webhook to keep your data synced</p>
+          <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
+        </div> {{-- /col-sm-7 --}}
+        <div class='col-sm-5'>
+          @include('help.webhook-permissions')
+        </div>
+      </div>{{-- /row --}}
     </div>{{-- /braintree-connect-step-2 --}}
   </div> {{-- /wizard-content --}}
 </div> {{-- /wizard --}}

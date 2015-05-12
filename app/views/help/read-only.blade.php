@@ -17,3 +17,9 @@ Use these API keys in ChartMogul for added security.
  
 
 Here are the rights you need to grant your Braintree user in order for ChartMogul to work:
+
+Transactions - Download Transactions with Masked Payment Data
+Customer Management - Download Vault Records with Masked Payment Data
+Recurring Billing - Download Subsctption Records
+
+{{HTML::image('img/braintree_role_requirements.png','',array('style'=>'width:100%'))}}
