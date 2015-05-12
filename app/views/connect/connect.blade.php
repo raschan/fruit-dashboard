@@ -148,16 +148,15 @@
               </div> <!-- /. connect-icon -->
               <div class="col-sm-5">
                 <!-- Braintree details modal box -->
-                <div id='modal-sizes-3' class='modal fade' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
+                <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
                   <div class='modal-dialog modal-lg'>
                     <div>
                       <div class='modal-header'>
                         <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
                         <h4 class='modal-title'>Connect Braintree</h4>
                       </div>
-                      @include('connect.braintreeConnect',array('user'=>$user))
-                      <div class='modal-footer'>
-                        <button type="button" class='btn btn-info'>Done</button>
+                      <div class='modal-content' style='background:white;'>
+                        @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>Session::has('modal')?2:1))
                       </div>
                     </div>
                   </div>
@@ -184,9 +183,9 @@
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-3">Details</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
                 @else
-                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-sizes-3'>Connect with Braintree</button>
+                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>Connect with Braintree</button>
                 @endif
               </div> <!-- /. col-sm-5 -->
 
@@ -244,9 +243,11 @@
 
   @section('pageScripts')
 
-    <script type="text/javascript">
-
-    </script>
+    @if (Session::has('modal'))
+      <script type="text/javascript">
+        $('#modal-braintree-connect').modal('show');
+      </script>
+    @endif
 
   @stop
 

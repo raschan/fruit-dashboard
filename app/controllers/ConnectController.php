@@ -278,7 +278,7 @@ class ConnectController extends BaseController
 
         	return Redirect::back()
         		->with('success','Authentication successful')
-                ->withInput();
+                ->with('modal','braintree-webhook');
         }
     }
 
