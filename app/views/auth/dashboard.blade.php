@@ -189,7 +189,7 @@
 
                 <!-- Customer events -->
                 
-                @if ($events[$i]['type'] == 'customer.created')
+                @if ($events[$i]['type'] == 'customer.created' && $events[$i]['provider']!='connect')
                   <li class="list-group-item">
                     <span class="badge badge-success">
                       New Customer
@@ -227,7 +227,7 @@
 
                 <!-- Customer Subscription events -->
 
-                @if ($events[$i]['type'] == 'customer.subscription.created')
+                @if ($events[$i]['type'] == 'customer.subscription.created' && $events[$i]['provider']!='connect'))
                   <li class="list-group-item">
                     <span class="badge badge-info">
                       New subscription

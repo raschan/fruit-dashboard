@@ -19,7 +19,7 @@ class Calculator
             $timestamp = $time;
         }
         else {
-            $timestamp = time();
+            $timestamp = Carbon::now()->timestamp;
         }
         $today = date('Y-m-d', $timestamp);
         $yesterday = date('Y-m-d', $timestamp - 86400);
@@ -39,7 +39,6 @@ class Calculator
         $yesterdayMetric = Metric::where('user', $user->id)
                         ->where('date', $yesterday)
                         ->first();
-
         if(!$yesterdayMetric)
         {
             Calculator::calculateMetrics($user, $timestamp-86400);
@@ -51,8 +50,6 @@ class Calculator
         $events = Event::where('user', $user->id)
                     ->where('date', $today)
                     ->get();
-        // events have a provider, needs merging
-        // FIXME!!!!
         
         // calculate all the metrics
 

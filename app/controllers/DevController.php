@@ -19,7 +19,31 @@ A Controller for testing stuff
 
 class DevController extends BaseController
 {
-    
+    public function show()
+    {
+        $customers = Braintree_Customer::all();
+
+        foreach ($customers as $customer) {
+            var_dump($customer->id);
+            foreach ($customer->paymentMethods() as $paymentMethod) 
+            {
+                if (isset($paymentMethod->_attributes['subscriptions']))
+                {        
+                    foreach ($paymentMethod->_attributes['subscriptions'] as $subscription) {        
+                        if ($subscription->status == Braintree_Subscription::ACTIVE)
+                        {
+                            var_dump($subscription->planId);
+                            var_dump('active');
+                        } else {
+                        }
+                    }            
+                } else {
+                    var_dump('false,2');
+                }
+            }        
+        }
+        exit();
+    }
     /*
     |====================================================
     | <GET> | showUsers: showing the current users

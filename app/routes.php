@@ -6,12 +6,12 @@
 |--------------------------------------------------------------------------
 */
 
-if(isset($_ENV['development']))
+if(!App::environment('production'))
 {
     // braintree development routes
 
     Route::get('/braintree', array(
-        'before' => 'auth|api_key',
+        'before' => 'api_key',
         'as' => 'dev.braintree',
         'uses' => 'DevController@showBraintree'
     ));
@@ -29,10 +29,8 @@ if(isset($_ENV['development']))
         'uses' => 'DevController@showUsers'
     ));
 
-    Route::get('/paypal', array(
-        'before' => 'auth|api_key',
-        'as' => 'dev.paypal',
-        'uses' => 'DevController@showPaypal'
+    Route::get('/test', array(
+        'uses' => 'DevController@show'
     ));
 }
 

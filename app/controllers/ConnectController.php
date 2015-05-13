@@ -272,9 +272,12 @@ class ConnectController extends BaseController
         	$user->btPrivateKey = Input::get('privateKey');
         	$user->btMerchantId = Input::get('merchantId');
 
-//        	$user->ready = 'connecting';
+        	$user->ready = 'connecting';
 
         	$user->save();
+
+            Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
+
 
         	return Redirect::back()
         		->with('success','Authentication successful')
@@ -284,7 +287,7 @@ class ConnectController extends BaseController
 
     /*
     |===================================================
-    | <POST> | doSaveSuggestion: updates user service data stripe only
+    | <POST> | doSaveSuggestion: saves a suggestion
     |===================================================
     */
     public function doSaveSuggestion()

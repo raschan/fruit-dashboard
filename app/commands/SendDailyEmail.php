@@ -186,7 +186,7 @@ class SendDailyEmail extends Command {
 			} // /isConnected
 		} // /foreach
 		Log::info($dailyEmailSent.' daily summary emails sent out of '.count($users).' users');
-		Log::info($weeklyEmailSent.' daily summary emails sent out of '.count($users).' users');
+		Log::info($weeklyEmailSent.' weekly summary emails sent out of '.count($users).' users');
 		Log::info('Total of '. $dailyEmailSent + $weeklyEmailSent .' emails sent');
 	}
 }
