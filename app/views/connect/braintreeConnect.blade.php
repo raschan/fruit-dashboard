@@ -107,7 +107,7 @@
       <div class='row'>
         <div class='col-sm-7'>
           <p class='lead'>Then add this webhook to keep your data synced</p>
-          <strong class='well well-sm text-danger'>{{ URL::to('api/braintree').'/'.$user->id }}</strong>
+          <strong class='well well-sm text-danger'>{{ URL::secure('api/braintree').'/'.$user->id }}</strong>
         </div> {{-- /col-sm-7 --}}
         <div class='col-sm-5'>
           @include('help.webhook-permissions')
