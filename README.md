@@ -2,6 +2,9 @@
 
 Fruit Analytics is a dashboard solution for startup companies.
 
+## Table of contents
+[TOC]
+
 ## How to build your local development box?
   - download & install [Virtualbox]
   - download & install [Vagrant] (max 1.6.5)
