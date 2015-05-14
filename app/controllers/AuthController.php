@@ -158,9 +158,10 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
-        if (Auth::user()->ready == 'notConnected')
+        if (!Auth::user()->isConnected())
         {
-            return Redirect::route('connect.connect');
+            return Redirect::route('connect.connect')
+                ->with('error','Connect a service first.');
         }
 
         // check if trial period is ended
