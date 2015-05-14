@@ -21,7 +21,7 @@
   <div class='wizard-content'>
     <div class='wizard-pane' id='braintree-connect-step-1' @if($stepNumber==1)style='display:block;opacity:1;'@endif>
       <div class='row'>
-        <div class='col-sm-7'>
+        <div class='col-sm-8 col-sm-offset-2'>
           <p class='lead'>First input and save your Braintree API keys</p>
           <p class='text-danger small'>For added security follow the steps on the right to create a read-only API key in your Braintree account</p>
           {{ Form::open(array(
@@ -95,25 +95,24 @@
             </div>
             <!-- /Submit -->
           {{ Form::close() }}
-
-        </div> {{-- /col-sm-7 --}}
-        <div class='col-sm-5'>
-          @include('help.read-only')
-        </div>
+        </div> {{-- /col-sm-8 --}}
+      </div> {{-- /row --}}
+      <div class='row'>
+        @include('help.read-only')
       </div> {{-- /row --}}
     </div> {{-- /braintree-connect-step-1 --}}
     
     <div class='wizard-pane' id='braintree-connect-step-2' @if($stepNumber==2)style='display:block;opacity:1;'@endif>
       <div class='row'>
-        <div class='col-sm-7'>
+        <div class='col-sm-8 col-sm-offset-2'>
           <p class='lead'>Then add this webhook to keep your data synced</p>
-          <strong class='well well-sm text-danger'>{{ URL::secure('api/braintree').'/'.$user->id }}</strong>
-        </div> {{-- /col-sm-7 --}}
-        <div class='col-sm-5'>
-          @include('help.webhook-permissions')
-        </div>
-      </div>{{-- /row --}}
-    </div>{{-- /braintree-connect-step-2 --}}
+          <p><span class='well well-sm text-danger'><strong>{{ URL::secure('api/braintree').'/'.$user->id }}</strong></span></p>
+        </div> {{-- /col-sm-8 --}}
+      </div> {{-- /row --}}
+      <div class='row'>
+        @include('help.webhook-permissions')
+      </div> {{-- /row --}}
+    </div> {{-- /braintree-connect-step-2 --}}
   </div> {{-- /wizard-content --}}
 </div> {{-- /wizard --}}
 
