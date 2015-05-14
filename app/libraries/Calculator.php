@@ -402,8 +402,8 @@ class Calculator
         
         foreach ($events as $id => $event)
         {
-            // decoding object
 
+            // decoding object
             $tempArray = json_decode(strstr($event->object, '{'), true);
             $tempString = strstr($event->object, '{');
             $prevTempArray = !is_null($event->previousAttributes)

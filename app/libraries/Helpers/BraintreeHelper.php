@@ -104,23 +104,29 @@ class BraintreeHelper {
 				switch ($notification->kind)
 				{
 					case 'disbursement':
+						$transaction = self::getTransaction($notification->disbursement->transactionIds[0] ,$user);
 						$object['object'] = array(
 							'id' 		=> $notification->disbursement->id,
 							'amount' 	=> $notification->disbursement->amount,
-							'currency'	=> Braintree_Transaction::find($notification->disbursement->transactionIds[0])
-												->currencyIsoCode,
+							'currency'	=> $transaction->currencyIsoCode,
 							'kind'		=> 'disbursement',
+							'card'		=> array(
+											'name' => $transaction->billing['firstName'].' '.$transaction->billing['lastName'])
 						);
 						break;
 					case 'subscription_charged_successfully':
 					case 'subscription_charged_unsuccessfully':
+						$sub = $notification->subscription;
+						$transaction = $sub->transactions[0];
 
-						$plan = self::getPlan($notification->subscription->planId, $user);
+						$plan = self::getPlan($sub->planId, $user);
 						$object['object'] = array(
-							'id'		=> $notification->subscription->id,
-							'amount'	=> $notification->subscription->price * 100,
+							'id'		=> $sub->id,
+							'amount'	=> $sub->price * 100,
 							'currency'  => $plan->currencyIsoCode,
 							'kind'		=> 'subscription',
+							'card'		=> array(
+											'name' => $transaction->billing['firstName'].' '.$transaction->billing['lastName'])
 						);
 						break;
 					default:
@@ -177,7 +183,9 @@ class BraintreeHelper {
 		$metrics->save();
 	}
 
-
+	// ------------------------------------------
+	// Braintree wrappers
+	// ------------------------------------------	
 
 	private static function setBraintreeCredentials($user)
 	{
@@ -285,6 +293,22 @@ class BraintreeHelper {
     	return $returnVariable;
 	}
 
+	/**
+	* wrapper for getting subscriptions from braintree
+	* @param string - id of the transaction
+	* @param object - user
+	*
+	* @return object - the searched transaction
+	*/
+
+	private static function getTransaction($transactionId,$user)
+	{
+		self::setBraintreeCredentials($user);
+
+		$transaction = Braintree_Transaction::find($transactionId);
+
+		return $transaction;
+	}
 
 
 	// ------------------------------------------

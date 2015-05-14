@@ -110,9 +110,13 @@
                     <span class="badge badge-success">
                       Charged
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif
+                      </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
@@ -130,9 +134,13 @@
                     <span class="badge badge-info">
                       Captured
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif
+                      </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
@@ -150,9 +158,13 @@
                     <span class="badge badge-danger">
                       Failed
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif
+                      </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
@@ -170,9 +182,13 @@
                     <span class="badge badge-warning">
                       Refunded
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif
+                      </span>
                     <span class="text-money up">
                       {{ Config::get('constants.' . $events[$i]['currency']) }}{{ $events[$i]['amount'] / 100 }}
                     </span>
@@ -194,9 +210,13 @@
                     <span class="badge badge-success">
                       New Customer
                     </span> 
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>        
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif        
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b> signed up
                     @if ($events[$i]['date'])
                     <span class="timestamp">
@@ -211,9 +231,13 @@
                     <span class="badge badge-warning">
                       Customer cancelled
                     </span> 
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>        
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif        
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b> left
                     @if ($events[$i]['date'])
                     <span class="timestamp">
@@ -227,14 +251,18 @@
 
                 <!-- Customer Subscription events -->
 
-                @if ($events[$i]['type'] == 'customer.subscription.created' && $events[$i]['provider']!='connect'))
+                @if ($events[$i]['type'] == 'customer.subscription.created' && $events[$i]['provider']!='connect')
                   <li class="list-group-item">
                     <span class="badge badge-info">
                       New subscription
                     </span> 
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>        
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif        
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b>
                     subscribed to 
                     {{ $events[$i]['plan_name'] }} ({{ $events[$i]['plan_interval'] }}) plan.
@@ -252,9 +280,13 @@
                     <span class="badge badge-info">
                       Changed subscription
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>         
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif         
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b>
                     changed from <b>{{ $events[$i]['prevPlanName'] }}</b> ({{ $events[$i]['prevPlanInterval']}}) 
                     to <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
@@ -271,9 +303,13 @@
                     <span class="badge badge-warning">
                       Cancelled subscription
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>         
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif         
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b>
                     cancelled <b>{{ $events[$i]['plan_name'] }}</b> ({{ $events[$i]['plan_interval'] }})
                     @if ($events[$i]['date'])
@@ -295,9 +331,13 @@
                     <span class="badge badge-warning">
                       Coupon used
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>         
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif         
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b>
                     used a coupon.
                     @if ($events[$i]['date'])
@@ -313,9 +353,13 @@
                     <span class="badge badge-success">
                       Coupon expired
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>         
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif         
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b>'s
                     discount ended.                    
                     @if ($events[$i]['date'])
@@ -331,9 +375,13 @@
                     <span class="badge badge-info">
                       Coupon changed
                     </span>
-                    <span class="provider">
-                      <i class="fa icon fa-cc-stripe"></i>
-                    </span>         
+                      <span class="provider">
+                        @if($events[$i]['provider'] == 'stripe')
+                          <i class="icon pf pf-stripe"></i>
+                        @elseif($events[$i]['provider'] == 'braintree')
+                          <i class='icon pf pf-braintree'></i>
+                        @endif         
+                      </span>
                     <b>{{ $events[$i]['name'] }}</b> changed coupon
                     from <b>{{$events[$i]['prevCoupon']}}</b> to <b>{{$events[$i]['newCoupon']}}</b>              
                     @if ($events[$i]['date'])
