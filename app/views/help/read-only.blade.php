@@ -1,5 +1,6 @@
-<p class='lead'>Creating a read-only API key with Braintree for added security</p>
-
+<div class='col-sm-11'>
+  <h3>Creating a read-only API key with Braintree for added security</h3>
+</div>
 <div class='col-sm-7'>
   <p>For added security when using Braintree we recommend taking these steps to only grant Fruit Analytics read access to certain parts of your Braintree account.</p>
 

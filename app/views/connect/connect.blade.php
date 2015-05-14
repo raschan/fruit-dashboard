@@ -249,5 +249,35 @@
       </script>
     @endif
 
+    {{-- scripts for modal wizard--}}
+    <script type="text/javascript">
+      init.push(function () {
+        $('.ui-wizard').pixelWizard({
+          onChange: function () {
+            console.log('Current step: ' + this.currentStep());
+          },
+          onFinish: function () {
+            // Disable changing step. To enable changing step just call this.unfreeze()
+            this.freeze();
+            console.log('Wizard is freezed');
+            console.log('Finished!');
+          }
+        });
+
+        $('.wizard-next-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('nextStep');
+        });
+
+        $('.wizard-prev-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('prevStep');
+        });
+
+        $('.wizard-go-to-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('setCurrentStep', 2);
+        });
+      });
+    </script>
+    {{-- /scripts for modal wizard--}}
+    
   @stop
 

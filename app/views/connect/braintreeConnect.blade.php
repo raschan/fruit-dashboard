@@ -1,4 +1,4 @@
-<div class='wizard'>
+<div class='wizard ui-wizard'>
   <div class='wizard-wrapper'>
     <ul class='wizard-steps' style='left:0px;'>
       <li data-target='#braintree-connect-step-1' @if($stepNumber==1)class='active'@endif>
@@ -13,16 +13,18 @@
           <span class='wizard-step-description'>Keep synchronized</span>
         </span>
       </li>
+      {{--
       <li data-target='#braintree-connect-step-3'>
         <span class='wizard-step-number'>3</span>
       </li>
+      --}}
     </ul>
   </div> {{-- /wizard-wrapper --}}
   <div class='wizard-content'>
     <div class='wizard-pane' id='braintree-connect-step-1' @if($stepNumber==1)style='display:block;opacity:1;'@endif>
       <div class='row'>
         <div class='col-sm-8 col-sm-offset-2'>
-          <p class='lead'>First input and save your Braintree API keys</p>
+          <h3>First input and save your Braintree API keys</h3>
           <p class='text-danger small'>For added security follow the steps on the right to create a read-only API key in your Braintree account</p>
           {{ Form::open(array(
                   'action' => 'ConnectController@doBraintreeConnect',
@@ -87,14 +89,17 @@
 
             <!-- Submit -->
             <div class='form-group'>
-              <div class='col-sm-1 col-sm-offset-3'>
-                {{ Form::submit('Save', array(
+              <div class='col-sm-2 col-sm-offset-5'>
+                {{ Form::submit('Save API keys', array(
                     'id' => 'id_submit',
-                    'class' => 'btn btn-primary btn-sm btn-flat',)) }}
+                    'class' => 'btn btn-primary btn-sm btn-flat text-center',)) }}
               </div>
             </div>
             <!-- /Submit -->
           {{ Form::close() }}
+          <div class='col-sm-2 col-sm-offset-7'>
+            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn'>Next step</button>
+          </div>
         </div> {{-- /col-sm-8 --}}
       </div> {{-- /row --}}
       <div class='row'>
@@ -105,14 +110,21 @@
     <div class='wizard-pane' id='braintree-connect-step-2' @if($stepNumber==2)style='display:block;opacity:1;'@endif>
       <div class='row'>
         <div class='col-sm-8 col-sm-offset-2'>
-          <p class='lead'>Then add this webhook to keep your data synced</p>
-          <p><span class='well well-sm text-danger'><strong>{{ URL::secure('api/braintree').'/'.$user->id }}</strong></span></p>
+          <h3>Then add this webhook to keep your data synced</h3>
+          <p class='top-space bottom-space'>
+            <span class='well well-sm text-danger'><strong>{{ URL::secure('api/braintree').'/'.$user->id }}</strong></span>
+          </p>
+          <div class='col-sm-7 col-sm-offset-2 top-space bottom-space'>
+            <button class='btn btn-default btn-sm btn-flat wizard-prev-step-btn pull-left'>Previous step</button>
+            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn pull-right'>Finish</button>
+          </div>
         </div> {{-- /col-sm-8 --}}
       </div> {{-- /row --}}
-      <div class='row'>
+      <div class='row top-space'>
         @include('help.webhook-permissions')
       </div> {{-- /row --}}
     </div> {{-- /braintree-connect-step-2 --}}
   </div> {{-- /wizard-content --}}
 </div> {{-- /wizard --}}
+
 
