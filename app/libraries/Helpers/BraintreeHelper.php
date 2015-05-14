@@ -107,7 +107,7 @@ class BraintreeHelper {
 						$transaction = self::getTransaction($notification->disbursement->transactionIds[0] ,$user);
 						$object['object'] = array(
 							'id' 		=> $notification->disbursement->id,
-							'amount' 	=> $notification->disbursement->amount,
+							'amount' 	=> $notification->disbursement->amount * 100,
 							'currency'	=> $transaction->currencyIsoCode,
 							'kind'		=> 'disbursement',
 							'card'		=> array(
@@ -168,8 +168,8 @@ class BraintreeHelper {
 			$metrics->user = $user->id;
 			$metrics->date = Carbon::now()->format('Y-m-d');
 
-			$metrics->mrr 	= self::getMRR($subscriptions);
-			$metrics->au 	= self::getAU($customers);
+			$metrics->mrr 	= self::getMRR($user, $subscriptions);
+			$metrics->au 	= self::getAU($user, $customers);
 			
 			$metrics->arr 	= $metrics->mrr * 12;
 			$metrics->arpu 	= $metrics->au != 0 ? round($metrics->mrr / $metrics->au) : null;
