@@ -158,7 +158,7 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
-        if (!Auth::user()->isConnected())
+        if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
         {
             return Redirect::route('connect.connect')
                 ->with('error','Connect a service first.');

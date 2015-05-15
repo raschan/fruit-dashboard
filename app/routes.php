@@ -140,6 +140,11 @@ Route::post('connectBraintree',array(
     'uses'      => 'ConnectController@doBraintreeConnect'
 ));
 
+Route::any('import/{provider}',array(
+    'before'    => 'auth',
+    'uses'      => 'ConnectController@doImport'
+));
+
 Route::post('connect', array(
     'before' => 'auth',
     'as' => 'connect.connect',
@@ -182,11 +187,11 @@ Route::post('/plans/{planName}', array(
 
 
 // webhook endpoints
-Route::get('/api/braintree/{userId}', array(
+Route::get('/api/events/braintree/{webhookId}', array(
     'uses'      => 'WebhookController@verifyBraintreeWebhook',
 ));
 
-Route::post('/api/braintree/{userId}', array(
+Route::post('/api/events/braintree/{webhookId}', array(
     'uses'      => 'WebhookController@braintreeEvents',
 ));
 

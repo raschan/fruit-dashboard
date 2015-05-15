@@ -75,7 +75,7 @@
               </div> <!-- /. connect-icon -->
 
               <div class="col-sm-5">
-                @if ($stripe_connected)
+                @if ($user->isStripeConnected())
                   <!-- Modal box -->
                   <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -156,13 +156,13 @@
                         <h4 class='modal-title'>Connect Braintree</h4>
                       </div>
                       <div class='modal-content' style='background:white;'>
-                        @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>Session::has('modal')?2:1))
+                        @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- /Braintree details modal box -->
-                @if ($braintree_connected)
+                @if ($user->isBraintreeConnected())
                   <!-- Modal box -->
                   <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -184,8 +184,18 @@
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
+                @elseif($user->btWebhookConnected)
+                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                    Import your data
+                  </button>
+                @elseif($user->isBraintreeCredentialsValid())
+                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                    Add webhook to finish connecting
+                  </button>
                 @else
-                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>Connect with Braintree</button>
+                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                    Connect with Braintree
+                  </button>
                 @endif
               </div> <!-- /. col-sm-5 -->
 
@@ -273,7 +283,7 @@
         });
 
         $('.wizard-go-to-step-btn').click(function () {
-          $(this).parents('.ui-wizard').pixelWizard('setCurrentStep', 2);
+          $(this).parents('.ui-wizard').pixelWizard('setCurrentStep', 1);
         });
       });
     </script>

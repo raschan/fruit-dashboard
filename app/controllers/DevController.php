@@ -21,9 +21,14 @@ class DevController extends BaseController
 {
     public function show()
     {
-        $transaction = Braintree_Transaction::find('k2f3hj');
+        $encrypted = Crypt::encrypt(3);
+        $encrypted_start = substr($encrypted,0,12);
+        $encrypted_end = substr($encrypted,176,12);
+        $decrypted = Crypt::decrypt($encrypted);
 
-        var_dump($transaction->billing['firstName']);
+        var_dump($encrypted_start);
+        var_dump($encrypted_end);
+        var_dump($decrypted);
         exit();
     }
     /*

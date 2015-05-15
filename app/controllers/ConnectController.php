@@ -14,31 +14,59 @@ class ConnectController extends BaseController
     */
     public function showConnect()
     {
-        /*
-        // getting paypal api context
-        $apiContext = PayPalHelper::getApiContext();
-
-        // building up redirect url
-        $redirectUrl = OpenIdSession::getAuthorizationUrl(
-            route('paypal.buildToken'),
-            array('profile', 'email', 'phone'),
-            null,
-            null,
-            null,
-            $apiContext
-        );
-        */
         // selecting logged in user
         $user = Auth::user();
+        
+        $braintree_connect_stepNumber = 1;
+
+        if (Session::has('modal'))
+        {
+            $connectState = Session::get('modal');
+
+            if ($connectState == 'braintree-credentials')
+            {
+                // this is the first step, this is default
+                // there was an authentication error with braintree
+            }
+            if ($connectState == 'braintree-webhook') 
+            {
+                // authentication with braintree was successful, 
+                // now lets show the webhook url
+
+                $braintree_connect_stepNumber = 2;
+            }
+            if ($connectState == 'braintree-connect')
+            {
+                // webhook setup was successful
+                // show the 'import your data' step
+                $braintree_connect_stepNumber = 3;
+            }
+        }
+
+        // we want to start on the second step with braintree, 
+        // if braintree credentials are okay
+        // we only save credentialss that were okay
+        if ($user->isBraintreeCredentialsValid())
+        {
+            $braintree_connect_stepNumber = 2;
+        }
+
+        // we want to show the 'import your data' step
+        // if webhook is already connected
+        if ($user->btWebhookConnected)
+        {
+            $braintree_connect_stepNumber = 3;
+        }
         
         // returning view
         return View::make('connect.connect',
             array(
-                'user'                  => $user,
-                'stripe_connected'      => $user->isStripeConnected(),
-                'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
+                'user'                          => $user,
+                // stripe stuff
+                'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
 
-                'braintree_connected'	=> $user->isBraintreeConnected(),
+                // braintree stuff
+                'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
             )
         );
     }
@@ -149,6 +177,9 @@ class ConnectController extends BaseController
             $user->btPublicKey = null;
             $user->btEnvironment = null;
             $user->btMerchantId = null;
+
+            $user->btWebhookId = null;
+            $user->btWebhookConnected = false;
             
         }
         // saving modification on user
@@ -262,7 +293,8 @@ class ConnectController extends BaseController
         	catch (Exception $e) 
         	{
         		return Redirect::back()
-        			->with('error','Authentication failed.');
+        			->with('error','Authentication failed.')
+                    ->with('modal','braintree-credentials');
         	}
 
         	$user = Auth::user();
@@ -272,16 +304,31 @@ class ConnectController extends BaseController
         	$user->btPrivateKey = Input::get('privateKey');
         	$user->btMerchantId = Input::get('merchantId');
 
-        	$user->ready = 'connecting';
+            if($user->btWebhookId == null)
+            {
+                $user->btWebhookId = substr(Crypt::encrypt($user->id),100,12);            
+            }
 
         	$user->save();
 
-            Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
-
-
-        	return Redirect::back()
+        	return Redirect::route('connect.connect')
         		->with('success','Authentication successful')
                 ->with('modal','braintree-webhook');
+        }
+    }
+
+    public function doImport($provider)
+    {
+        if ($provider == 'braintree')
+        {
+            $user = Auth::user();
+            $user->ready ='connecting';
+            $user->save();
+
+            Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
+
+            return Redirect::route('auth.dashboard')
+                ->with('success','Braintree connected, importing data');
         }
     }
 

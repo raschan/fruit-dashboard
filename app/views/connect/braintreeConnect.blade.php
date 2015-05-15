@@ -1,27 +1,28 @@
 <div class='wizard ui-wizard'>
   <div class='wizard-wrapper'>
     <ul class='wizard-steps' style='left:0px;'>
-      <li data-target='#braintree-connect-step-1' @if($stepNumber==1)class='active'@endif>
+      <li data-target='#braintree-connect-step-1' @if($stepNumber == 1)class='active'@endif>
         <span class='wizard-step-number'>1</span>
         <span class='wizard-step-caption'>Step 1
           <span class='wizard-step-description'>Credentials</span>
         </span>
       </li>
-      <li data-target='#braintree-connect-step-2' @if($stepNumber==2)class='active'@endif>
+      <li data-target='#braintree-connect-step-2' @if($stepNumber == 2)class='active'@endif>
         <span class='wizard-step-number'>2</span>
         <span class='wizard-step-caption'>Step 2
           <span class='wizard-step-description'>Keep synchronized</span>
         </span>
       </li>
-      {{--
-      <li data-target='#braintree-connect-step-3'>
+      <li data-target='#braintree-connect-step-3' @if($stepNumber == 3)class='active'@endif>
         <span class='wizard-step-number'>3</span>
+        <span class='wizard-step-caption'>Step 3
+          <span class='wizard-step-description'>Import your data</span>
+        </span>
       </li>
-      --}}
     </ul>
   </div> {{-- /wizard-wrapper --}}
   <div class='wizard-content'>
-    <div class='wizard-pane' id='braintree-connect-step-1' @if($stepNumber==1)style='display:block;opacity:1;'@endif>
+    <div class='wizard-pane' id='braintree-connect-step-1' @if($stepNumber == 1)style='display:block;opacity:1;'@endif>
       <div class='row'>
         <div class='col-sm-8 col-sm-offset-2'>
           <h3>First input and save your Braintree API keys</h3>
@@ -98,7 +99,7 @@
             <!-- /Submit -->
           {{ Form::close() }}
           <div class='col-sm-2 col-sm-offset-7'>
-            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn'>Next step</button>
+            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn'>Webhook</button>
           </div>
         </div> {{-- /col-sm-8 --}}
       </div> {{-- /row --}}
@@ -107,16 +108,20 @@
       </div> {{-- /row --}}
     </div> {{-- /braintree-connect-step-1 --}}
     
-    <div class='wizard-pane' id='braintree-connect-step-2' @if($stepNumber==2)style='display:block;opacity:1;'@endif>
+    <div class='wizard-pane' id='braintree-connect-step-2' @if($stepNumber == 2)style='display:block;opacity:1;'@endif>
       <div class='row'>
         <div class='col-sm-8 col-sm-offset-2'>
-          <h3>Then add this webhook to keep your data synced</h3>
-          <p class='top-space bottom-space'>
-            <span class='well well-sm text-danger'><strong>{{ URL::secure('api/braintree').'/'.$user->id }}</strong></span>
+          <h3>Add this webhook to keep your data synced</h3>
+          <p class='top-space bottom-space well well-sm'>
+            @if($user->isBraintreeCredentialsValid())
+              <span class='text-danger'><strong>{{ URL::secure('api/events/braintree').'/'.$user->btWebhookId }}</strong></span>
+            @else
+              <span class='well well-sm text-danger'><strong>Save API keys first</strong></span>
+            @endif
           </p>
           <div class='col-sm-7 col-sm-offset-2 top-space bottom-space'>
-            <button class='btn btn-default btn-sm btn-flat wizard-prev-step-btn pull-left'>Previous step</button>
-            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn pull-right'>Finish</button>
+            <button class='btn btn-default btn-sm btn-flat wizard-prev-step-btn pull-left'>Credentials</button>
+            <button class='btn btn-default btn-sm btn-flat wizard-next-step-btn pull-right'>Import</button>
           </div>
         </div> {{-- /col-sm-8 --}}
       </div> {{-- /row --}}
@@ -124,6 +129,20 @@
         @include('help.webhook-permissions')
       </div> {{-- /row --}}
     </div> {{-- /braintree-connect-step-2 --}}
+    <div class='wizard-pane' id='braintree-connect-step-3' @if($stepNumber == 3)style='display:block;opacity:1;'@endif>
+      <div class='row'>
+        <div class='col-sm-8 col-sm-offset-2'>
+          <div class='text-center'>
+            <h3>To finish, import your data</h3>
+            <a href="{{ URL::to('import/braintree') }}" class='btn btn-primary btn-lg'>Import</a>
+          </div>
+          <div class='col-sm-8 col-sm-offset-2 top-space bottom-space'>
+            <button class='btn btn-default btn-sm btn-flat wizard-go-to-step-btn pull-left'>Credentials</button>
+            <button class='btn btn-default btn-sm btn-flat wizard-prev-step-btn pull-right'>Webhook</button>
+          </div>
+        </div> {{-- /col-sm-8 --}}
+      </div> {{-- /row --}}
+    </div> {{-- /braintree-connect-step-3 --}}
   </div> {{-- /wizard-content --}}
 </div> {{-- /wizard --}}
 

@@ -9,20 +9,21 @@ use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 */
 class WebhookController extends BaseController
 {
-	public function braintreeEvents($userId)
+	public function braintreeEvents($webhookId)
 	{
 		if (Input::has('bt_signature') && Input::has('bt_payload'))
 		{
-			$user = User::find($userId);
+			$user = User::where('btWebhookId','=',$webhookId)
+					->first();
 			Log::info('Incoming webhook for user: '.$user->email);
 			
 			$notification = Braintree_WebhookNotification::parse(
 				Input::get("bt_signature"), Input::get("bt_payload")
 		    );
 
+			    $event = array();
 
 			// format the event to the common format
-		    $event = array();
 		    $event['created'] = $notification->timestamp->getTimestamp();
 		    
 
@@ -61,11 +62,24 @@ class WebhookController extends BaseController
 		}
 	}
 
-	public function verifyBraintreeWebhook($userId)
+	public function verifyBraintreeWebhook($webhookId)
 	{
 		if (Input::has('bt_challenge'))
 		{
-			echo(Braintree_WebhookNotification::verify(Input::get('bt_challenge')));
+			$user = User::where('btWebhookId','=',$webhookId)
+					->first();
+			if($user)
+			{
+				BraintreeHelper::setBraintreeCredentials($user);
+
+				$user->btWebhookConnected = true;
+				$user->save();
+				echo(Braintree_WebhookNotification::verify(Input::get('bt_challenge')));
+			} else {
+				echo('no such user');
+			}
+		} else {
+			echo('not a challenge');
 		}
 	}
 }

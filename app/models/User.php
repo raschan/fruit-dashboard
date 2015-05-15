@@ -61,6 +61,16 @@ class User extends Eloquent implements UserInterface
 
     public function isBraintreeConnected()
     {
+        if ($this->isBraintreeCredentialsValid() && $this->btWebhookConnected && $this->ready=='connected')
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBraintreeCredentialsValid()
+    {
         if (strlen($this->btPublicKey) > 2)
         {
             return true;
@@ -71,7 +81,7 @@ class User extends Eloquent implements UserInterface
 
     public function isTrialEnded()
     {
-        if ($this->plan == 'trial' && $this->created_at >= Carbon::now()->subDays(15))
+        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS']))
         {
             return true;
         } else {

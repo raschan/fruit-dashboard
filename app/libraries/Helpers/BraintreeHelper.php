@@ -187,7 +187,7 @@ class BraintreeHelper {
 	// Braintree wrappers
 	// ------------------------------------------	
 
-	private static function setBraintreeCredentials($user)
+	public static function setBraintreeCredentials($user)
 	{
 		Braintree_Configuration::environment($user->btEnvironment);
     	Braintree_Configuration::merchantId($user->btMerchantId);
