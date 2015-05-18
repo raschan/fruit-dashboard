@@ -7,7 +7,6 @@ composer.lock
 .DS_Store
 Thumbs.db
 startServer
-README.md
 error_log
 summary_email.html
 connected_email.html

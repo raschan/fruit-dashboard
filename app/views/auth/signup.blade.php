@@ -1,5 +1,9 @@
 @extends('meta.base-user-signout')
 
+  @section('pageTitle')
+    Sign up
+  @stop
+
 @section('pageStylesheet')
 <!-- Facebook Conversion Code for Katt -->
 

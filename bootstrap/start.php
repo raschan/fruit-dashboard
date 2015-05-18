@@ -28,12 +28,14 @@ $env = $app->detectEnvironment(function()
 {
 	$hostname = gethostname();
 	if ($hostname == 'server.abfinformatika.hu') {
-		if (basename(dirname(__DIR__)) == 'development-dash.tryfruit.com') {
+		if (basename(dirname(__DIR__)) == 'development-dashboard.tryfruit.com') {
 			return 'development';
-		} elseif (basename(dirname(__DIR__)) == 'testing-dashboard.tryfruit.com') {
-			return 'deploy';
-		} else {
+		} elseif (basename(dirname(__DIR__)) == 'staging-dashboard.tryfruit.com') {
+			return 'staging';
+		} elseif (basename(dirname(__DIR__)) == 'dashboard.tryfruit.com') {
 			return 'production';
+		} else {
+			return 'local';
 		}
 	} else {
 		return 'local';
