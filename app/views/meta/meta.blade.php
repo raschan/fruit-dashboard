@@ -7,9 +7,11 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
-    <title>Fruit Analytics | 
-      @section('pageTitle')
-      @show
+    <title>
+      Fruit Analytics
+      @if (trim($__env->yieldContent('pageTitle')))
+        | @yield('pageTitle')
+      @endif
     </title>
 
     @section('stylesheet')

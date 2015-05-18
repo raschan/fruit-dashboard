@@ -26,5 +26,5 @@ return array(
    |
    */
 
-   'url' => 'https://development-dashboard.tryfruit.com',
+   'url' => 'https://staging-dashboard.tryfruit.com',
 );
