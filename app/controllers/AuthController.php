@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | AuthController: Handles the authentication related sites
@@ -51,12 +52,6 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
-                // check if trial period is ended
-                if (Auth::user()->isTrialEnded())
-                {
-                    return Redirect::route('auth.plan')
-                        ->with('error','Trial period ended.');
-                }
                 // check if already connected
                 if (Auth::user()->isConnected()) {
                     return Redirect::route('auth.dashboard')
@@ -127,6 +122,7 @@ class AuthController extends BaseController
 
             // create user
             $user = new User;
+
             // set auth info
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
@@ -134,6 +130,10 @@ class AuthController extends BaseController
             $user->summaryEmailFrequency = 'daily';
             $user->plan = 'trial';
             $user->save();
+            
+            // create user on intercom
+            IntercomHelper::signup($user);
+
             // signing the user in and redirect to dashboard
             Auth::login($user);
             return Redirect::route('auth.signup')->with('success', 'Signup was successful.');
@@ -379,8 +379,7 @@ class AuthController extends BaseController
             ->with('success', 'Edit was succesful.');
         }
 
-    
-    
+
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page
