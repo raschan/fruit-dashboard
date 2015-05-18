@@ -139,13 +139,6 @@ class ConnectController extends BaseController
     		}
     	}
 
-    	if ($provider == 'braintree')
-    	{
-    		return View::make('connect.braintreeConnect', array(
-                'user'  => Auth::user(),
-            ));
-    	}
-
     	return Redirect::route('connect.connect')
     		->with('error','Invalid payment provider.');
     }
@@ -325,6 +318,7 @@ class ConnectController extends BaseController
             $user->ready ='connecting';
             $user->save();
 
+            IntercomHelper::connected($user,'braintree');
             Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
 
             return Redirect::route('auth.dashboard')
