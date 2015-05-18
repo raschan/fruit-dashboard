@@ -33,7 +33,7 @@ return array(
 
   
 
-   'from' => array('address' => 'hello@tryfruit.com', 'name' => 'Development'),
+   'from' => array('address' => 'hello@tryfruit.com', 'name' => 'Staging'),
 
    
 
