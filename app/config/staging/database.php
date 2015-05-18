@@ -22,9 +22,9 @@ return array(
       'mysql' => array(
         'driver'    => 'mysql',
         'host'      => 'localhost',
-        'database'  => 'abfinfor_supdashboarddevdb',
-        'username'  => 'abfinfor_root',
-        'password'  => 'A$9ZkUTHru[v',
+        'database'  => 'abfinfor_stagingdashboarddb',
+        'username'  => 'abfinfor_staging',
+        'password'  => 'Almafa123',
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',

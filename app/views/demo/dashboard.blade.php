@@ -1,5 +1,9 @@
 @extends('meta.base-user')
 
+  @section('pageTitle')
+    Dashboard demo
+  @stop
+
 @section('navbar')
 
 <div id="main-navbar" class="navbar" role="navigation">
