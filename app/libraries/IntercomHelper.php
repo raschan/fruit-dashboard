@@ -12,7 +12,7 @@ class IntercomHelper {
         ));
 	}
 
-	public static function signup($user)
+	public static function signedup($user)
 	{
 		$intercom = self::createInstance();
 
@@ -23,7 +23,7 @@ class IntercomHelper {
 		));
 	}
 
-	public static function connect($user, $provider)
+	public static function connected($user, $provider)
 	{
 		$intercom = self::createInstance();
 		
@@ -34,10 +34,57 @@ class IntercomHelper {
 			'email'			=> $user->email,
 		));
 
-		// witch provider
+		// provider connect
 		$intercom->createEvent(array(
 			'event_name' 	=> 'connected-'.$provider,
 			'created_at' 	=> time(),
+			'email'			=> $user->email,
+		));
+	}
+
+	public static function subscribed($user,$plan)
+	{
+		$intercom = self::createInstance();
+
+		// plan subscription
+		$intercom->createEvent(array(
+			'event_name'	=> 'subscribed-to-'.$plan,
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
+
+	public static function cancelled($user)
+	{
+		$intercom = self::createInstance();
+
+		// subscription cancelled
+		$intercom->createEvent(array(
+			'event_name'	=> 'cancelled-subscription',
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
+
+	public static function trialEnded($user,$when)
+	{
+		$intercom = self::createInstance();
+
+		// trial ended
+		$intercom->createEvent(array(
+			'event_name'	=> 'trial-ended-'.$when,
+			'created_at'	=> time(),
+			'email'			=> $user->email,
+		));
+	}
+
+	public static function trialWillEnd($user,$days)
+	{
+		$intercom = self::createInstance();
+
+		$intercom->createEvent(array(
+			'event_name'	=> 'trial-will-end-in-'.$days.'-days',
+			'created_at'	=> time(),
 			'email'			=> $user->email,
 		));
 	}

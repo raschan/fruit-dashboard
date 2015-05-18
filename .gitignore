@@ -10,3 +10,4 @@ startServer
 error_log
 summary_email.html
 connected_email.html
+development_email.html
