@@ -239,8 +239,6 @@
                 </div>
               {{ Form::close() }}
 
-                <!-- hidden password change form -->
-
               <!-- Summary Email Frequency -->
               <!-- choose from dropdown -->
               {{ Form::open(array(
@@ -268,7 +266,7 @@
                   </div> <!-- / .form-group -->
                 </div>
 
-                <!-- hidden password change form -->
+                <!-- hidden notification change form -->
 
                 <div id="changeFrequencyForm" class="hidden-form">
                   <div class="form-group @if ($errors->first('new_frequency')) has-error @endif">
@@ -301,7 +299,58 @@
                 </div>
               {{ Form::close() }}
 
-              <!-- 3 buttons for 3 options -->
+              <!-- Subscription -->
+
+              {{ Form::open(array(
+                'action' => 'AuthController@doCancelSubscription',
+                'id' => 'form-settings-subscription',
+                'role' => 'form',
+                'class' => 'form-horizontal' )) }}
+
+                <div id="editPlanForm">
+                  <div class="form-group">
+                    {{ Form::label('id_planedit', 'Subscription', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      <p class="form-control-static">
+                        {{ $planName }} 
+                        <button id="editPlan" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Changing subscription"]);mixpanel.track("Changing subscription");'>Edit</button>
+                      </p>
+                    </div>
+                  </div> <!-- / .form-group -->
+                </div>
+
+                <!-- hidden subscription change / cancel -->
+
+                <div id="changePlanForm" class="hidden-form">
+                  <div class="form-group @if ($errors->first('change_plan')) has-error @endif">
+                    {{ Form::label('id_plan', 'Subscription', array(
+                      'class' => 'col-sm-4 control-label')) }}
+                    <div class="col-sm-8">
+                      @if($planName == 'No subscription' 
+                          || $planName == 'Trial period' 
+                          || $planName == 'Trial period ended')
+                        <a href='/plans'><button class='btn btn-success btn-flat pull-right' type='button' id='changePlan'>
+                          Subscribe
+                        </button></a>
+                      @else
+                        {{ Form::submit('Cancel subsctiption', array(
+                          'action' => 'AuthController@doCancelSubscription',
+                          'class' => 'btn btn-danger btn-sm btn-flat pull-left'
+                          )) }}
+                        <a href='/plans'><button class='btn btn-info btn-sm btn-flat pull-right' type='button' id='changePlan'>
+                          Change subscription
+                        </button></a>                
+                      @endif
+                    </div>
+                  </div> <!-- / .form-group -->
+
+                  <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                    <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelPlanEdit">Cancel</button>  
+                  </div>
+                </div>
+
+              {{ Form::close() }}
               
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
@@ -317,7 +366,7 @@
                 
               {{-- 
                 <!-- hidden for development, will not be rendered on client side -->   
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">PayPal</h4>
                   <p class="list-group-item-text">
@@ -331,7 +380,7 @@
                 <!-- / hidden for development, will not be rendered on client side -->
               --}}   
 
-                <a href="{{ URL::route('auth.connect') }}" class="list-group-item">
+                <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
                   <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
                   <h4 class="list-group-item-heading">Stripe</h4>
                   <p class="list-group-item-text">
@@ -356,29 +405,29 @@
 
 
     @if (Session::get('errors') || Session::get('error'))
-    <script type="text/javascript">
-    init.push(function () {
-        // if error slide down
-        @if ($errors->first('name')|| $errors->first('name_password'))
-        $('#editNameForm').slideUp('fast', function (){
-          $('#changeNameForm').slideDown('fast');
-        });
-        @elseif ($errors->first('country'))
-        $('#editCountryForm').slideUp('fast', function (){
-          $('#changeCountryForm').slideDown('fast');
-        });
-        @elseif ($errors->first('email') || $errors->first('email_password'))
-        $('#editEmailForm').slideUp('fast', function (){
-          $('#changeEmailForm').slideDown('fast');
-        });
-        @elseif ($errors->first('old_password') || $errors->first('new_password'))
-        $('#editPasswordForm').slideUp('fast', function (){
-          $('#changePasswordForm').slideDown('fast');
-        });
-        
-        @endif
-    });
-    </script>
+      <script type="text/javascript">
+      init.push(function () {
+          // if error slide down
+          @if ($errors->first('name')|| $errors->first('name_password'))
+          $('#editNameForm').slideUp('fast', function (){
+            $('#changeNameForm').slideDown('fast');
+          });
+          @elseif ($errors->first('country'))
+          $('#editCountryForm').slideUp('fast', function (){
+            $('#changeCountryForm').slideDown('fast');
+          });
+          @elseif ($errors->first('email') || $errors->first('email_password'))
+          $('#editEmailForm').slideUp('fast', function (){
+            $('#changeEmailForm').slideDown('fast');
+          });
+          @elseif ($errors->first('old_password') || $errors->first('new_password'))
+          $('#editPasswordForm').slideUp('fast', function (){
+            $('#changePasswordForm').slideDown('fast');
+          });
+          
+          @endif
+      });
+      </script>
     @endif 
 
     <script type="text/javascript">
@@ -409,6 +458,11 @@
           $('#changeFrequencyForm').slideDown('fast');
         });
       })
+      $('#editPlan').on('click', function (){
+        $('#editPlanForm').slideUp('fast', function (){
+          $('#changePlanForm').slideDown('fast');
+        });
+      })
 
       // event listeners for cancel buttons
       $('#cancelName').on('click', function (){
@@ -434,6 +488,11 @@
       $('#cancelFrequency').on('click', function (){
         $('#changeFrequencyForm').slideUp('fast', function (){
           $('#editFrequencyForm').slideDown('fast');
+        });
+      })
+      $('#cancelPlanEdit').on('click', function (){
+        $('#changePlanForm').slideUp('fast', function (){
+          $('#editPlanForm').slideDown('fast');
         });
       })
     });

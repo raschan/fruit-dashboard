@@ -6,6 +6,40 @@
 |--------------------------------------------------------------------------
 */
 
+if(App::environment('local', 'development'))
+{
+    // braintree development routes
+
+    Route::get('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@showBraintree'
+    ));
+
+    Route::post('/braintree', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.braintree',
+        'uses' => 'HelloController@doBraintreePayment'
+    ));
+
+
+    Route::get('/users', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.users',
+        'uses' => 'HelloController@showUsers'
+    ));
+
+    Route::get('/paypal', array(
+        'before' => 'auth|api_key',
+        'as' => 'dev.paypal',
+        'uses' => 'HelloController@showPaypal'
+    ));
+
+    Route::get('test', array(
+        'as'    => 'dev.test',
+        'uses'  => 'HelloController@showTest'
+    ));
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -39,21 +73,29 @@ Route::post('signin', array(
     'uses' => 'AuthController@doSignin'
 ));
 
+
 // sign out route
 Route::any('signout', array(
     'as' => 'auth.signout',
     'uses' => 'AuthController@doSignout'
 ));
 
-// dashboard route
+
+// dashboard routes
 Route::get('dashboard', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
 
-// settings routes
+Route::get('statistics/{statID}', array(
+    'before' => 'auth|trial_ended|cancelled|api_key',
+    'as' => 'auth.single_stat',
+    'uses' => 'AuthController@showSinglestat'
+));
 
+
+// settings routes
 Route::get('settings', array(
     'before' => 'auth',
     'as' => 'auth.settings',
@@ -85,44 +127,62 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
-// connect routes
+Route::post('cancelSubscription', array(
+    'before'    => 'auth',
+    'uses'      => 'AuthController@doCancelSubscription'
+));
 
+
+// connect routes
 Route::get('connect', array(
-    'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@showConnect'
+    'before' => 'auth|trial_ended|cancelled',
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
-    'before' => 'auth',
-    'uses' => 'AuthController@connectProvider'
+    'before' => 'auth|trial_ended|cancelled',
+    'uses' => 'ConnectController@connectProvider'
 ));
 
 Route::post('connect', array(
     'before' => 'auth',
-    'as' => 'auth.connect',
-    'uses' => 'AuthController@doConnect'
+    'as' => 'connect.connect',
+    'uses' => 'ConnectController@doConnect'
 ));
 
 Route::post('suggest', array(
     'before' => 'auth',
-    'as' => 'auth.suggest',
-    'uses' => 'AuthController@doSaveSuggestion'
+    'as'    => 'auth.suggest',
+    'uses' => 'ConnectController@doSaveSuggestion'
 ));
+
 
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',
     'as' => 'auth.disconnect',
-    'uses' => 'AuthController@doDisconnect'
+    'uses' => 'ConnectController@doDisconnect'
 ));
 
-// single_stat route
 
-Route::get('statistics/{statID}', array(
-    'before' => 'auth',
-    'as' => 'auth.single_stat',
-    'uses' => 'AuthController@showSinglestat'
+// subscription routes
+Route::get('/plans', array(
+    'before'    => 'auth',
+    'as'        => 'auth.plan',
+    'uses'      => 'AuthController@showPlans'
+));
+
+Route::get('/plans/{planName}', array(
+    'before'    => 'auth',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@showPayPlan'
+));
+
+Route::post('/plans/{planName}', array(
+    'before'    => 'auth',
+    'as'        => 'auth.payplan',
+    'uses'      => 'AuthController@doPayPlan'
 ));
 
 
