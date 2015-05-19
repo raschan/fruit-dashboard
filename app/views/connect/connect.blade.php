@@ -96,10 +96,10 @@
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-                @elseif($user->connectedServices >= 1)
-                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Connect with Stripe</span></a>
-                @else
+                @elseif($user->canConnectMore())
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
+                @else
+                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Subscribe to connect more services</span></a>
                   
                   <!--
                   <div style='display:none;'>

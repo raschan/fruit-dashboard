@@ -58,6 +58,12 @@ class User extends Eloquent implements UserInterface
         return False;
     }
 
+    /*
+    |-------------------------------------
+    | Trial checking helpers
+    |-------------------------------------
+    */
+
     public function isTrialEnded()
     {
         $trialEndDate = Carbon::parse($this->created_at)->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']);
@@ -105,5 +111,32 @@ class User extends Eloquent implements UserInterface
         $days = $now->diffInDays($signup->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']), false);
 
         return $days;
+    }
+
+
+    /*
+    |------------------------------------------
+    | Connected services checking
+    |------------------------------------------
+    */
+
+    public function canConnectMore()
+    {
+        if($this->plan != 'free')
+        {
+            // the user is good paying customer (or trial period, whatever), 
+            // let him/her connect more
+            return true;
+        } elseif($this->connectedServices < $_ENV['MAX_FREE_CONNECTIONS'])
+        {
+            // not yet reached the maximum number of allowed connections
+            return true;
+        } else
+        {
+            // the user is not paying (or trial ended), 
+            // and reached maximum number of allowed connections
+            // don't let more connections
+            return false;
+        }
     }
 }
