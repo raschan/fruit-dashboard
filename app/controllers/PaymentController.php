@@ -40,6 +40,7 @@ class PaymentController extends BaseController
             $customer = Braintree_Customer::find('fruit_analytics_user_'.Auth::user()->id);
         }
         catch(Braintree_Exception_NotFound $e) {
+            // no such customer yet, lets make it
 
             $result = Braintree_Customer::create(array(
                 'id'        => 'fruit_analytics_user_'.Auth::user()->id,
@@ -130,12 +131,13 @@ class PaymentController extends BaseController
             }
             catch (Exception $e)
             {
+                Log::error("Couldn't process cancellation with subscription ID: ".$user->subscriptionId."(user email: ".$user->email);
                 return Redirect::back()
-                    ->with('error',"Couldn't process subscription, try again later.");
+                    ->with('error',"Couldn't process cancellation, try again later.");
             }
 
             $user->subscriptionId = '';
-            $user->plan = 'cancelled';
+            $user->plan = 'free';
 
             $user->save();
 
@@ -147,6 +149,5 @@ class PaymentController extends BaseController
             Redirect::back()
                 ->with('error','No valid subscription');
         }
-
     }
 }

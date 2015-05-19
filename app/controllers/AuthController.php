@@ -135,7 +135,7 @@ class AuthController extends BaseController
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
-            $user->plan = 'trial';
+            $user->plan = 'free';
             $user->connectedServices = 0;
             $user->save();
             
@@ -215,6 +215,10 @@ class AuthController extends BaseController
 
         if (!$planName)
         {
+            if($user->plan == 'free')
+            {
+                $planName == 'Free pack';
+            }
             if($user->plan == 'trial')
             {
                $planName = 'Trial period';

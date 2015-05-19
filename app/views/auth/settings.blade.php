@@ -325,7 +325,8 @@
                     <div class="col-sm-8">
                       @if($planName == 'No subscription' 
                           || $planName == 'Trial period' 
-                          || $planName == 'Trial period ended')
+                          || $planName == 'Trial period ended'
+                          || $planName == 'Free pack')
                         <a href='/plans'><button class='btn btn-success btn-flat pull-right' type='button' id='changePlan'>
                           Subscribe
                         </button></a>
