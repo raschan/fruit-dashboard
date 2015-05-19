@@ -184,18 +184,22 @@
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
-                @elseif($user->btWebhookConnected)
-                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                    Import your data
-                  </button>
-                @elseif($user->isBraintreeCredentialsValid())
-                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                    Add webhook to finish connecting
-                  </button>
+                @elseif($user->canConnectMore())
+                  @if($user->btWebhookConnected)
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Import your data
+                    </button>
+                  @elseif($user->isBraintreeCredentialsValid())
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Add webhook to finish connecting
+                    </button>
+                  @else
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Connect with Braintree
+                    </button>
+                  @endif
                 @else
-                  <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                    Connect with Braintree
-                  </button>
+                  <a href="/plans" class='btn-link sm-pull-right'>Subscribe to connect more services</a>
                 @endif
               </div> <!-- /. col-sm-5 -->
 

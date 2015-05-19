@@ -88,4 +88,11 @@ class User extends Eloquent implements UserInterface
             return false;
         }
     }
+
+
+    // dummy function, working version is in braintree branch
+    public function canConnectMore()
+    {
+        return true;
+    }
 }
