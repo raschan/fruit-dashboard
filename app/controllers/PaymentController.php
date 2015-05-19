@@ -109,7 +109,7 @@ class PaymentController extends BaseController
 
                 IntercomHelper::subscribed($user,$plans[$planName]->name);
 
-                return Redirect::route('auth.dashboard')
+                return Redirect::route('connect.connect')
                     ->with('success','Subscribed to '.$plans[$planName]->name);
             } else {
                 return Redirect::route('payment.plan')
