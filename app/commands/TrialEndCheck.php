@@ -64,7 +64,7 @@ class TrialEndCheck extends Command {
 				
 				// send email
 				$data = array('user' => $user);
-				Mailman::make('emails.trialWillEnd')
+				Mailman::make('emails.trial.trialWillEnd')
 					->with($data)
 					->to($user->email)
 					->subject('[Fruit Analytics] Your free trial is ending.')
@@ -78,7 +78,7 @@ class TrialEndCheck extends Command {
 
 				// send email
 				$data = array('user' => $user);
-				Mailman::make('emails.trialEndedFirst')
+				Mailman::make('emails.trial.trialEndedFirst')
 					->with($data)
 					->to($user->email)
 					->subject('[Fruit Analytics] Your free trial is ended')
@@ -91,7 +91,7 @@ class TrialEndCheck extends Command {
 
 				// send email
 				$data = array('user' => $user);
-				Mailman::make('emails.trialEndedSecond')
+				Mailman::make('emails.trial.trialEndedSecond')
 					->with($data)
 					->to($user->email)
 					->subject('[Fruit Analytics] ')
@@ -104,7 +104,7 @@ class TrialEndCheck extends Command {
 
 				// send email
 				$data = array('user' => $user);
-				Mailman::make('emails.trialEndedThird')
+				Mailman::make('emails.trial.trialEndedThird')
 					->with($data)
 					->to($user->email)
 					->subject('[Fruit Analytics]')

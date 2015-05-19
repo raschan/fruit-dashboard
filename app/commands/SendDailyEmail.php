@@ -101,7 +101,7 @@ class SendDailyEmail extends Command {
 								);
 
 							
-							$email = Mailman::make('emails.summary')
+							$email = Mailman::make('emails.notification.summary')
 								->with($data)
 								->to($user->email)
 								->subject('Daily summary')
@@ -169,7 +169,7 @@ class SendDailyEmail extends Command {
 
 
 							// send the email to the user
-							$email = Mailman::make('emails.summary')
+							$email = Mailman::make('emails.notification.summary')
 								->with($data)
 								->to($user->email)
 								->subject('Weekly summary')
