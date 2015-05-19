@@ -136,6 +136,7 @@ class AuthController extends BaseController
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
             $user->plan = 'trial';
+            $user->connectedServices = 0;
             $user->save();
             
             // create user on intercom
