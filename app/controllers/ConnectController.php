@@ -34,10 +34,8 @@ class ConnectController extends BaseController
         // returning view
         return View::make('connect.connect',
             array(
-                //'redirect_url' => $redirectUrl,
-                //'paypal_connected' => $user->isPayPalConnected(),
-                'stripe_connected'      => $user->isStripeConnected(),
-                'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
+                'user'              => $user,
+                'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
             )
         );
     }

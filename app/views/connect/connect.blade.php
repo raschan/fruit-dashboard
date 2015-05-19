@@ -75,7 +75,7 @@
               </div> <!-- /. connect-icon -->
 
               <div class="col-sm-5">
-                @if ($stripe_connected)
+                @if ($user->isStripeConnected())
                   <!-- Modal box -->
                   <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -96,6 +96,8 @@
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                @elseif($user->connectedServices >= 1)
+                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Connect with Stripe</span></a>
                 @else
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                   
