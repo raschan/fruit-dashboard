@@ -135,7 +135,7 @@ Route::post('cancelSubscription', array(
 
 // connect routes
 Route::get('connect', array(
-    'before' => 'auth|trial_ended|cancelled',
+    'before' => 'auth|trial_ended|cancelled|connection_limit',
     'as' => 'connect.connect',
     'uses' => 'ConnectController@showConnect'
 ));
