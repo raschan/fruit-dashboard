@@ -217,7 +217,7 @@ class AuthController extends BaseController
         {
             if($user->plan == 'free')
             {
-                $planName == 'Free pack';
+                $planName = 'Free pack';
             }
             if($user->plan == 'trial')
             {

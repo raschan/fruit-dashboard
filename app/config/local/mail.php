@@ -42,7 +42,7 @@ return array(
    |
    */
 
-   'host' => 'smtp.startupdashboard-dev.abfinformatika.hu',
+   'host' => 'smtp.abfinformatika.hu',
 
    /*
    |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return array(
    |
    */
 
-   'from' => array('address' => 'hello@startupdashboard-dev.abfinformatika.hu', 'name' => 'Local'),
+   'from' => array('address' => 'hello@tryfruit.com', 'name' => 'Local'),
 
    /*
    |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return array(
    |
    */
 
-   'username' => 'hello@startupdashboard-dev.abfinformatika.hu',
+   'username' => 'hello@tryfruit.com',
 
    /*
    |--------------------------------------------------------------------------

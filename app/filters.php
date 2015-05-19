@@ -91,7 +91,7 @@ Route::filter('cancelled', function()
 
 Route::filter('connection_limit',function()
 {
-    if (Auth::user()->plan != 'free' && Auth::user()->connectedServices >= 1)
+    if (Auth::user()->plan == 'free' && Auth::user()->connectedServices >= 1)
     {
         return Redirect::route('payment.plan')
             ->with('error','There is only 1 connector in your current plan. Please upgrade.');
