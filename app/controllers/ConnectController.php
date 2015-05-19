@@ -299,7 +299,7 @@ class ConnectController extends BaseController
 
             if($user->btWebhookId == null)
             {
-                $user->btWebhookId = substr(Crypt::encrypt($user->id),100,12);            
+                $user->btWebhookId = str_random(12);            
             }
 
         	$user->save();
