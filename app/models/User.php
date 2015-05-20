@@ -122,6 +122,12 @@ class User extends Eloquent implements UserInterface
 
     public function canConnectMore()
     {
+        if($this->paymentStatus == 'overdue')
+        {
+            // user is a paying customer, but its payment is overdue
+            // don't let more connections
+            return false;
+        }
         if($this->plan != 'free')
         {
             // the user is good paying customer (or trial period, whatever), 

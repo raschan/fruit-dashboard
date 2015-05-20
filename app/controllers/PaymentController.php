@@ -115,6 +115,7 @@ class PaymentController extends BaseController
 				// update user plan to subscrition
 				$user->plan = $plans[$planName]->id;
 				$user->subscriptionId = $result->subscription->id;
+				$user->paymentStatus = 'ok';
 				$user->save();
 
 				// send event to intercom about subscription
@@ -162,7 +163,6 @@ class PaymentController extends BaseController
 
 			$user->subscriptionId = '';
 			$user->plan = 'free';
-
 			$user->save();
 
 			IntercomHelper::cancelled($user);

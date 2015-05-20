@@ -17,3 +17,4 @@ Artisan::add(new MigrateExternalPackages);
 Artisan::add(new GenerateEmailConnect);
 Artisan::add(new GenerateEmails);
 Artisan::add(new TrialEndCheck);
+Artisan::add(new CheckPaymentPastDue);
