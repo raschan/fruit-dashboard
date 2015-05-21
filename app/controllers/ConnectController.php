@@ -132,16 +132,24 @@ class ConnectController extends BaseController
                 $client->setClientId($_ENV['GOOGLE_CLIENTID']);
                 $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
                 $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-                $client->setScopes(array('https://spreadsheets.google.com/feeds'));
+                $client->setScopes(
+                    array(
+                        'https://spreadsheets.google.com/feeds',
+                        'userinfo'
+                    )
+                );
                 $client->authenticate(Input::get('code'));
                 $access_stuff = json_decode($client->getAccessToken(), true);
                 Log::info($access_stuff);
 
+                IntercomHelper::connected($user,'googlespreadsheet');                
+
+
 /*
+                // $user->googleSpreadsheetUserId = $access_stuff['stripe_user_id'];
                 $user->googleSpreadsheetRefreshToken = $access_stuff;
                 $user->ready = 'connecting';
                 $user->save();
-                IntercomHelper::connected($user,'googlespreadsheet');                
 */
 
                 $serviceRequest = new DefaultServiceRequest($access_stuff['access_token']);
@@ -171,10 +179,6 @@ class ConnectController extends BaseController
 
                 $worksheet = $worksheetFeed->getByTitle('Munkalap1');
                 $listFeed = $worksheet->getListFeed();
-                echo("<h1>listfeed</h1>");
-                echo("<pre>");
-                print_r($listFeed);
-                echo("</pre>");
 
                 echo("<h1>values</h1>");
                 echo("<pre>");
