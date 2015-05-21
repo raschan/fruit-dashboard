@@ -34,7 +34,7 @@ class PaymentController extends BaseController
 				return $plan;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public function showPlans()
@@ -126,11 +126,18 @@ class PaymentController extends BaseController
 					'plan' => $plans[$planName],
 					);
 
-				$email = Mailman::make('emails.payment.upgrade')
-					->with($data)
-					->to($user->email)
-					->subject('Upgrade')
-					->send();
+				try {
+					$email = Mailman::make('emails.payment.upgrade')
+						->with($data)
+						->to($user->email)
+						->subject('Upgrade')
+						->send();
+				} catch (Exception $e)
+				{
+					Log::error('Upgrade email sending error');
+					Log::info($e->getMessage());
+					Log::info($user->email);
+				}
 
 				return Redirect::route('connect.connect')
 					->with('success','Subscribed to '.$plans[$planName]->name);
@@ -171,11 +178,18 @@ class PaymentController extends BaseController
 				'plan' => $plan,
 				);
 
-			$email = Mailman::make('emails.payment.downgrade')
-				->with($data)
-				->to($user->email)
-				->subject('Downgrade')
-				->send();
+			try {
+				$email = Mailman::make('emails.payment.downgrade')
+					->with($data)
+					->to($user->email)
+					->subject('Downgrade')
+					->send();
+			} catch (Exception $e)
+			{
+				Log::error('Downgrade email sending error');
+				Log::info($e->getMessage());
+				Log::info($user->email);
+			}
 
 			return Redirect::route('payment.plan')
 				->with('success','Unsubscribed successfully');

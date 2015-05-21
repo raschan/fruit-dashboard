@@ -99,7 +99,7 @@
                 @elseif($user->canConnectMore())
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                 @else
-                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Subscribe to connect more services</span></a>
+                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Connect with Stripe</span></a>
                   
                   <!--
                   <div style='display:none;'>
@@ -200,8 +200,10 @@
                       Connect with Braintree
                     </button>
                   @endif
-                @else
-                  <a href="/plans" class='btn-link sm-pull-right'>Subscribe to connect more services</a>
+                @else {{-- can't connect more --}}
+                  <a href="/plans" class='btn-link sm-pull-right'>Connect with Braintree</a>
+                }
+                }
                 @endif
               </div> <!-- /. col-sm-5 -->
 
