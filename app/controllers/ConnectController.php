@@ -33,16 +33,12 @@ class ConnectController extends BaseController
         // selecting logged in user
         $user = Auth::user();
 
-        /*
         // prepare stuff for google drive auth        
         $client = new Google_Client();
         $client->setClientId($_ENV['GOOGLE_CLIENTID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
         $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
         $client->setScopes(array('https://spreadsheets.google.com/feeds'));
-        */
-
-        $GoogleAuthUrl = GoogleOAuth::getAuthorizationUri();
 
         // returning view
         return View::make('connect.connect',
@@ -51,9 +47,8 @@ class ConnectController extends BaseController
                 //'paypal_connected' => $user->isPayPalConnected(),
                 'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
-                'googlespreadsheet_connected'      => false,
-                //'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
-                'googleSpreadsheetButtonUrl'       => $GoogleAuthUrl,
+                'googlespreadsheet_connected'      => $user->isGoogleSpreadsheetConnected(),
+                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
                 
             )
         );
