@@ -30,6 +30,11 @@ class DevController extends BaseController
         var_dump($encrypted_end);
         var_dump($decrypted);
         exit();
+    public function showTest()
+    {
+        return View::make('dev.test',array(
+        //    'time' => $time
+        ));
     }
     /*
     |====================================================

@@ -49,7 +49,7 @@ class SendDailyEmail extends Command {
 		$weeklyEmailSent = 0;
 		foreach ($users as $user) {
 			// check if user finished the connect process
-			if ($user->isConnected() && $user->ready == 'connected')
+			if ($user->isConnected() && $user->ready == 'connected' && !$user->isTrialEnded())
 			{
 				switch ($user->summaryEmailFrequency) {
 
@@ -101,7 +101,7 @@ class SendDailyEmail extends Command {
 								);
 
 							
-							$email = Mailman::make('emails.summary')
+							$email = Mailman::make('emails.notification.summary')
 								->with($data)
 								->to($user->email)
 								->subject('Daily summary')
@@ -120,7 +120,7 @@ class SendDailyEmail extends Command {
 							change this if to switch-case with days
 							for user controlled daily send
 						*/
-						if(Carbon::now()->dayOfWeek == Carbon::MONDAY)
+						if(Carbon::now()->dayOfWeek == Carbon::WEDNESDAY)
 						{
 							// get the user's metrics
 							$metrics = Metric::where('user', $user->id)	
@@ -169,12 +169,14 @@ class SendDailyEmail extends Command {
 
 
 							// send the email to the user
-							Mailman::make('emails.summary')
+							$email = Mailman::make('emails.notification.summary')
 								->with($data)
-								->setCss('bootstrap.min.css')
 								->to($user->email)
 								->subject('Weekly summary')
+								//->show();
 								->send();
+
+							//File::put(public_path().'/summary_email.html',$email);
 								
 							$weeklyEmailSent++;
 						}

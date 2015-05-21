@@ -114,6 +114,7 @@ class Calculator
         } else {
             $firstDate = date('Y-m-d', time());
         }
+
         // request plans and subscription infos (alternativly, customers)
         $customers = TailoredData::getCustomers($user);
         // calculate starter mrr and au

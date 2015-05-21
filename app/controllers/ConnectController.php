@@ -74,12 +74,13 @@ class ConnectController extends BaseController
     /*
     |===================================================
     | <GET> | connectProvider: return route for connecting a provider
+    | authentication with OAuth2 protocol (favored)
     |===================================================
     */
     public function connectProvider($provider)
     {
-    	if ($provider == 'stripe') {
-    		$user = Auth::user();
+		$user = Auth::user();
+        if ($provider == 'stripe') {
             if(Input::has('code'))
             {
     			// get the token with the code
@@ -106,8 +107,11 @@ class ConnectController extends BaseController
                         $user->zoneinfo = $returned_object['country'];
                     }
 
+                    $user->connectedServices++;
                     // saving user
                     $user->save();
+
+                    IntercomHelper::connected($user,'stripe');
 
                     Queue::push('CalculateFirstTime', array('userID' => $user->id));
             	    
@@ -175,6 +179,8 @@ class ConnectController extends BaseController
             $user->btWebhookConnected = false;
             
         }
+
+        $user->connectedServices--;
         // saving modification on user
         $user->save();
 
@@ -193,6 +199,7 @@ class ConnectController extends BaseController
     /*
     |===================================================
     | <POST> | doConnect: updates user service data stripe only
+    | connecting with stripe secret key (deprecated)
     |===================================================
     */
     public function doConnect()
@@ -236,8 +243,11 @@ class ConnectController extends BaseController
                     $user->zoneinfo = $returned_object['country'];
                 }
 
+                $user->connectedServices++;
                 // saving user
                 $user->save();
+
+                IntercomHelper::connected($user,'stripe');
 
                 Queue::push('CalculateFirstTime', array('userID' => $user->id));
 

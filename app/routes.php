@@ -32,6 +32,11 @@ if(!App::environment('production'))
     Route::get('/test', array(
         'uses' => 'DevController@show'
     ));
+
+    Route::get('test', array(
+        'as'    => 'dev.test',
+        'uses'  => 'HelloController@showTest'
+    ));
 }
 
 /*
@@ -78,13 +83,13 @@ Route::any('signout', array(
 
 // metric graph routes
 Route::get('dashboard', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'auth.dashboard',
     'uses' => 'AuthController@showDashboard'
 ));
 
 Route::get('statistics/{statID}', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'auth.single_stat',
     'uses' => 'AuthController@showSinglestat'
 ));
@@ -123,15 +128,22 @@ Route::post('settingsFrequency', array(
 ));
 
 
+
+Route::post('cancelSubscription', array(
+    'before'    => 'auth',
+    'uses'      => 'PaymentController@doCancelSubscription'
+));
+
+
 // connect routes
 Route::get('connect', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended|cancelled',
     'as' => 'connect.connect',
     'uses' => 'ConnectController@showConnect'
 ));
 
 Route::get('connect/{provider}', array(
-    'before' => 'auth',
+    'before' => 'auth|trial_ended|cancelled',
     'uses' => 'ConnectController@connectProvider'
 ));
 
@@ -166,23 +178,23 @@ Route::get('/disconnect/{service}', array(
 ));
 
 
-// subscribe routes
+// subscription routes
 Route::get('/plans', array(
     'before'    => 'auth',
-    'as'        => 'auth.plan',
-    'uses'      => 'AuthController@showPlans'
+    'as'        => 'payment.plan',
+    'uses'      => 'PaymentController@showPlans'
 ));
 
 Route::get('/plans/{planName}', array(
-    'before'    => 'auth|api_key',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@showPayPlan'
+    'before'    => 'auth',
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@showPayPlan'
 ));
 
 Route::post('/plans/{planName}', array(
-    'before'    => 'auth|api_key',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@doPayPlan',
+    'before'    => 'auth',
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@doPayPlan'
 ));
 
 

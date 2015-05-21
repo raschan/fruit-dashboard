@@ -79,9 +79,19 @@ class User extends Eloquent implements UserInterface
         return false;
     }
 
+
+    /*
+    |-------------------------------------
+    | Trial checking helpers
+    |-------------------------------------
+    */
+
     public function isTrialEnded()
     {
-        if ($this->plan == 'trial' && $this->created_at < Carbon::now()->subDays($_ENV['TRIAL_ENDS_IN_X_DAYS']))
+        $trialEndDate = Carbon::parse($this->created_at)->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']);
+
+        if ($this->plan == 'trial_ended' 
+            || ($this->plan == 'trial' && $trialEndDate->isPast()))
         {
             return true;
         } else {
@@ -89,10 +99,72 @@ class User extends Eloquent implements UserInterface
         }
     }
 
+    public function trialWillEndInDays($days)
+    {   
+        $daysRemaining = $this->daysRemaining();
 
-    // dummy function, working version is in braintree branch
+        if ($this->plan == 'trial' && $daysRemaining < $days)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function trialWillEndExactlyInDays($days)
+    {
+        $daysRemaining = $this->daysRemaining();
+
+        if (($this->plan == 'trial' || $this->plan == 'trial_ended') && $daysRemaining == $days)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function daysRemaining()
+    {
+        $days = 100;
+
+        $now = Carbon::now();
+        $signup = Carbon::parse($this->created_at);
+
+        $days = $now->diffInDays($signup->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']), false);
+
+        return $days;
+    }
+
+
+    /*
+    |------------------------------------------
+    | Connected services checking
+    |------------------------------------------
+    */
+
     public function canConnectMore()
     {
-        return true;
+        if($this->paymentStatus == 'overdue')
+        {
+            // user is a paying customer, but its payment is overdue
+            // don't let more connections
+            return false;
+        }
+        if($this->plan != 'free')
+        {
+            // the user is good paying customer (or trial period, whatever), 
+            // let him/her connect more
+            return true;
+        } elseif($this->connectedServices < $_ENV['MAX_FREE_CONNECTIONS'])
+        {
+            // not yet reached the maximum number of allowed connections
+            return true;
+        } else
+        {
+            // the user is not paying (or trial ended), 
+            // and reached maximum number of allowed connections
+            // don't let more connections
+            return false;
+        }
     }
 }

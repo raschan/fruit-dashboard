@@ -65,7 +65,27 @@ Route::filter('api_key', function()
     if (!Auth::user()->isConnected())
     {
         // no valid key
-        return Redirect::route('connect.connect');
+        return Redirect::route('connect.connect')
+            ->with(Session::all())
+            ->with('error','Connect a payment provider');
+    }
+});
+
+Route::filter('trial_ended', function()
+{
+    if (Auth::user()->isTrialEnded())
+    {
+        return Redirect::route('payment.plan')
+            ->with('error','Trial period ended.');
+    }
+});
+
+Route::filter('cancelled', function()
+{
+    if (Auth::user()->plan == 'cancelled')
+    {
+        return Redirect::route('payment.plan')
+            ->with('error','Please subscribe.');
     }
 });
 

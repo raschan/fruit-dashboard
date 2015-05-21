@@ -85,7 +85,7 @@
                         <h4 class="modal-title">Warning</h4>
                         </div>
                         <div class="modal-body">
-                          Are you sure you want to disconnect stripe from your account? <br>
+                          Are you sure you want to disconnect Stripe from your account? <br>
                           After disconnecting we will not receive any more data from Stripe.</div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -96,8 +96,10 @@
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-                @else
+                @elseif($user->canConnectMore())
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
+                @else
+                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Subscribe to connect more services</span></a>
                   
                   <!--
                   <div style='display:none;'>
