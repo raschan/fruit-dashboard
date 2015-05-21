@@ -1,4 +1,6 @@
 <?php
+use Google\Spreadsheet\DefaultServiceRequest;
+use Google\Spreadsheet\ServiceRequestFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,12 +33,16 @@ class ConnectController extends BaseController
         // selecting logged in user
         $user = Auth::user();
 
+        /*
         // prepare stuff for google drive auth        
         $client = new Google_Client();
         $client->setClientId($_ENV['GOOGLE_CLIENTID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
         $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
         $client->setScopes(array('https://spreadsheets.google.com/feeds'));
+        */
+
+        $GoogleAuthUrl = GoogleOAuth::getAuthorizationUri();
 
         // returning view
         return View::make('connect.connect',
@@ -46,7 +52,9 @@ class ConnectController extends BaseController
                 'stripe_connected'      => $user->isStripeConnected(),
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
                 'googlespreadsheet_connected'      => false,
-                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
+                //'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
+                'googleSpreadsheetButtonUrl'       => $GoogleAuthUrl,
+                
             )
         );
     }
@@ -121,6 +129,7 @@ class ConnectController extends BaseController
     	}
 
         if ($provider == 'googlespreadsheet') {
+
             $user = Auth::user();
 
             if (Input::has('code')) {
@@ -131,23 +140,69 @@ class ConnectController extends BaseController
                 $client->setScopes(array('https://spreadsheets.google.com/feeds'));
                 $client->authenticate(Input::get('code'));
                 $access_stuff = json_decode($client->getAccessToken(), true);
+                Log::info($access_stuff);
 
 /*
                 $user->googleSpreadsheetRefreshToken = $access_stuff;
                 $user->ready = 'connecting';
                 $user->save();
-                
-                IntercomHelper::connected($user,'googlespreadsheet');
+                IntercomHelper::connected($user,'googlespreadsheet');                
 */
 
-                return Redirect::route('connect.connect')
-                    ->with('success', ucfirst($provider).' connected.');
+                $serviceRequest = new DefaultServiceRequest($access_stuff['access_token']);
+                ServiceRequestFactory::setInstance($serviceRequest);
+
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+
+                echo("<h1>spreadsheetfeed</h1>");
+                echo("<pre>");
+                foreach ($spreadsheetFeed as $entry) {
+                    echo($entry->getTitle());
+                    echo("\n");
+                }
+                echo("</pre>");
+
+                $spreadsheet = $spreadsheetFeed->getByTitle('abf - fruit analytics - google spreadsheet connect teszt file');
+                $worksheetFeed = $spreadsheet->getWorksheets();
+                echo("<h1>worksheetfeed</h1>");
+                echo("<pre>");
+                foreach ($worksheetFeed as $entry) {
+                    echo($entry->getTitle());
+                    echo("\n");
+                }
+                //print_r($worksheetFeed);
+                echo("</pre>");
+
+                $worksheet = $worksheetFeed->getByTitle('Munkalap1');
+                $listFeed = $worksheet->getListFeed();
+                echo("<h1>listfeed</h1>");
+                echo("<pre>");
+                print_r($listFeed);
+                echo("</pre>");
+
+                echo("<h1>values</h1>");
+                echo("<pre>");
+                foreach ($listFeed->getEntries() as $entry) {
+                    $values = $entry->getValues();
+                    print_r($values);
+                }
+                echo("</pre>");
+
+                die("hello");
+
+                // return Redirect::to("/connect/googlespreadsheet")->with('authCode', $code);
             }
+
+            // return Redirect::route('connect.connect')
+            //    ->with('success', ucfirst($provider).' connected.');
         }
 
-    	return Redirect::route('auth.dashboard')
-    		->with('success', ucfirst($provider).' connected.');
+  	// return Redirect::route('auth.dashboard')
+   	//	->with('success', ucfirst($provider).' connected.');
+
     }
+
 
     /*
     |===================================================
