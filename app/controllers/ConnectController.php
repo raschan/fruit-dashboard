@@ -142,10 +142,9 @@ class ConnectController extends BaseController
                 $access_stuff = json_decode($client->getAccessToken(), true);
                 Log::info($access_stuff);
 
+/*
                 IntercomHelper::connected($user,'googlespreadsheet');                
 
-
-/*
                 // $user->googleSpreadsheetUserId = $access_stuff['stripe_user_id'];
                 $user->googleSpreadsheetRefreshToken = $access_stuff;
                 $user->ready = 'connecting';
@@ -158,39 +157,11 @@ class ConnectController extends BaseController
                 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
                 $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-                echo("<h1>spreadsheetfeed</h1>");
-                echo("<pre>");
+                $spreadsheetArray = array();
                 foreach ($spreadsheetFeed as $entry) {
-                    echo($entry->getTitle());
-                    echo("\n");
+                    $spreadsheetArray = array_add($spreadsheetArray, $entry->getId(), $entry->getTitle());
                 }
-                echo("</pre>");
-
-                $spreadsheet = $spreadsheetFeed->getByTitle('abf - fruit analytics - google spreadsheet connect teszt file');
-                $worksheetFeed = $spreadsheet->getWorksheets();
-                echo("<h1>worksheetfeed</h1>");
-                echo("<pre>");
-                foreach ($worksheetFeed as $entry) {
-                    echo($entry->getTitle());
-                    echo("\n");
-                }
-                //print_r($worksheetFeed);
-                echo("</pre>");
-
-                $worksheet = $worksheetFeed->getByTitle('Munkalap1');
-                $listFeed = $worksheet->getListFeed();
-
-                echo("<h1>values</h1>");
-                echo("<pre>");
-                foreach ($listFeed->getEntries() as $entry) {
-                    $values = $entry->getValues();
-                    print_r($values);
-                }
-                echo("</pre>");
-
-                die("hello");
-
-                // return Redirect::to("/connect/googlespreadsheet")->with('authCode', $code);
+                return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
             }
 
             // return Redirect::route('connect.connect')
@@ -333,5 +304,29 @@ class ConnectController extends BaseController
 
         return Redirect::route('connect.connect')
                         ->with(array('success' => "Thank you, we'll get in touch"));
+    }
+
+    /*
+    |===================================================
+    | <POST> | showGoogleSpreadsheetConnect: wizard for the Google Spreadsheet connect
+    |===================================================
+    */
+    public function showGoogleSpreadsheetConnect($step)
+    {
+
+        // selecting logged in user
+        $user = Auth::user();
+
+        // dd(Input::get('spreadsheetArray']);
+
+        var_dump(Input::all());
+        exit();
+
+        // returning view
+        return View::make('connect.googleSpreadsheetConnect')->with(
+            array(
+                'step' => $step,
+            )
+        );
     }
 }

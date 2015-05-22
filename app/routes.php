@@ -157,6 +157,11 @@ Route::post('suggest', array(
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
+Route::any('connect/googlespreadsheet/{step}', array(
+    'before' => 'auth',
+    'as'    => 'connect.googleSpreadsheetWizard',
+    'uses' => 'ConnectController@showGoogleSpreadsheetConnect'
+));
 
 // disconnect
 Route::get('/disconnect/{service}', array(
