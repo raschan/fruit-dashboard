@@ -141,6 +141,7 @@ class ConnectController extends BaseController
                 $client->authenticate(Input::get('code'));
                 $access_stuff = json_decode($client->getAccessToken(), true);
                 Log::info($access_stuff);
+                Session::put("gtoken", $access_stuff['access_token']);
 
 /*
                 IntercomHelper::connected($user,'googlespreadsheet');                
@@ -157,10 +158,8 @@ class ConnectController extends BaseController
                 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
                 $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-                $spreadsheetArray = array();
-                foreach ($spreadsheetFeed as $entry) {
-                    $spreadsheetArray = array_add($spreadsheetArray, $entry->getId(), $entry->getTitle());
-                }
+                // Session::put('spreadsheetFeed', $spreadsheetFeed->asXML());
+
                 return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
             }
 
@@ -317,16 +316,44 @@ class ConnectController extends BaseController
         // selecting logged in user
         $user = Auth::user();
 
-        // dd(Input::get('spreadsheetArray']);
+        // dd(Input::get('spreadsheet');
 
-        var_dump(Input::all());
-        exit();
+        $serviceRequest = new DefaultServiceRequest(Session::get('gtoken'));
+        ServiceRequestFactory::setInstance($serviceRequest);
 
-        // returning view
-        return View::make('connect.googleSpreadsheetConnect')->with(
-            array(
-                'step' => $step,
-            )
-        );
+        $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+        $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+
+        if ($step == 2) {
+            Session::put("spreadsheetname", Input::get('spreadsheet'));
+            $spreadsheet = $spreadsheetFeed->getByTitle(Input::get('spreadsheet'));
+            $worksheetFeed = $spreadsheet->getWorksheets();
+            return View::make('connect.googleSpreadsheetConnect')->with(
+                array(
+                    'step' => $step,
+                    'worksheetFeed' => $worksheetFeed
+                )
+            );
+        }
+
+        if ($step == 3) {
+            Session::put("worksheetname", Input::get('worksheet'));
+            $spreadsheet = $spreadsheetFeed->getByTitle(Session::get('spreadsheetname'));
+            $worksheetFeed = $spreadsheet->getWorksheets();
+            $worksheet = $worksheetFeed->getByTitle(Input::get('worksheet'));
+            $listFeed = $worksheet->getListFeed();
+            $listArray = array();
+            foreach ($listFeed->getEntries() as $entry) {
+                $values = $entry->getValues();
+                $listArray[] = $values;
+            }
+
+            return View::make('connect.googleSpreadsheetConnect')->with(
+                array(
+                    'step' => $step,
+                    'listArray' => $listArray
+                )
+            );
+        }
     }
 }

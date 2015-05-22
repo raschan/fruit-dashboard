@@ -8,26 +8,63 @@
       </div> <!-- / .page-header -->
       @parent
 
-      <h1>Select spreadsheet</h1>
+      @if (!isset($step))
+        <h1>Select spreadsheet</h1>
 
-      {{ Form::open(
-        array(
-          'url'=>'connect/googlespreadsheet/2',
-          'method' => 'post',
-        )
-      ) }}
+        {{ Form::open(
+          array(
+            'url'=>'connect/googlespreadsheet/2',
+            'method' => 'post',
+          )
+        ) }}
 
-        <select name="spreadsheet">
-        @foreach ($spreadsheetFeed as $entry)
-          <option value="{{ $entry->getId() }}">{{ $entry->getTitle() }}</option>
-        @endforeach
-        </select>
+          <select name="spreadsheet">
+          @foreach ($spreadsheetFeed as $entry)
+            <option value="{{ $entry->getTitle() }}">{{ $entry->getTitle() }}</option>
+          @endforeach
+          </select>
 
-        {{ Form::submit(
-          'Next >')
-        }}
+          {{ Form::submit(
+            'Next >')
+          }}
 
-      {{ Form::close() }}
+        {{ Form::close() }}
+      @endif
+
+      @if (isset($step) && ($step == 2))
+        <h1>Select worksheet</h1>
+
+        {{ Form::open(
+          array(
+            'url'=>'connect/googlespreadsheet/3',
+            'method' => 'post',
+          )
+        ) }}
+
+          <select name="worksheet">
+          @foreach ($worksheetFeed as $entry)
+            <option value="{{ $entry->getTitle() }}">{{ $entry->getTitle() }}</option>
+          @endforeach
+          </select>
+
+          {{ Form::submit(
+            'Next >')
+          }}
+
+        {{ Form::close() }}
+      @endif
+
+      @if (isset($step) && ($step == 3))
+        <h1>Result</h1>
+
+          <ul>
+          @foreach ($listArray as $entry)
+            @foreach ($entry as $key => $value)
+              <li>{{ $key }} - {{ $value }}</li>
+            @endforeach
+          @endforeach
+          </ul>
+      @endif
 
     </div> <!-- / #content-wrapper -->
 
