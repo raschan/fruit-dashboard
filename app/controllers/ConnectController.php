@@ -264,6 +264,20 @@ class ConnectController extends BaseController
                 # if we are after wizard step #2
                 if ($step == 3) {
 
+                    # save the widget
+
+                    $widget_data = array(
+                        'spreadsheetname'   =>  Session::get('spreadsheetname'),
+                        'worksheetname'     =>  Input::get('worksheet')
+                    );
+                    $widget_json = json_encode($widget_data);
+
+                    $widget = new Widget;
+                    $widget->wid_name = 'Google Spreadsheet Widget #1';
+                    $widget->wid_type = 'google-spreadsheet-linear';
+                    $widget->wid_source = $widget_json;
+                    $widget->save();
+
                     # get the data they asked for in the POST & SESSION
                     $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
                     $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
