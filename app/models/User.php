@@ -44,7 +44,7 @@ class User extends Eloquent implements UserInterface
     public function isGoogleSpreadsheetConnected()
     {
         // at this point validation like this is all right
-        if (strlen($this->googleSpreadsheetUserId) > 1) {
+        if (strlen($this->googleSpreadsheetRefreshToken) > 1) {
             // long enough key
             return True;
         }

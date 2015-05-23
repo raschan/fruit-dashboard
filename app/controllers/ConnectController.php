@@ -59,11 +59,16 @@ class ConnectController extends BaseController
     | <GET> | connectProvider: return route for connecting a provider
     |===================================================
     */
-    public function connectProvider($provider)
+    public function connectProvider($provider, $step = NULL)
     {
 
+        # we will need the user
+
+        $user = Auth::user();
+
+
     	if ($provider == 'stripe') {
-    		$user = Auth::user();
+
             if(Input::has('code'))
             {
     			// get the token with the code
@@ -123,50 +128,167 @@ class ConnectController extends BaseController
     		}
     	}
 
+
+        # if we auth with googlespreadsheet
+
         if ($provider == 'googlespreadsheet') {
 
-            $user = Auth::user();
+            # we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
 
-            if (Input::has('code')) {
-                $client = new Google_Client();
-                $client->setClientId($_ENV['GOOGLE_CLIENTID']);
-                $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
-                $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-                $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
-                $client->setAccessType('offline');                
+            $client = new Google_Client();
+            $client->setClientId($_ENV['GOOGLE_CLIENTID']);
+            $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
+            $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
+            $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
+            $client->setAccessType('offline');
 
-                $client->authenticate(Input::get('code'));
-                $access_stuff = json_decode($client->getAccessToken(), true);
+            if (!$step){
 
-                Log::info($access_stuff);
+                # first round -- we got a code in GET from google
 
-                Session::put("gtoken", $access_stuff['access_token']);
+                if (Input::has('code')) {
 
-                $user->googleSpreadsheetRefreshToken = $access_stuff['refresh_token'];
-                $user->save();
+                    # lets get an access token
+                    $client->authenticate(Input::get('code'));
+                    $access_token = $client->getAccessToken(); // big JSON stuff
 
-/*
-                IntercomHelper::connected($user,'googlespreadsheet');                
+                    # lets make it an associative array
+                    $tokens_decoded = json_decode($access_token, true);
 
-                // $user->googleSpreadsheetUserId = $access_stuff['stripe_user_id'];
-                $user->googleSpreadsheetRefreshToken = $access_stuff;
-                $user->ready = 'connecting';
-                $user->save();
-*/
+                    # lets check if we have a refresh token already
+                    $refresh_token = $user->googleSpreadsheetRefreshToken;
+                    if (strlen($refresh_token)<10) {
+                        # nope, let's use the one we got now
+                        $refresh_token = $tokens_decoded['refresh_token'];
+                    }
 
-                $serviceRequest = new DefaultServiceRequest($access_stuff['access_token']);
+                    # database save the access-stuff-JSON and the refresh token
+                    $user->googleSpreadsheetAccessToken = $access_token;
+                    $user->googleSpreadsheetRefreshToken = $refresh_token;
+                    $user->save();
+
+                    # good job, notify intercom
+                    IntercomHelper::connected($user,'googlespreadsheet');
+
+                    # lets call this route again, but without the code
+                    if (Request::secure()) {
+                        $redirect = 'https://';
+                    } else {
+                        $redirect = 'http://';
+                    }
+                    $redirect .= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+                    header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL)); 
+                    exit();
+                }
+
+                # second round, prepare the wizard
+
+                # load the tokens from the database
+                $access_token = $user->googleSpreadsheetAccessToken;
+                $refresh_token = $user->googleSpreadsheetRefreshToken;
+
+                # if we don't have a token, then we should get one
+                if(!$access_token) {
+                    $authUrl = $client->createAuthUrl();
+                    header('Location: ' . $authUrl);
+                    exit();
+                }
+
+                # if the token is expired, let's get another one with the refreshtoken
+                $client->setAccessToken($access_token);
+                if ($client->isAccessTokenExpired()) {
+                    $client->refreshToken($refresh_token);
+                }
+
+                # get the real access_token (from the big JSON one)
+                $tokens_decoded = json_decode($access_token);
+                $access_token_access_token = $tokens_decoded->access_token;
+
+                # get the spreadsheet list
+                $serviceRequest = new DefaultServiceRequest($access_token_access_token);
                 ServiceRequestFactory::setInstance($serviceRequest);
-
                 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
                 $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-
-                // Session::put('spreadsheetFeed', $spreadsheetFeed->asXML());
 
                 return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
             }
 
-            // return Redirect::route('connect.connect')
-            //    ->with('success', ucfirst($provider).' connected.');
+            # we are in the wizard
+
+            if ($step) {
+
+                # load the access stuff from the database
+                $access_stuff = $user->googleSpreadsheetAccessToken;
+                $refresh_token = $user->googleSpreadsheetRefreshToken;
+
+                # make an access token out of it
+                $tokens_decoded = json_decode($access_stuff);
+                $access_token_access_token = $tokens_decoded->access_token;
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token_access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+
+                # refresh tokens (get new ones from google, if possible)
+                $access_token = $client->getAccessToken();
+                $tokens_decoded = json_decode($access_token);
+                try {
+                    $refresh_token = $tokens_decoded->refresh_token;
+                } catch (Exception $e) {}
+
+                # save them to the database
+                $user->googleSpreadsheetAccessToken = $access_token;
+                $user->googleSpreadsheetRefreshToken = $refresh_token;
+
+                # if we are after wizard step #1
+                if ($step == 2) {
+
+                    # get the spreadsheet they asked for in the POST
+                    $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                    $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+                    $spreadsheet = $spreadsheetFeed->getByTitle(Input::get('spreadsheet'));
+                    $worksheetFeed = $spreadsheet->getWorksheets();
+
+                    # save the spreadsheet name in SESSION
+                    Session::put("spreadsheetname", Input::get('spreadsheet'));
+
+                    # render wizard step #2
+                    return View::make('connect.googleSpreadsheetConnect')->with(
+                        array(
+                            'step' => 2,
+                            'worksheetFeed' => $worksheetFeed
+                        )
+                    );
+                }
+
+                # if we are after wizard step #2
+                if ($step == 3) {
+
+                    # get the data they asked for in the POST & SESSION
+                    $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                    $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+                    $spreadsheet = $spreadsheetFeed->getByTitle(Session::get('spreadsheetname'));
+                    $worksheetFeed = $spreadsheet->getWorksheets();
+                    $worksheet = $worksheetFeed->getByTitle(Input::get('worksheet'));
+                    $listFeed = $worksheet->getListFeed();
+                    $listArray = array();
+                    foreach ($listFeed->getEntries() as $entry) {
+                        $values = $entry->getValues();
+                        $listArray[] = $values;
+                    }
+
+                    // # save the worksheet name in SESSION
+                    // Session::put("worksheetname", Input::get('worksheet'));
+
+                    # render wizard step #3
+                    return View::make('connect.googleSpreadsheetConnect')->with(
+                        array(
+                            'step' => 3,
+                            'listArray' => $listArray
+                        )
+                    );
+                }                
+            }
         }
 
   	// return Redirect::route('auth.dashboard')
@@ -201,6 +323,18 @@ class ConnectController extends BaseController
 
             // removing paypal refresh token
             $user->paypal_key = "";
+
+        } else if ($service == "googlespreadsheet") {
+
+            $client = new GuzzleHttp\Client();
+            $response = $client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
+
+            Log::info($response->getStatusCode());
+
+            $user->googleSpreadsheetRefreshToken = "";
+            $user->googleSpreadsheetAccessToken = "";
+            $user->googleSpreadsheetUserId = "";
+            $user->googleSpreadsheetEmail = "";
 
         }
 
@@ -305,57 +439,5 @@ class ConnectController extends BaseController
 
         return Redirect::route('connect.connect')
                         ->with(array('success' => "Thank you, we'll get in touch"));
-    }
-
-    /*
-    |===================================================
-    | <POST> | showGoogleSpreadsheetConnect: wizard for the Google Spreadsheet connect
-    |===================================================
-    */
-    public function showGoogleSpreadsheetConnect($step)
-    {
-
-        // selecting logged in user
-        $user = Auth::user();
-
-        // dd(Input::get('spreadsheet');
-
-        $serviceRequest = new DefaultServiceRequest(Session::get('gtoken'));
-        ServiceRequestFactory::setInstance($serviceRequest);
-
-        $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-        $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-
-        if ($step == 2) {
-            Session::put("spreadsheetname", Input::get('spreadsheet'));
-            $spreadsheet = $spreadsheetFeed->getByTitle(Input::get('spreadsheet'));
-            $worksheetFeed = $spreadsheet->getWorksheets();
-            return View::make('connect.googleSpreadsheetConnect')->with(
-                array(
-                    'step' => $step,
-                    'worksheetFeed' => $worksheetFeed
-                )
-            );
-        }
-
-        if ($step == 3) {
-            Session::put("worksheetname", Input::get('worksheet'));
-            $spreadsheet = $spreadsheetFeed->getByTitle(Session::get('spreadsheetname'));
-            $worksheetFeed = $spreadsheet->getWorksheets();
-            $worksheet = $worksheetFeed->getByTitle(Input::get('worksheet'));
-            $listFeed = $worksheet->getListFeed();
-            $listArray = array();
-            foreach ($listFeed->getEntries() as $entry) {
-                $values = $entry->getValues();
-                $listArray[] = $values;
-            }
-
-            return View::make('connect.googleSpreadsheetConnect')->with(
-                array(
-                    'step' => $step,
-                    'listArray' => $listArray
-                )
-            );
-        }
     }
 }

@@ -10,20 +10,6 @@
 
       <div class="col-md-10 col-md-offset-1">
 
-        {{--
-        <!-- SSL cert. -->
-        <div class="row">
-          <div class="certificate-wrapper bordered">
-            <div class="panel-body certificate">
-              <span class="lead col-sm-6">Don't worry we're using secure protocols here.</span>
-              <a href="https://www.positivessl.com" class='sm-pull-right text-center'>
-                <img src="https://www.positivessl.com/images-new/PositiveSSL_tl_white2.png" alt="SSL Certificate" title="SSL Certificate" border="0"/>
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- /SSL cert. -->
-        --}}
       {{-- 
         <!-- hidden for development, will not be rendered on client side -->   
         <!-- PayPal connect-->
@@ -98,36 +84,6 @@
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
                 @else
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
-                  
-                  <!--
-                  <div style='display:none;'>
-                    {{ Form::open(array(
-                      'route'=>'connect.connect',
-                      'method' => 'post',
-                      'id' => 'form-settings',
-                      'class' => 'form-horizontal',
-                      'role' => 'form' )) }}
-
-                        <div class="form-group">
-                          {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
-                            'class' => 'col-sm-3 control-label text-left-always')) }}
-                          <div class="col-sm-7">      
-                            {{ Form::text('stripe', '', array(
-                              'id' => 'id_stripe',
-                              'class' => 'form-control',
-                              'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
-                          </div>
-                          <div class="col-sm-2 text-center">
-                          {{ Form::submit('Connect', array(
-                              'id' => 'id_submit',
-                              'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                              'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
-                          </div>
-                        </div>
-                    {{ Form::close() }}
-                    <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
-                  </div>
-                  -->
               @endif
               </div> <!-- /. col-sm-5 -->
 
@@ -206,7 +162,7 @@
                             After disconnecting we will not receive any more data from Google Spreadsheet.</div>
                           <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Google Spreadsheet disconnected"]);mixpanel.track("Disconnect",{"service":"google spreadsheet"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Google Spreadsheet disconnected"]);mixpanel.track("Disconnect",{"service":"google spreadsheet"});' href="{{ URL::route('auth.disconnect', 'googlespreadsheet') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
                         </div>
                         </div> <!-- / .modal-content -->
                       </div> <!-- / .modal-dialog -->

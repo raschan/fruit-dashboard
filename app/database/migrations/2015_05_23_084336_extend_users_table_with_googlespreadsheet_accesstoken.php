@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class GoogleAuth extends Migration {
+class ExtendUsersTableWithGooglespreadsheetAccesstoken extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,8 +15,8 @@ class GoogleAuth extends Migration {
 		Schema::table('users', function($table)
         {
              // adding title
-            $table->string('googleSpreadsheetUserId')->nullable();
-            $table->string('googleSpreadsheetRefreshToken', 256)->nullable();
+            $table->longText('googleSpreadsheetAccessToken')->nullable();
+            $table->string('googleSpreadsheetEmail')->nullable();
         });
 	}
 
@@ -30,8 +30,8 @@ class GoogleAuth extends Migration {
 		Schema::table('users', function($table)
         {
             // dropping column
-            $table->dropColumn('googleSpreadsheetUserId');
-            $table->dropColumn('googleSpreadsheetRefreshToken');
+            $table->dropColumn('googleSpreadsheetAccessToken');
+            $table->dropColumn('googleSpreadsheetEmail')->nullable();
         });
 	}
 

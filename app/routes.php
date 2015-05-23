@@ -140,7 +140,7 @@ Route::get('connect', array(
     'uses' => 'ConnectController@showConnect'
 ));
 
-Route::get('connect/{provider}', array(
+Route::any('connect/{provider}/{step?}', array(
     'before' => 'auth|trial_ended|cancelled',
     'uses' => 'ConnectController@connectProvider'
 ));
@@ -155,12 +155,6 @@ Route::post('suggest', array(
     'before' => 'auth',
     'as'    => 'auth.suggest',
     'uses' => 'ConnectController@doSaveSuggestion'
-));
-
-Route::any('connect/googlespreadsheet/{step}', array(
-    'before' => 'auth',
-    'as'    => 'connect.googleSpreadsheetWizard',
-    'uses' => 'ConnectController@showGoogleSpreadsheetConnect'
 ));
 
 // disconnect
