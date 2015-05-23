@@ -38,7 +38,8 @@ class ConnectController extends BaseController
         $client->setClientId($_ENV['GOOGLE_CLIENTID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
         $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-        $client->setScopes(array('https://spreadsheets.google.com/feeds'));
+        $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
+        $client->setAccessType('offline');                
 
         // returning view
         return View::make('connect.connect',
@@ -49,7 +50,6 @@ class ConnectController extends BaseController
                 'stripeButtonUrl'       => OAuth2::getAuthorizeURL(),
                 'googlespreadsheet_connected'      => $user->isGoogleSpreadsheetConnected(),
                 'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
-                
             )
         );
     }
@@ -132,16 +132,18 @@ class ConnectController extends BaseController
                 $client->setClientId($_ENV['GOOGLE_CLIENTID']);
                 $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
                 $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-                $client->setScopes(
-                    array(
-                        'https://spreadsheets.google.com/feeds',
-                        'userinfo'
-                    )
-                );
+                $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
+                $client->setAccessType('offline');                
+
                 $client->authenticate(Input::get('code'));
                 $access_stuff = json_decode($client->getAccessToken(), true);
+
                 Log::info($access_stuff);
+
                 Session::put("gtoken", $access_stuff['access_token']);
+
+                $user->googleSpreadsheetRefreshToken = $access_stuff['refresh_token'];
+                $user->save();
 
 /*
                 IntercomHelper::connected($user,'googlespreadsheet');                
