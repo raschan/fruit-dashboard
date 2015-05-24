@@ -200,12 +200,11 @@ class ConnectController extends BaseController
 
                     # get the spreadsheet they asked for in the POST
                     $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-                    $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-                    $spreadsheet = $spreadsheetFeed->getByTitle(Input::get('spreadsheet'));
+                    $spreadsheet = $spreadsheetService->getSpreadsheetById(Input::get('spreadsheetId'));
                     $worksheetFeed = $spreadsheet->getWorksheets();
 
                     # save the spreadsheet name in SESSION
-                    Session::put("spreadsheetname", Input::get('spreadsheet'));
+                    Session::put("spreadsheetId", Input::get('spreadsheetId'));
 
                     # render wizard step #2
                     return View::make('connect.googleSpreadsheetConnect')->with(
@@ -222,8 +221,8 @@ class ConnectController extends BaseController
                     # save the widget
 
                     $widget_data = array(
-                        'spreadsheetname'   =>  Session::get('spreadsheetname'),
-                        'worksheetname'     =>  Input::get('worksheet')
+                        'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
+                        'googleWorksheetName'     =>  Input::get('worksheetName')
                     );
                     $widget_json = json_encode($widget_data);
 
@@ -233,29 +232,8 @@ class ConnectController extends BaseController
                     $widget->wid_source = $widget_json;
                     $widget->save();
 
-                    # get the data they asked for in the POST & SESSION
-                    $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-                    $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-                    $spreadsheet = $spreadsheetFeed->getByTitle(Session::get('spreadsheetname'));
-                    $worksheetFeed = $spreadsheet->getWorksheets();
-                    $worksheet = $worksheetFeed->getByTitle(Input::get('worksheet'));
-                    $listFeed = $worksheet->getListFeed();
-                    $listArray = array();
-                    foreach ($listFeed->getEntries() as $entry) {
-                        $values = $entry->getValues();
-                        $listArray[] = $values;
-                    }
-
-                    // # save the worksheet name in SESSION
-                    // Session::put("worksheetname", Input::get('worksheet'));
-
-                    # render wizard step #3
-                    return View::make('connect.googleSpreadsheetConnect')->with(
-                        array(
-                            'step' => 3,
-                            'listArray' => $listArray
-                        )
-                    );
+                    return Redirect::route('auth.dashboard')
+                      ->with('success', ucfirst($provider).' connected.');
                 }                
             }
         }

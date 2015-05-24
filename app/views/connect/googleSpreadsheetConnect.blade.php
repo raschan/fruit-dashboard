@@ -18,9 +18,9 @@
           )
         ) }}
 
-          <select name="spreadsheet">
+          <select name="spreadsheetId">
           @foreach ($spreadsheetFeed as $entry)
-            <option value="{{ $entry->getTitle() }}">{{ $entry->getTitle() }}</option>
+            <option value="{{ basename($entry->getId()) }}">{{ $entry->getTitle() }}</option>
           @endforeach
           </select>
 
@@ -41,7 +41,7 @@
           )
         ) }}
 
-          <select name="worksheet">
+          <select name="worksheetName">
           @foreach ($worksheetFeed as $entry)
             <option value="{{ $entry->getTitle() }}">{{ $entry->getTitle() }}</option>
           @endforeach

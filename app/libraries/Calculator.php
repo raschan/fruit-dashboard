@@ -181,45 +181,34 @@ class Calculator
         # google spreadsheet stuff start
 
         # setup Google stuff
-
-        Log::info(0);
         $client = GoogleSpreadsheetHelper::setGoogleClient();
         $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
-        Log::info(1);
 
         # init service
         $serviceRequest = new DefaultServiceRequest($access_token);
         ServiceRequestFactory::setInstance($serviceRequest);
-        Log::info(2);
-
-        # get the data they asked for in the POST & SESSION
         $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-        $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-        Log::info(3);
 
-        $spreadsheet = $spreadsheetFeed->getByTitle("abf - fruit analytics - google spreadsheet connect teszt file");
+        # get spreadsheet
+        $spreadsheet = $spreadsheetService->getSpreadsheetById("1KlkHX7ArJomhTrfjf0zq3aQGf21JmGDFEZBpWltS2BY");
         $worksheetFeed = $spreadsheet->getWorksheets();
-        Log::info(4);
 
+        # get worksheet
         $worksheet = $worksheetFeed->getByTitle("Munkalap1");
         $listFeed = $worksheet->getListFeed();
-        Log::info(5);
 
+        # get celldata
         $listArray = array();
         foreach ($listFeed->getEntries() as $entry) {
             $values = $entry->getValues();
             $listArray[] = $values;
         }
-        Log::info(6);
         foreach ($listArray as $entry) {
             foreach ($entry as $key => $value) {
                 //
             }
         }
-        Log::info(7);
-
-        Log::info("key - ".$key."<br/>value - ".$value);
-        exit();
+        Log::info("saveEvents - key - ".$key."<br/>value - ".$value);
 
         # google spreadsheet stuff end
         ###############################################
