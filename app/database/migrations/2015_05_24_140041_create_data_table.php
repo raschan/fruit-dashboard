@@ -15,8 +15,8 @@ class CreateDataTable extends Migration {
 		Schema::create('data', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('wid_id');
-			$table->longText('dat_object');
+			$table->integer('widget_id');
+			$table->longText('data_object');
 			$table->timestamps();
 		});
 	}

@@ -181,13 +181,13 @@ class Calculator
         # google spreadsheet stuff start
 
         # get google spreadsheet widgets for the user
-        $widgets = Widget::where('wid_type', 'google-spreadsheet-linear')->get();
+        $widgets = Widget::where('widget_type', 'google-spreadsheet-linear')->get();
 
         foreach ($widgets as $widget) {
 
-            Log::info("widget_id - ".$widget['wid_id']);
+            Log::info("widget_id - ".$widget['widget_id']);
 
-            $wid_source = json_decode($widget['wid_source'], true);
+            $wid_source = json_decode($widget['widget_source'], true);
             $spreadsheetId = $wid_source['googleSpreadsheetId'];
             $worksheetName = $wid_source['googleWorksheetName'];
 
@@ -217,8 +217,8 @@ class Calculator
             }
 
             $data = new Data;
-            $data->wid_id = $widget['wid_id'];
-            $data->dat_object = json_encode($values);
+            $data->widget_id = $widget['widget_id'];
+            $data->data_object = json_encode($values);
             $data->save();
 
         }

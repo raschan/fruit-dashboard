@@ -15,9 +15,9 @@ class CreateConnectionTable extends Migration {
 		Schema::create('connections', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('usr_id');
-			$table->longText('con_object'); # JSON
-			$table->string('con_type'); # provider
+			$table->integer('user_id');
+			$table->longText('connection_object'); # JSON
+			$table->string('connection_type'); # provider
 			$table->timestamps();
 		});
 	}

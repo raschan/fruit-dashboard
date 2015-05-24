@@ -16,7 +16,7 @@ class User extends Eloquent implements UserInterface
 
     // each user BELONGS to many dashboards
     public function dashboards() {
-        return $this->belongsToMany('Dashboard', 'users_dashboards', 'usr_id', 'das_id');
+        return $this->belongsToMany('Dashboard', 'users_dashboards', 'user_id', 'dashboard_id');
     }
 
     use UserTrait;

@@ -15,7 +15,7 @@ class Dashboard extends Eloquent
 
     // each dashboard can belong to many users
     public function users() {
-        return $this->belongsToMany('User', 'users_dashboards', 'das_id', 'usr_id');
+        return $this->belongsToMany('User', 'users_dashboards', 'dashboard_id', 'user_id');
     }
 
 }

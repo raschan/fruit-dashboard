@@ -15,9 +15,9 @@ class CreateUsersDashboardsTable extends Migration {
 		Schema::create('users_dashboards', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('usr_id');
-			$table->integer('das_id');
-			$table->string('udc_role'); # reader / editor / owner
+			$table->integer('user_id');
+			$table->integer('dashboard_id');
+			$table->string('role'); # reader / editor / owner
 			$table->timestamps();
 		});
 	}

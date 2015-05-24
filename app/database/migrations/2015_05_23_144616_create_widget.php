@@ -15,10 +15,10 @@ class CreateWidget extends Migration {
 		Schema::create('widgets', function($t)
 		{
 			$t->increments('id');
-			$t->text('wid_name');
-			$t->text('wid_type'); # f.e. google-spreadsheet-linear
-			$t->longText('wid_source'); # JSON
-			$t->longText('das_id'); # connection to dashboard
+			$t->text('widget_name');
+			$t->text('widget_type'); # f.e. google-spreadsheet-linear
+			$t->longText('widget_source'); # JSON
+			$t->longText('dashboard_id'); # connection to dashboard
 			$t->timestamps();
 		});
 	}
