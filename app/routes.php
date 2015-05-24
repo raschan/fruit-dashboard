@@ -145,6 +145,13 @@ Route::any('connect/{provider}/{step?}', array(
     'uses' => 'ConnectController@connectProvider'
 ));
 
+Route::any('connect.addwidget/{provider?}', array(
+    'before' => 'auth',
+    'as'    => 'connect.addwidget',
+    // 'uses' => 'ConnectController@addWidget'
+    'uses' => 'ConnectController@connectProvider'
+));
+
 Route::post('connect', array(
     'before' => 'auth',
     'as' => 'connect.connect',
@@ -156,14 +163,6 @@ Route::post('suggest', array(
     'as'    => 'auth.suggest',
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
-
-Route::get('getGoogleSpreadsheetEvents', array(
-    'before' => 'auth',
-    'as'    => 'getGoogleSpreadsheetEvents',
-    'uses' => 'ConnectController@getGoogleSpreadsheetEvents'
-));
-
-
 
 // disconnect
 Route::get('/disconnect/{service}', array(

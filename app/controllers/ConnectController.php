@@ -205,7 +205,8 @@ class ConnectController extends BaseController
 
                     # save the spreadsheet name in SESSION
                     Session::put("spreadsheetId", Input::get('spreadsheetId'));
-
+                    Session::put("spreadsheetName", $spreadsheet->getTitle());
+                    
                     # render wizard step #2
                     return View::make('connect.googleSpreadsheetConnect')->with(
                         array(
@@ -227,7 +228,7 @@ class ConnectController extends BaseController
                     $widget_json = json_encode($widget_data);
 
                     $widget = new Widget;
-                    $widget->widget_name = 'Google Spreadsheet Widget #1';
+                    $widget->widget_name = Session::get('spreadsheetName').' - Google Spreadsheet';
                     $widget->widget_type = 'google-spreadsheet-linear';
                     $widget->widget_source = $widget_json;
                     $widget->dashboard_id = $user->dashboards()->first()->id;
@@ -391,6 +392,16 @@ class ConnectController extends BaseController
         return Redirect::route('connect.connect')
                         ->with(array('success' => "Thank you, we'll get in touch"));
     }
+
+    /*
+    |===================================================
+    | <GET> | addWidget: adds a new widget
+    |===================================================
+    */
+    public function addWidget($provider){
+        return "soon.";
+    }
+
 
 }
 

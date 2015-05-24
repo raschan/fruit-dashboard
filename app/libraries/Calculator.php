@@ -183,44 +183,46 @@ class Calculator
         # get google spreadsheet widgets for the user
         $widgets = Widget::where('widget_type', 'google-spreadsheet-linear')->get();
 
-        foreach ($widgets as $widget) {
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
 
-            Log::info("widget_id - ".$widget['widget_id']);
+                Log::info("widget_id - ".$widget['id']);
 
-            $wid_source = json_decode($widget['widget_source'], true);
-            $spreadsheetId = $wid_source['googleSpreadsheetId'];
-            $worksheetName = $wid_source['googleWorksheetName'];
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
 
-            # setup Google stuff
-            $client = GoogleSpreadsheetHelper::setGoogleClient();
-            $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
 
-            # init service
-            $serviceRequest = new DefaultServiceRequest($access_token);
-            ServiceRequestFactory::setInstance($serviceRequest);
-            $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
 
-            # get spreadsheet
-            $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
-            $worksheetFeed = $spreadsheet->getWorksheets();
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
 
-            # get worksheet
-            $worksheet = $worksheetFeed->getByTitle($worksheetName);
-            $listFeed = $worksheet->getListFeed();
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+                $listFeed = $worksheet->getListFeed();
 
-            # get celldata (first line = header, second line = content)
-            $listArray = array();
-            $values = array();
-            foreach ($listFeed->getEntries() as $entry) {
-                 $values = $entry->getValues();
-                 break; # break, so we just the first line
+                # get celldata (first line = header, second line = content)
+                $listArray = array();
+                $values = array();
+                foreach ($listFeed->getEntries() as $entry) {
+                     $values = $entry->getValues();
+                     break; # break, so we just the first line
+                }
+
+                $data = new Data;
+                $data->widget_id = $widget['id'];
+                $data->data_object = json_encode($values);
+                $data->save();
+
             }
-
-            $data = new Data;
-            $data->widget_id = $widget['widget_id'];
-            $data->data_object = json_encode($values);
-            $data->save();
-
         }
         
         # google spreadsheet stuff end

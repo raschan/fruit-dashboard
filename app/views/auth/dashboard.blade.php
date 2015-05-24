@@ -356,6 +356,17 @@
       </div>
       <!-- /FEED BOX -->
 
+      <!-- widgetlist start -->
+      <div class="col-md-8 quickstats-box no-padding-hr">
+        <ul>
+        @foreach ($widgets as $widget)
+          <li>{{ $widget->widget_name }}</li>
+        @endforeach
+        </ul>
+
+        <a href="{{ URL::route('connect.connect') }}">Add widget</a>
+      </div>
+
     <div id="#appendhere" class="col-md-12">
 
     </div>  <!-- / #content-wrapper -->

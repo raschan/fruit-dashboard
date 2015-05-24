@@ -169,9 +169,10 @@
                     </div>
                     <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                  <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right"><span>Add new widget</span></a>
               @else
                 <div class="col-sm-5">
-                  <a href="{{$googleSpreadsheetButtonUrl}}" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
+                  <a href="{{ $googleSpreadsheetButtonUrl }}" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
               @endif
               </div> <!-- /. col-sm-10 -->
 
