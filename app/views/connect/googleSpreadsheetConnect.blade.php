@@ -54,18 +54,6 @@
         {{ Form::close() }}
       @endif
 
-      @if (isset($step) && ($step == 3))
-        <h1>Result</h1>
-
-          <ul>
-          @foreach ($listArray as $entry)
-            @foreach ($entry as $key => $value)
-              <li>{{ $key }} - {{ $value }}</li>
-            @endforeach
-          @endforeach
-          </ul>
-      @endif
-
     </div> <!-- / #content-wrapper -->
 
   @stop

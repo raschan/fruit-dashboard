@@ -180,36 +180,49 @@ class Calculator
         ###############################################
         # google spreadsheet stuff start
 
-        # setup Google stuff
-        $client = GoogleSpreadsheetHelper::setGoogleClient();
-        $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+        # get google spreadsheet widgets for the user
+        $widgets = Widget::where('wid_type', 'google-spreadsheet-linear')->get();
 
-        # init service
-        $serviceRequest = new DefaultServiceRequest($access_token);
-        ServiceRequestFactory::setInstance($serviceRequest);
-        $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+        foreach ($widgets as $widget) {
 
-        # get spreadsheet
-        $spreadsheet = $spreadsheetService->getSpreadsheetById("1KlkHX7ArJomhTrfjf0zq3aQGf21JmGDFEZBpWltS2BY");
-        $worksheetFeed = $spreadsheet->getWorksheets();
+            Log::info("widget_id - ".$widget['wid_id']);
 
-        # get worksheet
-        $worksheet = $worksheetFeed->getByTitle("Munkalap1");
-        $listFeed = $worksheet->getListFeed();
+            $wid_source = json_decode($widget['wid_source'], true);
+            $spreadsheetId = $wid_source['googleSpreadsheetId'];
+            $worksheetName = $wid_source['googleWorksheetName'];
 
-        # get celldata
-        $listArray = array();
-        foreach ($listFeed->getEntries() as $entry) {
-            $values = $entry->getValues();
-            $listArray[] = $values;
-        }
-        foreach ($listArray as $entry) {
-            foreach ($entry as $key => $value) {
-                //
+            # setup Google stuff
+            $client = GoogleSpreadsheetHelper::setGoogleClient();
+            $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+            # init service
+            $serviceRequest = new DefaultServiceRequest($access_token);
+            ServiceRequestFactory::setInstance($serviceRequest);
+            $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+            # get spreadsheet
+            $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+            $worksheetFeed = $spreadsheet->getWorksheets();
+
+            # get worksheet
+            $worksheet = $worksheetFeed->getByTitle($worksheetName);
+            $listFeed = $worksheet->getListFeed();
+
+            # get celldata (first line = header, second line = content)
+            $listArray = array();
+            $values = array();
+            foreach ($listFeed->getEntries() as $entry) {
+                 $values = $entry->getValues();
+                 break; # break, so we just the first line
             }
-        }
-        Log::info("saveEvents - key - ".$key."<br/>value - ".$value);
 
+            $data = new Data;
+            $data->wid_id = $widget['wid_id'];
+            $data->dat_object = json_encode($values);
+            $data->save();
+
+        }
+        
         # google spreadsheet stuff end
         ###############################################
 
