@@ -137,6 +137,14 @@ class AuthController extends BaseController
             $user->summaryEmailFrequency = 'daily';
             $user->plan = 'trial';
             $user->save();
+
+            // create first dashboard for user
+            $dashboard = new Dashboard;
+            $dashboard->das_name = "Dashboard #1";
+            $dashboard->save();
+
+            // attach dashboard & user
+            $user->dashboards()->attach($dashboard->id);
             
             // create user on intercom
             IntercomHelper::signedup($user);

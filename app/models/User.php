@@ -7,6 +7,18 @@ use Illuminate\Auth\UserInterface;
 class User extends Eloquent implements UserInterface
 {
     protected $guarded = array();
+
+    // DEFINE RELATIONSHIPS --------------------------------------------------
+    // each user has many connection
+    public function connections() {
+        return $this->hasMany('Connection');
+    }
+
+    // each user BELONGS to many dashboards
+    public function dashboards() {
+        return $this->belongsToMany('Dashboard', 'users_dashboards', 'usr_id', 'das_id');
+    }
+
     use UserTrait;
     /**
      * Testing if the user has connected a stripe account

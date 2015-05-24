@@ -14,7 +14,7 @@ class CreateWidget extends Migration {
 	{
 		Schema::create('widgets', function($t)
 		{
-			$t->increments('wid_id');
+			$t->increments('id');
 			$t->text('wid_name');
 			$t->text('wid_type'); # f.e. google-spreadsheet-linear
 			$t->longText('wid_source'); # JSON

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDataTable extends Migration {
+class CreateDashboardTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,10 @@ class CreateDataTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('data', function(Blueprint $table)
+		Schema::create('dashboards', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('wid_id');
-			$table->longText('dat_object');
+			$table->string('das_name');
 			$table->timestamps();
 		});
 	}
@@ -28,7 +27,7 @@ class CreateDataTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('data');
+		Schema::drop('dashboards');
 	}
 
 }
