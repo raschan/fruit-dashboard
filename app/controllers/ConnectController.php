@@ -34,14 +34,8 @@ class ConnectController extends BaseController
         // selecting logged in user
         $user = Auth::user();
 
-        // prepare stuff for google drive auth        
-        $client = new Google_Client();
-        $client->setClientId($_ENV['GOOGLE_CLIENTID']);
-        $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
-        $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-        $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
-        $client->setAccessType('offline');                
-        $client->setApprovalPrompt('force');
+        // prepare stuff for google drive auth
+        $client = setGoogleClient();
 
         // returning view
         return View::make('connect.connect',
@@ -137,13 +131,7 @@ class ConnectController extends BaseController
 
             # we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
 
-            $client = new Google_Client();
-            $client->setClientId($_ENV['GOOGLE_CLIENTID']);
-            $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
-            $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-            $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
-            $client->setAccessType('offline');
-            $client->setApprovalPrompt('force');
+            $client = setGoogleClient();
 
             if (!$step){
 
@@ -186,7 +174,7 @@ class ConnectController extends BaseController
 
                 # second round, prepare the wizard
 
-                $access_token = setUpGoogleConnector($client, $user);
+                $access_token = getGoogleAccessToken($client, $user);
 
                 # get the spreadsheet list
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -201,7 +189,7 @@ class ConnectController extends BaseController
 
             if ($step) {
 
-                $access_token = setUpGoogleConnector($client, $user);
+                $access_token = getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -431,15 +419,9 @@ class ConnectController extends BaseController
 
         $user = Auth::user();
 
-        $client = new Google_Client();
-        $client->setClientId($_ENV['GOOGLE_CLIENTID']);
-        $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
-        $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
-        $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
-        $client->setAccessType('offline');
-        $client->setApprovalPrompt('force');
+        $client = setGoogleClient();
 
-        $access_token = setUpGoogleConnector($client, $user);
+        $access_token = getGoogleAccessToken($client, $user);
 
         # init service
         $serviceRequest = new DefaultServiceRequest($access_token);
@@ -468,7 +450,18 @@ class ConnectController extends BaseController
 
 }
 
-function setUpGoogleConnector($client, $user){
+function setGoogleClient(){
+    $client = new Google_Client();
+    $client->setClientId($_ENV['GOOGLE_CLIENTID']);
+    $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
+    $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
+    $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
+    $client->setAccessType('offline');                
+    $client->setApprovalPrompt('force');
+    return $client;
+}
+
+function getGoogleAccessToken($client, $user){
 
     # load the tokens from the database
     $credentials = $user->googleSpreadsheetCredentials;
@@ -503,5 +496,4 @@ function setUpGoogleConnector($client, $user){
     $access_token = $tokens_decoded->access_token;
 
     return $access_token;
-
 }
