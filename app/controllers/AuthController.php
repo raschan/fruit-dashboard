@@ -52,6 +52,19 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
+                // if user has no dashboards created yet
+                if (Auth::user()->dashboards->count() == 0) {
+                    // create first dashboard for user
+                    $dashboard = new Dashboard;
+                    $dashboard->das_name = "Dashboard #1";
+                    $dashboard->save();
+
+                    // attach dashboard & user
+                    Auth::user()->dashboards()->attach($dashboard->id, array('udc_role' => 'owner'));
+                }
+
+
+
                 // check if trial period is ended
                 if (Auth::user()->isTrialEnded())
                 {
@@ -144,7 +157,7 @@ class AuthController extends BaseController
             $dashboard->save();
 
             // attach dashboard & user
-            $user->dashboards()->attach($dashboard->id);
+            $user->dashboards()->attach($dashboard->id, array('udc_role' => 'owner'));
             
             // create user on intercom
             IntercomHelper::signedup($user);
