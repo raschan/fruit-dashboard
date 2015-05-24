@@ -230,6 +230,7 @@ class ConnectController extends BaseController
                     $widget->wid_name = 'Google Spreadsheet Widget #1';
                     $widget->wid_type = 'google-spreadsheet-linear';
                     $widget->wid_source = $widget_json;
+                    $widget->das_id = $user->dashboards()->first()->id;
                     $widget->save();
 
                     return Redirect::route('auth.dashboard')

@@ -13,7 +13,7 @@ class Widget extends Eloquent
     }
 
     // each widget has one connection
-    public function data() {
+    public function connection() {
         return $this->hasOne('Connection');
     }
 
