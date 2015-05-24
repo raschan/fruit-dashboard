@@ -7,6 +7,7 @@ use Google\Spreadsheet\ServiceRequestFactory;
 | ConnectController: Handles the connection related sites
 |--------------------------------------------------------------------------
 */
+
 class ConnectController extends BaseController
 {
 	/*
@@ -185,37 +186,7 @@ class ConnectController extends BaseController
 
                 # second round, prepare the wizard
 
-                # load the tokens from the database
-                $credentials = $user->googleSpreadsheetCredentials;
-                $refresh_token = $user->googleSpreadsheetRefreshToken;
-
-                # give it a try
-                $client->setAccessToken($credentials);
-
-                # if the token is expired, 
-                if ($client->isAccessTokenExpired()) {
-
-                    # let's get another one with the refreshtoken
-                    $refresh_token = $user->googleSpreadsheetRefreshToken;
-                    $client->refreshToken($refresh_token);
-
-                    # get new credentials
-                    $credentials = $client->getAccessToken();
-
-                    # decode 
-                    $tokens_decoded = json_decode($credentials);
-                    try {
-                        $refresh_token = $tokens_decoded->refresh_token;
-                    } catch (Exception $e) {}
-
-                    # save them to the database
-                    $user->googleSpreadsheetCredentials = $credentials;
-                    $user->googleSpreadsheetRefreshToken = $refresh_token;
-                }
-
-                # get the real access_token (from the big JSON one)
-                $tokens_decoded = json_decode($credentials);
-                $access_token = $tokens_decoded->access_token;
+                $access_token = setUpGoogleConnector($client, $user);
 
                 # get the spreadsheet list
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -230,38 +201,8 @@ class ConnectController extends BaseController
 
             if ($step) {
 
-                # load the access stuff from the database
-                $credentials = $user->googleSpreadsheetCredentials;
-                $refresh_token = $user->googleSpreadsheetRefreshToken;
+                $access_token = setUpGoogleConnector($client, $user);
 
-                # give it a try
-                $client->setAccessToken($credentials);
-
-                # if the token is expired, 
-                if ($client->isAccessTokenExpired()) {
-
-                    # let's get another one with the refreshtoken
-                    $refresh_token = $user->googleSpreadsheetRefreshToken;
-                    $client->refreshToken($refresh_token);
-
-                    # get new credentials
-                    $credentials = $client->getAccessToken();
-
-                    # decode 
-                    $tokens_decoded = json_decode($credentials);
-                    try {
-                        $refresh_token = $tokens_decoded->refresh_token;
-                    } catch (Exception $e) {}
-
-                    # save them to the database
-                    $user->googleSpreadsheetCredentials = $credentials;
-                    $user->googleSpreadsheetRefreshToken = $refresh_token;
-                }
-
-                # get the real access_token (from the big JSON one)
-                $tokens_decoded = json_decode($credentials);
-                $access_token = $tokens_decoded->access_token;
-                
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
                 ServiceRequestFactory::setInstance($serviceRequest);
@@ -498,35 +439,7 @@ class ConnectController extends BaseController
         $client->setAccessType('offline');
         $client->setApprovalPrompt('force');
 
-        # load the credentials from the database
-        $credentials = $user->googleSpreadsheetCredentials;
-
-        # give it a try
-        $client->setAccessToken($credentials);
-
-        # if the token is expired, 
-        if ($client->isAccessTokenExpired()) {
-
-            # let's get another one with the refreshtoken
-            $refresh_token = $user->googleSpreadsheetRefreshToken;
-            $client->refreshToken($refresh_token);
-
-            # get new credentials
-            $credentials = $client->getAccessToken();
-
-            # decode 
-            $tokens_decoded = json_decode($credentials);
-            try {
-                $refresh_token = $tokens_decoded->refresh_token;
-            } catch (Exception $e) {}
-
-            # save them to the database
-            $user->googleSpreadsheetCredentials = $credentials;
-            $user->googleSpreadsheetRefreshToken = $refresh_token;
-        }
-
-        $tokens_decoded = json_decode($credentials);
-        $access_token = $tokens_decoded->access_token;
+        $access_token = setUpGoogleConnector($client, $user);
 
         # init service
         $serviceRequest = new DefaultServiceRequest($access_token);
@@ -553,7 +466,42 @@ class ConnectController extends BaseController
         return "key - ".$key."<br/>value - ".$value;
    }
 
+}
 
+function setUpGoogleConnector($client, $user){
 
+    # load the tokens from the database
+    $credentials = $user->googleSpreadsheetCredentials;
+    $refresh_token = $user->googleSpreadsheetRefreshToken;
+
+    # give it a try
+    $client->setAccessToken($credentials);
+
+    # if the token is expired, 
+    if ($client->isAccessTokenExpired()) {
+
+        # let's get another one with the refreshtoken
+        $refresh_token = $user->googleSpreadsheetRefreshToken;
+        $client->refreshToken($refresh_token);
+
+        # get new credentials
+        $credentials = $client->getAccessToken();
+
+        # decode 
+        $tokens_decoded = json_decode($credentials);
+        try {
+            $refresh_token = $tokens_decoded->refresh_token;
+        } catch (Exception $e) {}
+
+        # save them to the database
+        $user->googleSpreadsheetCredentials = $credentials;
+        $user->googleSpreadsheetRefreshToken = $refresh_token;
+    }
+
+    # get the real access_token (from the big JSON one)
+    $tokens_decoded = json_decode($credentials);
+    $access_token = $tokens_decoded->access_token;
+
+    return $access_token;
 
 }
