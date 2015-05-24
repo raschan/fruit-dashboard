@@ -157,6 +157,14 @@ Route::post('suggest', array(
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
+Route::get('getGoogleSpreadsheetEvents', array(
+    'before' => 'auth',
+    'as'    => 'getGoogleSpreadsheetEvents',
+    'uses' => 'ConnectController@getGoogleSpreadsheetEvents'
+));
+
+
+
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',

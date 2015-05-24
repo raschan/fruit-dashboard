@@ -15,7 +15,6 @@ class GoogleAuth extends Migration {
 		Schema::table('users', function($table)
         {
              // adding title
-            $table->string('googleSpreadsheetUserId')->nullable();
             $table->string('googleSpreadsheetRefreshToken', 256)->nullable();
         });
 	}
@@ -30,7 +29,6 @@ class GoogleAuth extends Migration {
 		Schema::table('users', function($table)
         {
             // dropping column
-            $table->dropColumn('googleSpreadsheetUserId');
             $table->dropColumn('googleSpreadsheetRefreshToken');
         });
 	}

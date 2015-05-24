@@ -40,6 +40,7 @@ class ConnectController extends BaseController
         $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
         $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
         $client->setAccessType('offline');                
+        $client->setApprovalPrompt('force');
 
         // returning view
         return View::make('connect.connect',
@@ -56,7 +57,7 @@ class ConnectController extends BaseController
 
     /*
     |===================================================
-    | <GET> | connectProvider: return route for connecting a provider
+    | <ANY> | connectProvider: return route for connecting a provider
     |===================================================
     */
     public function connectProvider($provider, $step = NULL)
@@ -141,6 +142,7 @@ class ConnectController extends BaseController
             $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
             $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
             $client->setAccessType('offline');
+            $client->setApprovalPrompt('force');
 
             if (!$step){
 
@@ -150,10 +152,10 @@ class ConnectController extends BaseController
 
                     # lets get an access token
                     $client->authenticate(Input::get('code'));
-                    $access_token = $client->getAccessToken(); // big JSON stuff
+                    $credentials = $client->getAccessToken(); // big JSON stuff
 
                     # lets make it an associative array
-                    $tokens_decoded = json_decode($access_token, true);
+                    $tokens_decoded = json_decode($credentials, true);
 
                     # lets check if we have a refresh token already
                     $refresh_token = $user->googleSpreadsheetRefreshToken;
@@ -163,7 +165,7 @@ class ConnectController extends BaseController
                     }
 
                     # database save the access-stuff-JSON and the refresh token
-                    $user->googleSpreadsheetAccessToken = $access_token;
+                    $user->googleSpreadsheetCredentials = $credentials;
                     $user->googleSpreadsheetRefreshToken = $refresh_token;
                     $user->save();
 
@@ -184,28 +186,39 @@ class ConnectController extends BaseController
                 # second round, prepare the wizard
 
                 # load the tokens from the database
-                $access_token = $user->googleSpreadsheetAccessToken;
+                $credentials = $user->googleSpreadsheetCredentials;
                 $refresh_token = $user->googleSpreadsheetRefreshToken;
 
-                # if we don't have a token, then we should get one
-                if(!$access_token) {
-                    $authUrl = $client->createAuthUrl();
-                    header('Location: ' . $authUrl);
-                    exit();
-                }
+                # give it a try
+                $client->setAccessToken($credentials);
 
-                # if the token is expired, let's get another one with the refreshtoken
-                $client->setAccessToken($access_token);
+                # if the token is expired, 
                 if ($client->isAccessTokenExpired()) {
+
+                    # let's get another one with the refreshtoken
+                    $refresh_token = $user->googleSpreadsheetRefreshToken;
                     $client->refreshToken($refresh_token);
+
+                    # get new credentials
+                    $credentials = $client->getAccessToken();
+
+                    # decode 
+                    $tokens_decoded = json_decode($credentials);
+                    try {
+                        $refresh_token = $tokens_decoded->refresh_token;
+                    } catch (Exception $e) {}
+
+                    # save them to the database
+                    $user->googleSpreadsheetCredentials = $credentials;
+                    $user->googleSpreadsheetRefreshToken = $refresh_token;
                 }
 
                 # get the real access_token (from the big JSON one)
-                $tokens_decoded = json_decode($access_token);
-                $access_token_access_token = $tokens_decoded->access_token;
+                $tokens_decoded = json_decode($credentials);
+                $access_token = $tokens_decoded->access_token;
 
                 # get the spreadsheet list
-                $serviceRequest = new DefaultServiceRequest($access_token_access_token);
+                $serviceRequest = new DefaultServiceRequest($access_token);
                 ServiceRequestFactory::setInstance($serviceRequest);
                 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
                 $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
@@ -218,27 +231,40 @@ class ConnectController extends BaseController
             if ($step) {
 
                 # load the access stuff from the database
-                $access_stuff = $user->googleSpreadsheetAccessToken;
+                $credentials = $user->googleSpreadsheetCredentials;
                 $refresh_token = $user->googleSpreadsheetRefreshToken;
 
-                # make an access token out of it
-                $tokens_decoded = json_decode($access_stuff);
-                $access_token_access_token = $tokens_decoded->access_token;
+                # give it a try
+                $client->setAccessToken($credentials);
 
+                # if the token is expired, 
+                if ($client->isAccessTokenExpired()) {
+
+                    # let's get another one with the refreshtoken
+                    $refresh_token = $user->googleSpreadsheetRefreshToken;
+                    $client->refreshToken($refresh_token);
+
+                    # get new credentials
+                    $credentials = $client->getAccessToken();
+
+                    # decode 
+                    $tokens_decoded = json_decode($credentials);
+                    try {
+                        $refresh_token = $tokens_decoded->refresh_token;
+                    } catch (Exception $e) {}
+
+                    # save them to the database
+                    $user->googleSpreadsheetCredentials = $credentials;
+                    $user->googleSpreadsheetRefreshToken = $refresh_token;
+                }
+
+                # get the real access_token (from the big JSON one)
+                $tokens_decoded = json_decode($credentials);
+                $access_token = $tokens_decoded->access_token;
+                
                 # init service
-                $serviceRequest = new DefaultServiceRequest($access_token_access_token);
+                $serviceRequest = new DefaultServiceRequest($access_token);
                 ServiceRequestFactory::setInstance($serviceRequest);
-
-                # refresh tokens (get new ones from google, if possible)
-                $access_token = $client->getAccessToken();
-                $tokens_decoded = json_decode($access_token);
-                try {
-                    $refresh_token = $tokens_decoded->refresh_token;
-                } catch (Exception $e) {}
-
-                # save them to the database
-                $user->googleSpreadsheetAccessToken = $access_token;
-                $user->googleSpreadsheetRefreshToken = $refresh_token;
 
                 # if we are after wizard step #1
                 if ($step == 2) {
@@ -346,8 +372,7 @@ class ConnectController extends BaseController
             Log::info($response->getStatusCode());
 
             $user->googleSpreadsheetRefreshToken = "";
-            $user->googleSpreadsheetAccessToken = "";
-            $user->googleSpreadsheetUserId = "";
+            $user->googleSpreadsheetCredentials = "";
             $user->googleSpreadsheetEmail = "";
 
         }
@@ -454,4 +479,81 @@ class ConnectController extends BaseController
         return Redirect::route('connect.connect')
                         ->with(array('success' => "Thank you, we'll get in touch"));
     }
+
+
+    /*
+    |===================================================
+    | <GET> | doSaveSuggestion: updates user service data stripe only
+    |===================================================
+    */
+    public function getGoogleSpreadsheetEvents() {
+
+        $user = Auth::user();
+
+        $client = new Google_Client();
+        $client->setClientId($_ENV['GOOGLE_CLIENTID']);
+        $client->setClientSecret($_ENV['GOOGLE_CLIENTSECRET']);
+        $client->setRedirectUri($_ENV['GOOGLE_REDIRECTURL']);
+        $client->setScopes(array('https://spreadsheets.google.com/feeds', 'email'));
+        $client->setAccessType('offline');
+        $client->setApprovalPrompt('force');
+
+        # load the credentials from the database
+        $credentials = $user->googleSpreadsheetCredentials;
+
+        # give it a try
+        $client->setAccessToken($credentials);
+
+        # if the token is expired, 
+        if ($client->isAccessTokenExpired()) {
+
+            # let's get another one with the refreshtoken
+            $refresh_token = $user->googleSpreadsheetRefreshToken;
+            $client->refreshToken($refresh_token);
+
+            # get new credentials
+            $credentials = $client->getAccessToken();
+
+            # decode 
+            $tokens_decoded = json_decode($credentials);
+            try {
+                $refresh_token = $tokens_decoded->refresh_token;
+            } catch (Exception $e) {}
+
+            # save them to the database
+            $user->googleSpreadsheetCredentials = $credentials;
+            $user->googleSpreadsheetRefreshToken = $refresh_token;
+        }
+
+        $tokens_decoded = json_decode($credentials);
+        $access_token = $tokens_decoded->access_token;
+
+        # init service
+        $serviceRequest = new DefaultServiceRequest($access_token);
+        ServiceRequestFactory::setInstance($serviceRequest);
+
+        # get the data they asked for in the POST & SESSION
+        $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+        $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+        $spreadsheet = $spreadsheetFeed->getByTitle("abf - fruit analytics - google spreadsheet connect teszt file");
+        $worksheetFeed = $spreadsheet->getWorksheets();
+        $worksheet = $worksheetFeed->getByTitle("Munkalap1");
+        $listFeed = $worksheet->getListFeed();
+        $listArray = array();
+        foreach ($listFeed->getEntries() as $entry) {
+            $values = $entry->getValues();
+            $listArray[] = $values;
+        }
+        foreach ($listArray as $entry) {
+            foreach ($entry as $key => $value) {
+                //
+            }
+        }
+
+        return "key - ".$key."<br/>value - ".$value;
+   }
+
+
+
+
 }

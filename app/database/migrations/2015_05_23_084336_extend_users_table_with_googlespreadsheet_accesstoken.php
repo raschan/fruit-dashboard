@@ -15,7 +15,7 @@ class ExtendUsersTableWithGooglespreadsheetAccesstoken extends Migration {
 		Schema::table('users', function($table)
         {
              // adding title
-            $table->longText('googleSpreadsheetAccessToken')->nullable();
+            $table->longText('googleSpreadsheetCredentials')->nullable();
             $table->string('googleSpreadsheetEmail')->nullable();
         });
 	}
@@ -30,7 +30,7 @@ class ExtendUsersTableWithGooglespreadsheetAccesstoken extends Migration {
 		Schema::table('users', function($table)
         {
             // dropping column
-            $table->dropColumn('googleSpreadsheetAccessToken');
+            $table->dropColumn('googleSpreadsheetCredentials');
             $table->dropColumn('googleSpreadsheetEmail')->nullable();
         });
 	}

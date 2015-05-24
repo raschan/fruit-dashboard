@@ -18,6 +18,7 @@ class CreateWidget extends Migration {
 			$t->text('wid_name');
 			$t->text('wid_type'); # f.e. google-spreadsheet-linear
 			$t->longText('wid_source'); # JSON
+			$t->longText('das_id'); # connection to dashboard
 			$t->timestamps();
 		});
 	}
