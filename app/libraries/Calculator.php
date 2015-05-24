@@ -2,6 +2,9 @@
 
 use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
+use Google\Spreadsheet\DefaultServiceRequest;
+use Google\Spreadsheet\ServiceRequestFactory;
+
 class Calculator
 {
 
@@ -173,6 +176,59 @@ class Calculator
 
     public static function saveEvents($user)
     {
+
+        ###############################################
+        # google spreadsheet stuff start
+
+        # setup Google stuff
+
+        Log::info(0);
+        $client = GoogleSpreadsheetHelper::setGoogleClient();
+        $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+        Log::info(1);
+
+        # init service
+        $serviceRequest = new DefaultServiceRequest($access_token);
+        ServiceRequestFactory::setInstance($serviceRequest);
+        Log::info(2);
+
+        # get the data they asked for in the POST & SESSION
+        $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+        $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+        Log::info(3);
+
+        $spreadsheet = $spreadsheetFeed->getByTitle("abf - fruit analytics - google spreadsheet connect teszt file");
+        $worksheetFeed = $spreadsheet->getWorksheets();
+        Log::info(4);
+
+        $worksheet = $worksheetFeed->getByTitle("Munkalap1");
+        $listFeed = $worksheet->getListFeed();
+        Log::info(5);
+
+        $listArray = array();
+        foreach ($listFeed->getEntries() as $entry) {
+            $values = $entry->getValues();
+            $listArray[] = $values;
+        }
+        Log::info(6);
+        foreach ($listArray as $entry) {
+            foreach ($entry as $key => $value) {
+                //
+            }
+        }
+        Log::info(7);
+
+        Log::info("key - ".$key."<br/>value - ".$value);
+        exit();
+
+        # google spreadsheet stuff end
+        ###############################################
+
+
+
+        ###############################################
+        # stripe & braintree & paypal stuff start
+
         $eventsToSave = TailoredData::getEvents($user);
 
         if($eventsToSave)
@@ -198,6 +254,10 @@ class Calculator
                 $newEvent->save();
             }
         }
+
+        # stripe & braintree & paypal stuff end
+        ###############################################
+
     }
 
     /**
