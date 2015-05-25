@@ -219,7 +219,7 @@ class AuthController extends BaseController
         $widgets = Auth::user()->dashboards->first()->widgets;
 
         foreach ($widgets as $widget) {
-            
+
             $dataObjects = Data::where('widget_id', $widget->id)
                                     ->orderBy('date','asc')
                                     ->take(31)
@@ -244,9 +244,6 @@ class AuthController extends BaseController
             );
             $allMetrics[] = $newMetricArray;
         }
-
-        // echo("<pre>");
-        // print_r($allMetrics);exit();
 
         # prepare stuff for google spreadsheet metrics end
         #####################################################
@@ -463,33 +460,133 @@ class AuthController extends BaseController
                 ->with('error','Trial period ended.');
         }
 
-        $currentMetrics = Calculator::currentMetrics();
-        $metricValues = Metric::where('user', Auth::user()->id)
-                                ->orderBy('date','desc')
-                                ->take(31)
-                                ->get();
-        
-        foreach ($currentMetrics as $metricID => $statClassName) {
-            $metricsArray = array();
-            foreach ($metricValues as $metric) {
-                $metricsArray[$metric->date] = $metric->$metricID;
-            }
-            ksort($metricsArray);
-            $allMetrics[$metricID] = $metricsArray;
-        }
+        #####################################################
+        # prepare stuff for stripe & braintree metrics start
 
-        if (isset($currentMetrics[$statID]))
+        $currentMetrics = Calculator::currentMetrics();
+
+        # if the query goes for a stripe/braintree metric
+        if (array_key_exists($statID, $currentMetrics)) {
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
+            
+            foreach ($currentMetrics as $metricID => $statClassName) {
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$metricID;
+                }
+                ksort($metricsArray);
+                $allMetrics[$metricID] = $metricsArray;
+            }
+
+            
+            // echo("<h1>1</h1><pre>");
+            // print_r($currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true));
+            // echo("</pre><h1>2</h1><pre>");
+            // print_r($currentMetrics[$statID]);
+            // exit();
+
+            if (isset($currentMetrics[$statID]))
+            {
+                $widgets = Auth::user()->dashboards->first()->widgets;
+
+                return View::make('auth.single_stat',
+                    array(
+                        'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
+                        'metricDetails' => $currentMetrics[$statID],
+                        'currentMetrics' => $currentMetrics,
+                        'widgets' => $widgets,
+                        'metric_type' => 'financial'
+                    )
+                );
+            } else {
+                return Redirect::route('auth.dashboard')
+                    ->with('error', 'Statistic does not exist.');
+            }
+        } else 
+
+        # prepare stuff for stripe & braintree metrics end
+        #####################################################
+
+        #####################################################
+        # prepare stuff for other metrics start
+
         {
+
+            $widget = Widget::where("id", "=", $statID)->first();
+
+            # get min/max date
+            $date_min = $widget->data()->min('date');
+            $date_max = $widget->data()->max('date');
+
+            # convert Y-m-d format to d-m-Y
+            $date_min = DateTime::createFromFormat('Y-m-d', $date_min)->format('d-m-Y');
+            $date_max = DateTime::createFromFormat('Y-m-d', $date_max)->format('d-m-Y');
+
+            # make fullHistory
+
+            # get the distinct dates
+            $allData = $widget->data()->select('date')->groupBy('date')->get();
+
+            # get 1 entry for each date
+            $fullDataArray = array();
+            foreach($allData as $entry) {
+                $dataObject = $widget->data()->where('date', '=', $entry->date)->first();
+                $x = json_decode($dataObject->data_object, true);
+                $a1 = $x['a1'];
+                $fullDataArray = array_add($fullDataArray, $dataObject->date, $a1);
+            }
+
+            // $dataArray = array();
+            $dataArray = $fullDataArray;
+
+            $data = array(
+                    "id" => $widget->id,
+                    "statName" => $widget->widget_name,
+                    "positiveIsGood" => 1,
+                    "history" => $dataArray,
+                    "currentValue" => $a1,
+                    "oneMonthChange" => "",
+                    "firstDay" => $date_min,
+                    "fullHistory" => $fullDataArray,
+                    "oneMonth" => "",
+                    "sixMonth" => "",
+                    "oneYear" => "",
+                    "twoMonthChange" => "",
+                    "threeMonthChange" => "",
+                    "sixMonthChange" => "",
+                    "nineMonthChange" => "",
+                    "oneYearChange" => "",
+                    "dateInterval" => Array(
+                        "startDate" => $date_min,
+                        "stopDate" => $date_max
+                    )
+            );
+
+            $metricDetails = array(
+                    "metricClass" => $widget->id,
+                    "metricName" => "",
+                    "metricDescription" => $widget->widget_name
+            );
+
+            $widgets = Auth::user()->dashboards->first()->widgets;
+
             return View::make('auth.single_stat',
                 array(
-                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
-                    'metricDetails' => $currentMetrics[$statID]
+                    'data' => $data,
+                    'metricDetails' => $metricDetails,
+                    'currentMetrics' => $currentMetrics,
+                    'widgets' => $widgets,
+                    'metric_type' => 'normal'
                 )
             );
-        } else {
-            return Redirect::route('auth.dashboard')
-                ->with('error', 'Statistic does not exist.');
         }
+
+        # prepare stuff for other metrics end
+        #####################################################
+
 
     }
 

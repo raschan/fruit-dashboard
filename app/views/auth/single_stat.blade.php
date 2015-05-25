@@ -11,12 +11,13 @@
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control input-lg" onChange="window.location.href=this.value">
-                <option value="{{ URL::route('auth.single_stat', 'au') }}" @if($data['id'] == "au") selected @endif>Active Users</option>
-                <option value="{{ URL::route('auth.single_stat', 'arr') }}" @if($data['id'] == "arr") selected @endif>Annual Run Rate</option>
-                <option value="{{ URL::route('auth.single_stat', 'arpu') }}" @if($data['id'] == "arpu") selected @endif>Average Revenue Per User</option>
-                <option value="{{ URL::route('auth.single_stat', 'cancellations') }}" @if($data['id'] == "cancellations") selected @endif>Cancellations</option>
-                <option value="{{ URL::route('auth.single_stat', 'mrr') }}" @if($data['id'] == "mrr") selected @endif>Monthly Recurring Revenue</option>
-                <option value="{{ URL::route('auth.single_stat', 'uc') }}" @if($data['id'] == "uc") selected @endif>User Churn</option>
+                <option value="{{ URL::route('auth.dashboard') }}">Back to dashboard</option>
+                @foreach ($currentMetrics as $key => $value)
+                  <option value="{{ URL::route('auth.single_stat', $key) }}" @if($data['id'] == $key) selected @endif>{{ $value['metricName'] }}</option>
+                @endforeach
+                @foreach ($widgets as $widget)
+                  <option value="{{ URL::route('auth.single_stat', $widget->id) }}" @if($data['id'] == $widget->id) selected @endif>{{ $widget->widget_name }}</option>
+                @endforeach
               </select>
           </div>
                   
@@ -48,6 +49,7 @@
           </div>
         </div> <!-- / .row .panel-body -->
 
+        @if ($metric_type == 'financial')
         <!-- Change numbers -->
         <div class="row panel-body margin-vr-sm bordered">
           <div class="statistic-description">
@@ -290,6 +292,7 @@
             </div>
           </div> <!-- /.statistic-description  -->
         </div> <!-- /.row -->
+        @endif
 
 
         <!-- Metric description -->
