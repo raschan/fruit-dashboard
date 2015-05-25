@@ -54,6 +54,27 @@
         {{ Form::close() }}
       @endif
 
+      @if (isset($step) && ($step == 3))
+        <h1>Select input type</h1>
+
+        {{ Form::open(
+          array(
+            'url'=>'connect/googlespreadsheet/4',
+            'method' => 'post',
+          )
+        ) }}
+
+          <input type="radio" name="type" value="google-spreadsheet-linear"/> Single cell (the data will be at the cell A2)<br/>
+          <input type="radio" name="type" value="google-spreadsheet-table"/> Single column (date is in column A, data is in column B)
+
+          {{ Form::submit(
+            'Next >')
+          }}
+
+        {{ Form::close() }}
+      @endif
+
+
     </div> <!-- / #content-wrapper -->
 
   @stop

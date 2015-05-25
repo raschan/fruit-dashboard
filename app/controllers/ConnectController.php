@@ -219,23 +219,36 @@ class ConnectController extends BaseController
                 # if we are after wizard step #2
                 if ($step == 3) {
 
-                    # save the widget
+                    # save the worksheet name in SESSION
+                    Session::put("worksheetName", Input::get('worksheetName'));
 
+                    # render wizard step #2
+                    return View::make('connect.googleSpreadsheetConnect')->with(
+                        array(
+                            'step' => 3
+                        )
+                    );
+                }                
+
+                # if we are after wizard step #3
+                if ($step == 4) {
+
+                    # save the widget
                     $widget_data = array(
                         'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
-                        'googleWorksheetName'     =>  Input::get('worksheetName')
+                        'googleWorksheetName'   =>  Session::get('worksheetName')
                     );
                     $widget_json = json_encode($widget_data);
 
                     $widget = new Widget;
-                    $widget->widget_name = Session::get('spreadsheetName').' - Google Spreadsheet';
-                    $widget->widget_type = 'google-spreadsheet-linear';
+                    $widget->widget_name = Session::get('worksheetName').' - '.Session::get('spreadsheetName');
+                    $widget->widget_type = Input::get('type');
                     $widget->widget_source = $widget_json;
                     $widget->dashboard_id = $user->dashboards()->first()->id;
                     $widget->save();
 
                     return Redirect::route('auth.dashboard')
-                      ->with('success', ucfirst($provider).' connected.');
+                      ->with('success', 'Google Spreadsheet widget added.');
                 }                
             }
         }

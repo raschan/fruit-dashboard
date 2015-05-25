@@ -510,7 +510,7 @@ class AuthController extends BaseController
                 );
             } else {
                 return Redirect::route('auth.dashboard')
-                    ->with('error', 'Statistic does not exist.');
+                    ->with('error', 'Widget does not exist.');
             }
         } else 
 
@@ -523,6 +523,11 @@ class AuthController extends BaseController
         {
 
             $widget = Widget::where("id", "=", $statID)->first();
+
+            if (!$widget) {
+                return Redirect::route('auth.dashboard')
+                    ->with('error', 'This widget can not be displayed. Try again in a few minutes.');                
+            }
 
             # get min/max date
             $date_min = $widget->data()->min('date');
