@@ -101,12 +101,12 @@ class ConnectController extends BaseController
     			} else if (isset($response['error'])) {
 
     				Log::error($response['error_description']);
-    				return Redirect::route('connect.connect')
+    				return Redirect::route('auth.settings')
     					->with('error', 'Something went wrong, try again later');
     			} else {
 
     				Log::error("Something went wrong with stripe connect, don't know what");
-    				return Redirect::route('connect.connect')
+    				return Redirect::route('auth.settings')
     					->with('error', 'Something went wrong, try again later');
     			}
 
@@ -114,12 +114,12 @@ class ConnectController extends BaseController
     			// there was an error in the request
 
                 Log::error(Input::get('error_description'));
-    			return Redirect::route('connect.connect')
+    			return Redirect::route('auth.settings')
     				->with('error',Input::get('error_description'));
     		} else {
     			// we don't know what happened
                 Log::error('Unknown error with user: '.$user->email);
-    			return Redirect::route('connect.connect')
+    			return Redirect::route('auth.settings')
     				->with('error', 'Something went wrong, try again');
     		}
     	}
@@ -253,7 +253,7 @@ class ConnectController extends BaseController
             }
         }
 
-  	return Redirect::route('connect.connect')
+  	return Redirect::route('auth.settings')
    		->with('error', 'Unknown provider.');
 
     }
@@ -307,7 +307,7 @@ class ConnectController extends BaseController
         $user->save();
 
         // redirect to connect
-        return Redirect::route('connect.connect')
+        return Redirect::route('auth.settings')
         	->with('success', 'Disconnected from ' . $servicename . '.');
     }
 
@@ -421,7 +421,7 @@ class ConnectController extends BaseController
         $success = $data->delete();
         Log::info($success);
 
-        return Redirect::route('auth.dashboard')
+        return Redirect::back()
                         ->with(array('success' => "Widget deleted."));
     }
 

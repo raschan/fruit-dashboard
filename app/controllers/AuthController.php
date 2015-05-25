@@ -297,11 +297,19 @@ class AuthController extends BaseController
             }
         }
 
+        $client = GoogleSpreadsheetHelper::setGoogleClient();
+
+        $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
+
         return View::make('auth.settings',
             array(
                 'paypal_connected'  => $user->isPayPalConnected(),
                 'stripe_connected'  => $user->isStripeConnected(),
+                'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
+                'googlespreadsheet_connected'      => $user->isGoogleSpreadsheetConnected(),
+                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
                 'planName'          => $planName,
+                'google_spreadsheet_widgets'       => $google_spreadsheet_widgets,
             )
         );
     }
