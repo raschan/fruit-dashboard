@@ -180,7 +180,6 @@ class Calculator
         ###############################################
         # google spreadsheet stuff start
 
-/*
         # get google spreadsheet widgets for the user
         $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-linear')->get();
 
@@ -229,8 +228,6 @@ class Calculator
 
             }
         }
-
-*/
 
         # get the matching widgets from the user
         $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-table')->get();

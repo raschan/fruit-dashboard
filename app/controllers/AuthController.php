@@ -524,9 +524,9 @@ class AuthController extends BaseController
 
             $widget = Widget::where("id", "=", $statID)->first();
 
-            if (!$widget) {
+            if (!$widget || $widget->data()->count() == 0) {
                 return Redirect::route('auth.dashboard')
-                    ->with('error', 'This widget can not be displayed. Try again in a few minutes.');                
+                    ->with('error', 'This widget is not yet filled with data. Try again in a few minutes.');                
             }
 
             # get min/max date
