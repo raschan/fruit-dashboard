@@ -66,6 +66,25 @@ class User extends Eloquent implements UserInterface
 
 
     /**
+     * Testing if the user has connected at least one financial account
+     *
+     * @return boolean
+    */
+    public function isFinancialStuffConnected()
+    {
+        if ($this->isStripeConnected() 
+            || $this->isPayPalConnected()
+            ) 
+        {
+            // connected
+            return True;
+        }
+        // not connected
+        return False;
+    }
+
+
+    /**
      * Testing if the user has connected at least one account
      *
      * @return boolean

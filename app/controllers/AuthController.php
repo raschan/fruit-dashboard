@@ -192,23 +192,26 @@ class AuthController extends BaseController
 
         $allMetrics = array();
 
-        // get the metrics we are calculating right now
-        $currentMetrics = Calculator::currentMetrics();
+        if (Auth::user()->ready != 'notConnected') {
+            $currentMetrics = Calculator::currentMetrics();
 
-        $metricValues = Metric::where('user', Auth::user()->id)
-                                ->orderBy('date','desc')
-                                ->take(31)
-                                ->get();
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
 
-        foreach ($currentMetrics as $statID => $statDetails) {
+            foreach ($currentMetrics as $statID => $statDetails) {
 
-            $metricsArray = array();
-            foreach ($metricValues as $metric) {
-                $metricsArray[$metric->date] = $metric->$statID;
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$statID;
+                }
+                ksort($metricsArray);
+                $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
             }
-            ksort($metricsArray);
-            $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
         }
+
+
 
         # prepare stuff for stripe & braintree metrics end
         #####################################################
@@ -217,6 +220,8 @@ class AuthController extends BaseController
         # prepare stuff for google spreadsheet metrics start
 
         $widgets = Auth::user()->dashboards->first()->widgets;
+
+        $current_value = "";
 
         foreach ($widgets as $widget) {
 
@@ -228,10 +233,10 @@ class AuthController extends BaseController
             $dataArray = array();
 
             foreach ($dataObjects as $dataObject) {
-                $x = json_decode($dataObject->data_object, true);
-                $a1 = $x['a1'];
+                $array = json_decode($dataObject->data_object, true);
+                $current_value = array_values($array)[0];
 
-                $dataArray = array_add($dataArray, $dataObject->date, $a1);
+                $dataArray = array_add($dataArray, $dataObject->date, $current_value);
             }
 
             $newMetricArray = array(
@@ -239,7 +244,7 @@ class AuthController extends BaseController
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
                     "history" => $dataArray,
-                    "currentValue" => $a1,
+                    "currentValue" => $current_value,
                     "oneMonthChange" => "",
             );
             $allMetrics[] = $newMetricArray;
@@ -252,7 +257,8 @@ class AuthController extends BaseController
             'auth.dashboard',
             array(
                 'allFunctions' => $allMetrics,
-                'events' => Calculator::formatEvents(Auth::user())
+                'events' => Calculator::formatEvents(Auth::user()),
+                'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
             )
         );
     }
@@ -498,7 +504,8 @@ class AuthController extends BaseController
                         'metricDetails' => $currentMetrics[$statID],
                         'currentMetrics' => $currentMetrics,
                         'widgets' => $widgets,
-                        'metric_type' => 'financial'
+                        'metric_type' => 'financial',
+                        'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
                     )
                 );
             } else {
@@ -530,13 +537,16 @@ class AuthController extends BaseController
             # get the distinct dates
             $allData = $widget->data()->select('date')->groupBy('date')->get();
 
+
             # get 1 entry for each date
             $fullDataArray = array();
+            $current_value = "";
+
             foreach($allData as $entry) {
                 $dataObject = $widget->data()->where('date', '=', $entry->date)->first();
-                $x = json_decode($dataObject->data_object, true);
-                $a1 = $x['a1'];
-                $fullDataArray = array_add($fullDataArray, $dataObject->date, $a1);
+                $array = json_decode($dataObject->data_object, true);
+                $current_value = array_values($array)[0];
+                $fullDataArray = array_add($fullDataArray, $dataObject->date, $current_value);
             }
 
             // $dataArray = array();
@@ -547,7 +557,7 @@ class AuthController extends BaseController
                     "statName" => $widget->widget_name,
                     "positiveIsGood" => 1,
                     "history" => $dataArray,
-                    "currentValue" => $a1,
+                    "currentValue" => $current_value,
                     "oneMonthChange" => "",
                     "firstDay" => $date_min,
                     "fullHistory" => $fullDataArray,
@@ -579,7 +589,8 @@ class AuthController extends BaseController
                     'metricDetails' => $metricDetails,
                     'currentMetrics' => $currentMetrics,
                     'widgets' => $widgets,
-                    'metric_type' => 'normal'
+                    'metric_type' => 'normal',
+                    'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
                 )
             );
         }

@@ -10,8 +10,6 @@
 
       <!-- STATISTICS BOX -->
       <div class="col-md-8 quickstats-box no-padding-hr">
-        @if (Auth::user()->ready != 'notConnected')
-
           @for ($i = 0; $i< count($allFunctions); $i++)
             @if($i == 0 || $i % 3 == 0)
             <div class="row">
@@ -91,12 +89,12 @@
             <!-- /{{ $allFunctions[$i]['statName'] }} -->
           @endfor
 
-        @endif
       </div> <!-- / .col-sm-8 -->
       <!-- /STATISTICS BOX -->
 
 
 
+      @if ($isFinancialStuffConnected == 1)
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
@@ -361,6 +359,7 @@
         </div> <!-- / .col-sm-4 -->
       </div>
       <!-- /FEED BOX -->
+      @endif
 
 
       <!-- settings start -->
