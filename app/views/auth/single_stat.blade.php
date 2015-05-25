@@ -305,6 +305,16 @@
           <div class="col-md-11">
             <p class='lead'>{{ $metricDetails['metricDescription'] }}</p>            
           </div>
+
+          @if ($metric_type == 'normal')
+          <div class="col-md-11">
+            <!-- FIXME - ack popup needed -->
+            <a href="{{ URL::route('connect.deletewidget', $widget->id) }}">
+              <button class='btn btn-warning btn-xs btn-flat'>Delete widget</button>
+            </a>
+          </div>
+          @endif
+
         </div>
 
 

@@ -395,11 +395,21 @@ class ConnectController extends BaseController
 
     /*
     |===================================================
-    | <GET> | addWidget: adds a new widget
+    | <ANY> | deleteWidget: delete widget
     |===================================================
     */
-    public function addWidget($provider){
-        return "soon.";
+    public function deleteWidget($widget_id){
+
+        $widget = Auth::user()->dashboards->first()->widgets()->find($widget_id);
+        $success = $widget->delete();
+        Log::info($success);
+
+        $data = Data::where("widget_id", "=", $widget_id);
+        $success = $data->delete();
+        Log::info($success);
+
+        return Redirect::route('auth.dashboard')
+                        ->with(array('success' => "Widget deleted."));
     }
 
 

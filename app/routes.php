@@ -171,6 +171,13 @@ Route::get('/disconnect/{service}', array(
     'uses' => 'ConnectController@doDisconnect'
 ));
 
+// delete widget
+Route::any('connect.deletewidget/{widget_id}', array(
+    'before' => 'auth',
+    'as' => 'connect.deletewidget',
+    'uses' => 'ConnectController@deleteWidget'
+));
+
 
 // subscription routes
 Route::get('/plans', array(
