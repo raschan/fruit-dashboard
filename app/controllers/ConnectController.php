@@ -240,8 +240,8 @@ class ConnectController extends BaseController
             }
         }
 
-  	// return Redirect::route('auth.dashboard')
-   	//	->with('success', ucfirst($provider).' connected.');
+  	return Redirect::route('connect.connect')
+   		->with('error', 'Unknown provider.');
 
     }
 
