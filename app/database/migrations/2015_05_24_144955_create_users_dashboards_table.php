@@ -15,9 +15,15 @@ class CreateUsersDashboardsTable extends Migration {
 		Schema::create('users_dashboards', function(Blueprint $table)
 		{
 			$table->increments('id');
+
 			$table->integer('user_id');
+			// $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
 			$table->integer('dashboard_id');
+			// $table->foreign('dashboard_id')->references('id')->on('dashboards')->onDelete('cascade');
+
 			$table->string('role'); # reader / editor / owner
+
 			$table->timestamps();
 		});
 	}

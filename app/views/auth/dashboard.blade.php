@@ -8,7 +8,7 @@
       </div> <!-- / .page-header -->
       @parent
 
-        <!-- STATISTICS BOX -->
+      <!-- STATISTICS BOX -->
       <div class="col-md-8 quickstats-box no-padding-hr">
         @if (Auth::user()->ready != 'notConnected')
 
@@ -67,17 +67,21 @@
                     <h6 class="no-margin">Not enough data</h6>
                     @endif
                   </div>
+                  {{--
                   @if (Auth::user()->ready == 'connecting')
                     <div class="chart-connecting">
-                      <span class="text-connecting">We are importing your data <br> just a minute</span>
+                      <span class="text-connecting">Importing data <br> just a minute</span>
                     </div>
                   @else
+                  --}}
                     <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
                       <div class="chart-overlay">
                           <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
                       </div>
                     </a>
+                  {{--
                   @endif
+                  --}}
                   <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
                 </div> <!-- / .chart-wrapper -->
               </div> <!-- / .chart-box -->
@@ -89,8 +93,10 @@
 
         @endif
       </div> <!-- / .col-sm-8 -->
-
       <!-- /STATISTICS BOX -->
+
+
+
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
@@ -356,16 +362,13 @@
       </div>
       <!-- /FEED BOX -->
 
-      <!-- widgetlist start -->
-      <div class="col-md-8 quickstats-box no-padding-hr">
-        <ul>
-        @foreach ($widgets as $widget)
-          <li>{{ $widget->widget_name }}</li>
-        @endforeach
-        </ul>
 
+      <!-- settings start -->
+      <div class="col-md-8 quickstats-box no-padding-hr">
         <a href="{{ URL::route('connect.connect') }}">Add widget</a>
       </div>
+      <!-- settings end -->
+
 
     <div id="#appendhere" class="col-md-12">
 
@@ -390,12 +393,10 @@
 
     var data, ctx;
 
-    
-
     @for ($i = 0; $i< count($allFunctions); $i++)
 
     /* {{ $allFunctions[$i]['statName'] }} */
-    
+
     data = {
       labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
       datasets: [
@@ -413,7 +414,7 @@
     };
 
     ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
-    var {{$allFunctions[$i]['id']}}Chart = new Chart(ctx).Line(data, options);
+    var Chart{{$allFunctions[$i]['id']}} = new Chart(ctx).Line(data, options);
 
     /* / {{ $allFunctions[$i]['statName'] }} */
 

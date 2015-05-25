@@ -15,8 +15,15 @@ class CreateDataTable extends Migration {
 		Schema::create('data', function(Blueprint $table)
 		{
 			$table->increments('id');
+
 			$table->integer('widget_id');
+			// $table->foreign('widget_id')->references('id')->on('widgets')->onDelete('cascade');
+
 			$table->longText('data_object');
+
+			$table->date('date');
+			$table->timestamp('timestamp');
+
 			$table->timestamps();
 		});
 	}

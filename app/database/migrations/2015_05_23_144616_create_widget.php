@@ -18,7 +18,10 @@ class CreateWidget extends Migration {
 			$t->text('widget_name');
 			$t->text('widget_type'); # f.e. google-spreadsheet-linear
 			$t->longText('widget_source'); # JSON
-			$t->longText('dashboard_id'); # connection to dashboard
+
+			$t->integer('dashboard_id'); # connection to dashboard
+			// $t->foreign('dashboard_id')->references('id')->on('dashboards')->onDelete('cascade');
+
 			$t->timestamps();
 		});
 	}

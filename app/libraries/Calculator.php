@@ -217,9 +217,13 @@ class Calculator
                      break; # break, so we just the first line
                 }
 
+                $time = time();
+
                 $data = new Data;
                 $data->widget_id = $widget['id'];
                 $data->data_object = json_encode($values);
+                $data->date = date("Y-m-d", $time);
+                $data->timestamp = date('Y-m-d H:i:s', $time);
                 $data->save();
 
             }

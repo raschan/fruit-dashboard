@@ -186,6 +186,10 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+
+        #####################################################
+        # prepare stuff for stripe & braintree metrics start
+
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -206,12 +210,52 @@ class AuthController extends BaseController
             $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
         }
 
+        # prepare stuff for stripe & braintree metrics end
+        #####################################################
+
+        #####################################################
+        # prepare stuff for google spreadsheet metrics start
+
+        $widgets = Auth::user()->dashboards->first()->widgets;
+
+        foreach ($widgets as $widget) {
+            
+            $dataObjects = Data::where('widget_id', $widget->id)
+                                    ->orderBy('date','asc')
+                                    ->take(31)
+                                    ->get();
+
+            $dataArray = array();
+
+            foreach ($dataObjects as $dataObject) {
+                $x = json_decode($dataObject->data_object, true);
+                $a1 = $x['a1'];
+
+                $dataArray = array_add($dataArray, $dataObject->date, $a1);
+            }
+
+            $newMetricArray = array(
+                    "id" => $widget->id,
+                    "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+                    "positiveIsGood" => "true",
+                    "history" => $dataArray,
+                    "currentValue" => $a1,
+                    "oneMonthChange" => "",
+            );
+            $allMetrics[] = $newMetricArray;
+        }
+
+        // echo("<pre>");
+        // print_r($allMetrics);exit();
+
+        # prepare stuff for google spreadsheet metrics end
+        #####################################################
+
         return View::make(
             'auth.dashboard',
             array(
                 'allFunctions' => $allMetrics,
-                'events' => Calculator::formatEvents(Auth::user()),
-                'widgets' => Auth::user()->dashboards->first()->widgets
+                'events' => Calculator::formatEvents(Auth::user())
             )
         );
     }
