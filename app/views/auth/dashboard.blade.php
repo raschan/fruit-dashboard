@@ -5,6 +5,9 @@
     <div id="content-wrapper">
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
+        <a href="{{ URL::route('auth.settings') }}">
+          <button id="addGoogleSpreadsheetWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+        </a>
       </div> <!-- / .page-header -->
       @parent
 
@@ -360,14 +363,6 @@
       </div>
       <!-- /FEED BOX -->
       @endif
-
-
-      <!-- settings start -->
-      <div class="col-md-8 quickstats-box no-padding-hr">
-        <a href="{{ URL::route('connect.connect') }}">Add widget</a>
-      </div>
-      <!-- settings end -->
-
 
     <div id="#appendhere" class="col-md-12">
 

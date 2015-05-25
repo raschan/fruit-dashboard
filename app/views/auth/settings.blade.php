@@ -410,11 +410,11 @@
         <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
         @if($stripe_connected)
         <a href="{{ URL::route('auth.disconnect', 'stripe') }}">
-          <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
+          <button id="disconnectStripe" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
         </a>  
         @else
         <a href="{{ $stripeButtonUrl }}">
-          <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
+          <button id="connectStripe" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
         </a>  
         @endif
         <h4 class="list-group-item-heading">Stripe</h4>
@@ -433,11 +433,11 @@
         <i class="fa icon fa-google fa-4x pull-left"></i>
         @if($googlespreadsheet_connected)
         <a href="{{ URL::route('auth.disconnect', 'googlespreadsheet') }}">
-          <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
+          <button id="disconnectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
         </a>  
         @else
         <a href="{{ $googleSpreadsheetButtonUrl }}">
-          <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
+          <button id="connectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
         </a>  
         @endif
         <h4 class="list-group-item-heading">Google Spreadsheet</h4>
@@ -463,7 +463,7 @@
     <div class="panel-body bordered sameHeight">
       <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Manage widgets</h4>
 
-      <div class="list-group-item">
+      <div class="list-group-item" style="border:none;">
         <i class="fa icon fa-google fa-4x pull-left"></i>
         <h4 class="list-group-item-heading">Google Spreadsheet</h4>
         <p class="list-group-item-text">
@@ -483,7 +483,7 @@
         @endforeach
         </ul>
         <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right">
-          <button id="editName" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+          <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
         </a>
       </div>
 
