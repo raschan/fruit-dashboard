@@ -52,13 +52,6 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
-                // check if trial period is ended
-                if (Auth::user()->isTrialEnded())
-                {
-                    return Redirect::route('auth.plan')
-                        ->with('error','Trial period ended.');
-                }
-
                 // check if already connected
                 if (Auth::user()->isConnected()) {
                     return Redirect::route('auth.dashboard')
@@ -135,7 +128,8 @@ class AuthController extends BaseController
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
-            $user->plan = 'trial';
+            $user->plan = 'free';
+            $user->connectedServices = 0;
             $user->save();
             
             // create user on intercom
@@ -165,6 +159,19 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
+        {
+            return Redirect::route('connect.connect')
+                ->with('error','Connect a service first.');
+        }
+
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
+
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -207,13 +214,17 @@ class AuthController extends BaseController
 
         $planName = null;
         foreach ($plans as $plan) {
-            if ($plan->id =='fruit_analytics_plan_'.$user->plan) {
+            if ($plan->id == $user->plan) {
                 $planName = $plan->name;
             }
         }
 
         if (!$planName)
         {
+            if($user->plan == 'free')
+            {
+                $planName = 'Free pack';
+            }
             if($user->plan == 'trial')
             {
                $planName = 'Trial period';
@@ -230,9 +241,10 @@ class AuthController extends BaseController
 
         return View::make('auth.settings',
             array(
-                'paypal_connected'  => $user->isPayPalConnected(),
-                'stripe_connected'  => $user->isStripeConnected(),
-                'planName'          => $planName,
+                'paypal_connected'      => $user->isPayPalConnected(),
+                'stripe_connected'      => $user->isStripeConnected(),
+                'braintree_connected'   => $user->isBraintreeConnected(),
+                'planName'              => $planName,
             )
         );
     }
@@ -382,7 +394,6 @@ class AuthController extends BaseController
         return Redirect::to('/settings')
             ->with('success', 'Edit was succesful.');
     }
-    
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page
@@ -424,145 +435,5 @@ class AuthController extends BaseController
             return Redirect::route('auth.dashboard')
                 ->with('error', 'Statistic does not exist.');
         }
-
-    }
-
-    public function showPlans()
-    {
-        return View::make('auth.plan',array(
-            'plans' => Braintree_Plan::all()
-        ));
-    }
-
-
-    public function showPayPlan($planId)
-    {
-        try {
-            $customer = Braintree_Customer::find('fruit_analytics_user_'.Auth::user()->id);
-        }
-        catch(Braintree_Exception_NotFound $e) {
-
-            $result = Braintree_Customer::create(array(
-                'id'        => 'fruit_analytics_user_'.Auth::user()->id,
-                'email'     => Auth::user()->email,
-                'firstName' => Auth::user()->email,
-            ));
-            if($result->success)
-            {
-                $customer = $result->customer;
-            } else {
-                // needs error handling
-            }
-        }
-
-        // generate clientToken for the user to make payment
-        $clientToken = Braintree_ClientToken::generate(array(
-            "customerId" => $customer->id
-        ));
-        // get the detials of the plan
-        $plans = Braintree_Plan::all();
-
-        // find the correct plan to show
-        // no way currently to get only one plan
-        foreach ($plans as $plan) {
-            // the plan id needs to be in .env.php (or any other assocc array) for easy access
-            if($plan->id == 'fruit_analytics_plan_'.$planId)
-            {
-                $planName = $plan->name;
-            }
-        }
-
-        return View::make('auth.payplan', array(
-            'planName'      =>$planName,
-            'clientToken'   =>$clientToken,
-        )); 
-    }
-
-    public function doPayPlan($planId)
-    {
-        if(Input::has('payment_method_nonce'))
-        {
-            // get the detials of the plan
-            $plans = Braintree_Plan::all();
-
-            $user = Auth::user();
-            
-            
-            // find the correct plan to show
-            // no way currently to get only one plan
-            foreach ($plans as $plan) {
-                if($plan->id == 'fruit_analytics_plan_'.$planId)
-                {
-                    $planName = $plan->name;
-                }
-            }
-
-            // lets see, if the user already has a subscripton
-            if ($user->subscriptionId)
-            {
-                try
-                {
-                    $result = Braintree_Subscription::cancel($user->subscriptionId);
-                }
-                catch (Exception $e)
-                {
-                    return Redirect::route('auth.plan')
-                    ->with('error',"Couldn't process subscription, try again later.");
-                }
-            }   
-            
-            // create the new subscription
-            $result = Braintree_Subscription::create(array(
-                'planId'                => 'fruit_analytics_plan_'.$planId,
-                'paymentMethodNonce'    => Input::get('payment_method_nonce'),
-            ));
-            
-            if($result->success)
-            {
-                // update user plan to subscrition
-                $user->plan = $planId;
-                $user->subscriptionId = $result->subscription->id;
-                $user->save();
-
-                IntercomHelper::subscribed($user,$planId);
-
-                return Redirect::route('auth.dashboard')
-                    ->with('success','Subscribed to '.$planName);
-            } else {
-                return Redirect::route('auth.plan')
-                    ->with('error',"Couldn't process subscription, try again later.");
-            }
-        }
-    }
-    public function doCancelSubscription()
-    {
-        $user = Auth::user();
-
-        if ($user->subscriptionId)
-        {
-            try
-            {
-                $result = Braintree_Subscription::cancel($user->subscriptionId);
-            }
-            catch (Exception $e)
-            {
-                return Redirect::back()
-                    ->with('error',"Couldn't process subscription, try again later.");
-            }
-
-            $user->subscriptionId = '';
-            $user->plan = 'cancelled';
-
-            $user->save();
-
-            IntercomHelper::cancelled($user);
-
-            return Redirect::route('auth.plan')
-                ->with('success','Unsubscribed successfully');
-        } else {
-            Redirect::back()
-                ->with('error','No valid subscription');
-        }
-
     }
 }

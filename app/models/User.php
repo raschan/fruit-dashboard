@@ -49,7 +49,8 @@ class User extends Eloquent implements UserInterface
     public function isConnected()
     {
         if ($this->isStripeConnected() 
-            || $this->isPayPalConnected()) 
+            || $this->isPayPalConnected()
+            || $this->isBraintreeConnected()) 
         {
             // connected
             return True;
@@ -57,6 +58,33 @@ class User extends Eloquent implements UserInterface
         // not connected
         return False;
     }
+
+    public function isBraintreeConnected()
+    {
+        if ($this->isBraintreeCredentialsValid() && $this->btWebhookConnected && $this->ready=='connected')
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBraintreeCredentialsValid()
+    {
+        if (strlen($this->btPublicKey) > 2)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /*
+    |-------------------------------------
+    | Trial checking helpers
+    |-------------------------------------
+    */
 
     public function isTrialEnded()
     {
@@ -105,5 +133,38 @@ class User extends Eloquent implements UserInterface
         $days = $now->diffInDays($signup->addDays($_ENV['TRIAL_ENDS_IN_X_DAYS']), false);
 
         return $days;
+    }
+
+
+    /*
+    |------------------------------------------
+    | Connected services checking
+    |------------------------------------------
+    */
+
+    public function canConnectMore()
+    {
+        if($this->paymentStatus == 'overdue')
+        {
+            // user is a paying customer, but its payment is overdue
+            // don't let more connections
+            return false;
+        }
+        if($this->plan != 'free')
+        {
+            // the user is good paying customer (or trial period, whatever), 
+            // let him/her connect more
+            return true;
+        } elseif($this->connectedServices < $_ENV['MAX_FREE_CONNECTIONS'])
+        {
+            // not yet reached the maximum number of allowed connections
+            return true;
+        } else
+        {
+            // the user is not paying (or trial ended), 
+            // and reached maximum number of allowed connections
+            // don't let more connections
+            return false;
+        }
     }
 }

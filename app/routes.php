@@ -6,33 +6,31 @@
 |--------------------------------------------------------------------------
 */
 
-if(App::environment('local', 'development'))
+if(!App::environment('production'))
 {
     // braintree development routes
 
     Route::get('/braintree', array(
-        'before' => 'auth|api_key',
+        'before' => 'api_key',
         'as' => 'dev.braintree',
-        'uses' => 'HelloController@showBraintree'
+        'uses' => 'DevController@showBraintree'
     ));
 
     Route::post('/braintree', array(
         'before' => 'auth|api_key',
         'as' => 'dev.braintree',
-        'uses' => 'HelloController@doBraintreePayment'
+        'uses' => 'DevController@doBraintreePayment'
     ));
 
 
     Route::get('/users', array(
         'before' => 'auth|api_key',
         'as' => 'dev.users',
-        'uses' => 'HelloController@showUsers'
+        'uses' => 'DevController@showUsers'
     ));
 
-    Route::get('/paypal', array(
-        'before' => 'auth|api_key',
-        'as' => 'dev.paypal',
-        'uses' => 'HelloController@showPaypal'
+    Route::get('/test', array(
+        'uses' => 'DevController@show'
     ));
 
     Route::get('test', array(
@@ -51,6 +49,7 @@ Route::get('/', function()
     return Redirect::route('auth.dashboard');
 });
 
+
 // sign up routes
 Route::get('signup', array(
     'as' => 'auth.signup',
@@ -61,6 +60,7 @@ Route::post('signup', array(
     'as' => 'auth.signup',
     'uses' => 'AuthController@doSignup'
 ));
+
 
 // sign in routes
 Route::get('signin', array(
@@ -81,7 +81,7 @@ Route::any('signout', array(
 ));
 
 
-// dashboard routes
+// metric graph routes
 Route::get('dashboard', array(
     'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'auth.dashboard',
@@ -127,9 +127,11 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
+
+
 Route::post('cancelSubscription', array(
     'before'    => 'auth',
-    'uses'      => 'AuthController@doCancelSubscription'
+    'uses'      => 'PaymentController@doCancelSubscription'
 ));
 
 
@@ -143,6 +145,16 @@ Route::get('connect', array(
 Route::get('connect/{provider}', array(
     'before' => 'auth|trial_ended|cancelled',
     'uses' => 'ConnectController@connectProvider'
+));
+
+Route::post('connectBraintree',array(
+    'before'    => 'auth',
+    'uses'      => 'ConnectController@doBraintreeConnect'
+));
+
+Route::any('import/{provider}',array(
+    'before'    => 'auth',
+    'uses'      => 'ConnectController@doImport'
 ));
 
 Route::post('connect', array(
@@ -169,34 +181,30 @@ Route::get('/disconnect/{service}', array(
 // subscription routes
 Route::get('/plans', array(
     'before'    => 'auth',
-    'as'        => 'auth.plan',
-    'uses'      => 'AuthController@showPlans'
+    'as'        => 'payment.plan',
+    'uses'      => 'PaymentController@showPlans'
 ));
 
 Route::get('/plans/{planName}', array(
     'before'    => 'auth',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@showPayPlan'
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@showPayPlan'
 ));
 
 Route::post('/plans/{planName}', array(
     'before'    => 'auth',
-    'as'        => 'auth.payplan',
-    'uses'      => 'AuthController@doPayPlan'
+    'as'        => 'payment.payplan',
+    'uses'      => 'PaymentController@doPayPlan'
 ));
 
 
-// adding a key to a user
-Route::get('addkey', array(
-    'as' => 'auth.addkey',
-    'before' => 'auth',
-    'uses' => 'AuthController@showAddKey'
+// webhook endpoints
+Route::get('/api/events/braintree/{webhookId}', array(
+    'uses'      => 'WebhookController@verifyBraintreeWebhook',
 ));
 
-Route::post('addkey', array(
-    'as' => 'auth.addkey',
-    'before' => 'auth',
-    'uses' => 'AuthController@doAddKey'
+Route::post('/api/events/braintree/{webhookId}', array(
+    'uses'      => 'WebhookController@braintreeEvents',
 ));
 
 /*
@@ -205,19 +213,17 @@ Route::post('addkey', array(
 |--------------------------------------------------------------------------
 */
 
-// single_stat
-Route::get('demo/statistics/{statID}', array(
-    'as' => 'demo.single_stat',
-    'uses' => 'DemoController@showSinglestat'
-));
-
 Route::get('demo', array(
     'as' => 'demo.dashboard',
     'uses' => 'DemoController@showDashboard'
 ));
 
-// dashboard route
 Route::get('demo/dashboard', array(
     'as' => 'demo.dashboard',
     'uses' => 'DemoController@showDashboard'
+));
+
+Route::get('demo/statistics/{statID}', array(
+    'as' => 'demo.single_stat',
+    'uses' => 'DemoController@showSinglestat'
 ));

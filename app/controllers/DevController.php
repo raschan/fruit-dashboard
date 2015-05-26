@@ -17,8 +17,19 @@ use PayPal\Api\ChargeModel;
 A Controller for testing stuff
 */
 
-class HelloController extends BaseController
+class DevController extends BaseController
 {
+    public function show()
+    {
+        $encrypted = Crypt::encrypt(3);
+        $encrypted_start = substr($encrypted,0,12);
+        $encrypted_end = substr($encrypted,176,12);
+        $decrypted = Crypt::decrypt($encrypted);
+
+        var_dump($encrypted_start);
+        var_dump($encrypted_end);
+        var_dump($decrypted);
+        exit();
     public function showTest()
     {
         return View::make('dev.test',array(
@@ -126,30 +137,41 @@ class HelloController extends BaseController
 
     public function showBraintree()
     {
-        try {
-            $customer = Braintree_Customer::find('development_fruit_analytics_user_'.Auth::user()->id);
+
+        /* 
+        notification samples
+        Braintree_WebhookNotification::SUBSCRIPTION_CANCELED
+        Braintree_WebhookNotification::SUBSCRIPTION_CHARGED_SUCCESSFULLY
+        Braintree_WebhookNotification::SUBSCRIPTION_CHARGED_UNSUCCESSFULLY
+        Braintree_WebhookNotification::SUBSCRIPTION_EXPIRED
+        Braintree_WebhookNotification::SUBSCRIPTION_TRIAL_ENDED
+        Braintree_WebhookNotification::SUBSCRIPTION_WENT_ACTIVE
+        Braintree_WebhookNotification::SUBSCRIPTION_WENT_PAST_DUE
+        Braintree_WebhookNotification::SUB_MERCHANT_ACCOUNT_APPROVED
+        Braintree_WebhookNotification::SUB_MERCHANT_ACCOUNT_DECLINED
+        Braintree_WebhookNotification::TRANSACTION_DISBURSED
+        Braintree_WebhookNotification::DISPUTE_OPENED
+        Braintree_WebhookNotification::DISPUTE_LOST
+        Braintree_WebhookNotification::DISPUTE_WON
+        */
+
+        $sampleNotification = Braintree_WebhookTesting::sampleNotification(
+            Braintree_WebhookNotification::TRANSACTION_DISBURSED,
+            'my_id'
+        );
+
+        $webhookNotification = Braintree_WebhookNotification::parse(
+            $sampleNotification['bt_signature'],
+            $sampleNotification['bt_payload']
+        );
+
+        var_dump($webhookNotification->kind);
+        var_dump($webhookNotification->subject);
+        foreach ($webhookNotification->subject as $key => $value) 
+        {
+            var_dump($webhookNotification->$key);
         }
-        catch(Braintree_Exception_NotFound $e) {
-
-            $result = Braintree_Customer::create(array(
-                'id' => 'development_fruit_analytics_user_'.Auth::user()->id,
-                'email' => Auth::user()->email,
-            ));
-            if($result->success)
-            {
-                $customer = $result->customer;
-            } else {
-                // needs error handling
-            }
-        }
-        $clientToken = Braintree_ClientToken::generate(array(
-            "customerId" => $customer->id
-        ));
-
-
-        return View::make('dev.braintree',array(
-            'clientToken' => $clientToken, 
-        ));
+        exit();
     }
 
     public function doBraintreePayment()
