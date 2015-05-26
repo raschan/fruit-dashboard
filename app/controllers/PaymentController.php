@@ -9,47 +9,6 @@
 class PaymentController extends BaseController
 {
 
-	/*
-	|-----------------------------------------
-	| Class helper functions
-	|-----------------------------------------
-	*/
-	// Get the plan_name => plan pairs for all plans we currently have
-	private function getPlanDictionary()
-	{
-		$planDict = array();
-
-		$plans = Braintree_Plan::all();
-
-		// find the correct plan to show
-		// no way currently to get only one plan
-		foreach ($plans as $plan) 
-		{
-			$planDict[snake_case(camel_case($plan->name))] = $plan;
-		}
-		return $planDict;
-	}
-
-	// Get the plan for a given id
-	private function getPlanById($id)
-	{
-		$plans = Braintree_Plan::all();
-
-		foreach ($plans as $plan) {
-			if($plan->id == $id)
-			{
-				return $plan;
-			}
-		}
-		return null;
-	}
-
-	/*
-	|-----------------------------------------
-	| Route functions
-	|-----------------------------------------
-	*/
-
 	// Renders Plans & Pricing page 
 	public function showPlans()
 	{
@@ -88,7 +47,7 @@ class PaymentController extends BaseController
 			"customerId" => $customer->id
 		));
 		
-		$plans = $this->getPlanDictionary();
+		$plans = BraintreeHelper::getPlanDictionary();
 
 		return View::make('payment.payplan', array(
 			'planName'      =>$plans[$planName]->name,
@@ -118,7 +77,7 @@ class PaymentController extends BaseController
 				}
 			}   
 			
-			$plans = $this->getPlanDictionary();
+			$plans = BraintreeHelper::getPlanDictionary();
 
 			// create the new subscription
 			$result = Braintree_Subscription::create(array(
@@ -182,7 +141,7 @@ class PaymentController extends BaseController
 					->with('error',"Couldn't process cancellation, try again later.");
 			}
 
-			$plan = $this->getPlanById($user->plan);
+			$plan = BraintreeHelper::getPlanById($user->plan);
 
 			$user->subscriptionId = '';
 			$user->plan = 'free';

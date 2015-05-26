@@ -74,7 +74,7 @@
                 <span class="icon pf-big pf-stripe"></span>
               </div> <!-- /. connect-icon -->
 
-              <div class="col-sm-5">
+              <div class="col-sm-5 valign">
                 @if ($user->isStripeConnected())
                   <!-- Modal box -->
                   <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
@@ -148,7 +148,7 @@
               <div class="col-sm-2 col-sm-offset-1 text-center">
                 <span class="icon pf-big pf-braintree"></span>
               </div> <!-- /. connect-icon -->
-              <div class="col-sm-5">
+              <div class="col-sm-5 valign">
                 <!-- Braintree details modal box -->
                 <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
                   <div class='modal-dialog modal-lg'>
@@ -202,8 +202,6 @@
                   @endif
                 @else {{-- can't connect more --}}
                   <a href="/plans" class='btn-link sm-pull-right'>Connect with Braintree</a>
-                }
-                }
                 @endif
               </div> <!-- /. col-sm-5 -->
 

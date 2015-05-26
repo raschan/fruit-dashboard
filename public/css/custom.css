@@ -607,9 +607,16 @@
 .left-space {
   margin-left: 15px;
 }
+
 .top-space {
 	margin-top: 15px;
 }
+
 .bottom-space {
 	margin-bottom: 15px
+}
+
+.valign {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
