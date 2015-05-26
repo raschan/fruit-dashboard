@@ -8,6 +8,12 @@
 */
 class PaymentController extends BaseController
 {
+
+	/*
+	|-----------------------------------------
+	| Class helper functions
+	|-----------------------------------------
+	*/
 	// Get the plan_name => plan pairs for all plans we currently have
 	private function getPlanDictionary()
 	{
@@ -23,6 +29,7 @@ class PaymentController extends BaseController
 		}
 		return $planDict;
 	}
+
 	// Get the plan for a given id
 	private function getPlanById($id)
 	{
@@ -37,6 +44,13 @@ class PaymentController extends BaseController
 		return false;
 	}
 
+	/*
+	|-----------------------------------------
+	| Route functions
+	|-----------------------------------------
+	*/
+
+	// Renders Plans & Pricing page 
 	public function showPlans()
 	{
 		$plans = Braintree_Plan::all();
@@ -47,6 +61,7 @@ class PaymentController extends BaseController
 	}
 
 
+	// Renders specific plan payment page
 	public function showPayPlan($planName)
 	{
 		try {
@@ -81,6 +96,7 @@ class PaymentController extends BaseController
 		)); 
 	}
 
+	// Execute the payment process
 	public function doPayPlan($planName)
 	{
 		if(Input::has('payment_method_nonce'))
@@ -141,7 +157,7 @@ class PaymentController extends BaseController
 		}
 	}
 
-
+	// Execute the cancellation
 	public function doCancelSubscription()
 	{
 		$user = Auth::user();
