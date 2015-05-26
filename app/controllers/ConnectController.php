@@ -292,8 +292,11 @@ class ConnectController extends BaseController
 
         } else if ($service == "googlespreadsheet") {
 
-            $client = new GuzzleHttp\Client();
-            $response = $client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
+            $client = GoogleSpreadsheetHelper::setGoogleClient();
+            $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+            $guzzle_client = new GuzzleHttp\Client();
+            $response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
 
             $user->googleSpreadsheetRefreshToken = "";
             $user->googleSpreadsheetCredentials = "";
