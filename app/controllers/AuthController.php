@@ -211,23 +211,23 @@ class AuthController extends BaseController
             }
         }
 
-
-
         # prepare stuff for stripe & braintree metrics end
         #####################################################
+
+
+
 
         #####################################################
         # prepare stuff for google spreadsheet metrics start
 
         $widgets = Auth::user()->dashboards->first()->widgets;
 
-        $current_value = "";
-
         foreach ($widgets as $widget) {
+
+            $current_value = "";
 
             $dataObjects = Data::where('widget_id', $widget->id)
                                     ->orderBy('date','asc')
-                                    ->take(31)
                                     ->get();
 
             $dataArray = array();
@@ -558,7 +558,8 @@ class AuthController extends BaseController
             foreach($allData as $entry) {
                 $dataObject = $widget->data()->where('date', '=', $entry->date)->first();
                 $array = json_decode($dataObject->data_object, true);
-                $current_value = array_values($array)[0];
+                $current_value = intval(array_values($array)[0]);
+                Log::info($current_value);
                 $fullDataArray = array_add($fullDataArray, $dataObject->date, $current_value);
             }
 
