@@ -194,8 +194,10 @@
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-google-ss-disconnect">Disconnect</button>
                   <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right"><span>Add new widget</span></a>
-                @else
+                @elseif($user->canConnectMore())
                   <a href="{{ $googleSpreadsheetButtonUrl }}" class="sm-pull-right valign" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
+                @else
+                  <a href="/plans" class="sm-pull-right valign"><span>Connect Google Spreadsheets</span></a>
                 @endif
               </div> <!-- /. col-sm-5 -->
             </div> <!-- /. panel-body googlespreadsheet-from -->
