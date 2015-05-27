@@ -196,7 +196,6 @@ return array(
 		'Carbon'			=> 'Carbon\Carbon',
 		'Client'			=> 'GuzzleHttp\Client',
 		'Mailman' 			=> 'Waavi\Mailman\Facades\Facade',
-		
 	),
 
 );

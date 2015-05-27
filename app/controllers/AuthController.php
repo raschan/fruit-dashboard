@@ -52,6 +52,19 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
+                // if user has no dashboards created yet
+                if (Auth::user()->dashboards->count() == 0) {
+                    // create first dashboard for user
+                    $dashboard = new Dashboard;
+                    $dashboard->dashboard_name = "Dashboard #1";
+                    $dashboard->save();
+
+                    // attach dashboard & user
+                    Auth::user()->dashboards()->attach($dashboard->id, array('role' => 'owner'));
+                }
+
+
+
                 // check if trial period is ended
                 if (Auth::user()->isTrialEnded())
                 {
@@ -137,6 +150,14 @@ class AuthController extends BaseController
             $user->summaryEmailFrequency = 'daily';
             $user->plan = 'trial';
             $user->save();
+
+            // create first dashboard for user
+            $dashboard = new Dashboard;
+            $dashboard->dashboard_name = "Dashboard #1";
+            $dashboard->save();
+
+            // attach dashboard & user
+            $user->dashboards()->attach($dashboard->id, array('role' => 'owner'));
             
             // create user on intercom
             IntercomHelper::signedup($user);
@@ -165,31 +186,93 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+
+        #####################################################
+        # prepare stuff for stripe & braintree metrics start
+
         $allMetrics = array();
 
-        // get the metrics we are calculating right now
-        $currentMetrics = Calculator::currentMetrics();
+        if (Auth::user()->ready != 'notConnected') {
+            $currentMetrics = Calculator::currentMetrics();
 
-        $metricValues = Metric::where('user', Auth::user()->id)
-                                ->orderBy('date','desc')
-                                ->take(31)
-                                ->get();
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
 
-        foreach ($currentMetrics as $statID => $statDetails) {
+            foreach ($currentMetrics as $statID => $statDetails) {
 
-            $metricsArray = array();
-            foreach ($metricValues as $metric) {
-                $metricsArray[$metric->date] = $metric->$statID;
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$statID;
+                }
+                ksort($metricsArray);
+                $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
             }
-            ksort($metricsArray);
-            $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
         }
+
+        # prepare stuff for stripe & braintree metrics end
+        #####################################################
+
+
+
+
+        #####################################################
+        # prepare stuff for google spreadsheet metrics start
+
+        $widgets = Auth::user()->dashboards->first()->widgets;
+
+        foreach ($widgets as $widget) {
+
+            $current_value = "";
+
+            $dataObjects = Data::where('widget_id', $widget->id)
+                                    ->orderBy('date','asc')
+                                    ->get();
+
+            $dataArray = array();
+
+            if ($widget->widget_type == 'google-spreadsheet-text-column') {
+
+                foreach ($dataObjects as $dataObject) {
+                    $array = json_decode($dataObject->data_object, true);
+                    foreach ($array as $key => $value) {
+                        $current_value = $value;
+                        $dataArray = array_add($dataArray, $key, $current_value);
+                    }
+                }
+
+            } else {
+
+                foreach ($dataObjects as $dataObject) {
+                    $array = json_decode($dataObject->data_object, true);
+                    $current_value = array_values($array)[0];
+                    $dataArray = array_add($dataArray, $dataObject->date, $current_value);
+                }
+
+            }
+
+            $newMetricArray = array(
+                    "id" => $widget->id,
+                    "widget_type" => $widget->widget_type,
+                    "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+                    "positiveIsGood" => "true",
+                    "history" => $dataArray,
+                    "currentValue" => $current_value,
+                    "oneMonthChange" => "",
+            );
+            $allMetrics[] = $newMetricArray;
+        }
+
+        # prepare stuff for google spreadsheet metrics end
+        #####################################################
 
         return View::make(
             'auth.dashboard',
             array(
-                'allFunctions' => $allMetrics
-                ,'events' => Calculator::formatEvents(Auth::user())
+                'allFunctions' => $allMetrics,
+                'events' => Calculator::formatEvents(Auth::user()),
+                'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
             )
         );
     }
@@ -228,11 +311,19 @@ class AuthController extends BaseController
             }
         }
 
+        $client = GoogleSpreadsheetHelper::setGoogleClient();
+
+        $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
+
         return View::make('auth.settings',
             array(
                 'paypal_connected'  => $user->isPayPalConnected(),
                 'stripe_connected'  => $user->isStripeConnected(),
+                'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
+                'googlespreadsheet_connected'      => $user->isGoogleSpreadsheetConnected(),
+                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
                 'planName'          => $planName,
+                'google_spreadsheet_widgets'       => $google_spreadsheet_widgets,
             )
         );
     }
@@ -397,32 +488,283 @@ class AuthController extends BaseController
                 ->with('error','Trial period ended.');
         }
 
-        $currentMetrics = Calculator::currentMetrics();
-        $metricValues = Metric::where('user', Auth::user()->id)
-                                ->orderBy('date','desc')
-                                ->take(31)
-                                ->get();
-        
-        foreach ($currentMetrics as $metricID => $statClassName) {
-            $metricsArray = array();
-            foreach ($metricValues as $metric) {
-                $metricsArray[$metric->date] = $metric->$metricID;
-            }
-            ksort($metricsArray);
-            $allMetrics[$metricID] = $metricsArray;
-        }
+        #####################################################
+        # prepare stuff for stripe & braintree metrics start
 
-        if (isset($currentMetrics[$statID]))
+        $currentMetrics = Calculator::currentMetrics();
+
+        # if the query goes for a stripe/braintree metric
+        if (array_key_exists($statID, $currentMetrics)) {
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
+            
+            foreach ($currentMetrics as $metricID => $statClassName) {
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$metricID;
+                }
+                ksort($metricsArray);
+                $allMetrics[$metricID] = $metricsArray;
+            }
+
+            
+            // echo("<h1>1</h1><pre>");
+            // print_r($currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true));
+            // echo("</pre><h1>2</h1><pre>");
+            // print_r($currentMetrics[$statID]);
+            // exit();
+
+            if (isset($currentMetrics[$statID]))
+            {
+                $widgets = Auth::user()->dashboards->first()->widgets;
+
+                return View::make('auth.single_stat',
+                    array(
+                        'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
+                        'metricDetails' => $currentMetrics[$statID],
+                        'currentMetrics' => $currentMetrics,
+                        'widgets' => $widgets,
+                        'metric_type' => 'financial',
+                        'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
+                    )
+                );
+            } else {
+                return Redirect::route('auth.dashboard')
+                    ->with('error', 'Widget does not exist.');
+            }
+        } else 
+
+        # prepare stuff for stripe & braintree metrics end
+        #####################################################
+
+        #####################################################
+        # prepare stuff for other metrics start
+
         {
+
+            $widget = Widget::where("id", "=", $statID)->first();
+
+            if (!$widget || $widget->data()->count() == 0) {
+                return Redirect::route('auth.dashboard')
+                    ->with('error', 'This widget is not yet filled with data. Try again in a few minutes.');                
+            }
+
+            # get min/max date
+            $date_min = $widget->data()->min('date');
+            $date_max = $widget->data()->max('date');
+
+            # convert Y-m-d format to d-m-Y
+            $date_min = DateTime::createFromFormat('Y-m-d', $date_min)->format('d-m-Y');
+            $date_max = DateTime::createFromFormat('Y-m-d', $date_max)->format('d-m-Y');
+
+            # make fullHistory
+
+            # get the distinct dates
+            $allData = $widget->data()->select('date')->groupBy('date')->get();
+
+
+            # get 1 entry for each date
+            $fullDataArray = array();
+            $current_value = "";
+
+            foreach($allData as $entry) {
+                $dataObject = $widget->data()->where('date', '=', $entry->date)->first();
+                $array = json_decode($dataObject->data_object, true);
+                $current_value = intval(array_values($array)[0]);
+                Log::info($current_value);
+                $fullDataArray = array_add($fullDataArray, $dataObject->date, $current_value);
+            }
+
+            // $dataArray = array();
+            $dataArray = $fullDataArray;
+
+            $data = array(
+                    "id" => $widget->id,
+                    "statName" => $widget->widget_name,
+                    "positiveIsGood" => 1,
+                    "history" => $dataArray,
+                    "currentValue" => $current_value,
+                    "oneMonthChange" => "",
+                    "firstDay" => $date_min,
+                    "fullHistory" => $fullDataArray,
+                    "oneMonth" => "",
+                    "sixMonth" => "",
+                    "oneYear" => "",
+                    "twoMonthChange" => "",
+                    "threeMonthChange" => "",
+                    "sixMonthChange" => "",
+                    "nineMonthChange" => "",
+                    "oneYearChange" => "",
+                    "dateInterval" => Array(
+                        "startDate" => $date_min,
+                        "stopDate" => $date_max
+                    )
+            );
+
+            $metricDetails = array(
+                    "metricClass" => $widget->id,
+                    "metricName" => "",
+                    "metricDescription" => $widget->widget_name
+            );
+
+            $widgets = Auth::user()->dashboards->first()->widgets;
+
             return View::make('auth.single_stat',
                 array(
-                    'data' => $currentMetrics[$statID]['metricClass']::show($allMetrics[$statID],true),
-                    'metricDetails' => $currentMetrics[$statID]
+                    'data' => $data,
+                    'metricDetails' => $metricDetails,
+                    'currentMetrics' => $currentMetrics,
+                    'widgets' => $widgets,
+                    'metric_type' => 'normal',
+                    'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
                 )
             );
-        } else {
-            return Redirect::route('auth.dashboard')
-                ->with('error', 'Statistic does not exist.');
         }
+
+        # prepare stuff for other metrics end
+        #####################################################
+
+
+    }
+
+    public function showPlans()
+    {
+        return View::make('auth.plan',array(
+            'plans' => Braintree_Plan::all()
+        ));
+    }
+
+
+    public function showPayPlan($planId)
+    {
+        try {
+            $customer = Braintree_Customer::find('fruit_analytics_user_'.Auth::user()->id);
+        }
+        catch(Braintree_Exception_NotFound $e) {
+
+            $result = Braintree_Customer::create(array(
+                'id'        => 'fruit_analytics_user_'.Auth::user()->id,
+                'email'     => Auth::user()->email,
+                'firstName' => Auth::user()->email,
+            ));
+            if($result->success)
+            {
+                $customer = $result->customer;
+            } else {
+                // needs error handling
+            }
+        }
+
+        // generate clientToken for the user to make payment
+        $clientToken = Braintree_ClientToken::generate(array(
+            "customerId" => $customer->id
+        ));
+        // get the detials of the plan
+        $plans = Braintree_Plan::all();
+
+        // find the correct plan to show
+        // no way currently to get only one plan
+        foreach ($plans as $plan) {
+            // the plan id needs to be in .env.php (or any other assocc array) for easy access
+            if($plan->id == 'fruit_analytics_plan_'.$planId)
+            {
+                $planName = $plan->name;
+            }
+        }
+
+        return View::make('auth.payplan', array(
+            'planName'      =>$planName,
+            'clientToken'   =>$clientToken,
+        )); 
+    }
+
+    public function doPayPlan($planId)
+    {
+        if(Input::has('payment_method_nonce'))
+        {
+            // get the detials of the plan
+            $plans = Braintree_Plan::all();
+
+            $user = Auth::user();
+            
+            
+            // find the correct plan to show
+            // no way currently to get only one plan
+            foreach ($plans as $plan) {
+                if($plan->id == 'fruit_analytics_plan_'.$planId)
+                {
+                    $planName = $plan->name;
+                }
+            }
+
+            // lets see, if the user already has a subscripton
+            if ($user->subscriptionId)
+            {
+                try
+                {
+                    $result = Braintree_Subscription::cancel($user->subscriptionId);
+                }
+                catch (Exception $e)
+                {
+                    return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+                }
+            }   
+            
+            // create the new subscription
+            $result = Braintree_Subscription::create(array(
+                'planId'                => 'fruit_analytics_plan_'.$planId,
+                'paymentMethodNonce'    => Input::get('payment_method_nonce'),
+            ));
+            
+            if($result->success)
+            {
+                // update user plan to subscrition
+                $user->plan = $planId;
+                $user->subscriptionId = $result->subscription->id;
+                $user->save();
+
+                IntercomHelper::subscribed($user,$planId);
+
+                return Redirect::route('auth.dashboard')
+                    ->with('success','Subscribed to '.$planName);
+            } else {
+                return Redirect::route('auth.plan')
+                    ->with('error',"Couldn't process subscription, try again later.");
+            }
+        }
+    }
+    public function doCancelSubscription()
+    {
+        $user = Auth::user();
+
+        if ($user->subscriptionId)
+        {
+            try
+            {
+                $result = Braintree_Subscription::cancel($user->subscriptionId);
+            }
+            catch (Exception $e)
+            {
+                return Redirect::back()
+                    ->with('error',"Couldn't process subscription, try again later.");
+            }
+
+            $user->subscriptionId = '';
+            $user->plan = 'cancelled';
+
+            $user->save();
+
+            IntercomHelper::cancelled($user);
+
+            return Redirect::route('auth.plan')
+                ->with('success','Unsubscribed successfully');
+        } else {
+            Redirect::back()
+                ->with('error','No valid subscription');
+        }
+
     }
 }

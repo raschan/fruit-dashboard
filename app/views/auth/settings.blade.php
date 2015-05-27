@@ -426,12 +426,12 @@
           });
           
           @endif
-      });
-      </script>
-    @endif 
+        });
+</script>
+@endif 
 
-    <script type="text/javascript">
-    init.push(function () {
+<script type="text/javascript">
+init.push(function () {
       // event listeners for hidden forms
       $('#editName').on('click', function (){
         $('#editNameForm').slideUp('fast', function (){
@@ -497,6 +497,6 @@
       })
     });
 
-    </script>
+</script>
 
-  @stop
+@stop

@@ -14,78 +14,89 @@ class IntercomHelper {
 
 	public static function signedup($user)
 	{
-		$intercom = self::createInstance();
-
-		$intercom->createUser(array(
-			'name'			=> $user->email,
-			'email' 		=> $user->email,
-			'created_at'	=> Carbon::parse($user->created_at)->timestamp,
-		));
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
+			$intercom->createUser(array(
+				'name'			=> $user->email,
+				'email' 		=> $user->email,
+				'created_at'	=> Carbon::parse($user->created_at)->timestamp,
+			));
+		}
 	}
 
 	public static function connected($user, $provider)
 	{
-		$intercom = self::createInstance();
-		
-		// general connect
-		$intercom->createEvent(array(
-			'event_name'	=> 'connected',
-			'created_at'	=> time(),
-			'email'			=> $user->email,
-		));
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
 
-		// provider connect
-		$intercom->createEvent(array(
-			'event_name' 	=> 'connected-'.$provider,
-			'created_at' 	=> time(),
-			'email'			=> $user->email,
-		));
+			// general connect
+			$intercom->createEvent(array(
+				'event_name'	=> 'connected',
+				'created_at'	=> time(),
+				'email'			=> $user->email,
+			));
+
+			// provider connect
+			$intercom->createEvent(array(
+				'event_name' 	=> 'connected-'.$provider,
+				'created_at' 	=> time(),
+				'email'			=> $user->email,
+			));
+		}
 	}
 
 	public static function subscribed($user,$plan)
 	{
-		$intercom = self::createInstance();
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
 
-		// plan subscription
-		$intercom->createEvent(array(
-			'event_name'	=> 'subscribed-to-'.$plan,
-			'created_at'	=> time(),
-			'email'			=> $user->email,
-		));
+			// plan subscription
+			$intercom->createEvent(array(
+				'event_name'	=> 'subscribed-to-'.$plan,
+				'created_at'	=> time(),
+				'email'			=> $user->email,
+			));
+		}
 	}
 
 	public static function cancelled($user)
 	{
-		$intercom = self::createInstance();
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
 
-		// subscription cancelled
-		$intercom->createEvent(array(
-			'event_name'	=> 'cancelled-subscription',
-			'created_at'	=> time(),
-			'email'			=> $user->email,
-		));
+			// subscription cancelled
+			$intercom->createEvent(array(
+				'event_name'	=> 'cancelled-subscription',
+				'created_at'	=> time(),
+				'email'			=> $user->email,
+			));
+		}
 	}
 
 	public static function trialEnded($user,$when)
 	{
-		$intercom = self::createInstance();
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
 
-		// trial ended
-		$intercom->createEvent(array(
-			'event_name'	=> 'trial-ended-'.$when,
-			'created_at'	=> time(),
-			'email'			=> $user->email,
-		));
+			// trial ended
+			$intercom->createEvent(array(
+				'event_name'	=> 'trial-ended-'.$when,
+				'created_at'	=> time(),
+				'email'			=> $user->email,
+			));
+		}
 	}
 
 	public static function trialWillEnd($user,$days)
 	{
-		$intercom = self::createInstance();
+		if (App::environment('production')) {
+			$intercom = self::createInstance();
 
-		$intercom->createEvent(array(
-			'event_name'	=> 'trial-will-end-in-'.$days.'-days',
-			'created_at'	=> time(),
-			'email'			=> $user->email,
-		));
+			$intercom->createEvent(array(
+				'event_name'	=> 'trial-will-end-in-'.$days.'-days',
+				'created_at'	=> time(),
+				'email'			=> $user->email,
+			));
+		}
 	}
 }

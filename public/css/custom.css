@@ -298,6 +298,23 @@
 	padding-bottom: 15px;
 }
 
+.notification-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.subscription-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.connection-form-wrapper {
+	border: none;
+	padding-bottom: 15px;
+}
+
+.widget-form-wrapper {
+	padding-bottom: 15px;
+}
+
 .connect-form .list-group-item {
 	border: none;
 	padding-bottom: 15px;
