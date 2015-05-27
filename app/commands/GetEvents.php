@@ -18,7 +18,7 @@ class GetEvents extends Command {
      *
      * @var string
      */
-    protected $description = 'This command saves all the stripe events of all users.';
+    protected $description = 'This command saves all the connector events of all users.';
 
     /**
      * Create a new command instance.

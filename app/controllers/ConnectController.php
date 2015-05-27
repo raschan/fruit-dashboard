@@ -1,10 +1,13 @@
 <?php
+use Google\Spreadsheet\DefaultServiceRequest;
+use Google\Spreadsheet\ServiceRequestFactory;
 
 /*
 |--------------------------------------------------------------------------
 | ConnectController: Handles the connection related sites
 |--------------------------------------------------------------------------
 */
+
 class ConnectController extends BaseController
 {
 	/*
@@ -57,6 +60,9 @@ class ConnectController extends BaseController
         {
             $braintree_connect_stepNumber = 3;
         }
+       
+        // prepare stuff for google drive auth
+        $client = GoogleSpreadsheetHelper::setGoogleClient();
         
         // returning view
         return View::make('connect.connect',
@@ -67,20 +73,28 @@ class ConnectController extends BaseController
 
                 // braintree stuff
                 'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
+
+                // google spreadsheet stuff
+                'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
             )
         );
     }
 
     /*
     |===================================================
-    | <GET> | connectProvider: return route for connecting a provider
+    | <ANY> | connectProvider: return route for connecting a provider
     | authentication with OAuth2 protocol (favored)
     |===================================================
     */
-    public function connectProvider($provider)
+    public function connectProvider($provider, $step = NULL)
     {
-		$user = Auth::user();
-        if ($provider == 'stripe') {
+        # we will need the user
+
+        $user = Auth::user();
+
+
+    	if ($provider == 'stripe') {
+
             if(Input::has('code'))
             {
     			// get the token with the code
@@ -120,12 +134,12 @@ class ConnectController extends BaseController
     			} else if (isset($response['error'])) {
 
     				Log::error($response['error_description']);
-    				return Redirect::route('connect.connect')
+    				return Redirect::route('auth.settings')
     					->with('error', 'Something went wrong, try again later');
     			} else {
 
     				Log::error("Something went wrong with stripe connect, don't know what");
-    				return Redirect::route('connect.connect')
+    				return Redirect::route('auth.settings')
     					->with('error', 'Something went wrong, try again later');
     			}
 
@@ -133,19 +147,149 @@ class ConnectController extends BaseController
     			// there was an error in the request
 
                 Log::error(Input::get('error_description'));
-    			return Redirect::route('connect.connect')
+    			return Redirect::route('auth.settings')
     				->with('error',Input::get('error_description'));
     		} else {
     			// we don't know what happened
-                Log:error('Unknown error with user: '.$user->email);
-    			return Redirect::route('connect.connect')
+                Log::error('Unknown error with user: '.$user->email);
+    			return Redirect::route('auth.settings')
     				->with('error', 'Something went wrong, try again');
     		}
     	}
 
-    	return Redirect::route('connect.connect')
-    		->with('error','Invalid payment provider.');
+        # if we auth with googlespreadsheet
+
+        if ($provider == 'googlespreadsheet') {
+
+            # we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
+
+            $client = GoogleSpreadsheetHelper::setGoogleClient();
+
+            if (!$step){
+
+                # first round -- we got a code in GET from google
+
+                if (Input::has('code')) {
+
+                    # lets get an access token
+                    $client->authenticate(Input::get('code'));
+                    $credentials = $client->getAccessToken(); // big JSON stuff
+
+                    # lets make it an associative array
+                    $tokens_decoded = json_decode($credentials, true);
+
+                    # lets check if we have a refresh token already
+                    $refresh_token = $user->googleSpreadsheetRefreshToken;
+                    if (strlen($refresh_token)<10) {
+                        # nope, let's use the one we got now
+                        $refresh_token = $tokens_decoded['refresh_token'];
+                    }
+
+                    # database save the access-stuff-JSON and the refresh token
+                    $user->googleSpreadsheetCredentials = $credentials;
+                    $user->googleSpreadsheetRefreshToken = $refresh_token;
+                    $user->save();
+
+                    # good job, notify intercom
+                    IntercomHelper::connected($user,'googlespreadsheet');
+
+                    # lets call this route again, but without the code
+                    if (Request::secure()) {
+                        $redirect = 'https://';
+                    } else {
+                        $redirect = 'http://';
+                    }
+                    $redirect .= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+                    header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL)); 
+                    exit();
+                }
+
+                # second round, prepare the wizard
+
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # get the spreadsheet list
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+
+                return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
+            }
+
+            # we are in the wizard
+
+            if ($step) {
+
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+
+                # if we are after wizard step #1
+                if ($step == 2) {
+
+                    # get the spreadsheet they asked for in the POST
+                    $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+                    $spreadsheet = $spreadsheetService->getSpreadsheetById(Input::get('spreadsheetId'));
+                    $worksheetFeed = $spreadsheet->getWorksheets();
+
+                    # save the spreadsheet name in SESSION
+                    Session::put("spreadsheetId", Input::get('spreadsheetId'));
+                    Session::put("spreadsheetName", $spreadsheet->getTitle());
+                    
+                    # render wizard step #2
+                    return View::make('connect.googleSpreadsheetConnect')->with(
+                        array(
+                            'step' => 2,
+                            'worksheetFeed' => $worksheetFeed
+                        )
+                    );
+                }
+
+                # if we are after wizard step #2
+                if ($step == 3) {
+
+                    # save the worksheet name in SESSION
+                    Session::put("worksheetName", Input::get('worksheetName'));
+
+                    # render wizard step #2
+                    return View::make('connect.googleSpreadsheetConnect')->with(
+                        array(
+                            'step' => 3
+                        )
+                    );
+                }                
+
+                # if we are after wizard step #3
+                if ($step == 4) {
+
+                    # save the widget
+                    $widget_data = array(
+                        'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
+                        'googleWorksheetName'   =>  Session::get('worksheetName')
+                    );
+                    $widget_json = json_encode($widget_data);
+
+                    $widget = new Widget;
+                    $widget->widget_name = Session::get('worksheetName').' - '.Session::get('spreadsheetName');
+                    $widget->widget_type = Input::get('type');
+                    $widget->widget_source = $widget_json;
+                    $widget->dashboard_id = $user->dashboards()->first()->id;
+                    $widget->save();
+
+                    return Redirect::route('auth.dashboard')
+                      ->with('success', 'Google Spreadsheet widget added.');
+                }                
+            }
+        }
+
+  	return Redirect::route('auth.settings')
+   		->with('error', 'Unknown provider.');
+
     }
+
 
     /*
     |===================================================
@@ -167,6 +311,8 @@ class ConnectController extends BaseController
             $user->stripeUserId = "";
             $user->stripeRefreshToken = "";
 
+            $servicename = 'Stripe';
+
         } else if ($service == "braintree") {
             // disconnecting braintree
 
@@ -178,6 +324,22 @@ class ConnectController extends BaseController
             $user->btWebhookId = null;
             $user->btWebhookConnected = false;
             
+            $servicename = 'Braintree';
+
+        } else if ($service == "googlespreadsheet") {
+
+            $client = GoogleSpreadsheetHelper::setGoogleClient();
+            $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+            $guzzle_client = new GuzzleHttp\Client();
+            $response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
+
+            $user->googleSpreadsheetRefreshToken = "";
+            $user->googleSpreadsheetCredentials = "";
+            $user->googleSpreadsheetEmail = "";
+
+            $servicename = 'Google Spreadsheet';
+
         }
 
         $user->connectedServices--;
@@ -191,8 +353,8 @@ class ConnectController extends BaseController
         }
 
         // redirect to connect
-        return Redirect::route('connect.connect')
-        	->with('success', 'Disconnected from ' . $service . '.');
+        return Redirect::route('auth.settings')
+        	->with('success', 'Disconnected from ' . $servicename . '.');
     }
 
 
@@ -365,4 +527,27 @@ class ConnectController extends BaseController
         return Redirect::route('connect.connect')
                         ->with(array('success' => "Thank you, we'll get in touch"));
     }
+
+    /*
+    |===================================================
+    | <ANY> | deleteWidget: delete widget
+    |===================================================
+    */
+    public function deleteWidget($widget_id){
+
+        $widget = Auth::user()->dashboards->first()->widgets()->find($widget_id);
+        $success = $widget->delete();
+        Log::info($success);
+
+        $data = Data::where("widget_id", "=", $widget_id);
+        $success = $data->delete();
+        Log::info($success);
+
+        return Redirect::back()
+                        ->with(array('success' => "Widget deleted."));
+    }
+
+
 }
+
+

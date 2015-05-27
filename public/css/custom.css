@@ -136,7 +136,8 @@
 
 .stripe-form,
 .braintree-form,
-.suggestion-form {
+.suggestion-form,
+.googlespreadsheet-form {
 
 }
 
@@ -145,7 +146,9 @@
 .braintree-form .form-horizontal .form-control,
 .braintree-form .form-horizontal .control-label,
 .suggestion-form .form-horizontal .form-control,
-.suggestion-form .form-horizontal .control-label {
+.suggestion-form .form-horizontal .control-label,
+.googlespreadsheet-form .form-horizontal .form-control,
+.googlespreadsheet-form .form-horizontal .control-label, {
 	margin-top: 5px;
 }
 
@@ -295,6 +298,23 @@
 }
 
 .account-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.notification-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.subscription-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.connection-form-wrapper {
+	border: none;
+	padding-bottom: 15px;
+}
+
+.widget-form-wrapper {
 	padding-bottom: 15px;
 }
 

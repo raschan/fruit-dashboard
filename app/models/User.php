@@ -7,6 +7,18 @@ use Illuminate\Auth\UserInterface;
 class User extends Eloquent implements UserInterface
 {
     protected $guarded = array();
+
+    // DEFINE RELATIONSHIPS --------------------------------------------------
+    // each user has many connection
+    public function connections() {
+        return $this->hasMany('Connection');
+    }
+
+    // each user BELONGS to many dashboards
+    public function dashboards() {
+        return $this->belongsToMany('Dashboard', 'users_dashboards', 'user_id', 'dashboard_id');
+    }
+
     use UserTrait;
     /**
      * Testing if the user has connected a stripe account
@@ -41,6 +53,37 @@ class User extends Eloquent implements UserInterface
         return False;
     }
 
+    public function isGoogleSpreadsheetConnected()
+    {
+        // at this point validation like this is all right
+        if (strlen($this->googleSpreadsheetRefreshToken) > 1) {
+            // long enough key
+            return True;
+        }
+        // no key is given
+        return False;
+    }
+
+
+    /**
+     * Testing if the user has connected at least one financial account
+     *
+     * @return boolean
+    */
+    public function isFinancialStuffConnected()
+    {
+        if ($this->isStripeConnected() 
+            || $this->isPayPalConnected()
+            ) 
+        {
+            // connected
+            return True;
+        }
+        // not connected
+        return False;
+    }
+
+
     /**
      * Testing if the user has connected at least one account
      *
@@ -50,7 +93,9 @@ class User extends Eloquent implements UserInterface
     {
         if ($this->isStripeConnected() 
             || $this->isPayPalConnected()
-            || $this->isBraintreeConnected()) 
+            || $this->isBraintreeConnected() 
+            || $this->isGoogleSpreadsheetConnected()
+            ) 
         {
             // connected
             return True;
