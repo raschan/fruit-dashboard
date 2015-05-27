@@ -11,13 +11,11 @@ if(!App::environment('production'))
     // braintree development routes
 
     Route::get('/braintree', array(
-        'before' => 'api_key',
         'as' => 'dev.braintree',
         'uses' => 'DevController@showBraintree'
     ));
 
     Route::post('/braintree', array(
-        'before' => 'auth|api_key',
         'as' => 'dev.braintree',
         'uses' => 'DevController@doBraintreePayment'
     ));

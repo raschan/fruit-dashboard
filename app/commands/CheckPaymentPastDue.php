@@ -47,6 +47,10 @@ class CheckPaymentPastDue extends Command {
 		
 		foreach ($users as $user) 
 		{
+			if ($user->id == 1)
+			{
+				continue;
+			}
 			// if the user has any subscriptions
 			if($user->plan != 'free')
 			{
@@ -58,10 +62,9 @@ class CheckPaymentPastDue extends Command {
 						Braintree_SubscriptionSearch::id()->is($user->subscriptionId),
 						Braintree_SubscriptionSearch::status()->is(Braintree_Subscription::ACTIVE)
 					));
-					
-					if(!empty($collection))
+					if($collection->maximumCount() > 0)
 					{
-						$subscription = $collection[0];
+						$subscription = $collection->firstItem();
 						// upgrade and alert the user
 
 						$user->paymentStatus = 'ok';
@@ -81,17 +84,17 @@ class CheckPaymentPastDue extends Command {
 				} else {
 					$paying++;
 					// get user's subscription if its overdue
-					$collection = Braintree_Subscription::searc(array(
+					$collection = Braintree_Subscription::search(array(
 						Braintree_SubscriptionSearch::id()->is($user->subscriptionId),
 						Braintree_SubscriptionSearch::status()->is(Braintree_Subscription::PAST_DUE)
-						// more versatile search would be with Braintree_SubscriptionSearch::daysPastDue() 
+						// more versatile search would be with Braintree_SubscriptionSearch::daysPastDue(int) 
 					));
 
 					// search returns a collection, but 
 					// we now there is maximum one such subscription
-					if(!empty($collection))
+					if($collection->maximumCount() > 0)
 					{
-						$subscription = $collection[0];
+						$subscription = $collection->firstItem();
 						// downgrade and alert user
 						$user->paymentStatus = 'overdue';
 						$user->save();

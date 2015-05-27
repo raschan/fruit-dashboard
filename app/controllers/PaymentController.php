@@ -8,35 +8,8 @@
 */
 class PaymentController extends BaseController
 {
-	// Get the plan_name => plan pairs for all plans we currently have
-	private function getPlanDictionary()
-	{
-		$planDict = array();
 
-		$plans = Braintree_Plan::all();
-
-		// find the correct plan to show
-		// no way currently to get only one plan
-		foreach ($plans as $plan) 
-		{
-			$planDict[snake_case(camel_case($plan->name))] = $plan;
-		}
-		return $planDict;
-	}
-	// Get the plan for a given id
-	private function getPlanById($id)
-	{
-		$plans = Braintree_Plan::all();
-
-		foreach ($plans as $plan) {
-			if($plan->id == $id)
-			{
-				return $plan;
-			}
-		}
-		return null;
-	}
-
+	// Renders Plans & Pricing page 
 	public function showPlans()
 	{
 		$plans = Braintree_Plan::all();
@@ -47,6 +20,7 @@ class PaymentController extends BaseController
 	}
 
 
+	// Renders specific plan payment page
 	public function showPayPlan($planName)
 	{
 		try {
@@ -73,7 +47,7 @@ class PaymentController extends BaseController
 			"customerId" => $customer->id
 		));
 		
-		$plans = $this->getPlanDictionary();
+		$plans = BraintreeHelper::getPlanDictionary();
 
 		return View::make('payment.payplan', array(
 			'planName'      =>$plans[$planName]->name,
@@ -81,6 +55,7 @@ class PaymentController extends BaseController
 		)); 
 	}
 
+	// Execute the payment process
 	public function doPayPlan($planName)
 	{
 		if(Input::has('payment_method_nonce'))
@@ -102,7 +77,7 @@ class PaymentController extends BaseController
 				}
 			}   
 			
-			$plans = $this->getPlanDictionary();
+			$plans = BraintreeHelper::getPlanDictionary();
 
 			// create the new subscription
 			$result = Braintree_Subscription::create(array(
@@ -148,7 +123,7 @@ class PaymentController extends BaseController
 		}
 	}
 
-
+	// Execute the cancellation
 	public function doCancelSubscription()
 	{
 		$user = Auth::user();
@@ -166,7 +141,7 @@ class PaymentController extends BaseController
 					->with('error',"Couldn't process cancellation, try again later.");
 			}
 
-			$plan = $this->getPlanById($user->plan);
+			$plan = BraintreeHelper::getPlanById($user->plan);
 
 			$user->subscriptionId = '';
 			$user->plan = 'free';

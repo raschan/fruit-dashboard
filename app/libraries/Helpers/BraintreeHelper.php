@@ -9,6 +9,8 @@ class BraintreeHelper {
 
 	}
 
+//===============================================================================
+
 	/**
 	* Format braintree event type to stripe event type
 	* @param string - braintree event type
@@ -69,6 +71,8 @@ class BraintreeHelper {
 	       		break;
 	    }
 	}
+
+//===============================================================================
 
 	/**
 	* create new formatted array, from the braintree object
@@ -140,6 +144,8 @@ class BraintreeHelper {
 		return $object;
 	}
 
+//===============================================================================
+
 	/**
 	* calculate and save metrics on connect
 	* @param object - user
@@ -183,6 +189,8 @@ class BraintreeHelper {
 		$metrics->save();
 	}
 
+//===============================================================================
+
 	// ------------------------------------------
 	// Braintree wrappers
 	// ------------------------------------------	
@@ -195,6 +203,8 @@ class BraintreeHelper {
     	Braintree_Configuration::privateKey($user->btPrivateKey);
 	}
 
+
+//===============================================================================
 
 	/**
 	* wrapper for getting plan from braintree
@@ -225,6 +235,8 @@ class BraintreeHelper {
         return null;
 	}
 
+//===============================================================================
+
 	/**
 	* wrapper for getting customers from braintree
 	* @param object - user
@@ -254,6 +266,8 @@ class BraintreeHelper {
 
     	return $returnVariable;
 	}
+
+//===============================================================================
 
 	/**
 	* wrapper for getting subscriptions from braintree
@@ -293,6 +307,8 @@ class BraintreeHelper {
     	return $returnVariable;
 	}
 
+//===============================================================================
+
 	/**
 	* wrapper for getting subscriptions from braintree
 	* @param string - id of the transaction
@@ -310,6 +326,7 @@ class BraintreeHelper {
 		return $transaction;
 	}
 
+//===============================================================================
 
 	// ------------------------------------------
 	// Calculators
@@ -342,6 +359,8 @@ class BraintreeHelper {
                      
 		return $mrr;
 	}
+
+//===============================================================================
 
 	private static function getAU($user, $customers,$previousValue = 0)
 	{
@@ -379,6 +398,56 @@ class BraintreeHelper {
         } // /foreach customer
 
 		return $au;
+	}
+
+//===============================================================================
+
+	// Get the plan_name => plan dictionary for all plans
+	public static function getPlanDictionary($userId = null)
+	{
+		// we are okay, if we search through our plans,
+		// but we have to set users credentials, if
+		// we go through our user's plans
+		if ($userId)
+		{
+			self::setBraintreeCredentials(User::find($userId));
+		}
+
+		$planDict = array();
+
+		$plans = Braintree_Plan::all();
+
+		// find the correct plan to show
+		// no way currently to get only one plan
+		foreach ($plans as $plan) 
+		{
+			$planDict[snake_case(camel_case($plan->name))] = $plan;
+		}
+		return $planDict;
+	}
+
+//===============================================================================
+
+	// Get the plan for a given id
+	public static function getPlanById($id, $userId = null)
+	{
+		// we are okay, if we search through our plans,
+		// but we have to set users credentials, if
+		// we go through our user's plans
+		if ($userId)
+		{
+			self::setBraintreeCredentials(User::find($userId));
+		}
+
+		$plans = Braintree_Plan::all();
+
+		foreach ($plans as $plan) {
+			if($plan->id == $id)
+			{
+				return $plan;
+			}
+		}
+		return null;
 	}
 
 }

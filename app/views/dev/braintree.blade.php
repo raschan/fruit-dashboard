@@ -14,13 +14,13 @@
 	<div id='paymentStuff'>
 		<form id="checkout" method="post" action="">
 	  		<div id="dropin"></div>
-	  		<input type="submit" value="Pay $10">
+	  		<input type="submit" value="Subscribe">
 		</form>
 	</div>
 
 	<div id='results'>
 		@if(isset($result))
-			{{ $result }}
+			{{ $result->getMessage() }}
 		@endif
 	</div>
 
