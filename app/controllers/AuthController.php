@@ -52,13 +52,6 @@ class AuthController extends BaseController
             if (Auth::attempt($credentials)) {
                 // auth successful!
 
-                // check if trial period is ended
-                if (Auth::user()->isTrialEnded())
-                {
-                    return Redirect::route('auth.plan')
-                        ->with('error','Trial period ended.');
-                }
-
                 // check if already connected
                 if (Auth::user()->isConnected()) {
                     return Redirect::route('auth.dashboard')
@@ -135,7 +128,8 @@ class AuthController extends BaseController
             $user->password = Hash::make(Input::get('password'));
             $user->ready = 'notConnected';
             $user->summaryEmailFrequency = 'daily';
-            $user->plan = 'trial';
+            $user->plan = 'free';
+            $user->connectedServices = 0;
             $user->save();
             
             // create user on intercom
@@ -165,6 +159,19 @@ class AuthController extends BaseController
     */
     public function showDashboard()
     {
+        if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
+        {
+            return Redirect::route('connect.connect')
+                ->with('error','Connect a service first.');
+        }
+
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
+
         $allMetrics = array();
 
         // get the metrics we are calculating right now
@@ -214,6 +221,10 @@ class AuthController extends BaseController
 
         if (!$planName)
         {
+            if($user->plan == 'free')
+            {
+                $planName = 'Free pack';
+            }
             if($user->plan == 'trial')
             {
                $planName = 'Trial period';
@@ -230,9 +241,10 @@ class AuthController extends BaseController
 
         return View::make('auth.settings',
             array(
-                'paypal_connected'  => $user->isPayPalConnected(),
-                'stripe_connected'  => $user->isStripeConnected(),
-                'planName'          => $planName,
+                'paypal_connected'      => $user->isPayPalConnected(),
+                'stripe_connected'      => $user->isStripeConnected(),
+                'braintree_connected'   => $user->isBraintreeConnected(),
+                'planName'              => $planName,
             )
         );
     }
@@ -382,7 +394,6 @@ class AuthController extends BaseController
         return Redirect::to('/settings')
             ->with('success', 'Edit was succesful.');
     }
-    
     /*
     |===================================================
     | <GET> | showSinglestat: renders the single stats page

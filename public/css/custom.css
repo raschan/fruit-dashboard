@@ -599,3 +599,24 @@
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
+
+.right-space {
+  margin-right: 15px;
+}
+
+.left-space {
+  margin-left: 15px;
+}
+
+.top-space {
+	margin-top: 15px;
+}
+
+.bottom-space {
+	margin-bottom: 15px
+}
+
+.valign {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

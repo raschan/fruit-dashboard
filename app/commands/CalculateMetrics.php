@@ -42,10 +42,10 @@ class CalculateMetrics extends Command {
         foreach (User::all() as $user) {
         	// check if user is connected and ready (in case he is just connecting), and trial not ended yet
         	// or it's demo user
-        	if(($user->isStripeConnected() && $user->ready == 'connected' && !$user->isTrialEnded()) || $user->id == 1)
+        	if(($user->isConnected() && $user->ready == 'connected' && !$user->isTrialEnded()) || $user->id == 1)
         	{
         		// saving events
-	            Calculator::calculateMetrics($user,time());
+	            Calculator::calculateMetrics($user,Carbon::now()->timestamp);
 	        }
         }
         Log::info('CalculateMetrics finished');

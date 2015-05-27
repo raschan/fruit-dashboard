@@ -78,8 +78,8 @@
                 <span class="icon pf-big pf-stripe"></span>
               </div> <!-- /. connect-icon -->
 
-              <div class="col-sm-5">
-                @if ($stripe_connected)
+              <div class="col-sm-5 valign">
+                @if ($user->isStripeConnected())
                   <!-- Modal box -->
                   <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -100,8 +100,10 @@
                   </div>
                   <!-- /Modal box -->
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-                @else
+                @elseif($user->canConnectMore())
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
+                @else
+                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Connect with Stripe</span></a>
                   
                   <!--
                   <div style='display:none;'>
@@ -132,7 +134,7 @@
                     <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
                   </div>
                   -->
-              @endif
+                @endif
               </div> <!-- /. col-sm-5 -->
 
             </div> <!-- /. panel-body stripe-from -->
@@ -140,7 +142,6 @@
         </div> <!-- /. row -->
         <!-- / Stripe connect -->
 
-        {{-- 
         <!-- Braintree connect -->
         <div class="row">
           <div class="braintree-form-wrapper bordered">
@@ -151,39 +152,67 @@
               <div class="col-sm-2 col-sm-offset-1 text-center">
                 <span class="icon pf-big pf-braintree"></span>
               </div> <!-- /. connect-icon -->
-              @if ($braintree_connected)
-                <div class="col-sm-5">
-                    <!-- Modal box -->
-                    <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                      <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                          <div class="modal-header">
+              <div class="col-sm-5 valign">
+                <!-- Braintree details modal box -->
+                <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
+                  <div class='modal-dialog modal-lg'>
+                    <div>
+                      <div class='modal-header'>
+                        <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
+                        <h4 class='modal-title'>Connect Braintree</h4>
+                      </div>
+                      <div class='modal-content' style='background:white;'>
+                        @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Braintree details modal box -->
+                @if ($user->isBraintreeConnected())
+                  <!-- Modal box -->
+                  <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h4 class="modal-title">Warning</h4>
-                          </div>
-                          <div class="modal-body">
-                            Are you sure you want to disconnect Braintree from your account? <br>
-                            After disconnecting we will not receive any more data from Braintree.</div>
-                          <div class="modal-footer">
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to disconnect Braintree from your account? <br>
+                          After disconnecting we will not receive any more data from Braintree.</div>
+                        <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                           <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                        </div>
-                        </div> <!-- / .modal-content -->
-                      </div> <!-- / .modal-dialog -->
-                    </div>
-                    <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
-              @else
-                <div class="col-sm-5">
-                  <a href="" class="sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Braintree"]);mixpanel.track("Braintree connect");'><span>Connect with Braintree</span></a>
-              @endif
-              </div> <!-- /. col-sm-10 -->
+                      </div>
+                      </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                  </div>
+                  <!-- /Modal box -->
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
+                @elseif($user->canConnectMore())
+                  @if($user->btWebhookConnected)
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Import your data
+                    </button>
+                  @elseif($user->isBraintreeCredentialsValid())
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Add webhook to finish connecting
+                    </button>
+                  @else
+                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
+                      Connect with Braintree
+                    </button>
+                  @endif
+                @else {{-- can't connect more --}}
+                  <a href="/plans" class='btn-link sm-pull-right'>Connect with Braintree</a>
+                @endif
+              </div> <!-- /. col-sm-5 -->
 
             </div> <!-- /. panel-body braintree-from -->
           </div> <!-- /. col-sm-6 braintree-form-wrapper -->
         </div> <!-- /. row -->
         <!-- / Braintree connect -->
-        --}}
 
         <!-- Suggestion -->
         <div class="row">
@@ -208,7 +237,7 @@
                       {{ Form::text('suggestion', '', array(
                         'id' => 'id_suggestion',
                         'class' => 'form-control',
-                        'placeholder' => 'e.g: PayPal')) }}
+                        'placeholder' => 'e.g: Paymill')) }}
                     </div>
 
                     <div class="col-sm-2 text-center">
@@ -234,9 +263,41 @@
 
   @section('pageScripts')
 
+    @if (Session::has('modal'))
+      <script type="text/javascript">
+        $('#modal-braintree-connect').modal('show');
+      </script>
+    @endif
+
+    {{-- scripts for modal wizard--}}
     <script type="text/javascript">
+      init.push(function () {
+        $('.ui-wizard').pixelWizard({
+          onChange: function () {
+            console.log('Current step: ' + this.currentStep());
+          },
+          onFinish: function () {
+            // Disable changing step. To enable changing step just call this.unfreeze()
+            this.freeze();
+            console.log('Wizard is freezed');
+            console.log('Finished!');
+          }
+        });
 
+        $('.wizard-next-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('nextStep');
+        });
+
+        $('.wizard-prev-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('prevStep');
+        });
+
+        $('.wizard-go-to-step-btn').click(function () {
+          $(this).parents('.ui-wizard').pixelWizard('setCurrentStep', 1);
+        });
+      });
     </script>
-
+    {{-- /scripts for modal wizard--}}
+    
   @stop
 

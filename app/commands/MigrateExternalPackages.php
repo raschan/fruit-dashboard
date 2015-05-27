@@ -11,7 +11,7 @@ class MigrateExternalPackages extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'migrate:all';
+	protected $name = 'migrate:external';
 
 	/**
 	 * The console command description.
@@ -37,8 +37,6 @@ class MigrateExternalPackages extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('migrate:refresh');
-		//$this->call('db:seed');
 		$this->call('migrate', array('--package' => 'barryvdh/laravel-async-queue'));
 	}
 }

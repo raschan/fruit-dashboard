@@ -28,7 +28,7 @@
 					@if (Auth::user()->trialWillEndInDays(4) && !Auth::user()->isTrialEnded())
 						<div id='pa-page-alerts-box'>
               <div class='alert alert-page alert-warning alert-dark' data-animate='true'>
-                <button type='button' class='close'>x</button><strong>Your trial period will end in {{Auth::user()->daysRemaining()}} days. <a href="{{URL::route('auth.plan')}}" class='demo-link'>Click here to subscribe now</a></strong>
+                <button type='button' class='close'>x</button><strong>Your trial period will end in {{Auth::user()->daysRemaining()}} days. <a href="{{URL::route('payment.plan')}}" class='demo-link'>Click here to subscribe now</a></strong>
               </div>      
             </div>
 					@endif
