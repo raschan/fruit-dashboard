@@ -502,15 +502,40 @@
 
   @section('pageScripts')
 
+    @if (Session::get('errors') || Session::get('error'))
+      <script type="text/javascript">
+        init.push(function () {
+          // if error slide down
+          @if ($errors->first('name')|| $errors->first('name_password'))
+          $('#editNameForm').slideUp('fast', function (){
+            $('#changeNameForm').slideDown('fast');
+          });
+          @elseif ($errors->first('country'))
+          $('#editCountryForm').slideUp('fast', function (){
+            $('#changeCountryForm').slideDown('fast');
+          });
+          @elseif ($errors->first('email') || $errors->first('email_password'))
+          $('#editEmailForm').slideUp('fast', function (){
+            $('#changeEmailForm').slideDown('fast');
+          });
+          @elseif ($errors->first('old_password') || $errors->first('new_password'))
+          $('#editPasswordForm').slideUp('fast', function (){
+            $('#changePasswordForm').slideDown('fast');
+          });
+          
+          @endif
+        });
+      </script>
+    @endif 
 
-  @if (Session::get('errors') || Session::get('error'))
     <script type="text/javascript">
       init.push(function () {
-        // if error slide down
-        @if ($errors->first('name')|| $errors->first('name_password'))
-        $('#editNameForm').slideUp('fast', function (){
-          $('#changeNameForm').slideDown('fast');
-        });
+        // event listeners for hidden forms
+        $('#editName').on('click', function (){
+          $('#editNameForm').slideUp('fast', function (){
+            $('#changeNameForm').slideDown('fast');
+          });
+        })
         $('#editCountry').on('click', function (){
           $('#editCountryForm').slideUp('fast', function (){
             $('#changeCountryForm').slideDown('fast');
@@ -569,6 +594,7 @@
           });
         })
       });
+
     </script>
 
   @stop
