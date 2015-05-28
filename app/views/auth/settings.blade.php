@@ -502,73 +502,72 @@
 
   @section('pageScripts')
 
+    @if (Session::get('errors') || Session::get('error'))
+      <script type="text/javascript">
+        init.push(function () {
+          // if error slide down
+          @if ($errors->first('name')|| $errors->first('name_password'))
+          $('#editNameForm').slideUp('fast', function (){
+            $('#changeNameForm').slideDown('fast');
+          });
+          $('#editCountry').on('click', function (){
+            $('#editCountryForm').slideUp('fast', function (){
+              $('#changeCountryForm').slideDown('fast');
+            });
+          })
+          $('#editEmail').on('click', function (){
+            $('#editEmailForm').slideUp('fast', function (){
+              $('#changeEmailForm').slideDown('fast');
+            });
+          })
+          $('#editPassword').on('click', function (){
+            $('#editPasswordForm').slideUp('fast', function (){
+              $('#changePasswordForm').slideDown('fast');
+            });
+          })
+          $('#editFrequency').on('click', function (){
+            $('#editFrequencyForm').slideUp('fast', function (){
+              $('#changeFrequencyForm').slideDown('fast');
+            });
+          })
+          $('#editPlan').on('click', function (){
+            $('#editPlanForm').slideUp('fast', function (){
+              $('#changePlanForm').slideDown('fast');
+            });
+          })
 
-  @if (Session::get('errors') || Session::get('error'))
-    <script type="text/javascript">
-      init.push(function () {
-        // if error slide down
-        @if ($errors->first('name')|| $errors->first('name_password'))
-        $('#editNameForm').slideUp('fast', function (){
-          $('#changeNameForm').slideDown('fast');
+          // event listeners for cancel buttons
+          $('#cancelName').on('click', function (){
+            $('#changeNameForm').slideUp('fast', function (){
+              $('#editNameForm').slideDown('fast');
+            });
+          })
+          $('#cancelCountry').on('click', function (){
+            $('#changeCountryForm').slideUp('fast', function (){
+              $('#editCountryForm').slideDown('fast');
+            });
+          })
+          $('#cancelEmail').on('click', function (){
+            $('#changeEmailForm').slideUp('fast', function (){
+              $('#editEmailForm').slideDown('fast');
+            });
+          })
+          $('#cancelPassword').on('click', function (){
+            $('#changePasswordForm').slideUp('fast', function (){
+              $('#editPasswordForm').slideDown('fast');
+            });
+          })
+          $('#cancelFrequency').on('click', function (){
+            $('#changeFrequencyForm').slideUp('fast', function (){
+              $('#editFrequencyForm').slideDown('fast');
+            });
+          })
+          $('#cancelPlanEdit').on('click', function (){
+            $('#changePlanForm').slideUp('fast', function (){
+              $('#editPlanForm').slideDown('fast');
+            });
+          })
         });
-        $('#editCountry').on('click', function (){
-          $('#editCountryForm').slideUp('fast', function (){
-            $('#changeCountryForm').slideDown('fast');
-          });
-        })
-        $('#editEmail').on('click', function (){
-          $('#editEmailForm').slideUp('fast', function (){
-            $('#changeEmailForm').slideDown('fast');
-          });
-        })
-        $('#editPassword').on('click', function (){
-          $('#editPasswordForm').slideUp('fast', function (){
-            $('#changePasswordForm').slideDown('fast');
-          });
-        })
-        $('#editFrequency').on('click', function (){
-          $('#editFrequencyForm').slideUp('fast', function (){
-            $('#changeFrequencyForm').slideDown('fast');
-          });
-        })
-        $('#editPlan').on('click', function (){
-          $('#editPlanForm').slideUp('fast', function (){
-            $('#changePlanForm').slideDown('fast');
-          });
-        })
-
-        // event listeners for cancel buttons
-        $('#cancelName').on('click', function (){
-          $('#changeNameForm').slideUp('fast', function (){
-            $('#editNameForm').slideDown('fast');
-          });
-        })
-        $('#cancelCountry').on('click', function (){
-          $('#changeCountryForm').slideUp('fast', function (){
-            $('#editCountryForm').slideDown('fast');
-          });
-        })
-        $('#cancelEmail').on('click', function (){
-          $('#changeEmailForm').slideUp('fast', function (){
-            $('#editEmailForm').slideDown('fast');
-          });
-        })
-        $('#cancelPassword').on('click', function (){
-          $('#changePasswordForm').slideUp('fast', function (){
-            $('#editPasswordForm').slideDown('fast');
-          });
-        })
-        $('#cancelFrequency').on('click', function (){
-          $('#changeFrequencyForm').slideUp('fast', function (){
-            $('#editFrequencyForm').slideDown('fast');
-          });
-        })
-        $('#cancelPlanEdit').on('click', function (){
-          $('#changePlanForm').slideUp('fast', function (){
-            $('#editPlanForm').slideDown('fast');
-          });
-        })
-      });
-    </script>
+      </script>
 
   @stop
