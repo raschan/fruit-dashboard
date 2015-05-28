@@ -207,7 +207,10 @@ class AuthController extends BaseController
                     $metricsArray[$metric->date] = $metric->$statID;
                 }
                 ksort($metricsArray);
-                $allMetrics[] = $statDetails['metricClass']::show($metricsArray);
+                
+                $array = $statDetails['metricClass']::show($metricsArray);
+                $array = array_add($array, 'widget_type', 'financial');
+                $allMetrics[] = $array;
             }
         }
 
