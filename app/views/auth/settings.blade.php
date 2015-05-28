@@ -447,7 +447,7 @@
                     <button id="disconnectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
                   </a>  
                 @elseif ($user->canConnectMore())
-                  <a href="/connect?modal=braintree-credentials">
+                  <a href="/connect">
                     <button id="connectBraintree" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
                   </a>
                 @else
@@ -455,9 +455,9 @@
                     <button id="connectBraintree" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
                   </a>  
                 @endif
-                <h4 class="list-group-item-heading">Google Spreadsheet</h4>
+                <h4 class="list-group-item-heading">Braintree</h4>
                 <p class="list-group-item-text">
-                  @if($user->isGooglespreadsheetConnected())
+                  @if($user->isBraintreeConnected())
                     <span class="up">Connected.</span>
                   @else
                     <span class="down">Not connected.</span>
@@ -509,7 +509,7 @@
                 <i class="fa icon fa-google fa-4x pull-left"></i>
                 <h4 class="list-group-item-heading">Google Spreadsheet</h4>
                 <p class="list-group-item-text">
-                @if($googlespreadsheet_connected)
+                @if($user->isGooglespreadsheetConnected())
                   <span class="up">Connected.</span>
                 @else
                   <span class="down">Not connected.</span>
