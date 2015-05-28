@@ -17,8 +17,8 @@
             <span>{{$plans[0]->description}}</span>
           </div>
           <div class='plan-pricing bg-light-green darken'>
-            <span class='plan-currency'>$</span>
-            <span class='plan-value'>{{ round($plans[0]->price)}}</span>
+            <span class='plan-currency'>{{ Config::get('constants')[strtolower($plans[0]->currencyIsoCode)] }}</span>
+            <span class='plan-value'>{{ round($plans[0]->price) }}</span>
             <span class='plan-period'>/MO</span>
           </div>
           <ul class='plan-features'>

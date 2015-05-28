@@ -298,6 +298,7 @@ class BraintreeHelper {
     				array(
     					Braintree_Subscription::ACTIVE,
     					Braintree_Subscription::PAST_DUE,
+    					Braintree_Subscription::PENDING,
     					)
     				)
     			)
