@@ -33,7 +33,12 @@ if(!App::environment('production'))
 
     Route::get('test', array(
         'as'    => 'dev.test',
-        'uses'  => 'HelloController@showTest'
+        'uses'  => 'DevController@showTest'
+    ));
+
+    Route::get('/email/{email}', array(
+        'as'    => 'dev.email',
+        'uses'  => 'DevController@showEmail'
     ));
 }
 
