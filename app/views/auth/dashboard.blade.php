@@ -4,6 +4,11 @@
     Dashboard
   @stop
 
+  @section('pageStylesheet')
+    <script src="{{{ asset('/used_assets/handsontable/dist/handsontable.full.js') }}}"></script>
+    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable//dist/handsontable.full.css') }}}" />  
+  @stop
+
   @section('pageContent')
     
     <div id="content-wrapper">
@@ -38,6 +43,28 @@
                       <li>{{ $value }}</li>
                     @endforeach
                     </ul>
+                  @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
+                    <div id="example" style="width:700px;"> </div>
+                    <script>
+                    var data = [
+                      ['2015.05.28.', '11:15', '11:30', '0:15', 'marketing', 'IT oktatás', 'cégvezetők ping v2', ''],
+                      ['2015.05.28.', '11:30', '11:45', '0:15', 'meta', 'ABF', 'naprendez', ''],
+                    ];
+                    var container = document.getElementById("example");
+                    var hot = new Handsontable(container, {
+                      data: data,
+                      height: 200,
+                      colHeaders: ['date', 'start', 'end', 'length', 'role', 'project', 'comment', 'h13'], 
+                      rowHeaders: false,
+                      stretchH: 'all',
+                      minSpareRows: 1,
+                      cells: function (row, col, prop) {
+                        var cellProperties = {};
+                        cellProperties.className = 'htMiddle htCenter';
+                        return cellProperties;
+                      }        
+                    });
+                    </script>
                   @else
 
                     <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
@@ -458,31 +485,33 @@
 
     var data, ctx;
 
-    @for ($i = 0; $i< count($allFunctions); $i++)
+    @for ($i = 0; $i < count($allFunctions); $i++)
+      @if ($allFunctions[$i]['widget_type']!='google-spreadsheet-abf-munkaido')
 
-    /* {{ $allFunctions[$i]['statName'] }} */
+      /* {{ $allFunctions[$i]['statName'] }} */
 
-    data = {
-      labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
-      datasets: [
-          {
-              label: "Monthly Recurring Revenue",
-              fillColor: "rgba(151,187,205,0.4)",
-              strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
-                @if($value == null) 0,
-                @else{{ $value }},
-                @endif 
-                @endforeach]
-          }
-      ]
-    };
+      data = {
+        labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
+        datasets: [
+            {
+                label: {{ $allFunctions[$i]['statName'] }},
+                fillColor: "rgba(151,187,205,0.4)",
+                strokeColor: "rgba(151,187,205,0.6)",
+                data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
+                  @if($value == null) 0,
+                  @else{{ $value }},
+                  @endif 
+                  @endforeach]
+            }
+        ]
+      };
 
-    ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
-    var Chart{{$allFunctions[$i]['id']}} = new Chart(ctx).Line(data, options);
+      ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
+      var Chart{{$allFunctions[$i]['id']}} = new Chart(ctx).Line(data, options);
 
-    /* / {{ $allFunctions[$i]['statName'] }} */
+      /* / {{ $allFunctions[$i]['statName'] }} */
 
+      @endif
     @endfor
 
        
