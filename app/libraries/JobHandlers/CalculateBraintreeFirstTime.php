@@ -10,7 +10,7 @@ class CalculateBraintreeFirstTime
         BraintreeHelper::firstTime($user);
 
     	Log::info('Sending "ready" email for user: '.$user->email);
-        $email = Mailman::make('emails.connected')
+        $email = Mailman::make('emails.connected.notification')
         	->to($user->email)
         	->subject('Your metrics are ready!')
         	->send();
