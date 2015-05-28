@@ -293,6 +293,8 @@ class AuthController extends BaseController
     {
         // checking connections for the logged in user
         $user = Auth::user();
+        
+        // get users plan name
         $plans = Braintree_Plan::all();
 
         $planName = null;
@@ -302,6 +304,7 @@ class AuthController extends BaseController
             }
         }
 
+        // no we found no plan, lets set one
         if (!$planName)
         {
             if($user->plan == 'free')
@@ -322,19 +325,24 @@ class AuthController extends BaseController
             }
         }
 
+
         $client = GoogleSpreadsheetHelper::setGoogleClient();
 
         $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
 
         return View::make('auth.settings',
             array(
-                'paypal_connected'  => $user->isPayPalConnected(),
-                'stripe_connected'  => $user->isStripeConnected(),
+                'user'              => $user,
+                
+                // stripe stuff
                 'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
-                'googlespreadsheet_connected'      => $user->isGoogleSpreadsheetConnected(),
+                
+                // google spreadsheet stuff 
                 'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
-                'planName'          => $planName,
                 'google_spreadsheet_widgets'       => $google_spreadsheet_widgets,
+
+                // payment stuff
+                'planName'          => $planName,
             )
         );
     }
