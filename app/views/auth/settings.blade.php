@@ -336,7 +336,7 @@
                         </button></a>
                       @else
                         {{ Form::submit('Cancel subsctiption', array(
-                          'action' => 'AuthController@doCancelSubscription',
+                          'action' => 'PaymentController@doCancelSubscription',
                           'class' => 'btn btn-danger btn-sm btn-flat pull-left'
                           )) }}
                         <a href='/plans'><button class='btn btn-info btn-sm btn-flat pull-right' type='button' id='changePlan'>
@@ -353,6 +353,8 @@
 
               {{ Form::close() }}
               
+              <!-- / Subscription -->
+
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
 
