@@ -325,10 +325,10 @@
               <div class="panel-body account-form bordered getHeight">
                 <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Subscription settings</h4>
 
-                <!-- Subscription -->
+               <!-- Subscription -->
 
-                {{ Form::open(array(
-                'action' => 'AuthController@doCancelSubscription',
+              {{ Form::open(array(
+                'action' => 'PaymentController@doCancelSubscription',
                 'id' => 'form-settings-subscription',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}
@@ -336,7 +336,7 @@
                 <div id="editPlanForm">
                   <div class="form-group">
                     {{ Form::label('id_planedit', 'Subscription', array(
-                    'class' => 'col-sm-4 control-label')) }}
+                      'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       <p class="form-control-static">
                         {{ $planName }} 
@@ -351,22 +351,23 @@
                 <div id="changePlanForm" class="hidden-form">
                   <div class="form-group @if ($errors->first('change_plan')) has-error @endif">
                     {{ Form::label('id_plan', 'Subscription', array(
-                    'class' => 'col-sm-4 control-label')) }}
+                      'class' => 'col-sm-4 control-label')) }}
                     <div class="col-sm-8">
                       @if($planName == 'No subscription' 
-                      || $planName == 'Trial period' 
-                      || $planName == 'Trial period ended')
-                      <a href='/plans'><button class='btn btn-success btn-flat pull-right' type='button' id='changePlan'>
-                        Subscribe
-                      </button></a>
+                          || $planName == 'Trial period' 
+                          || $planName == 'Trial period ended'
+                          || $planName == 'Free pack')
+                        <a href='/plans'><button class='btn btn-success btn-flat pull-right' type='button' id='changePlan'>
+                          Subscribe
+                        </button></a>
                       @else
-                      {{ Form::submit('Cancel subsctiption', array(
-                      'action' => 'AuthController@doCancelSubscription',
-                      'class' => 'btn btn-danger btn-sm btn-flat pull-left'
-                      )) }}
-                      <a href='/plans'><button class='btn btn-info btn-sm btn-flat pull-right' type='button' id='changePlan'>
-                        Change subscription
-                      </button></a>                
+                        {{ Form::submit('Cancel subsctiption', array(
+                          'action' => 'PaymentController@doCancelSubscription',
+                          'class' => 'btn btn-danger btn-sm btn-flat pull-left'
+                          )) }}
+                        <a href='/plans'><button class='btn btn-info btn-sm btn-flat pull-right' type='button' id='changePlan'>
+                          Change subscription
+                        </button></a>                
                       @endif
                     </div>
                   </div> <!-- / .form-group -->
@@ -376,7 +377,9 @@
                   </div>
                 </div>
 
-                {{ Form::close() }}
+              {{ Form::close() }}
+              
+              <!-- / Subscription -->
 
               </div>
             </div> <!-- / .panel-body -->
