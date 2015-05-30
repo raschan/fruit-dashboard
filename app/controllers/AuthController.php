@@ -232,36 +232,54 @@ class AuthController extends BaseController
         foreach ($widgets as $widget) {
 
             $current_value = "";
-
-            $dataObjects = Data::where('widget_id', $widget->id)
-                                    ->orderBy('date','asc')
-                                    ->get();
-
             $dataArray = array();
 
-            if ($widget->widget_type == 'google-spreadsheet-text-column') {
+            switch ($widget->widget_type) {
 
-                foreach ($dataObjects as $dataObject) {
-                    $array = json_decode($dataObject->data_object, true);
-                    foreach ($array as $key => $value) {
-                        $current_value = $value;
-                        $dataArray = array_add($dataArray, $key, $current_value);
+                case 'google-spreadsheet-text-column':
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        foreach ($array as $key => $value) {
+                            $current_value = $value;
+                            $dataArray = array_add($dataArray, $key, $current_value);
+                        }
                     }
-                }
+                    break;
 
-            } else {
+                case 'google-spreadsheet-abf-munkaido':
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('data_key','desc')
+                                            ->take(5)
+                                            ->get();                    
+                    $counter = 0;
+                    foreach ($dataObjects as $dataObject) {
+                        $array = ['data_key' => $dataObject->data_key];
+                        $array = array_merge($array, json_decode($dataObject->data_object, true));
+                        $dataArray = array_add($dataArray, $counter, $array);
+                        $counter++;
+                    }
+                    $dataArray = array_reverse($dataArray);
 
-                foreach ($dataObjects as $dataObject) {
-                    $array = json_decode($dataObject->data_object, true);
-                    $current_value = array_values($array)[0];
-                    $dataArray = array_add($dataArray, $dataObject->date, $current_value);
-                }
+                    break;
 
+                default:
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        $current_value = array_values($array)[0];
+                        $dataArray = array_add($dataArray, $dataObject->date, $current_value);
+                    }
             }
 
             $newMetricArray = array(
                     "id" => $widget->id,
                     "widget_type" => $widget->widget_type,
+                    "widget_id" => $widget->id,
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
                     "history" => $dataArray,
@@ -644,4 +662,7 @@ class AuthController extends BaseController
         # prepare stuff for other metrics end
         #####################################################
     }
+
+
+
 }

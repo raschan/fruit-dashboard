@@ -453,36 +453,40 @@ class Calculator
                 # get feeddata (first line = header)
                 $listFeed = $worksheet->getListFeed();
 
-                $values = array();
+                $time = time();
                 $key = 0;
 
                 foreach ($listFeed->getEntries() as $entry) {
-                    $array = $entry->getValues();
-                    $values = array_add($values, $key, $array);
+                    $values = array();
+                    $values = $entry->getValues();
+                    $values_json = json_encode($values);
+
+                    # have we saved data for this widget?
+                    $db_data = Data::where('widget_id', '=', $widget['id'])->where('data_object', '=', $values_json);
+
+                    if ($db_data->count() == 0) {
+                        # nope, save it
+                        $data = new Data;
+                        $data->data_key = $key;
+                        $data->widget_id = $widget['id'];
+                        $data->data_object = json_encode($values);
+                        $data->date = date("Y-m-d", $time);
+                        $data->timestamp = date('Y-m-d H:i:s', $time);
+                        $data->save();
+                    } else {
+                        # yes, update it
+                        $db_data->update([
+                            'data_key' => $key,
+                            'data_object' => json_encode($values), 
+                            'date' => date("Y-m-d", $time), 
+                            'timestamp' => date('Y-m-d H:i:s', $time)
+                        ]);
+                    }
+
                     $key++;
+
                 }
 
-                $time = time();
-
-                # have we saved data for this widget?
-                $db_data = Data::where('widget_id', '=', $widget['id']);
-
-                if ($db_data->count() == 0) {
-                    # nope, save it
-                    $data = new Data;
-                    $data->widget_id = $widget['id'];
-                    $data->data_object = json_encode($values);
-                    $data->date = date("Y-m-d", $time);
-                    $data->timestamp = date('Y-m-d H:i:s', $time);
-                    $data->save();
-                } else {
-                    # yes, update it
-                    $db_data->update([
-                        'data_object' => json_encode($values), 
-                        'date' => date("Y-m-d", $time), 
-                        'timestamp' => date('Y-m-d H:i:s', $time)
-                    ]);
-                }
 
             }
         }

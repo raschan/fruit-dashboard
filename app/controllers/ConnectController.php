@@ -547,6 +547,66 @@ class ConnectController extends BaseController
                         ->with(array('success' => "Widget deleted."));
     }
 
+    /*
+    |===================================================
+    | <ANY> | modifyAbfWidget: saves the changes to the ABF timetracking widget
+    |===================================================
+    */
+    public function modifyAbfWidget()
+    {
+        $data = json_decode(Input::get('data'), true);
+        $widget_id = json_decode(Input::get('widget_id'), true);
+        $data_key = $data['updatedData'][0];
+
+        Log::info($data);
+        Log::info($widget_id);
+
+        $values = [
+            'date'      =>  $data['updatedData'][1],
+            'start'     =>  $data['updatedData'][2],
+            'end'       =>  $data['updatedData'][3],
+            'length'    =>  $data['updatedData'][4],
+            'role'      =>  $data['updatedData'][5],
+            'project'   =>  $data['updatedData'][6],
+            'comment'   =>  $data['updatedData'][7],
+            'h13'       =>  $data['updatedData'][8]
+        ];
+
+        $db_data = Data::where('widget_id', '=', $widget_id)
+            ->where('data_key', '=', $data_key);
+
+        $time = time();
+
+        if ($db_data->count() == 0) {
+            # nope, save it
+
+            $maxData = Data::where('widget_id', '=', $widget_id)
+                ->orderBy('data_key','desc')
+                ->first();
+            $newKey = $maxData['data_key']+1;
+
+            Log::info("newKey - ".$newKey);
+
+            $data = new Data;
+            $data->data_key = $newKey;
+            $data->widget_id = $widget_id;
+            $data->data_object = json_encode($values);
+            $data->date = date("Y-m-d", $time);
+            $data->timestamp = date('Y-m-d H:i:s', $time);
+            $data->save();
+        } else {
+            # yes, update it
+            Log::info("data_key - ".$data_key);
+
+            $db_data->update([
+                'data_key' => $data_key,
+                'data_object' => json_encode($values), 
+                'date' => date("Y-m-d", $time), 
+                'timestamp' => date('Y-m-d H:i:s', $time)
+            ]);
+        }
+
+    }
 
 }
 

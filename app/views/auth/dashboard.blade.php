@@ -6,11 +6,14 @@
 
   @section('pageStylesheet')
     <script src="{{{ asset('/used_assets/handsontable/dist/handsontable.full.js') }}}"></script>
-    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable//dist/handsontable.full.css') }}}" />  
+    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable/dist/handsontable.full.css') }}}" />  
+    <script src="{{{ asset('/used_assets/handsontable//dist/moment/moment.js') }}}"></script>
+    <script src="{{{ asset('/used_assets/handsontable//dist/pikaday/pikaday.js') }}}"></script>
+    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable/dist/pikaday/css/pikaday.css') }}}" />
   @stop
 
   @section('pageContent')
-    
+
     <div id="content-wrapper">
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
@@ -44,27 +47,7 @@
                     @endforeach
                     </ul>
                   @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
-                    <div id="example" style="width:700px;"> </div>
-                    <script>
-                    var data = [
-                      ['2015.05.28.', '11:15', '11:30', '0:15', 'marketing', 'IT oktatás', 'cégvezetők ping v2', ''],
-                      ['2015.05.28.', '11:30', '11:45', '0:15', 'meta', 'ABF', 'naprendez', ''],
-                    ];
-                    var container = document.getElementById("example");
-                    var hot = new Handsontable(container, {
-                      data: data,
-                      height: 200,
-                      colHeaders: ['date', 'start', 'end', 'length', 'role', 'project', 'comment', 'h13'], 
-                      rowHeaders: false,
-                      stretchH: 'all',
-                      minSpareRows: 1,
-                      cells: function (row, col, prop) {
-                        var cellProperties = {};
-                        cellProperties.className = 'htMiddle htCenter';
-                        return cellProperties;
-                      }        
-                    });
-                    </script>
+                    <div id="example" class="example" style="width:700px;"> </div>
                   @else
 
                     <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
@@ -486,6 +469,7 @@
     var data, ctx;
 
     @for ($i = 0; $i < count($allFunctions); $i++)
+
       @if ($allFunctions[$i]['widget_type']!='google-spreadsheet-abf-munkaido')
 
       /* {{ $allFunctions[$i]['statName'] }} */
@@ -494,13 +478,20 @@
         labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
         datasets: [
             {
-                label: {{ $allFunctions[$i]['statName'] }},
+                label: "{{ $allFunctions[$i]['statName'] }}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
-                  @if($value == null) 0,
-                  @else{{ $value }},
-                  @endif 
+                data: [
+                  @foreach ($allFunctions[$i]['history'] as $date => $value)
+                    @if (is_numeric($value))
+                      @if($value == null)
+                        0,
+                      @else
+                        {{ $value }},
+                      @endif 
+                    @else
+                        '{{ $value }}',
+                    @endif
                   @endforeach]
             }
         ]
@@ -512,10 +503,121 @@
       /* / {{ $allFunctions[$i]['statName'] }} */
 
       @endif
+
     @endfor
 
        
     </script>
+
+@for ($i = 0; $i < count($allFunctions); $i++)
+  @if($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
+
+    <script>
+
+    var data = [
+      @foreach ($allFunctions[$i]['history'] as $array)
+        [
+        @foreach ($array as $key => $value)
+          @if ($key != 'data_key')
+            '{{ $value }}',
+          @endif
+        @endforeach
+        ],
+      @endforeach
+    ];
+
+    var backgroundData = {
+      @foreach ($allFunctions[$i]['history'] as $key => $value)
+        {{ $key }}:
+        [ 
+        @foreach ($value as $key2 => $value2)
+          '{{ $value2 }}',
+        @endforeach
+        ],
+      @endforeach
+    };
+
+    Object.size = function(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
+
+    var container = document.getElementById("example");
+
+    var hot = new Handsontable(container, {
+      data: data,
+      height: 200,
+      colHeaders: ['date', 'start', 'end', 'length', 'role', 'project', 'comment', 'h13'], 
+      columns: [
+        {
+          type: 'date',
+          dateFormat: 'YYYY.MM.DD.',
+          correctFormat: true
+        },
+        {},
+        {},
+        {},
+        {
+          type: 'autocomplete',
+          source: ["architekt", "bizdev", "board", "custdev", "EMK", "fejlesztő", "gazdaságis", "hr", "irodavezető", "marketing", "meta", "pm", "PM", "rendszeradminisztrátor", "sales", "szakmai vezető", "szoftvertervező", "tanulás", "team lead", "ügyfélkapcsolat", "ügyvezető"],
+          strict: false
+        },
+        {
+          type: 'autocomplete',
+          source: ["ABF", "PATH", "NEVES", "BEGONIA", "BELLA", "BELLA-INDA", "Moment", "Bedtime", "Interactive", "AppXplorer", "StartupDashboard", "Kutatás", "EMK", "TrackR", "KönyvScanner", "Rendszeradmin", "EMK üzemeltetés", "IT oktatás"],
+          strict: false
+        },
+        {},
+        {}
+      ],
+      rowHeaders: false,
+      stretchH: 'all',
+      minSpareRows: 1,
+      afterChange: function (change, source) {
+
+        rowOfChange = change[0][0];
+        columnOfChange = change[0][1];
+        valueOfChange = change[0][3];
+
+        if (rowOfChange <= (Object.size(backgroundData)-1)) {
+          backgroundData[rowOfChange][columnOfChange+1] = valueOfChange;
+        } else {
+          newLineCounter = Object.size(backgroundData);
+          backgroundDataCounter = parseInt(backgroundData[rowOfChange-1][0])+1;
+          newLine = [backgroundDataCounter,'','','','','','','',''];
+          backgroundData[newLineCounter] = newLine;
+          backgroundData[rowOfChange][columnOfChange+1] = valueOfChange;
+        }
+
+        updatedData = backgroundData[rowOfChange];
+
+        $.ajax({
+            type: "POST",
+            url: "{{ URL::route('modifyAbfWidget') }}",
+            data: {
+                'data': JSON.stringify({ updatedData }),
+                'widget_id': {{ $allFunctions[$i]['widget_id'] }}
+            },
+            success: function() {
+            }
+          });
+      },
+      cells: function (row, col, prop) {
+        var cellProperties = {};
+        cellProperties.className = 'htMiddle htCenter';
+        return cellProperties;
+      },
+    });
+
+    hot.setDataAtCell(0, 0, 'new value');
+
+    </script>
+
+  @endif
+@endfor
 
   @stop
 
