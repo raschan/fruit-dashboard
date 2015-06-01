@@ -3,9 +3,6 @@
   @section('pageContent')
 
   <div id="content-wrapper">
-    <div class="page-header text-center">
-      <h1>{{ $planName }}</h1>
-    </div> <!-- / .page-header -->
     @parent
   	<div class='col-md-6 col-md-offset-3'>
   		<form id="checkout" method="post" action="">

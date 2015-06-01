@@ -14,3 +14,4 @@ echo "Done."
 cd /var/www/supdashboard
 php artisan migrate
 php artisan db:seed
+ 

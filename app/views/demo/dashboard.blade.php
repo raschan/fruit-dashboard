@@ -61,10 +61,6 @@
 
 @section('pageContent')
     <div id="content-wrapper">
-      
-      <div class="page-header text-center">
-        <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
-      </div> <!-- / .page-header -->
 
       <div id="pa-page-alerts-box">
         <div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true" style="">

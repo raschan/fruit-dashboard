@@ -7,9 +7,6 @@
   @section('pageContent')
 
     <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1><i class="fa fa-cogs page-header-icon"></i>&nbsp;&nbsp;Account settings</h1>
-      </div> <!-- / .page-header -->
       @parent
 
       <!-- Account settings -->

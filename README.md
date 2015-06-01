@@ -40,16 +40,16 @@ cd /var/www/supdashboard
 composer global require "laravel/installer=~1.1"
 ```
 
-####Create the database
-```sh
-cd /var/www/supdashboard/scripts
-sh run_sql_commands
-```
-
 ####Update the dependencies
 ```sh
 cd /var/www/supdashboard/
 composer update
+```
+
+####Create the database
+```sh
+cd /var/www/supdashboard/scripts
+sh run_sql_commands
 ```
 
 ####Migrate an external dependencys database
