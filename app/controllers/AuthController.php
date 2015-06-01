@@ -274,12 +274,26 @@ class AuthController extends BaseController
         # prepare stuff for google spreadsheet metrics end
         #####################################################
 
+        #####################################################        
+        # prepare stuff for daily background start
+
+        
+
+        $isBackgroundOn = true;
+        $dailyBackgroundURL = '/img/backgrounds/3.png';
+
+        # prepare stuff for daily background end
+        #####################################################
+
+
         return View::make(
             'auth.dashboard',
             array(
                 'allFunctions' => $allMetrics,
                 'events' => Calculator::formatEvents(Auth::user()),
-                'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
+                'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
+                'isBackgroundOn' => $isBackgroundOn,
+                'dailyBackgroundURL' => $dailyBackgroundURL,
             )
         );
     }

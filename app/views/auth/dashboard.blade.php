@@ -11,7 +11,9 @@
 
   @section('pageContent')
     
-    <div id="content-wrapper">
+    {{-- FIXME !!! url to daily random image --}}
+
+    <div id="content-wrapper" @if($isBackgroundOn)style='background-image: url("{{$dailyBackgroundURL}}");' @endif>
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
         <a href="{{ URL::route('auth.settings') }}">
