@@ -131,7 +131,7 @@ html {
 @media (min-width: 992px) {
 	.navbar {
 		padding: 0 60px 0 60px;
-		background: #2c3e50;
+		/*background: #2c3e50;*/
 	}
 }
 
@@ -649,4 +649,19 @@ html {
 	margin-bottom: 10px;
 }
 
+#settingsIcon{
+	position: absolute;
+	top: 25px;
+	right: 25px;
+	z-index: 1000;
+}
 
+i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog{
+	text-shadow: 1px 1px 1px rgba(255,255,0,0.5);
+}
+
+i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
+	color:#666;
+	text-shadow: 1px 1px 1px rgba(255,255,255,1);
+	cursor: pointer;
+}
