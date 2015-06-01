@@ -47,7 +47,9 @@
                     @endforeach
                     </ul>
                   @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
-                    <div id="example" class="example" style="width:700px;"> </div>
+                    <!--div id="example" class="example" style="width:700px;"> </div-->
+                    <!--iframe width='800' height='700' frameborder='0' src='https://docs.google.com/spreadsheet/pub?key=0AnUZJzwNC3NkdGRXM28xQUNmclFhbEZuN2cxTGRDa0E&gridlines=false&headers=false&gid=32&range=A1:C10'></iframe-->
+                    <iframe width="500" height="300" frameborder="0" src="https://docs.google.com/spreadsheet/pub?key=0AnUZJzwNC3NkdGRXM28xQUNmclFhbEZuN2cxTGRDa0E&single=true&gid=32&range=a1%3Ac1&output=html&widget=true"></iframe>
                   @else
 
                     <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
