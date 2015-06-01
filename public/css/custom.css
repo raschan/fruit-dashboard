@@ -7,6 +7,14 @@
 	display: none;
 }
 
+html { 
+	background: url(../img/backgrounds/3.png) no-repeat center center fixed;
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+}
+
 @media (max-width: 767px) {
 	.theme-signout .container {
 		padding: 30px 0 0 0 !important;
@@ -640,3 +648,5 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+
+

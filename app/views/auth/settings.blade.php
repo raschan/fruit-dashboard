@@ -244,6 +244,77 @@
         </div> <!-- /. col-md-10 -->
         <!-- /Account settings -->
 
+        <!-- Appearance settings -->
+        <div class="col-md-10 col-md-offset-1">
+          <div class="row">
+            <div class="col-sm-6 col-md-offset-3 appearence-form-wrapper">
+              <div class="panel-body bordered getHeight">
+                <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Appearence settings</h4>
+
+                <!-- Background switch -->
+                {{ Form::open(array(
+                  'action' => 'AuthController@doSettingsBackground',
+                  'id' => 'form-settings-background',
+                  'role' => 'form',
+                  'class' => 'form-horizontal' )) }}
+
+                  <div id="editBackgroundForm">
+                    <div class="form-group">
+                      {{ Form::label('id_backgroundedit', 'Show Background', array(
+                       'class' => 'col-sm-4 control-label')) }}
+                      <div class="col-sm-8">
+                        <p class="form-control-static">
+                          @if (Auth::user()->isBackgroundOn)
+                            <span>Yes</span>
+                          @else
+                            <span>No</span>
+                          @endif
+                          <button id="editBackground" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing background"]);mixpanel.track("Editing background");'>Edit</button>
+                        </p>
+                      </div>
+                    </div> <!-- / .form-group -->
+                  </div>
+
+                  <!-- hidden notification change form -->
+
+                  <div id="changeBackgroundForm" class="hidden-form">
+                    <div class="form-group @if ($errors->first('newBackgroundState')) has-error @endif">
+                      {{ Form::label('id_background', 'Show Background', array(
+                        'class' => 'col-sm-4 control-label')) }}
+                      <div class="col-sm-8">
+                        {{ Form::select('newBackgroundState',
+                          // dropdown options
+                          array(
+                            'none' => 'No email', 
+                            'daily' => 'Daily email',
+                            'weekly' => 'Weekly email'
+                          ), 
+                          // highlighted option
+                          Auth::user()->summaryEmailFrequency,
+                          array(                                       
+                            'id' => 'id_frequency',
+                            'class' => 'form-control'
+                          )) 
+                        }}
+                      </div>
+                    </div> <!-- / .form-group -->
+
+                    <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                      <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelFrequency">Cancel</button>  
+                      {{ Form::submit('Save', array(
+                      'id' => 'id_submit',
+                      'class' => 'btn btn-primary btn-sm btn-flat',
+                      'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Frequency edited"]);
+                      mixpanel.track("Frequency edited");')) }}
+                    </div>
+
+                  </div>
+                {{ Form::close() }}
+              </div>
+            </div> <!-- / .panel-body -->
+          </div> <!-- / .col-sm-6 -->
+        </div> <!-- /. col-md-10 -->
+        <!-- /Appearance settings -->
 
         <!-- Notification settings -->
         <div class="col-md-10 col-md-offset-1">

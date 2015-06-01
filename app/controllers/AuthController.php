@@ -177,13 +177,13 @@ class AuthController extends BaseController
     |===================================================
     */
     public function showDashboard()
-    {
+    {/*
         if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
         {
             return Redirect::route('connect.connect')
                 ->with('error','Connect a service first.');
         }
-
+*/
         // check if trial period is ended
         if (Auth::user()->isTrialEnded())
         {
@@ -277,9 +277,6 @@ class AuthController extends BaseController
         #####################################################        
         # prepare stuff for daily background start
 
-        
-
-        $isBackgroundOn = true;
         $dailyBackgroundURL = '/img/backgrounds/3.png';
 
         # prepare stuff for daily background end
@@ -292,7 +289,7 @@ class AuthController extends BaseController
                 'allFunctions' => $allMetrics,
                 'events' => Calculator::formatEvents(Auth::user()),
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
-                'isBackgroundOn' => $isBackgroundOn,
+                'isBackgroundOn' => Auth::user()->isBackgroundOn,
                 'dailyBackgroundURL' => $dailyBackgroundURL,
             )
         );
@@ -500,6 +497,18 @@ class AuthController extends BaseController
         $user = Auth::user();
 
         $user->summaryEmailFrequency = Input::get('new_frequency');
+
+        $user->save();
+
+        return Redirect::to('/settings')
+            ->with('success', 'Edit was succesful.');
+    }
+
+    public function doSettingsBackground()
+    {
+        $user = Auth::user();
+
+        $user->isBackgroundOn = Input::get('newBackgroundState');
 
         $user->save();
 
