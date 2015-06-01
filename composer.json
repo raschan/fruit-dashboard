@@ -15,10 +15,14 @@
 		"nwidart/db-exporter": "1.0",
 		"nesbot/carbon": "~1.14",
 		"guzzlehttp/guzzle": "~5.2",
-		"waavi/mailman": "*",
+		"waavi/mailman": "1.1.*@dev",
 		"bradleyboy/laravel-braintree": "dev-master",
-		"intercom/intercom-php": "~1.0"
+		"intercom/intercom-php": "~1.0",
+		"google/apiclient": "1.0.*@beta",
+		"asimlqt/php-google-spreadsheet-client": "2.3.*"
 	},
+
+
 	"autoload": {
 		"classmap": [
 			"app/libraries",

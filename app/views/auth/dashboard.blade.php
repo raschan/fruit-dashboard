@@ -4,18 +4,24 @@
     Dashboard
   @stop
 
+  @section('pageStylesheet')
+    <script src="{{{ asset('/used_assets/handsontable/dist/handsontable.full.js') }}}"></script>
+    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable//dist/handsontable.full.css') }}}" />  
+  @stop
+
   @section('pageContent')
     
     <div id="content-wrapper">
       <div class="page-header text-center">
         <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
+        <a href="{{ URL::route('auth.settings') }}">
+          <button id="addGoogleSpreadsheetWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+        </a>
       </div> <!-- / .page-header -->
       @parent
 
-        <!-- STATISTICS BOX -->
+      <!-- STATISTICS BOX -->
       <div class="col-md-8 quickstats-box no-padding-hr">
-        @if (Auth::user()->ready != 'notConnected')
-
           @for ($i = 0; $i< count($allFunctions); $i++)
             @if($i == 0 || $i % 3 == 0)
             <div class="row">
@@ -23,66 +29,111 @@
             @endif
               <div class="col-md-4 chart-box">
                 <div class="chart-wrapper bordered">
-                  <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
-                  <div class="chart-text-left"> 
-                    @if($allFunctions[$i]['currentValue'])
-                      @if($allFunctions[$i]['positiveIsGood'])
-                        @if(str_contains($allFunctions[$i]['currentValue'],'-'))
-                          <span class="text-money down">
-                        @else
-                          <span class="text-money up">
-                        @endif
-                      @else
-                        @if(str_contains($allFunctions[$i]['currentValue'],'-'))
-                          <span class="text-money up">
-                        @else
-                          <span class="text-money down">
-                        @endif
-                      @endif
-                      {{ $allFunctions[$i]['currentValue'] }}
-                    @else
-                      <span class="text-money nochange">
-                      --
-                    @endif
-                    </span>
-                  </div>
-                  <div class="chart-text-right">
-                    @if($allFunctions[$i]['oneMonthChange'])
-                      @if($allFunctions[$i]['positiveIsGood'])
-                        @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                          <span class="text-money down"><i class="fa fa-angle-down"></i>
-                        @else
-                          <span class="text-money up"><i class="fa fa-angle-up"></i>
-                        @endif
-                      @else
-                        @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
-                          <span class="text-money up"><i class="fa fa-angle-down"></i>
-                        @else
-                          <span class="text-money down"><i class="fa fa-angle-up"></i>
-                        @endif
-                      @endif
-                      {{ $allFunctions[$i]['oneMonthChange'] }}
-                      </span>
-                    <h6 class="no-margin">Previous 30 days</h6>
-                    @else
-                      <span class="text-money nochange">
-                      --
-                      </span>
-                    <h6 class="no-margin">Not enough data</h6>
-                    @endif
-                  </div>
-                  @if (Auth::user()->ready == 'connecting')
-                    <div class="chart-connecting">
-                      <span class="text-connecting">We are importing your data <br> just a minute</span>
-                    </div>
+
+                  @if($allFunctions[$i]['widget_type']=='google-spreadsheet-text-cell')
+                    <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+                    <br/>
+                    <h2 class="text-center">{{ $allFunctions[$i]['currentValue'] }}</h2>
+                    <br/>
+                  @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-text-column')
+                    <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+                    <br/>
+                    <ul>
+                    @foreach ($allFunctions[$i]['history'] as $value)
+                      <li>{{ $value }}</li>
+                    @endforeach
+                    </ul>
+                  @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
+                    <div id="example" style="width:700px;"> </div>
+                    <script>
+                    var data = [
+                      ['2015.05.28.', '11:15', '11:30', '0:15', 'marketing', 'IT oktatás', 'cégvezetők ping v2', ''],
+                      ['2015.05.28.', '11:30', '11:45', '0:15', 'meta', 'ABF', 'naprendez', ''],
+                    ];
+                    var container = document.getElementById("example");
+                    var hot = new Handsontable(container, {
+                      data: data,
+                      height: 200,
+                      colHeaders: ['date', 'start', 'end', 'length', 'role', 'project', 'comment', 'h13'], 
+                      rowHeaders: false,
+                      stretchH: 'all',
+                      minSpareRows: 1,
+                      cells: function (row, col, prop) {
+                        var cellProperties = {};
+                        cellProperties.className = 'htMiddle htCenter';
+                        return cellProperties;
+                      }        
+                    });
+                    </script>
                   @else
-                    <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
-                      <div class="chart-overlay">
-                          <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+
+                    <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
+                    <div class="chart-text-left"> 
+                      @if($allFunctions[$i]['currentValue'])
+                        @if($allFunctions[$i]['positiveIsGood'])
+                          @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                            <span class="text-money down">
+                          @else
+                            <span class="text-money up">
+                          @endif
+                        @else
+                          @if(str_contains($allFunctions[$i]['currentValue'],'-'))
+                            <span class="text-money up">
+                          @else
+                            <span class="text-money down">
+                          @endif
+                        @endif
+                        {{ $allFunctions[$i]['currentValue'] }}
+                      @else
+                        <span class="text-money nochange">
+                        --
+                      @endif
+                      </span>
+                    </div>
+                    <div class="chart-text-right">
+                      @if($allFunctions[$i]['oneMonthChange'])
+                        @if($allFunctions[$i]['positiveIsGood'])
+                          @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                            <span class="text-money down"><i class="fa fa-angle-down"></i>
+                          @else
+                            <span class="text-money up"><i class="fa fa-angle-up"></i>
+                          @endif
+                        @else
+                          @if(str_contains($allFunctions[$i]['oneMonthChange'],'-'))
+                            <span class="text-money up"><i class="fa fa-angle-down"></i>
+                          @else
+                            <span class="text-money down"><i class="fa fa-angle-up"></i>
+                          @endif
+                        @endif
+                        {{ $allFunctions[$i]['oneMonthChange'] }}
+                        </span>
+                      <h6 class="no-margin">Previous 30 days</h6>
+                      @else
+                        <span class="text-money nochange">
+                          --
+                        </span>
+                      <h6 class="no-margin">Not enough data</h6>
+                      @endif
+                    </div>
+                    {{--
+                    @if (Auth::user()->ready == 'connecting')
+                      <div class="chart-connecting">
+                        <span class="text-connecting">Importing data <br> just a minute</span>
                       </div>
-                    </a>
+                    @else
+                    --}}
+                      <a href="{{ URL::route('auth.single_stat', $allFunctions[$i]['id']) }}">
+                        <div class="chart-overlay">
+                            <span class="text-overlay">View details <i class="fa fa-angle-right"></i></span>
+                        </div>
+                      </a>
+                    {{--
+                    @endif
+                    --}}
+                    <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+
                   @endif
-                  <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
+
                 </div> <!-- / .chart-wrapper -->
               </div> <!-- / .chart-box -->
             @if (($i+1) % 3 == 0 || $i >= count($allFunctions) - 1)
@@ -91,10 +142,12 @@
             <!-- /{{ $allFunctions[$i]['statName'] }} -->
           @endfor
 
-        @endif
       </div> <!-- / .col-sm-8 -->
-
       <!-- /STATISTICS BOX -->
+
+
+
+      @if ($isFinancialStuffConnected == 1)
       <!-- FEED BOX -->
       <div class="row">
         <div class="col-md-4 feed-box">
@@ -407,6 +460,7 @@
         </div> <!-- / .col-sm-4 -->
       </div>
       <!-- /FEED BOX -->
+      @endif
 
     <div id="#appendhere" class="col-md-12">
 
@@ -431,33 +485,33 @@
 
     var data, ctx;
 
-    
+    @for ($i = 0; $i < count($allFunctions); $i++)
+      @if ($allFunctions[$i]['widget_type']!='google-spreadsheet-abf-munkaido')
 
-    @for ($i = 0; $i< count($allFunctions); $i++)
+      /* {{ $allFunctions[$i]['statName'] }} */
 
-    /* {{ $allFunctions[$i]['statName'] }} */
-    
-    data = {
-      labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
-      datasets: [
-          {
-              label: "Monthly Recurring Revenue",
-              fillColor: "rgba(151,187,205,0.4)",
-              strokeColor: "rgba(151,187,205,0.6)",
-              data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
-                @if($value == null) 0,
-                @else{{ $value }},
-                @endif 
-                @endforeach]
-          }
-      ]
-    };
+      data = {
+        labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
+        datasets: [
+            {
+                label: {{ $allFunctions[$i]['statName'] }},
+                fillColor: "rgba(151,187,205,0.4)",
+                strokeColor: "rgba(151,187,205,0.6)",
+                data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
+                  @if($value == null) 0,
+                  @else{{ $value }},
+                  @endif 
+                  @endforeach]
+            }
+        ]
+      };
 
-    ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
-    var {{$allFunctions[$i]['id']}}Chart = new Chart(ctx).Line(data, options);
+      ctx = $("#{{$allFunctions[$i]['id']}}").get(0).getContext("2d");
+      var Chart{{$allFunctions[$i]['id']}} = new Chart(ctx).Line(data, options);
 
-    /* / {{ $allFunctions[$i]['statName'] }} */
+      /* / {{ $allFunctions[$i]['statName'] }} */
 
+      @endif
     @endfor
 
        

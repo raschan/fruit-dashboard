@@ -2,6 +2,9 @@
 
 use Abf\Event;      // needed because of conflicts with Laravel and Stripe
 
+use Google\Spreadsheet\DefaultServiceRequest;
+use Google\Spreadsheet\ServiceRequestFactory;
+
 class Calculator
 {
 
@@ -170,6 +173,329 @@ class Calculator
 
     public static function saveEvents($user)
     {
+
+        ###############################################
+        # google spreadsheet stuff start
+
+        # get google spreadsheet widgets for the user
+        $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-line-cell')->get();
+
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
+
+                Log::info("google-spreadsheet-line-cell - widget_id - ".$widget['id']);
+
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
+
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
+
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+                $listFeed = $worksheet->getListFeed();
+
+                # get celldata (first line = header, second line = content)
+                $listArray = array();
+                $values = array();
+                foreach ($listFeed->getEntries() as $entry) {
+                     $values = $entry->getValues();
+                     break; # break, so we just the first line
+                }
+
+                $time = time();
+
+                $data = new Data;
+                $data->widget_id = $widget['id'];
+                $data->data_object = json_encode($values);
+                $data->date = date("Y-m-d", $time);
+                $data->timestamp = date('Y-m-d H:i:s', $time);
+                $data->save();
+
+            }
+        }
+
+        # get the matching widgets from the user
+        $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-line-column')->get();
+
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
+
+                Log::info("google-spreadsheet-line-column - widget_id - ".$widget['id']);
+
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
+
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
+
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+
+                # get feeddata (first line = header)
+                $listFeed = $worksheet->getListFeed();
+
+                foreach ($listFeed->getEntries() as $entry) {
+                    $array = $entry->getValues();
+
+                    $date = array_values($array)[0];
+                    $value = array_values($array)[1];
+
+                    # format date (from almost everything to Y-m-d)
+                    $time = strtotime(trim(str_replace('.', '-', $date), '-'));
+
+                    # have we saved data for this date?
+                    $db_data = Data::where('widget_id', '=', $widget['id'])
+                        ->where('date', '=', date("Y-m-d", $time));
+
+                    if ($db_data->count() == 0) {
+                        # nope, save it
+                        $data = new Data;
+                        $data->widget_id = $widget['id'];
+                        $data->data_object = json_encode(array("value" => $value));
+                        $data->date = date("Y-m-d", $time);
+                        $data->timestamp = date('Y-m-d H:i:s', $time);
+                        $data->save();
+                    } else {
+                        # yes, update it
+                        $db_data->update(['data_object' => json_encode(array("value" => $value))]);
+                    }
+                }
+            }
+        }
+
+
+        # get the matching widgets from the user
+        $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-text-cell')->get();
+
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
+
+                Log::info("google-spreadsheet-text-cell - widget_id - ".$widget['id']);
+
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
+
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
+
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+
+                # get feeddata (first line = header)
+                $listFeed = $worksheet->getListFeed();
+
+                foreach ($listFeed->getEntries() as $entry) {
+                    $array = $entry->getValues();
+
+                    $value = array_values($array)[0];
+
+                    $time = time();
+
+                    # have we saved data for this widget?
+                    $db_data = Data::where('widget_id', '=', $widget['id']);
+
+                    if ($db_data->count() == 0) {
+                        # nope, save it
+                        $data = new Data;
+                        $data->widget_id = $widget['id'];
+                        $data->data_object = json_encode(array("value" => $value));
+                        $data->date = date("Y-m-d", $time);
+                        $data->timestamp = date('Y-m-d H:i:s', $time);
+                        $data->save();
+                    } else {
+                        # yes, update it
+                        $db_data->update([
+                            'data_object' => json_encode(array("value" => $value)), 
+                            'date' => date("Y-m-d", $time), 
+                            'timestamp' => date('Y-m-d H:i:s', $time)
+                        ]);
+                    }
+
+                    break; # break, so we just the first line
+
+                }
+            }
+        }
+
+
+        # get the matching widgets from the user
+        $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-text-column')->get();
+
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
+
+                Log::info("google-spreadsheet-text-column - widget_id - ".$widget['id']);
+
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
+
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
+
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+
+                # get feeddata (first line = header)
+                $listFeed = $worksheet->getListFeed();
+
+                $values = array();
+                $key = 0;
+
+                foreach ($listFeed->getEntries() as $entry) {
+                    $array = $entry->getValues();
+
+                    $value = array_values($array)[0];
+                    $values = array_add($values, "a".$key, $value);
+
+                    $key++;
+                }
+
+                $time = time();
+
+                # have we saved data for this widget?
+                $db_data = Data::where('widget_id', '=', $widget['id']);
+
+                if ($db_data->count() == 0) {
+                    # nope, save it
+                    $data = new Data;
+                    $data->widget_id = $widget['id'];
+                    $data->data_object = json_encode($values);
+                    $data->date = date("Y-m-d", $time);
+                    $data->timestamp = date('Y-m-d H:i:s', $time);
+                    $data->save();
+                } else {
+                    # yes, update it
+                    $db_data->update([
+                        'data_object' => json_encode($values), 
+                        'date' => date("Y-m-d", $time), 
+                        'timestamp' => date('Y-m-d H:i:s', $time)
+                    ]);
+                }
+
+            }
+        }
+
+
+
+        # get the matching widgets from the user
+        $widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'google-spreadsheet-abf-munkaido')->get();
+
+        if ($widgets->count() > 0) {
+            foreach ($widgets as $widget) {
+
+                Log::info("google-spreadsheet-abf-munkaido - widget_id - ".$widget['id']);
+
+                $widget_source = json_decode($widget['widget_source'], true);
+                $spreadsheetId = $widget_source['googleSpreadsheetId'];
+                $worksheetName = $widget_source['googleWorksheetName'];
+
+                # setup Google stuff
+                $client = GoogleSpreadsheetHelper::setGoogleClient();
+                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+
+                # init service
+                $serviceRequest = new DefaultServiceRequest($access_token);
+                ServiceRequestFactory::setInstance($serviceRequest);
+                $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+                # get spreadsheet
+                $spreadsheet = $spreadsheetService->getSpreadsheetById($spreadsheetId);
+                $worksheetFeed = $spreadsheet->getWorksheets();
+
+                # get worksheet
+                $worksheet = $worksheetFeed->getByTitle($worksheetName);
+
+                # get feeddata (first line = header)
+                $listFeed = $worksheet->getListFeed();
+
+                $values = array();
+                $key = 0;
+
+                foreach ($listFeed->getEntries() as $entry) {
+                    $array = $entry->getValues();
+                    $values = array_add($values, $key, $array);
+                    $key++;
+                }
+
+                $time = time();
+
+                # have we saved data for this widget?
+                $db_data = Data::where('widget_id', '=', $widget['id']);
+
+                if ($db_data->count() == 0) {
+                    # nope, save it
+                    $data = new Data;
+                    $data->widget_id = $widget['id'];
+                    $data->data_object = json_encode($values);
+                    $data->date = date("Y-m-d", $time);
+                    $data->timestamp = date('Y-m-d H:i:s', $time);
+                    $data->save();
+                } else {
+                    # yes, update it
+                    $db_data->update([
+                        'data_object' => json_encode($values), 
+                        'date' => date("Y-m-d", $time), 
+                        'timestamp' => date('Y-m-d H:i:s', $time)
+                    ]);
+                }
+
+            }
+        }
+
+
+        # google spreadsheet stuff end
+        ###############################################
+
+
+
+        ###############################################
+        # stripe & braintree & paypal stuff start
+
         $eventsToSave = TailoredData::getEvents($user);
 
         if($eventsToSave)
@@ -195,6 +521,10 @@ class Calculator
                 $newEvent->save();
             }
         }
+
+        # stripe & braintree & paypal stuff end
+        ###############################################
+
     }
 
     /**

@@ -3,9 +3,6 @@
   @section('pageContent')
 
   <div id="content-wrapper" class='page-pricing'>
-    <div class="page-header text-center">
-      <h1><i class="page-header-icon"></i>Plans and Pricing</h1>
-    </div> <!-- / .page-header -->
     @parent
     <div class='plans-panel'>
       <div class='plans-container'>

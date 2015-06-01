@@ -145,7 +145,7 @@ Route::get('connect', array(
     'uses' => 'ConnectController@showConnect'
 ));
 
-Route::get('connect/{provider}', array(
+Route::any('connect/{provider}/{step?}', array(
     'before' => 'auth|trial_ended|cancelled',
     'uses' => 'ConnectController@connectProvider'
 ));
@@ -160,6 +160,13 @@ Route::any('import/{provider}',array(
     'uses'      => 'ConnectController@doImport'
 ));
 
+
+Route::any('connect.addwidget/{provider?}', array(
+    'before' => 'auth',
+    'as'    => 'connect.addwidget',
+    'uses' => 'ConnectController@connectProvider'
+));
+
 Route::post('connect', array(
     'before' => 'auth',
     'as' => 'connect.connect',
@@ -172,12 +179,18 @@ Route::post('suggest', array(
     'uses' => 'ConnectController@doSaveSuggestion'
 ));
 
-
 // disconnect
 Route::get('/disconnect/{service}', array(
     'before' => 'auth|api_key',
     'as' => 'auth.disconnect',
     'uses' => 'ConnectController@doDisconnect'
+));
+
+// delete widget
+Route::any('connect.deletewidget/{widget_id}', array(
+    'before' => 'auth',
+    'as' => 'connect.deletewidget',
+    'uses' => 'ConnectController@deleteWidget'
 ));
 
 

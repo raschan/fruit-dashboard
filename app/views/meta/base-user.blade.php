@@ -2,7 +2,7 @@
 
 @section('body')
 
-	<body class="theme-asphalt main-menu-animated page-invoice main-navbar-fixed main-menu-fixed no-main-menu">
+	<body class="theme-asphalt main-menu-animated main-navbar-fixed main-menu-fixed no-main-menu">
   		<div id="main-wrapper">
 
 			@section('navbar')

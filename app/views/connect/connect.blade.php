@@ -7,66 +7,9 @@
   @section('pageContent')
     
     <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1><i class="fa fa-link page-header-icon"></i>&nbsp;&nbsp;Connect a service</h1>
-      </div> <!-- / .page-header -->
       @parent
 
       <div class="col-md-10 col-md-offset-1">
-
-        {{--
-        <!-- SSL cert. -->
-        <div class="row">
-          <div class="certificate-wrapper bordered">
-            <div class="panel-body certificate">
-              <span class="lead col-sm-6">Don't worry we're using secure protocols here.</span>
-              <a href="https://www.positivessl.com" class='sm-pull-right text-center'>
-                <img src="https://www.positivessl.com/images-new/PositiveSSL_tl_white2.png" alt="SSL Certificate" title="SSL Certificate" border="0"/>
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- /SSL cert. -->
-        --}}
-      {{-- 
-        <!-- hidden for development, will not be rendered on client side -->   
-        <!-- PayPal connect-->
-
-        <div class="row">
-          <div class="paypal-form-wrapper">
-            <div class="panel-body paypal-form bordered">
-              <h4>Connect PayPal</h4>
-
-              <div class="col-sm-2 text-center">
-                <i class="fa icon fa-cc-paypal fa-4x"></i>
-              </div> <!-- /. col-sm-2 -->
-
-              <div class="col-sm-8">
-                <p class="text-muted">Some help text abot what to do. Lorem ipsum</p>
-              </div> <!-- /. col-sm-8 -->
-
-              <div class="col-sm-2 text-center">
-                @if ($paypal_connected)
-                <a href="{{ URL::route('auth.disconnect', 'paypal') }}">
-                <button class='btn btn-warning btn-xs btn-flat sm-pull-right'>Disconnect</button>
-                </a>
-                @else
-                <a href="{{ $redirect_url }}">
-                    {{ Form::submit('Connect', array(
-                        'id' => 'id_submit',
-                        'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right')) }}
-                </a>
-                @endif
-              </div>
-
-            </div> <!-- /. panel-body paypal-form -->
-          </div> <!-- /. col-sm-6 paypal-form-wrapper -->
-        </div> <!-- /. row -->
-
-        <!-- /PayPal connect-->
-        <!-- / hidden for development, will not be rendered on client side -->   
-      --}}
-
         <!-- Stripe connect -->
         <div class="row">
           <div class="stripe-form-wrapper bordered">
@@ -81,7 +24,7 @@
               <div class="col-sm-5 valign">
                 @if ($user->isStripeConnected())
                   <!-- Modal box -->
-                  <div id="modal-sizes-1" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                  <div id="modal-stripe-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -99,7 +42,7 @@
                     </div> <!-- / .modal-dialog -->
                   </div>
                   <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-1">Disconnect</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-stripe-disconnect">Disconnect</button>
                 @elseif($user->canConnectMore())
                   <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
                 @else
@@ -170,7 +113,7 @@
                 <!-- /Braintree details modal box -->
                 @if ($user->isBraintreeConnected())
                   <!-- Modal box -->
-                  <div id="modal-sizes-2" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                  <div id="modal-bt-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -188,7 +131,7 @@
                     </div> <!-- / .modal-dialog -->
                   </div>
                   <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-sizes-2">Disconnect</button>
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-bt-disconnect">Disconnect</button>
                   <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
                 @elseif($user->canConnectMore())
                   @if($user->btWebhookConnected)
@@ -213,6 +156,51 @@
           </div> <!-- /. col-sm-6 braintree-form-wrapper -->
         </div> <!-- /. row -->
         <!-- / Braintree connect -->
+       
+        <!-- Google Spreadsheet connect -->
+        <div class="row">
+          <div class="googlespreadsheet-form-wrapper bordered">
+            <div class="panel-body googlespreadsheet-form">
+              <div class='col-sm-4'>
+                <h4>Connect Google Spreadsheets</h4>
+              </div>
+              <div class="col-sm-2 col-sm-offset-1 text-center">
+                <span class="icon fa fa-google fa-3x"></span>
+              </div> <!-- /. connect-icon -->
+              <div class="col-sm-5">
+                @if ($user->isGoogleSpreadsheetConnected())
+                  <!-- Modal box -->
+                  <div id="modal-google-ss-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Warning</h4>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to disconnect Google Spreadsheet from your account? <br>
+                          After disconnecting we will not receive any more data from Google Spreadsheet.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Google Spreadsheet disconnected"]);mixpanel.track("Disconnect",{"service":"google spreadsheet"});' href="{{ URL::route('auth.disconnect', 'googlespreadsheet') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
+                        </div>
+                      </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                  </div>
+                  <!-- /Modal box -->
+                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-google-ss-disconnect">Disconnect</button>
+                  <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right"><span>Add new widget</span></a>
+                @elseif($user->canConnectMore())
+                  <a href="{{ $googleSpreadsheetButtonUrl }}" class="sm-pull-right valign" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
+                @else
+                  <a href="/plans" class="sm-pull-right valign"><span>Connect Google Spreadsheets</span></a>
+                @endif
+              </div> <!-- /. col-sm-5 -->
+            </div> <!-- /. panel-body googlespreadsheet-from -->
+          </div> <!-- /. col-sm-6 googlespreadsheet-form-wrapper -->
+        </div> <!-- /. row -->
+        <!-- / Google Spreadsheet connect -->
 
         <!-- Suggestion -->
         <div class="row">
@@ -300,4 +288,3 @@
     {{-- /scripts for modal wizard--}}
     
   @stop
-
