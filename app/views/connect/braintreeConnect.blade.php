@@ -3,9 +3,6 @@
   @section('pageContent')
 
     <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1>Connect Braintree</h1>
-      </div> <!-- / .page-header -->
       @parent
 
 

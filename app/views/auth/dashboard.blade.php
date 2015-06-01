@@ -7,9 +7,6 @@
   @section('pageContent')
     
     <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
-      </div> <!-- / .page-header -->
       @parent
 
         <!-- STATISTICS BOX -->
