@@ -7,12 +7,17 @@
 	display: none;
 }
 
-html { 
+body {
+	min-height: 100%;
+}
+
+.full-height { 
 	background: url(../img/backgrounds/3.png) no-repeat center center fixed;
  -webkit-background-size: cover;
  -moz-background-size: cover;
  -o-background-size: cover;
  background-size: cover;
+ min-height: 100%;
 }
 
 @media (max-width: 767px) {
