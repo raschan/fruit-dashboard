@@ -7,7 +7,7 @@
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="#">
+			<a href="https://fruitdashboard.uservoice.com/">
 				<i class="dropdown-icon fa fa-bullhorn"></i>&nbsp;&nbsp;Feedback
 			</a>
 		<li role="presentation">
