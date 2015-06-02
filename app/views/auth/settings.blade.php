@@ -241,6 +241,75 @@
         </div> <!-- /. col-md-10 -->
         <!-- /Account settings -->
 
+        <!-- Appearance settings -->
+        <div class="col-md-10 col-md-offset-1">
+          <div class="row">
+            <div class="col-sm-6 col-md-offset-3 appearence-form-wrapper">
+              <div class="panel-body bordered getHeight">
+                <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Appearence settings</h4>
+
+                <!-- Background switch -->
+                {{ Form::open(array(
+                  'action' => 'AuthController@doSettingsBackground',
+                  'id' => 'form-settings-background',
+                  'role' => 'form',
+                  'class' => 'form-horizontal' )) }}
+
+                  <div id="editBackgroundForm">
+                    <div class="form-group">
+                      {{ Form::label('id_backgroundedit', 'Show Background', array(
+                       'class' => 'col-sm-4 control-label')) }}
+                      <div class="col-sm-8">
+                        <p class="form-control-static">
+                          @if (Auth::user()->isBackgroundOn)
+                            <span>Yes</span>
+                          @else
+                            <span>No</span>
+                          @endif
+                          <button id="editBackground" class="btn btn-flat btn-info btn-sm pull-right" type="button" onClick= '_gaq.push(["_trackEvent", "Edit", "Editing background"]);mixpanel.track("Editing background");'>Edit</button>
+                        </p>
+                      </div>
+                    </div> <!-- / .form-group -->
+                  </div>
+
+                  <!-- hidden notification change form -->
+
+                  <div id="changeBackgroundForm" class="hidden-form">
+                    <div class="form-group @if ($errors->first('newBackgroundState')) has-error @endif">
+                      {{ Form::label('id_background', 'Show Background', array(
+                        'class' => 'col-sm-4 control-label')) }}
+                      <div class="col-sm-8">
+                        <div class="{{--switcher switcher-sm switcher-primary --}}@if (Auth::user()->isBackgroundOn)checked @endif">
+                          {{ Form::checkbox('newBackgroundState',
+                            Auth::user()->isBackgroundOn,
+                            Auth::user()->isBackgroundOn,
+                            array(                                       
+                              'id' => 'id_background',
+                              'class' => 'form-control',
+//                              'data-class' => 'switcher-sm switcher-primary'
+                            )) 
+                          }}
+                          
+                        </div>
+                      </div>
+                    </div> <!-- / .form-group -->
+
+                    <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
+                      <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelBackground">Cancel</button>  
+                      {{ Form::submit('Save', array(
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Background edited"]);
+                        mixpanel.track("Background edited");')) }}
+                    </div>
+
+                  </div>
+                {{ Form::close() }}
+              </div>
+            </div> <!-- / .panel-body -->
+          </div> <!-- / .col-sm-6 -->
+        </div> <!-- /. col-md-10 -->
+        <!-- /Appearance settings -->
 
         <!-- Notification settings -->
         <div class="col-md-10 col-md-offset-1">
@@ -609,6 +678,11 @@
             $('#changeFrequencyForm').slideDown('fast');
           });
         })
+        $('#editBackground').on('click', function (){
+          $('#editBackgroundForm').slideUp('fast', function (){
+            $('#changeBackgroundForm').slideDown('fast');
+          });
+        })
         $('#editPlan').on('click', function (){
           $('#editPlanForm').slideUp('fast', function (){
             $('#changePlanForm').slideDown('fast');
@@ -641,11 +715,22 @@
             $('#editFrequencyForm').slideDown('fast');
           });
         })
+        $('#cancelBackground').on('click', function (){
+          $('#changeBackgroundForm').slideUp('fast', function (){
+            $('#editBackgroundForm').slideDown('fast');
+          });
+        })
         $('#cancelPlanEdit').on('click', function (){
           $('#changePlanForm').slideUp('fast', function (){
             $('#editPlanForm').slideDown('fast');
           });
         })
+
+        // switchers
+        $('#id_background').switcher();
+        $('#switchers-colors-square > input').switcher({ theme: 'square' });
+        $('#switchers-colors-modern > input').switcher({ theme: 'modern' });
+        
       });
 
     </script>

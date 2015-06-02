@@ -129,7 +129,7 @@ class ConnectController extends BaseController
 
                     Queue::push('CalculateFirstTime', array('userID' => $user->id));
             	    
-			    	return Redirect::route('auth.dashboard')
+			    	return Redirect::route('dashboard.dashboard')
 			    		->with('success', ucfirst($provider).' connected.');
     			} else if (isset($response['error'])) {
 
@@ -279,7 +279,7 @@ class ConnectController extends BaseController
                     $widget->dashboard_id = $user->dashboards()->first()->id;
                     $widget->save();
 
-                    return Redirect::route('auth.dashboard')
+                    return Redirect::route('dashboard.dashboard')
                       ->with('success', 'Google Spreadsheet widget added.');
                 }  
             }
@@ -448,7 +448,7 @@ class ConnectController extends BaseController
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard')
+        return Redirect::route('dashboard.dashboard')
                         ->with(array('success' => 'Stripe connected.'));
 
         }
@@ -522,7 +522,7 @@ class ConnectController extends BaseController
             IntercomHelper::connected($user,'braintree');
             Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
 
-            return Redirect::route('auth.dashboard')
+            return Redirect::route('dashboard.dashboard')
                 ->with('success','Braintree connected, importing data');
         }
     }

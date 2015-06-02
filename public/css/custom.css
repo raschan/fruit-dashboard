@@ -6,6 +6,27 @@
 .theme-signout #main-navbar {
 	display: none;
 }
+/*
+html {
+	height: 100%;
+}
+*/
+html, body {
+	height: 100%;
+}
+
+.full-height {
+	height: 100%;
+}
+
+
+
+body { 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
 
 @media (max-width: 767px) {
 	.theme-signout .container {
@@ -298,6 +319,10 @@
 }
 
 .account-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.appearence-form-wrapper {
 	padding-bottom: 15px;
 }
 
@@ -620,7 +645,6 @@
   -moz-osx-font-smoothing:grayscale;
 }
 
-<<<<<<< HEAD
 .right-space {
   margin-right: 15px;
 }
@@ -641,7 +665,7 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-=======
+
 #settingsIcon{
 	position: absolute;
 	top: 25px;
@@ -658,4 +682,3 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	text-shadow: 1px 1px 1px rgba(255,255,255,1);
 	cursor: pointer;
 }
->>>>>>> master

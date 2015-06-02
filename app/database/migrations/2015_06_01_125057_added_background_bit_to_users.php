@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBtWebhookColumnToUser extends Migration {
+class AddedBackgroundBitToUsers extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,8 +15,7 @@ class AddBtWebhookColumnToUser extends Migration {
 		Schema::table('users', function($table)
         {
              // adding title
-            $table->boolean('btWebhookConnected')->nullable();
-            $table->string('btWebhookId',12);
+            $table->boolean('isBackgroundOn')->default(true);
         });
 	}
 
@@ -27,11 +26,13 @@ class AddBtWebhookColumnToUser extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function($table)
+		if (Schema::hasColumn('users','isBackgroundOn'))
         {
-            // dropping column
-            $table->dropColumn('btWebhookConnected');
-        });
+            Schema::table('users', function($table)
+            {
+                // dropping column
+                $table->dropColumn('isBackgroundOn');
+            });
+        }
 	}
-
 }

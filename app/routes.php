@@ -44,7 +44,7 @@ if(!App::environment('production'))
 */
 Route::get('/', function()
 {
-    return Redirect::route('auth.dashboard');
+    return Redirect::route('dashboard.dashboard');
 });
 
 
@@ -82,13 +82,13 @@ Route::any('signout', array(
 // metric graph routes
 Route::get('dashboard', array(
     'before' => 'auth|trial_ended|cancelled|api_key',
-    'as' => 'auth.dashboard',
-    'uses' => 'AuthController@showDashboard'
+    'as' => 'dashboard.dashboard',
+    'uses' => 'DashboardController@showDashboard'
 ));
 
 Route::get('statistics/{statID}', array(
     'before' => 'auth|trial_ended|cancelled|api_key',
-    'as' => 'auth.single_stat',
+    'as' => 'dashboard.single_stat',
     'uses' => 'AuthController@showSinglestat'
 ));
 
@@ -125,6 +125,10 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
+Route::post('settingsBackground', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsBackground'
+));
 
 
 Route::post('cancelSubscription', array(
