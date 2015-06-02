@@ -8,6 +8,7 @@
   @stop
 
   @section('pageContent')
+
     <div id="content-wrapper" class="gridster">
       <ul>
 
