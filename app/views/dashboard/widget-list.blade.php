@@ -7,4 +7,3 @@
     @endforeach
   </ul>
 </li>
-        
