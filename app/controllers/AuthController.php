@@ -173,6 +173,125 @@ class AuthController extends BaseController
 
     /*
     |===================================================
+    | <GET> | showDashboard: renders the dashboard page
+    |===================================================
+    */
+    public function showDashboard()
+    {
+       /* if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
+        {
+            return Redirect::route('connect.connect')
+                ->with('error','Connect a service first.');
+        }*/
+
+        // check if trial period is ended
+        if (Auth::user()->isTrialEnded())
+        {
+            return Redirect::route('auth.plan')
+                ->with('error','Trial period ended.');
+        }
+
+        #####################################################
+        # prepare stuff for stripe & braintree metrics start
+
+        $allMetrics = array();
+
+        if (Auth::user()->ready != 'notConnected') {
+            $currentMetrics = Calculator::currentMetrics();
+
+            $metricValues = Metric::where('user', Auth::user()->id)
+                                    ->orderBy('date','desc')
+                                    ->take(31)
+                                    ->get();
+
+            foreach ($currentMetrics as $statID => $statDetails) {
+
+                $metricsArray = array();
+                foreach ($metricValues as $metric) {
+                    $metricsArray[$metric->date] = $metric->$statID;
+                }
+                ksort($metricsArray);
+                
+                $array = $statDetails['metricClass']::show($metricsArray);
+                $array = array_add($array, 'widget_type', 'financial');
+                $allMetrics[] = $array;
+            }
+        }
+
+        # prepare stuff for stripe & braintree metrics end
+        #####################################################
+
+
+
+
+        #####################################################
+        # prepare stuff for google spreadsheet metrics start
+
+        $widgets = Auth::user()->dashboards()->first()->widgets;
+
+        foreach ($widgets as $widget) {
+
+            $current_value = "";
+            $dataArray = array();
+
+            switch ($widget->widget_type) {
+
+                case 'google-spreadsheet-text-column':
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        foreach ($array as $key => $value) {
+                            $current_value = $value;
+                            $dataArray = array_add($dataArray, $key, $current_value);
+                        }
+                    }
+                    break;
+
+                case 'iframe':
+                    $current_value = $widget->widget_source;
+                    break;
+
+                default:
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        $current_value = array_values($array)[0];
+                        $dataArray = array_add($dataArray, $dataObject->date, $current_value);
+                    }
+            }
+
+            $newMetricArray = array(
+                    "id" => $widget->id,
+                    "widget_type" => $widget->widget_type,
+                    "widget_id" => $widget->id,
+                    "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+                    "positiveIsGood" => "true",
+                    "history" => $dataArray,
+                    "currentValue" => $current_value,
+                    "oneMonthChange" => "",
+            );
+            $allMetrics[] = $newMetricArray;
+        }
+
+        # prepare stuff for google spreadsheet metrics end
+        #####################################################
+
+        return View::make(
+            'auth.dashboard',
+            array(
+                'allFunctions' => $allMetrics,
+                'events' => Calculator::formatEvents(Auth::user()),
+                'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
+            )
+        );
+    }
+
+    /*
+    |===================================================
     | <GET> | showSettings: renders the settings page
     |===================================================
     */
