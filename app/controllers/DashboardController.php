@@ -70,34 +70,40 @@ class DashboardController extends BaseController
 
             $current_value = "";
 
-            $dataObjects = Data::where('widget_id', $widget->id)
-                                    ->orderBy('date','asc')
-                                    ->get();
-
             $dataArray = array();
 
-            if ($widget->widget_type == 'google-spreadsheet-text-column') {
+            switch ($widget->widget_type) {
 
-                foreach ($dataObjects as $dataObject) {
-                    $array = json_decode($dataObject->data_object, true);
-                    foreach ($array as $key => $value) {
-                        $current_value = $value;
-                        $dataArray = array_add($dataArray, $key, $current_value);
+                case 'google-spreadsheet-text-column':
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        foreach ($array as $key => $value) {
+                            $current_value = $value;
+                            $dataArray = array_add($dataArray, $key, $current_value);
+                        }
                     }
-                }
+                    break;
 
-            } else {
+                case 'iframe':
+                    $current_value = $widget->widget_source;
+                    break;
 
-                foreach ($dataObjects as $dataObject) {
-                    $array = json_decode($dataObject->data_object, true);
-                    $current_value = array_values($array)[0];
-                    $dataArray = array_add($dataArray, $dataObject->date, $current_value);
-                }
-
+                default:
+                    $dataObjects = Data::where('widget_id', $widget->id)
+                                            ->orderBy('date','asc')
+                                            ->get();
+                    foreach ($dataObjects as $dataObject) {
+                        $array = json_decode($dataObject->data_object, true);
+                        $current_value = array_values($array)[0];
+                        $dataArray = array_add($dataArray, $dataObject->date, $current_value);
+                    }
             }
 
             $newMetricArray = array(
-                    "id" => $widget->id,
+                    "widget_id" => $widget->id,
                     "widget_type" => $widget->widget_type,
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
