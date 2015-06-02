@@ -6,6 +6,26 @@
 .theme-signout #main-navbar {
 	display: none;
 }
+/*
+html {
+	height: 100%;
+}
+*/
+html, body {
+	height: 100%;
+}
+
+.dashboard-widget {
+  list-style: none;
+}
+
+
+body { 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
 
 @media (max-width: 767px) {
 	.theme-signout .container {
@@ -298,6 +318,10 @@
 }
 
 .account-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.appearence-form-wrapper {
 	padding-bottom: 15px;
 }
 

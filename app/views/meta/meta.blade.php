@@ -40,6 +40,10 @@
       {{ HTML::style('css/pages.min.css') }}
       <!-- /PixelAdmin -->
 
+      <!-- Gridster -->
+      {{ HTML::style('css/jquery.gridster.min.css') }}
+      <!-- /Gridster -->
+
       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
       <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -84,6 +88,7 @@
     {{ HTML::script('js/bootstrap.min.js'); }}
     {{ HTML::script('js/pixel-admin.min.js'); }}
     {{ HTML::script('js/chart.min.js'); }}
+    {{ HTML::script('js/jquery.gridster.with-extras.min.js'); }}
     <!-- /Base scripts -->
 
     <!-- Pagealert timeout -->

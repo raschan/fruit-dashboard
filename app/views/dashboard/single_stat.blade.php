@@ -20,14 +20,14 @@
           <div class="col-md-4 col-lg-5">
               <small><strong>CHOOSE A METRIC:</strong></small><br>
               <select class="form-control input-lg" onChange="window.location.href=this.value">
-                <option value="{{ URL::route('auth.dashboard') }}">Back to dashboard</option>
+                <option value="{{ URL::route('dashboard.dashboard') }}">Back to dashboard</option>
                 @if ($isFinancialStuffConnected == 1)
                   @foreach ($currentMetrics as $key => $value)
-                    <option value="{{ URL::route('auth.single_stat', $key) }}" @if($data['id'] == $key) selected @endif>{{ $value['metricName'] }}</option>
+                    <option value="{{ URL::route('dashboard.single_stat', $key) }}" @if($data['id'] == $key) selected @endif>{{ $value['metricName'] }}</option>
                   @endforeach
                 @endif
                 @foreach ($widgets as $widget)
-                  <option value="{{ URL::route('auth.single_stat', $widget->id) }}" @if($data['id'] == $widget->id) selected @endif>{{ $widget->widget_name }}</option>
+                  <option value="{{ URL::route('dashboard.single_stat', $widget->id) }}" @if($data['id'] == $widget->id) selected @endif>{{ $widget->widget_name }}</option>
                 @endforeach
               </select>
           </div>
