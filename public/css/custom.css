@@ -620,7 +620,6 @@
   -moz-osx-font-smoothing:grayscale;
 }
 
-<<<<<<< HEAD
 .right-space {
   margin-right: 15px;
 }
@@ -641,7 +640,7 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-=======
+
 #settingsIcon{
 	position: absolute;
 	top: 25px;
@@ -658,4 +657,3 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	text-shadow: 1px 1px 1px rgba(255,255,255,1);
 	cursor: pointer;
 }
->>>>>>> master
