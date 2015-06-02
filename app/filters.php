@@ -61,7 +61,6 @@ Route::filter('auth.basic', function()
 });
 
 Route::filter('api_key', function()
-{/*
     if (!Auth::user()->isConnected())
     {
         // no valid key
