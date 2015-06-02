@@ -12,7 +12,7 @@
 
       @for ($i = 0; $i < count($allFunctions); $i++)
 
-        @include('dashboard.widget', ['some' => 'data'])
+        @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
       @endfor
 
