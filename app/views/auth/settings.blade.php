@@ -590,9 +590,15 @@
                   </li>
                 @endforeach
                 </ul>
+                @if($user->isGooglespreadsheetConnected())
                 <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right">
                   <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
                 </a>
+                @else
+                <a href="{{ $googleSpreadsheetButtonUrl }}" class="sm-pull-right">
+                  <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+                </a>
+                @endif
               </div>  
 
               <div style="clear:both"></div>
