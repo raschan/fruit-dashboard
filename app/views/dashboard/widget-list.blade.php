@@ -1,13 +1,10 @@
-<div class="col-sm-4">
-  <div class="stat-panel">
-    <div class="stat-cell col-xs-4 bordered no-border-vr no-border-l no-padding valign-middle">
-      <ul class="list-group no-margin">
-        @foreach ($allFunctions[$i]['history'] as $value)
-          <li class="list-group-item no-border-hr padding-xs-hr">
-            {{ $value }}
-          </li>
-        @endforeach
-      </ul>
-    </div>
-  </div>
-</div>
+<li class="dashboard-widget well" data-row="1" data-col="1" data-sizex="2" data-sizey="2"> 
+  <ul>
+    @foreach ($list as $value)
+      <li class="list-group-item no-border-hr padding-xs-hr">
+        {{ $value }}
+      </li>
+    @endforeach
+  </ul>
+</li>
+        
