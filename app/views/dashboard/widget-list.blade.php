@@ -2,9 +2,7 @@
 	<a href="{{ URL::route('connect.deletewidget', $id) }}"><span class="fa fa-times pull-right widget-close"></span></a>
 	<ul>
     @foreach ($list as $value)
-    	<li class="list-group-item no-border-hr padding-xs-hr">
-        	{{ $value }}
-    	</li>
+    	{{ $value }}
     @endforeach
   	</ul>
 </li>
