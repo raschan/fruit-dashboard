@@ -308,7 +308,7 @@ class ConnectController extends BaseController
                 $widget->dashboard_id = $user->dashboards()->first()->id;
                 $widget->save();
 
-                return Redirect::route('auth.dashboard')
+                return Redirect::route('dashboard.dashboard')
                   ->with('success', 'iframe widget added.');
             }
         }
