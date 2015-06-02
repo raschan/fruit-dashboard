@@ -290,7 +290,7 @@ class AuthController extends BaseController
                 'events' => Calculator::formatEvents(Auth::user()),
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
-                'dailyBackgroundURL' => $dailyBackgroundURL,
+                'dailyBackgroundURL' => '/img/backgrounds/3.png',
             )
         );
     }
@@ -508,8 +508,9 @@ class AuthController extends BaseController
     {
         $user = Auth::user();
 
-        $user->isBackgroundOn = Input::get('newBackgroundState');
+        $user->isBackgroundOn = Input::has('newBackgroundState');
 
+        
         $user->save();
 
         return Redirect::to('/settings')

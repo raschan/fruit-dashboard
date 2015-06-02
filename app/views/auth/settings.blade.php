@@ -279,30 +279,28 @@
                       {{ Form::label('id_background', 'Show Background', array(
                         'class' => 'col-sm-4 control-label')) }}
                       <div class="col-sm-8">
-                        {{ Form::select('newBackgroundState',
-                          // dropdown options
-                          array(
-                            'none' => 'No email', 
-                            'daily' => 'Daily email',
-                            'weekly' => 'Weekly email'
-                          ), 
-                          // highlighted option
-                          Auth::user()->summaryEmailFrequency,
-                          array(                                       
-                            'id' => 'id_frequency',
-                            'class' => 'form-control'
-                          )) 
-                        }}
+                        <div class="{{--switcher switcher-sm switcher-primary --}}@if (Auth::user()->isBackgroundOn)checked @endif">
+                          {{ Form::checkbox('newBackgroundState',
+                            Auth::user()->isBackgroundOn,
+                            Auth::user()->isBackgroundOn,
+                            array(                                       
+                              'id' => 'id_background',
+                              'class' => 'form-control',
+//                              'data-class' => 'switcher-sm switcher-primary'
+                            )) 
+                          }}
+                          
+                        </div>
                       </div>
                     </div> <!-- / .form-group -->
 
                     <div class="col-sm-8 col-sm-offset-4 text-center padding-xs-vr">
-                      <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelFrequency">Cancel</button>  
+                      <button class="btn btn-warning btn-sm btn-flat" type="button" id="cancelBackground">Cancel</button>  
                       {{ Form::submit('Save', array(
-                      'id' => 'id_submit',
-                      'class' => 'btn btn-primary btn-sm btn-flat',
-                      'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Frequency edited"]);
-                      mixpanel.track("Frequency edited");')) }}
+                        'id' => 'id_submit',
+                        'class' => 'btn btn-primary btn-sm btn-flat',
+                        'onClick'=> '_gaq.push(["_trackEvent", "Edit", "Background edited"]);
+                        mixpanel.track("Background edited");')) }}
                     </div>
 
                   </div>
@@ -662,6 +660,11 @@
             $('#changeFrequencyForm').slideDown('fast');
           });
         })
+        $('#editBackground').on('click', function (){
+          $('#editBackgroundForm').slideUp('fast', function (){
+            $('#changeBackgroundForm').slideDown('fast');
+          });
+        })
         $('#editPlan').on('click', function (){
           $('#editPlanForm').slideUp('fast', function (){
             $('#changePlanForm').slideDown('fast');
@@ -694,11 +697,22 @@
             $('#editFrequencyForm').slideDown('fast');
           });
         })
+        $('#cancelBackground').on('click', function (){
+          $('#changeBackgroundForm').slideUp('fast', function (){
+            $('#editBackgroundForm').slideDown('fast');
+          });
+        })
         $('#cancelPlanEdit').on('click', function (){
           $('#changePlanForm').slideUp('fast', function (){
             $('#editPlanForm').slideDown('fast');
           });
         })
+
+        // switchers
+        $('#id_background').switcher();
+        $('#switchers-colors-square > input').switcher({ theme: 'square' });
+        $('#switchers-colors-modern > input').switcher({ theme: 'modern' });
+        
       });
 
     </script>

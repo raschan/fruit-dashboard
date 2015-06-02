@@ -125,6 +125,10 @@ Route::post('settingsFrequency', array(
     'uses' => 'AuthController@doSettingsFrequency'
 ));
 
+Route::post('settingsBackground', array(
+    'before' => 'auth',
+    'uses' => 'AuthController@doSettingsBackground'
+));
 
 
 Route::post('cancelSubscription', array(

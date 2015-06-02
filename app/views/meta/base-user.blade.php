@@ -2,8 +2,8 @@
 
 @section('body')
 
-	<body class="theme-asphalt main-menu-animated main-navbar-fixed main-menu-fixed no-main-menu">
-  		<div id="main-wrapper">
+	<body @if ($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif>
+  		<div id='main-wrapper'>
 
 			@section('navbar')
 				@include('meta.navbar')
