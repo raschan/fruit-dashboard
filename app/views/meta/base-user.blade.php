@@ -2,7 +2,7 @@
 
 @section('body')
 
-	<body @if ($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif>
+	<body @if(isset($isBackgroundOn)) @if($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif @endif class='theme-asphalt no-main-menu'>
   		<div id='main-wrapper'>
 
 			@section('navbar')
