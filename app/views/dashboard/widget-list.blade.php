@@ -2,7 +2,7 @@
   <div class="stat-panel">
     <div class="stat-cell col-xs-4 bordered no-border-vr no-border-l no-padding valign-middle">
       <ul class="list-group no-margin">
-        @foreach ($allFunctions[$i]['history'] as $value)
+        @foreach ($list as $value)
           <li class="list-group-item no-border-hr padding-xs-hr">
             {{ $value }}
           </li>
