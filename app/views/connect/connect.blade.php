@@ -202,6 +202,24 @@
         </div> <!-- /. row -->
         <!-- / Google Spreadsheet connect -->
 
+        <!-- iframe connect -->
+        <div class="row">
+          <div class="googlespreadsheet-form-wrapper bordered">
+            <div class="panel-body googlespreadsheet-form">
+              <div class='col-sm-4'>
+                <h4>Add an iFrame widget</h4>
+              </div>
+              <div class="col-sm-2 col-sm-offset-1 text-center">
+                <span class="icon fa fa-file-text-o fa-3x"></span>
+              </div> <!-- /. connect-icon -->
+              <div class="col-sm-5">
+                  <a href="{{ URL::route('connect.addwidget', 'iframe') }}" class="sm-pull-right"><span>Add new widget</span></a>
+              </div> <!-- /. col-sm-5 -->
+            </div> <!-- /. panel-body googlespreadsheet-from -->
+          </div> <!-- /. col-sm-6 googlespreadsheet-form-wrapper -->
+        </div> <!-- /. row -->
+        <!-- / iframe connect -->
+
         <!-- Suggestion -->
         <div class="row">
           <div class="suggestion-form-wrapper bordered">
