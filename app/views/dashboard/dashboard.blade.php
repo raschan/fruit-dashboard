@@ -9,7 +9,13 @@
 
   @section('pageContent')
     <div id='content-wrapper'>
-      sdfjsifugy
+
+      @for ($i = 0; $i < count($allFunctions); $i++)
+
+        @include('dashboard.widget', ['some' => 'data'])
+
+      @endfor
+
     </div>
   @stop
 
