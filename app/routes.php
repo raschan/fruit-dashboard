@@ -188,12 +188,6 @@ Route::any('connect.deletewidget/{widget_id}', array(
     'uses' => 'ConnectController@deleteWidget'
 ));
 
-// modify Abf widget
-Route::any('modifyAbfWidget', array(
-    'as' => 'modifyAbfWidget',
-    'uses' => 'ConnectController@modifyAbfWidget'
-));
-
 
 // subscription routes
 Route::get('/plans', array(

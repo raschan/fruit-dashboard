@@ -249,20 +249,8 @@ class AuthController extends BaseController
                     }
                     break;
 
-                case 'google-spreadsheet-abf-munkaido':
-                    $dataObjects = Data::where('widget_id', $widget->id)
-                                            ->orderBy('data_key','desc')
-                                            ->take(5)
-                                            ->get();                    
-                    $counter = 0;
-                    foreach ($dataObjects as $dataObject) {
-                        $array = ['data_key' => $dataObject->data_key];
-                        $array = array_merge($array, json_decode($dataObject->data_object, true));
-                        $dataArray = array_add($dataArray, $counter, $array);
-                        $counter++;
-                    }
-                    $dataArray = array_reverse($dataArray);
-
+                case 'iframe':
+                    $current_value = $widget->widget_source;
                     break;
 
                 default:
@@ -345,8 +333,9 @@ class AuthController extends BaseController
 
 
         $client = GoogleSpreadsheetHelper::setGoogleClient();
-
         $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
+
+        $iframe_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'iframe%')->get();
 
         return View::make('auth.settings',
             array(
@@ -358,6 +347,9 @@ class AuthController extends BaseController
                 // google spreadsheet stuff 
                 'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
                 'google_spreadsheet_widgets'       => $google_spreadsheet_widgets,
+
+                // iframe stuff
+                'iframe_widgets'       => $iframe_widgets,
 
                 // payment stuff
                 'planName'          => $planName,
