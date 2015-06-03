@@ -368,34 +368,34 @@ class BraintreeHelper {
 
 		foreach ($customers as $customer) 
 		{
-            foreach ($customer->paymentMethods() as $paymentMethod) 
+      foreach ($customer->paymentMethods() as $paymentMethod) 
+      {
+        if (isset($paymentMethod->_attributes['subscriptions']))
+        {        
+          foreach ($paymentMethod->_attributes['subscriptions'] as $subscription) 
+          {        
+            if ($subscription->status == Braintree_Subscription::ACTIVE)
             {
-                if (isset($paymentMethod->_attributes['subscriptions']))
-                {        
-                    foreach ($paymentMethod->_attributes['subscriptions'] as $subscription) 
-                    {        
-                        if ($subscription->status == Braintree_Subscription::ACTIVE)
-                        {
-                        	$au++;
+            	$au++;
 
 							// needs a new custom events so the calculator runs normal
-                        	$newEvent = new Event;
+            	$newEvent = new Event;
 
 							$newEvent->date                 = Carbon::now()->format('Y-m-d');
-					        $newEvent->eventID              = str_random(32);
-					        $newEvent->user                 = $user->id;
-					        $newEvent->created              = Carbon::now();
-					        $newEvent->provider             = 'connect';
-					        $newEvent->type                 = 'customer.created';
-					        $newEvent->object               = '{}';
-					        $newEvent->previousAttributes   = null;
+			        $newEvent->eventID              = str_random(32);
+			        $newEvent->user                 = $user->id;
+			        $newEvent->created              = Carbon::now();
+			        $newEvent->provider             = 'connect';
+			        $newEvent->type                 = 'customer.created';
+			        $newEvent->object               = '{}';
+			        $newEvent->previousAttributes   = null;
 
-					        $newEvent->save();
-                        } // /if active
-                    } // /foreach subscription            
-                } // /if isset
-            } // /foreach paymentMethod     
-        } // /foreach customer
+			        $newEvent->save();
+            } // /if active
+          } // /foreach subscription            
+        } // /if isset
+      } // /foreach paymentMethod     
+    } // /foreach customer
 
 		return $au;
 	}

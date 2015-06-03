@@ -446,11 +446,10 @@
               {{ Form::close() }}
               
               <!-- / Subscription -->
-
-              </div>
-            </div> <!-- / .panel-body -->
-          </div> <!-- / .col-sm-6 -->
-        </div> <!-- /. col-md-10 -->
+              </div> <!-- / .panel-body -->
+            </div> <!-- / .col-sm-6 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .col-md-10 -->
 
         <!-- /Account settings -->
 
