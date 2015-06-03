@@ -212,4 +212,43 @@ class User extends Eloquent implements UserInterface
             return false;
         }
     }
+
+
+    /*
+    |------------------------------------------
+    | App background for user
+    |------------------------------------------
+    */
+
+    public function dailyBackgroundURL() {
+
+        # get the number of day in the year
+        $numberOfDayInYear = date('z');
+
+        # get the number of background images & collect them in an array
+        $i = 0;
+        $fileListArray = array();
+        $dir = 'public/img/backgrounds/';
+
+        if ($handle = opendir($dir)) {
+            while (($file = readdir($handle)) !== false){
+                if (!in_array($file, array('.', '..')) && !is_dir($dir.$file) && !(substr($file, 0, 1 ) === ".")) {
+                    $fileListArray = array_add($fileListArray, $i, $file);                    
+                    $i++;
+                }
+            }
+        }
+        $numberOfBackgroundFiles = $i;
+
+        # calculate which image will we use
+        $imageNumber = $numberOfDayInYear % $numberOfBackgroundFiles;
+
+        # create the url that will be passed to the view
+        $imageName = $fileListArray[$imageNumber];
+        $dailyBackgroundURL = '/img/backgrounds/'.$imageName;
+
+        return $dailyBackgroundURL;
+
+    }
+
 }

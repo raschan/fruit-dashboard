@@ -696,6 +696,7 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	opacity:1;
 }
 
+<<<<<<< HEAD
 /* own class */
 .textShadow{
 	text-shadow: 1px 1px 1px rgba(20, 20, 20, 1);
@@ -723,4 +724,8 @@ h1.digitTime{
   	color: #fff;
   	font-size: 72px;
   	font-weight: lighter;
+}
+
+.white-background {
+	background-color: #ffffff;
 }

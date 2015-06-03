@@ -91,6 +91,14 @@ class DashboardController extends BaseController
                     $current_value = $widget->widget_source;
                     break;
 
+                case 'google-spreadsheet-text-column-random';
+                    $dataObject = Data::where('widget_id', $widget->id)
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->first();
+                    $array = json_decode($dataObject->data_object, true);
+                    $current_value = array_values($array)[0];
+                    break;
+
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
                                             ->orderBy('date','asc')
@@ -118,42 +126,6 @@ class DashboardController extends BaseController
         #####################################################
 
 
-
-
-        #####################################################        
-        # prepare stuff for daily background start
-
-        # get the number of day in the year
-        $numberOfDayInYear = date('z');
-
-        # get the number of background images & collect them in an array
-        $i = 0;
-        $fileListArray = array();
-        $dir = 'public/img/backgrounds/';
-
-        if ($handle = opendir($dir)) {
-            while (($file = readdir($handle)) !== false){
-                if (!in_array($file, array('.', '..')) && !is_dir($dir.$file) && !(substr($file, 0, 1 ) === ".")) {
-                    $fileListArray = array_add($fileListArray, $i, $file);                    
-                    $i++;
-                }
-            }
-        }
-        $numberOfBackgroundFiles = $i;
-
-        # calculate which image will we use
-        $imageNumber = $numberOfDayInYear % $numberOfBackgroundFiles;
-
-        # create the url that will be passed to the view
-        $imageName = $fileListArray[$imageNumber];
-        $dailyBackgroundURL = '/img/backgrounds/'.$imageName;
-
-        # prepare stuff for daily background end
-        #####################################################
-
-
-
-
         return View::make(
             'dashboard.dashboard',
             array(
@@ -161,7 +133,7 @@ class DashboardController extends BaseController
                 'events' => Calculator::formatEvents(Auth::user()),
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
-                'dailyBackgroundURL' => $dailyBackgroundURL,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
             )
         );
     }
