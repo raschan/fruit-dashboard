@@ -76,6 +76,10 @@ class ConnectController extends BaseController
 
                 // google spreadsheet stuff
                 'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+
+                'isBackgroundOn' => Auth::user()->isBackgroundOn,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+
             )
         );
     }

@@ -691,3 +691,7 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 .widget-close:hover {
 	opacity:1;
 }
+
+.white-background {
+	background-color: #ffffff;
+}
