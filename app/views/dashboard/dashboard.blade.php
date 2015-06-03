@@ -27,6 +27,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
           var gridster;
+          var positioning = [];
           var widget_width = $(window).width()/6-15;
           var widget_height = $(window).height()/6-20;
 
@@ -39,7 +40,37 @@
               resize: {
                 enabled: true,
                 max_size: [4, 4],
-                min_size: [1, 1]
+                min_size: [1, 1],
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize()
+                  $.ajax({
+                   type: "POST",
+                   url: "{{ URL::route('modifyAbfWidget') }}",
+                   data: {
+                       'data': JSON.stringify(positioning),
+                       'widget_id': {{ $allFunctions[$i]['widget_id'] }}
+                   },
+                   success: function() {
+                    console.log('we happy');
+                   }
+                 });
+                }
+              },
+              draggable: {
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize()
+                  $.ajax({
+                   type: "POST",
+                   url: "{{ URL::route('modifyAbfWidget') }}",
+                   data: {
+                       'data': JSON.stringify(positioning),
+                       'widget_id': {{ $allFunctions[$i]['widget_id'] }}
+                   },
+                   success: function() {
+                    console.log('we happy');
+                   }
+                 });
+                }
               }
             }).data('gridster');
 
