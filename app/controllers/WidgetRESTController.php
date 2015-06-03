@@ -91,20 +91,27 @@ class WidgetRESTController extends BaseController {
 	 */
 	public function saveWidgetPosition($userId, $position)
 	{
-		$dashboard = User::where('id','=',$userId)
-						->first()
-						->dashboards()
-						->first();
+		$user = User::where('id','=',$userId)->first();
+		$dashboard = null;
+
+		if ($user)
+		{
+			$dashboard = $user->dashboards()->first();
+		} else {
+			// no such user
+			return Response::json(array('error' => 'no such user'));
+		}
+			
 		if ($dashboard)
 		{
 			$dashboard->widgetPosition = $position;
 			$dashboard->save();
 
-			return Response::make(null,200);
+			return Response::make('Saved successfully',200);
 			
 		} else {
 			// we dont have a dashboard for that user, something is bad
-			return Response::json(array('error' => 'no such user'));
+			return Response::json(array('error' => 'no dashboard for user'));
 		}
 	}
 }

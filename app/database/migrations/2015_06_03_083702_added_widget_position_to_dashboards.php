@@ -12,7 +12,7 @@ class AddedWidgetPositionToDashboards extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users_dashboards', function($table)
+		Schema::table('dashboards', function($table)
         {
              // adding title
             $table->longtext('widgetPosition')->default('');
@@ -26,9 +26,9 @@ class AddedWidgetPositionToDashboards extends Migration {
 	 */
 	public function down()
 	{
-		if (Schema::hasColumn('users','widgetPosition'))
+		if (Schema::hasColumn('dashboards','widgetPosition'))
         {
-            Schema::table('users', function($table)
+            Schema::table('dashboards', function($table)
             {
                 // dropping column
                 $table->dropColumn('widgetPosition');
