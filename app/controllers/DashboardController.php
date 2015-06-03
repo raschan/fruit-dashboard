@@ -99,6 +99,20 @@ class DashboardController extends BaseController
                     $current_value = array_values($array)[0];
                     break;
 
+                case 'quote';
+                    $widgetObject = json_decode($widget->widget_source);
+
+                    $quoteObject = Quote::where('type', '=', $widgetObject->type)
+                                            // ->where('language', '=', $widgetObject->language)
+                                            ->where('language', '=', 'english')
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->first();
+                    $current_value = json_encode([
+                            'quote' => $quoteObject->quote,
+                            'author' => $quoteObject->author
+                    ]);
+                    break;
+
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
                                             ->orderBy('date','asc')

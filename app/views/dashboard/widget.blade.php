@@ -9,5 +9,12 @@
 
 @elseif ($widget_data['widget_type']=='google-spreadsheet-text-column-random')
     @include('dashboard.widget-text', ['text' => $widget_data['currentValue'], 'id' => $widget_data['widget_id']])
+
+@elseif ($widget_data['widget_type']=='quote')
+    @include('dashboard.widget-quote', [
+    	'quote' => json_decode($widget_data['currentValue'],true)['quote'], 
+    	'author' => json_decode($widget_data['currentValue'],true)['author'], 
+    	'id' => $widget_data['widget_id']
+    ])
     
 @endif
