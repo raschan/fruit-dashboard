@@ -26,10 +26,13 @@ class AddOriginalColumnToEvents extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function($table)
-        {
-            // dropping column
-            $table->dropColumn('original');
-        });
+		if (Schema::hasColumn('users','original'))
+		{	
+			Schema::table('users', function($table)
+	        {
+	            // dropping column
+	            $table->dropColumn('original');
+	        });
+		}
 	}
 }

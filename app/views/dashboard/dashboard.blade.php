@@ -27,6 +27,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
           var gridster;
+          var positioning = [];
           var widget_width = $(window).width()/6-15;
           var widget_height = $(window).height()/6-20;
 
@@ -36,10 +37,37 @@
               widget_base_dimensions: [widget_width, widget_height],
               widget_margins: [5, 5],
               helper: 'clone',
+              serialize_params: function ($w, wgd) {
+                  return {
+                    id: $w.data().id,
+                    col: wgd.col,
+                    row: wgd.row,
+                    size_x: wgd.size_x,
+                    size_y: wgd.size_y,
+                  };
+                },
               resize: {
                 enabled: true,
                 max_size: [4, 4],
-                min_size: [1, 1]
+                min_size: [1, 1],
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize();
+                  positioning = JSON.stringify(positioning);
+                  $.ajax({
+                   type: "POST",
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                 });
+                }
+              },
+              draggable: {
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize();
+                  positioning = JSON.stringify(positioning);
+                  $.ajax({
+                   type: "POST",
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                 });
+                }
               }
             }).data('gridster');
 
