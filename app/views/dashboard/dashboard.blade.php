@@ -37,17 +37,21 @@
               widget_base_dimensions: [widget_width, widget_height],
               widget_margins: [5, 5],
               helper: 'clone',
+              serialize_params: function ($w, wgd) {
+                  return {
+                    id: $w.data().id,
+                    col: wgd.col,
+                    row: wgd.row,
+                    size_x: wgd.size_x,
+                    size_y: wgd.size_y,
+                  };
+                },
               resize: {
                 enabled: true,
                 max_size: [4, 4],
                 min_size: [1, 1],
                 stop: function(e, ui, $widget) {
                   positioning = gridster.serialize();
-
-                  for (var j = positioning.length - 1; j >= 0; j--) {
-                    $.extend(positioning[j], {widget_id:$widget[0].attributes[0].nodeValue});
-                  };
-
                   positioning = JSON.stringify(positioning);
                   $.ajax({
                    type: "POST",
@@ -58,12 +62,6 @@
               draggable: {
                 stop: function(e, ui, $widget) {
                   positioning = gridster.serialize();
-
-                  for (var j = positioning.length - 1; j >= 0; j--) {
-
-                    $.extend(positioning[j], {widget_id:$widget[0].attributes[0].nodeValue});
-                  };
-
                   positioning = JSON.stringify(positioning);
                   $.ajax({
                    type: "POST",
