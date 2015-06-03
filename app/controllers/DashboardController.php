@@ -121,7 +121,7 @@ class DashboardController extends BaseController
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
-                    "position" => $position,
+                    
             );
             $allMetrics[] = $newMetricArray;
         }
@@ -146,6 +146,7 @@ class DashboardController extends BaseController
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
                 'dailyBackgroundURL' => '/img/backgrounds/3.png',
+                "position" => $position,
             )
         );
     }
