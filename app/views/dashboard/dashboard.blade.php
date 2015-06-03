@@ -14,7 +14,7 @@
 
         @for ($i = 0; $i < count($allFunctions); $i++)
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+          @include('dashboard.widget', ['widget_data' => $allFunctions[$i],'position' => $position[$i]])
 
         @endfor
 
@@ -42,33 +42,25 @@
                 max_size: [4, 4],
                 min_size: [1, 1],
                 stop: function(e, ui, $widget) {
-                  positioning = gridster.serialize()
+                  positioning = gridster.serialize();
+                  console.log(positioning);
+                  positioning = JSON.stringify(positioning);
+                  console.log(positioning);
                   $.ajax({
                    type: "POST",
-                   url: "{{ URL::route('modifyAbfWidget') }}",
-                   data: {
-                       'data': JSON.stringify(positioning),
-                       'widget_id': {{ $allFunctions[$i]['widget_id'] }}
-                   },
-                   success: function() {
-                    console.log('we happy');
-                   }
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
                  });
                 }
               },
               draggable: {
                 stop: function(e, ui, $widget) {
-                  positioning = gridster.serialize()
+                  positioning = gridster.serialize();
+                  console.log(positioning);
+                  positioning = JSON.stringify(positioning);
+                  console.log(positioning);
                   $.ajax({
                    type: "POST",
-                   url: "{{ URL::route('modifyAbfWidget') }}",
-                   data: {
-                       'data': JSON.stringify(positioning),
-                       'widget_id': {{ $allFunctions[$i]['widget_id'] }}
-                   },
-                   success: function() {
-                    console.log('we happy');
-                   }
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
                  });
                 }
               }

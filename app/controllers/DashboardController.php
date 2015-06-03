@@ -69,7 +69,6 @@ class DashboardController extends BaseController
         foreach ($widgets as $widget) {
 
             $current_value = "";
-
             $dataArray = array();
 
             switch ($widget->widget_type) {
@@ -101,6 +100,18 @@ class DashboardController extends BaseController
                         $dataArray = array_add($dataArray, $dataObject->date, $current_value);
                     }
             }
+            $valami = json_decode(Auth::user()->dashboards()->first()->widgetPosition);
+            $position = array();
+            foreach ($valami as $widgetPosition) {
+                $position[] = [
+                    'x'         => $widgetPosition->size_x,
+                    'y'         => $widgetPosition->size_y,
+                    'col'       => $widgetPosition->col,
+                    'row'       => $widgetPosition->row,
+                ];
+            }
+
+
 
             $newMetricArray = array(
                     "widget_id" => $widget->id,
@@ -110,6 +121,7 @@ class DashboardController extends BaseController
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
+                    "position" => $position,
             );
             $allMetrics[] = $newMetricArray;
         }
