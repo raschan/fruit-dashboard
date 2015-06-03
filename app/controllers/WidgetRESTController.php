@@ -100,7 +100,7 @@ class WidgetRESTController extends BaseController {
 			Log::info('Updating widgets');
 			foreach ($newPositions as $newPosition) 
 			{
-				$widget = Widget::find($newPosition->widget_id);
+				$widget = Widget::find($newPosition->id);
 
 				if($widget)
 				{
