@@ -724,3 +724,8 @@ h1.digitTime{
   	font-size: 72px;
   	font-weight: lighter;
 }
+
+/* grid li dot */
+ul{
+	list-style-type: none;
+}
