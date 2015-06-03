@@ -76,6 +76,10 @@ class ConnectController extends BaseController
 
                 // google spreadsheet stuff
                 'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+
+                'isBackgroundOn' => Auth::user()->isBackgroundOn,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+
             )
         );
     }
@@ -88,8 +92,8 @@ class ConnectController extends BaseController
     */
     public function connectProvider($provider, $step = NULL)
     {
-        # we will need the user
 
+        # we will need the user
         $user = Auth::user();
 
 
@@ -129,7 +133,7 @@ class ConnectController extends BaseController
 
                     Queue::push('CalculateFirstTime', array('userID' => $user->id));
             	    
-			    	return Redirect::route('auth.dashboard')
+			    	return Redirect::route('dashboard.dashboard')
 			    		->with('success', ucfirst($provider).' connected.');
     			} else if (isset($response['error'])) {
 
@@ -279,11 +283,40 @@ class ConnectController extends BaseController
                     $widget->dashboard_id = $user->dashboards()->first()->id;
                     $widget->save();
 
-                    return Redirect::route('auth.dashboard')
+                    return Redirect::route('dashboard.dashboard')
                       ->with('success', 'Google Spreadsheet widget added.');
-                }                
+                }  
             }
         }
+
+        if ($provider == 'iframe') {
+
+            if (!$step){
+                return View::make('connect.iframeConnect');
+            }
+
+            if ($step == 2) {
+                
+                $url = Input::get('fullURL');
+
+                # save the widget
+                $widget_data = array(
+                    'iframeURL'   => $url
+                );
+                $widget_json = json_encode($widget_data);
+
+                $widget = new Widget;
+                $widget->widget_name = 'iframe widget';
+                $widget->widget_type = 'iframe';
+                $widget->widget_source = $widget_json;
+                $widget->dashboard_id = $user->dashboards()->first()->id;
+                $widget->save();
+
+                return Redirect::route('dashboard.dashboard')
+                  ->with('success', 'iframe widget added.');
+            }
+        }
+
 
   	return Redirect::route('auth.settings')
    		->with('error', 'Unknown provider.');
@@ -419,7 +452,7 @@ class ConnectController extends BaseController
             }
 
         // redirect to get stripe
-        return Redirect::route('auth.dashboard')
+        return Redirect::route('dashboard.dashboard')
                         ->with(array('success' => 'Stripe connected.'));
 
         }
@@ -493,7 +526,7 @@ class ConnectController extends BaseController
             IntercomHelper::connected($user,'braintree');
             Queue::push('CalculateBraintreeFirstTime', array('userID' => $user->id));
 
-            return Redirect::route('auth.dashboard')
+            return Redirect::route('dashboard.dashboard')
                 ->with('success','Braintree connected, importing data');
         }
     }
@@ -546,8 +579,97 @@ class ConnectController extends BaseController
         return Redirect::back()
                         ->with(array('success' => "Widget deleted."));
     }
-
-
 }
 
+   define('HTTP_URL_REPLACE', 1);              // Replace every part of the first URL when there's one of the second URL
+    define('HTTP_URL_JOIN_PATH', 2);            // Join relative paths
+    define('HTTP_URL_JOIN_QUERY', 4);           // Join query strings
+    define('HTTP_URL_STRIP_USER', 8);           // Strip any user authentication information
+    define('HTTP_URL_STRIP_PASS', 16);          // Strip any password authentication information
+    define('HTTP_URL_STRIP_AUTH', 32);          // Strip any authentication information
+    define('HTTP_URL_STRIP_PORT', 64);          // Strip explicit port numbers
+    define('HTTP_URL_STRIP_PATH', 128);         // Strip complete path
+    define('HTTP_URL_STRIP_QUERY', 256);        // Strip query string
+    define('HTTP_URL_STRIP_FRAGMENT', 512);     // Strip any fragments (#identifier)
+    define('HTTP_URL_STRIP_ALL', 1024);         // Strip anything but scheme and host
 
+function http_build_url($url, $parts=array(), $flags=HTTP_URL_REPLACE, &$new_url=false) {
+        $keys = array('user','pass','port','path','query','fragment');
+
+        // HTTP_URL_STRIP_ALL becomes all the HTTP_URL_STRIP_Xs
+        if ($flags & HTTP_URL_STRIP_ALL)
+        {
+            $flags |= HTTP_URL_STRIP_USER;
+            $flags |= HTTP_URL_STRIP_PASS;
+            $flags |= HTTP_URL_STRIP_PORT;
+            $flags |= HTTP_URL_STRIP_PATH;
+            $flags |= HTTP_URL_STRIP_QUERY;
+            $flags |= HTTP_URL_STRIP_FRAGMENT;
+        }
+        // HTTP_URL_STRIP_AUTH becomes HTTP_URL_STRIP_USER and HTTP_URL_STRIP_PASS
+        else if ($flags & HTTP_URL_STRIP_AUTH)
+        {
+            $flags |= HTTP_URL_STRIP_USER;
+            $flags |= HTTP_URL_STRIP_PASS;
+        }
+
+        // Parse the original URL
+        $parse_url = parse_url($url);
+
+        // Scheme and Host are always replaced
+        if (isset($parts['scheme']))
+            $parse_url['scheme'] = $parts['scheme'];
+        if (isset($parts['host']))
+            $parse_url['host'] = $parts['host'];
+
+        // (If applicable) Replace the original URL with it's new parts
+        if ($flags & HTTP_URL_REPLACE)
+        {
+            foreach ($keys as $key)
+            {
+                if (isset($parts[$key]))
+                    $parse_url[$key] = $parts[$key];
+            }
+        }
+        else
+        {
+            // Join the original URL path with the new path
+            if (isset($parts['path']) && ($flags & HTTP_URL_JOIN_PATH))
+            {
+                if (isset($parse_url['path']))
+                    $parse_url['path'] = rtrim(str_replace(basename($parse_url['path']), '', $parse_url['path']), '/') . '/' . ltrim($parts['path'], '/');
+                else
+                    $parse_url['path'] = $parts['path'];
+            }
+
+            // Join the original query string with the new query string
+            if (isset($parts['query']) && ($flags & HTTP_URL_JOIN_QUERY))
+            {
+                if (isset($parse_url['query']))
+                    $parse_url['query'] .= '&' . $parts['query'];
+                else
+                    $parse_url['query'] = $parts['query'];
+            }
+        }
+
+        // Strips all the applicable sections of the URL
+        // Note: Scheme and Host are never stripped
+        foreach ($keys as $key)
+        {
+            if ($flags & (int)constant('HTTP_URL_STRIP_' . strtoupper($key)))
+                unset($parse_url[$key]);
+        }
+
+
+        $new_url = $parse_url;
+
+        return 
+             ((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
+            .((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') .'@' : '')
+            .((isset($parse_url['host'])) ? $parse_url['host'] : '')
+            .((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
+            .((isset($parse_url['path'])) ? $parse_url['path'] : '')
+            .((isset($parse_url['query'])) ? '?' . $parse_url['query'] : '')
+            .((isset($parse_url['fragment'])) ? '#' . $parse_url['fragment'] : '')
+        ;
+    }

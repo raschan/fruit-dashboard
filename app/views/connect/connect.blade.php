@@ -6,250 +6,102 @@
 
   @section('pageContent')
     
-    <div id="content-wrapper">
-      @parent
+    <div id="content-wrapper" class="gridster">
 
-      <div class="col-md-10 col-md-offset-1">
-        <!-- Stripe connect -->
-        <div class="row">
-          <div class="stripe-form-wrapper bordered">
-            <div class="panel-body stripe-form">
-              <div class='col-sm-4'>
-                <h4>Connect Stripe</h4>
-              </div>
-              <div class="col-sm-2 col-sm-offset-1 text-center">
-                <span class="icon pf-big pf-stripe"></span>
-              </div> <!-- /. connect-icon -->
+      <ul>
 
-              <div class="col-sm-5 valign">
-                @if ($user->isStripeConnected())
-                  <!-- Modal box -->
-                  <div id="modal-stripe-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Warning</h4>
-                        </div>
-                        <div class="modal-body">
-                          Are you sure you want to disconnect Stripe from your account? <br>
-                          After disconnecting we will not receive any more data from Stripe.</div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Stripe disconnected"]);mixpanel.track("Disconnect",{"service":"stripe"});' href="{{ URL::route('auth.disconnect', 'stripe') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                      </div>
-                      </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                  </div>
-                  <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-stripe-disconnect">Disconnect</button>
-                @elseif($user->canConnectMore())
-                  <a href="{{$stripeButtonUrl}}" class="stripe-connect sm-pull-right" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");'><span>Connect with Stripe</span></a>
-                @else
-                  <a href="/plans" class="stripe-connect sm-pull-right"><span>Connect with Stripe</span></a>
-                  
-                  <!--
-                  <div style='display:none;'>
-                    {{ Form::open(array(
-                      'route'=>'connect.connect',
-                      'method' => 'post',
-                      'id' => 'form-settings',
-                      'class' => 'form-horizontal',
-                      'role' => 'form' )) }}
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+        @if ($user->canConnectMore())
+          <a href="{{ $stripeButtonUrl }}">
+        @else
+          <a href="/plans">
+        @endif
+            <span class="icon pf-big pf-stripe"></span>
+            <p>Stripe payments</p>
+          </a>
+        </li>
 
-                        <div class="form-group">
-                          {{ Form::label('id_stripe', 'Your Stripe secret key:', array(
-                            'class' => 'col-sm-3 control-label text-left-always')) }}
-                          <div class="col-sm-7">      
-                            {{ Form::text('stripe', '', array(
-                              'id' => 'id_stripe',
-                              'class' => 'form-control',
-                              'placeholder' => 'sk_live_xxxxxxxxxxxxxxxxxxxxxxxx')) }}
-                          </div>
-                          <div class="col-sm-2 text-center">
-                          {{ Form::submit('Connect', array(
-                              'id' => 'id_submit',
-                              'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                              'onClick'=> '_gaq.push(["_trackEvent", "Connect", "Connecting Stripe"]);mixpanel.track("Stripe connect");')) }}
-                          </div>
-                        </div>
-                    {{ Form::close() }}
-                    <p class="col-sm-7 col-sm-offset-3 text-default">Go to <a href="http://www.stripe.com">www.stripe.com</a>, Your account, Account settings, API keys and copy your secret key</p>
-                  </div>
-                  -->
-                @endif
-              </div> <!-- /. col-sm-5 -->
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+          <a href="#" data-toggle='modal' data-target='#modal-braintree-connect'>
+            <span class="icon pf-big pf-braintree"></span>
+            <p>Braintree payments</p>
+          </a>
+        </li>
 
-            </div> <!-- /. panel-body stripe-from -->
-          </div> <!-- /. col-sm-6 stripe-form-wrapper -->
-        </div> <!-- /. row -->
-        <!-- / Stripe connect -->
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+        @if ($user->isGoogleSpreadsheetConnected())
+          <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
+        @elseif($user->canConnectMore())
+          <a href="{{ $googleSpreadsheetButtonUrl }}" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'>
+        @else
+          <a href="/plans">
+        @endif
+            <span class="icon fa fa-google fa-3x"></span>
+            <p>Google Spreadsheet</p>
+          </a>
+        </li>
 
-        <!-- Braintree connect -->
-        <div class="row">
-          <div class="braintree-form-wrapper bordered">
-            <div class="panel-body braintree-form">
-              <div class='col-sm-4'>
-                <h4>Connect Braintree</h4>
-              </div>
-              <div class="col-sm-2 col-sm-offset-1 text-center">
-                <span class="icon pf-big pf-braintree"></span>
-              </div> <!-- /. connect-icon -->
-              <div class="col-sm-5 valign">
-                <!-- Braintree details modal box -->
-                <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
-                  <div class='modal-dialog modal-lg'>
-                    <div>
-                      <div class='modal-header'>
-                        <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
-                        <h4 class='modal-title'>Connect Braintree</h4>
-                      </div>
-                      <div class='modal-content' style='background:white;'>
-                        @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- /Braintree details modal box -->
-                @if ($user->isBraintreeConnected())
-                  <!-- Modal box -->
-                  <div id="modal-bt-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h4 class="modal-title">Warning</h4>
-                        </div>
-                        <div class="modal-body">
-                          Are you sure you want to disconnect Braintree from your account? <br>
-                          After disconnecting we will not receive any more data from Braintree.</div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Braintree disconnected"]);mixpanel.track("Disconnect",{"service":"braintree"});' href="{{ URL::route('auth.disconnect', 'braintree') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                      </div>
-                      </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                  </div>
-                  <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-bt-disconnect">Disconnect</button>
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-braintree-connect">Details</button>
-                @elseif($user->canConnectMore())
-                  @if($user->btWebhookConnected)
-                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                      Import your data
-                    </button>
-                  @elseif($user->isBraintreeCredentialsValid())
-                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                      Add webhook to finish connecting
-                    </button>
-                  @else
-                    <button class='btn-link sm-pull-right' data-toggle='modal' data-target='#modal-braintree-connect'>
-                      Connect with Braintree
-                    </button>
-                  @endif
-                @else {{-- can't connect more --}}
-                  <a href="/plans" class='btn-link sm-pull-right'>Connect with Braintree</a>
-                @endif
-              </div> <!-- /. col-sm-5 -->
 
-            </div> <!-- /. panel-body braintree-from -->
-          </div> <!-- /. col-sm-6 braintree-form-wrapper -->
-        </div> <!-- /. row -->
-        <!-- / Braintree connect -->
-       
-        <!-- Google Spreadsheet connect -->
-        <div class="row">
-          <div class="googlespreadsheet-form-wrapper bordered">
-            <div class="panel-body googlespreadsheet-form">
-              <div class='col-sm-4'>
-                <h4>Connect Google Spreadsheets</h4>
-              </div>
-              <div class="col-sm-2 col-sm-offset-1 text-center">
-                <span class="icon fa fa-google fa-3x"></span>
-              </div> <!-- /. connect-icon -->
-              <div class="col-sm-5">
-                @if ($user->isGoogleSpreadsheetConnected())
-                  <!-- Modal box -->
-                  <div id="modal-google-ss-disconnect" class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h4 class="modal-title">Warning</h4>
-                        </div>
-                        <div class="modal-body">
-                          Are you sure you want to disconnect Google Spreadsheet from your account? <br>
-                          After disconnecting we will not receive any more data from Google Spreadsheet.
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <a onClick= '_gaq.push(["_trackEvent", "Disconnect", "Google Spreadsheet disconnected"]);mixpanel.track("Disconnect",{"service":"google spreadsheet"});' href="{{ URL::route('auth.disconnect', 'googlespreadsheet') }}"><button type="button" class="btn btn-danger">Disconnect</button></a>
-                        </div>
-                      </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                  </div>
-                  <!-- /Modal box -->
-                  <button class="btn-link sm-pull-right" data-toggle="modal" data-target="#modal-google-ss-disconnect">Disconnect</button>
-                  <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}" class="sm-pull-right"><span>Add new widget</span></a>
-                @elseif($user->canConnectMore())
-                  <a href="{{ $googleSpreadsheetButtonUrl }}" class="sm-pull-right valign" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'><span>Connect Google Spreadsheets</span></a>
-                @else
-                  <a href="/plans" class="sm-pull-right valign"><span>Connect Google Spreadsheets</span></a>
-                @endif
-              </div> <!-- /. col-sm-5 -->
-            </div> <!-- /. panel-body googlespreadsheet-from -->
-          </div> <!-- /. col-sm-6 googlespreadsheet-form-wrapper -->
-        </div> <!-- /. row -->
-        <!-- / Google Spreadsheet connect -->
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+        @if ($user->canConnectMore())
+          <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
+        @else
+          <a href="/plans">
+        @endif
+            <span class="icon fa fa-file-text-o fa-3x"></span>
+            <p>iframe</p>
+          </a>
+        </li>
 
-        <!-- Suggestion -->
-        <div class="row">
-          <div class="suggestion-form-wrapper bordered">
-            <div class="panel-body suggestion-form">
-              <h4>Using a different payment processor?</h4>
-              <p>Please tell us and we'll get in touch with you.</p>
+      </ul>
 
-              <div class="col-sm-10 col-sm-offset-2">
-              {{ Form::open(array(
-                'route'=>'auth.suggest',
-                'method' => 'post',
-                'id' => 'form-settings',
-                'class' => 'form-horizontal',
-                'role' => 'form' )) }}
+      <!-- Braintree details modal box -->
+      <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
+        <div class='modal-dialog modal-lg'>
+          <div>
+            <div class='modal-header'>
+              <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
+              <h4 class='modal-title'>Connect Braintree</h4>
+            </div>
+            <div class='modal-content' style='background:white;'>
+              @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Braintree details modal box -->
 
-                  <div class="form-group">
-
-                    {{ Form::label('id_suggestion', 'Your payment processor:', array(
-                      'class' => 'col-sm-3 control-label text-left-always')) }}
-                    <div class="col-sm-7">
-                      {{ Form::text('suggestion', '', array(
-                        'id' => 'id_suggestion',
-                        'class' => 'form-control',
-                        'placeholder' => 'e.g: Paymill')) }}
-                    </div>
-
-                    <div class="col-sm-2 text-center">
-                    {{ Form::submit('Tell us', array(
-                        'id' => 'id_submit',
-                        'class' => 'btn btn-primary btn-lg btn-flat sm-pull-right',
-                        'onClick'=> '_gaq.push(["_trackEvent", "Suggest", "Suggestion sent"]);mixpanel.track("Suggest");')) }}
-                    </div>
-                  </div> <!-- / .form-group -->
-
-              {{ Form::close() }}
-
-              </div> <!-- /. col-sm-10 -->
-            </div> <!-- /. panel-body suggestion-from -->
-          </div> <!-- /. col-sm-6 suggestion-form-wrapper -->
-        </div> <!-- /. row -->
-        <!-- / Suggestion -->
-
-      </div> <!-- /. col-md-10 col-md-offset-1 -->
     </div> <!-- / #content-wrapper -->
 
   @stop
 
   @section('pageScripts')
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+          var gridster;
+          var widget_width = $(window).width()/6-15;
+          var widget_height = $(window).height()/6-20;
+
+          $(function(){
+
+            gridster = $(".gridster ul").gridster({
+              widget_base_dimensions: [widget_width, widget_height],
+              widget_margins: [5, 5],
+              helper: 'clone',
+              resize: {
+                enabled: true,
+                max_size: [4, 4],
+                min_size: [1, 1]
+              }
+            }).data('gridster');
+
+          });
+      });
+    </script>
+
+
+    <!-- modal stuff for braintree start -->  
 
     @if (Session::has('modal'))
       <script type="text/javascript">
@@ -257,7 +109,6 @@
       </script>
     @endif
 
-    {{-- scripts for modal wizard--}}
     <script type="text/javascript">
       init.push(function () {
         $('.ui-wizard').pixelWizard({
@@ -267,8 +118,6 @@
           onFinish: function () {
             // Disable changing step. To enable changing step just call this.unfreeze()
             this.freeze();
-            console.log('Wizard is freezed');
-            console.log('Finished!');
           }
         });
 
@@ -285,6 +134,7 @@
         });
       });
     </script>
-    {{-- /scripts for modal wizard--}}
-    
+
+    <!-- modal stuff for braintree end -->
+  
   @stop

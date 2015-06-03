@@ -5,19 +5,11 @@
   @stop
 
   @section('pageStylesheet')
-    <script src="{{{ asset('/used_assets/handsontable/dist/handsontable.full.js') }}}"></script>
-    <link rel="stylesheet" href="{{{ asset('/used_assets/handsontable//dist/handsontable.full.css') }}}" />  
   @stop
 
   @section('pageContent')
-    
+
     <div id="content-wrapper">
-      <div class="page-header text-center">
-        <h1><i class="fa fa-home page-header-icon"></i>&nbsp;&nbsp;Dashboard</h1>
-        <a href="{{ URL::route('auth.settings') }}">
-          <button id="addGoogleSpreadsheetWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
-        </a>
-      </div> <!-- / .page-header -->
       @parent
 
       <!-- STATISTICS BOX -->
@@ -27,15 +19,17 @@
             <div class="row">
             <!-- {{ $allFunctions[$i]['statName'] }} -->
             @endif
+
+            @if($allFunctions[$i]['widget_type']=='google-spreadsheet-text-cell')
               <div class="col-md-4 chart-box">
                 <div class="chart-wrapper bordered">
-
-                  @if($allFunctions[$i]['widget_type']=='google-spreadsheet-text-cell')
                     <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
                     <br/>
                     <h2 class="text-center">{{ $allFunctions[$i]['currentValue'] }}</h2>
                     <br/>
-                  @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-text-column')
+            @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-text-column')
+              <div class="col-md-4 chart-box">
+                <div class="chart-wrapper bordered">
                     <h4 class="text-center">{{ $allFunctions[$i]['statName'] }}</h4>
                     <br/>
                     <ul>
@@ -43,30 +37,15 @@
                       <li>{{ $value }}</li>
                     @endforeach
                     </ul>
-                  @elseif($allFunctions[$i]['widget_type']=='google-spreadsheet-abf-munkaido')
-                    <div id="example" style="width:700px;"> </div>
-                    <script>
-                    var data = [
-                      ['2015.05.28.', '11:15', '11:30', '0:15', 'marketing', 'IT oktatás', 'cégvezetők ping v2', ''],
-                      ['2015.05.28.', '11:30', '11:45', '0:15', 'meta', 'ABF', 'naprendez', ''],
-                    ];
-                    var container = document.getElementById("example");
-                    var hot = new Handsontable(container, {
-                      data: data,
-                      height: 200,
-                      colHeaders: ['date', 'start', 'end', 'length', 'role', 'project', 'comment', 'h13'], 
-                      rowHeaders: false,
-                      stretchH: 'all',
-                      minSpareRows: 1,
-                      cells: function (row, col, prop) {
-                        var cellProperties = {};
-                        cellProperties.className = 'htMiddle htCenter';
-                        return cellProperties;
-                      }        
-                    });
-                    </script>
-                  @else
-
+            @elseif($allFunctions[$i]['widget_type']=='iframe')
+              <div>
+                <div>
+                  <div style="width:700px;">
+                    <iframe width="100%" height="100%" frameborder="0" src="{{ json_decode($allFunctions[$i]["currentValue"], true)['iframeURL'] }}"></iframe>
+                  </div>
+            @else
+              <div class="col-md-4 chart-box">
+                <div class="chart-wrapper bordered">
                     <canvas id="{{ $allFunctions[$i]['id'] }}"></canvas>
                     <div class="chart-text-left"> 
                       @if($allFunctions[$i]['currentValue'])
@@ -486,6 +465,7 @@
     var data, ctx;
 
     @for ($i = 0; $i < count($allFunctions); $i++)
+
       @if ($allFunctions[$i]['widget_type']!='google-spreadsheet-abf-munkaido')
 
       /* {{ $allFunctions[$i]['statName'] }} */
@@ -494,13 +474,20 @@
         labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
         datasets: [
             {
-                label: {{ $allFunctions[$i]['statName'] }},
+                label: "{{ $allFunctions[$i]['statName'] }}",
                 fillColor: "rgba(151,187,205,0.4)",
                 strokeColor: "rgba(151,187,205,0.6)",
-                data: [@foreach ($allFunctions[$i]['history'] as $date => $value)
-                  @if($value == null) 0,
-                  @else{{ $value }},
-                  @endif 
+                data: [
+                  @foreach ($allFunctions[$i]['history'] as $date => $value)
+                    @if (is_numeric($value))
+                      @if($value == null)
+                        0,
+                      @else
+                        {{ $value }},
+                      @endif 
+                    @else
+                        '{{ $value }}',
+                    @endif
                   @endforeach]
             }
         ]
@@ -512,10 +499,9 @@
       /* / {{ $allFunctions[$i]['statName'] }} */
 
       @endif
-    @endfor
 
+    @endfor
        
     </script>
 
   @stop
-

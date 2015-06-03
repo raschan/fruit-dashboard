@@ -2,8 +2,8 @@
 
 @section('body')
 
-	<body class="theme-asphalt main-menu-animated main-navbar-fixed main-menu-fixed no-main-menu">
-  		<div id="main-wrapper">
+	<body @if(isset($isBackgroundOn)) @if($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif @endif class='theme-asphalt no-main-menu'>
+  		<div id='main-wrapper'>
 
 			@section('navbar')
 				@include('meta.navbar')
@@ -15,24 +15,15 @@
 			
 			@section('pageContent')
 				@if(Auth::user())
-					<!-- Notice on connect -->
 					@if (Session::get('connected') || Auth::user()->ready == 'connecting')
+					<!-- Notice on connect -->
 						<div id="pa-page-alerts-box">
 							<div class="alert alert-page pa_page_alerts_dark alert-info alert-dark" data-animate="true">
 								<button type="button" class="close">×</button><strong>We're now calculating your numbers, it'll be a few minutes. We'll email you when we finished.</strong>
 							</div>
 						</div>
-					@endif
 					<!-- / Notice on connect -->
-					<!-- Notice if trial is ending -->
-					@if (Auth::user()->trialWillEndInDays(4) && !Auth::user()->isTrialEnded())
-						<div id='pa-page-alerts-box'>
-              <div class='alert alert-page alert-warning alert-dark' data-animate='true'>
-                <button type='button' class='close'>x</button><strong>Your trial period will end in {{Auth::user()->daysRemaining()}} days. <a href="{{URL::route('payment.plan')}}" class='demo-link'>Click here to subscribe now</a></strong>
-              </div>      
-            </div>
 					@endif
-					<!-- /Notice if trial is ending -->
 				@endif
 			@show
 

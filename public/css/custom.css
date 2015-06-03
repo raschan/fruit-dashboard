@@ -6,6 +6,26 @@
 .theme-signout #main-navbar {
 	display: none;
 }
+/*
+html {
+	height: 100%;
+}
+*/
+html, body {
+	height: 100%;
+}
+
+.dashboard-widget {
+  list-style: none;
+}
+
+
+body { 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
 
 @media (max-width: 767px) {
 	.theme-signout .container {
@@ -298,6 +318,10 @@
 }
 
 .account-form-wrapper {
+	padding-bottom: 15px;
+}
+
+.appearence-form-wrapper {
 	padding-bottom: 15px;
 }
 
@@ -620,7 +644,6 @@
   -moz-osx-font-smoothing:grayscale;
 }
 
-<<<<<<< HEAD
 .right-space {
   margin-right: 15px;
 }
@@ -641,7 +664,7 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-=======
+
 #settingsIcon{
 	position: absolute;
 	top: 25px;
@@ -650,12 +673,59 @@
 }
 
 i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog{
-	text-shadow: 1px 1px 1px rgba(255,255,0,0.5);
+	text-shadow: 1px 1px 3px rgba(20, 20, 20, 1);
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #ccc;
 }
 
 i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
-	color:#666;
-	text-shadow: 1px 1px 1px rgba(255,255,255,1);
+	color: #333;
 	cursor: pointer;
+	text-shadow: 1px 1px 3px rgba(20, 20, 20, 1);
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #ccc;
 }
->>>>>>> master
+
+.widget-close {
+	margin-top:-16px;
+	margin-right:-15px;
+	opacity:0;
+}
+
+.widget-close:hover {
+	opacity:1;
+}
+
+<<<<<<< HEAD
+/* own class */
+.textShadow{
+	text-shadow: 1px 1px 1px rgba(20, 20, 20, 1);
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #aaa;
+}
+
+/* quote */
+#quote{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: #fff;
+	line-height: 1.25em;
+}
+
+/* digital clock */
+h1.digitTime{
+	padding: 0;
+  	margin: 0;
+	text-align: center;
+  	line-height: 1;
+  	color: #fff;
+  	font-size: 72px;
+  	font-weight: lighter;
+}
+
+.white-background {
+	background-color: #ffffff;
+}

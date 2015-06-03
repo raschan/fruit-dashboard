@@ -60,15 +60,14 @@ Route::filter('auth.basic', function()
     return Auth::basic();
 });
 
-Route::filter('api_key', function()
-{
-   /* if (!Auth::user()->isConnected())
-    {
-        // no valid key
-        return Redirect::route('connect.connect')
-            ->with(Session::all())
-            ->with('error','Connect a payment provider');
-    }*/
+Route::filter('api_key', function() { 
+    // if (!Auth::user()->isConnected())
+    // {
+    //     // no valid key
+    //     return Redirect::route('connect.connect')
+    //         ->with(Session::all())
+    //         ->with('error','Connect a payment provider');
+    // }
 });
 
 Route::filter('trial_ended', function()

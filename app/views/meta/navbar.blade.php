@@ -2,12 +2,12 @@
 	<i class="dropdown-icon fa fa-2x fa-cog" id="rightDropDown" data-toggle="dropdown" aria-expanded="true"></i>
 	<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="rightDropDown">
 		<li role="presentation">
-			<a href="#">
+			<a href="{{ URL::route('connect.connect') }}">
 				<i class="dropdown-icon fa fa-plus-circle"></i>&nbsp;&nbsp;Add New Widget
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="#">
+			<a href="https://fruitdashboard.uservoice.com/">
 				<i class="dropdown-icon fa fa-bullhorn"></i>&nbsp;&nbsp;Feedback
 			</a>
 		<li role="presentation">

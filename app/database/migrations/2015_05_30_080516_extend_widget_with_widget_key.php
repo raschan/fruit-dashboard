@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBtWebhookColumnToUser extends Migration {
+class ExtendWidgetWithWidgetKey extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,10 @@ class AddBtWebhookColumnToUser extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users', function($table)
+		Schema::table('data', function($table)
         {
              // adding title
-            $table->boolean('btWebhookConnected')->nullable();
-            $table->string('btWebhookId',12);
+            $table->integer('data_key')->nullable();
         });
 	}
 
@@ -27,10 +26,10 @@ class AddBtWebhookColumnToUser extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function($table)
+		Schema::table('data', function($table)
         {
             // dropping column
-            $table->dropColumn('btWebhookConnected');
+            $table->dropColumn('data_key');
         });
 	}
 
