@@ -61,6 +61,7 @@ Route::filter('auth.basic', function()
 });
 
 Route::filter('api_key', function()
+{
     if (!Auth::user()->isConnected())
     {
         // no valid key
@@ -68,7 +69,6 @@ Route::filter('api_key', function()
             ->with(Session::all())
             ->with('error','Connect a payment provider');
     }
-    */
 });
 
 Route::filter('trial_ended', function()
