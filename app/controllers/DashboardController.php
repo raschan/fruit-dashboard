@@ -69,7 +69,6 @@ class DashboardController extends BaseController
         foreach ($widgets as $widget) {
 
             $current_value = "";
-
             $dataArray = array();
 
             switch ($widget->widget_type) {
@@ -91,6 +90,28 @@ class DashboardController extends BaseController
                     $current_value = $widget->widget_source;
                     break;
 
+                case 'google-spreadsheet-text-column-random';
+                    $dataObject = Data::where('widget_id', $widget->id)
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->first();
+                    $array = json_decode($dataObject->data_object, true);
+                    $current_value = array_values($array)[0];
+                    break;
+
+                case 'quote';
+                    $widgetObject = json_decode($widget->widget_source);
+
+                    $quoteObject = Quote::where('type', '=', $widgetObject->type)
+                                            // ->where('language', '=', $widgetObject->language)
+                                            ->where('language', '=', 'english')
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->first();
+                    $current_value = json_encode([
+                            'quote' => $quoteObject->quote,
+                            'author' => $quoteObject->author
+                    ]);
+                    break;
+
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
                                             ->orderBy('date','asc')
@@ -101,57 +122,31 @@ class DashboardController extends BaseController
                         $dataArray = array_add($dataArray, $dataObject->date, $current_value);
                     }
             }
+            $widgetPosition = json_decode($widget->position);
+            
+            $position = [
+                'x'     => $widgetPosition->size_x,
+                'y'     => $widgetPosition->size_y,
+                'col'   => $widgetPosition->col,
+                'row'   => $widgetPosition->row,
+            ];
 
             $newMetricArray = array(
                     "widget_id" => $widget->id,
                     "widget_type" => $widget->widget_type,
+                    "widget_position" => $position,
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
+                    "position"  => $position,
             );
             $allMetrics[] = $newMetricArray;
         }
 
         # prepare stuff for google spreadsheet metrics end
         #####################################################
-
-
-
-
-        #####################################################        
-        # prepare stuff for daily background start
-
-        # get the number of day in the year
-        $numberOfDayInYear = date('z');
-
-        # get the number of background images & collect them in an array
-        $i = 0;
-        $fileListArray = array();
-        $dir = 'public/img/backgrounds/';
-
-        if ($handle = opendir($dir)) {
-            while (($file = readdir($handle)) !== false){
-                if (!in_array($file, array('.', '..')) && !is_dir($dir.$file) && !(substr($file, 0, 1 ) === ".")) {
-                    $fileListArray = array_add($fileListArray, $i, $file);                    
-                    $i++;
-                }
-            }
-        }
-        $numberOfBackgroundFiles = $i;
-
-        # calculate which image will we use
-        $imageNumber = $numberOfDayInYear % $numberOfBackgroundFiles;
-
-        # create the url that will be passed to the view
-        $imageName = $fileListArray[$imageNumber];
-        $dailyBackgroundURL = '/img/backgrounds/'.$imageName;
-
-        # prepare stuff for daily background end
-        #####################################################
-
-
 
 
         return View::make(
@@ -161,7 +156,7 @@ class DashboardController extends BaseController
                 'events' => Calculator::formatEvents(Auth::user()),
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
-                'dailyBackgroundURL' => $dailyBackgroundURL,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
             )
         );
     }

@@ -25,6 +25,7 @@
 
   @section('pageScripts')
     <script type="text/javascript">
+<<<<<<< HEAD
      $(document).ready(function() {
          var gridster;
          var positioning = [];
@@ -105,5 +106,56 @@
       console.log(y);
   });
 </script>
+=======
+      $(document).ready(function() {
+          var gridster;
+          var positioning = [];
+          var widget_width = $(window).width()/6-15;
+          var widget_height = $(window).height()/6-20;
+
+          $(function(){
+
+            gridster = $(".gridster ul").gridster({
+              widget_base_dimensions: [widget_width, widget_height],
+              widget_margins: [5, 5],
+              helper: 'clone',
+              serialize_params: function ($w, wgd) {
+                  return {
+                    id: $w.data().id,
+                    col: wgd.col,
+                    row: wgd.row,
+                    size_x: wgd.size_x,
+                    size_y: wgd.size_y,
+                  };
+                },
+              resize: {
+                enabled: true,
+                max_size: [4, 4],
+                min_size: [1, 1],
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize();
+                  positioning = JSON.stringify(positioning);
+                  $.ajax({
+                   type: "POST",
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                 });
+                }
+              },
+              draggable: {
+                stop: function(e, ui, $widget) {
+                  positioning = gridster.serialize();
+                  positioning = JSON.stringify(positioning);
+                  $.ajax({
+                   type: "POST",
+                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                 });
+                }
+              }
+            }).data('gridster');
+
+          });
+      });
+    </script>
+>>>>>>> 2060b21ac370031221fb295ecacfdacc3992f38e
   @stop
 

@@ -222,6 +222,11 @@ Route::post('/api/events/braintree/{webhookId}', array(
     'uses'      => 'WebhookController@braintreeEvents',
 ));
 
+
+// AJAX endpoints
+Route::any('/api/widgets/save/{userId}/{position}', array(
+    'uses'  => 'WidgetRESTController@saveWidgetPosition',
+));
 /*
 |--------------------------------------------------------------------------
 | demo Routes

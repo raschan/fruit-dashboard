@@ -73,10 +73,11 @@
           )
           ) }}
 
-          <input type="radio" name="type" value="google-spreadsheet-line-cell"/> Graph widget, refresh data from a single cell (the data has to be at cell A2)<br/>
-          <input type="radio" name="type" value="google-spreadsheet-line-column"/> Graph widget, refresh data from a column (dates have to be in column A, values have to be in column B)<br/>
-          <input type="radio" name="type" value="google-spreadsheet-text-cell"/> Text widget, refresh data from a single cell (the data has to be at cell A2)<br/>
-          <input type="radio" name="type" value="google-spreadsheet-text-column"/> Text widget, refresh data from a column (the data has to be at column A)<br/>
+          <input type="radio" name="type" value="google-spreadsheet-text-cell"/> Text widget, gets data from cell A2<br/>
+          <input type="radio" name="type" value="google-spreadsheet-text-column-random"/> Text widget, randomly displays a cell from column A<br/>
+          <input type="radio" name="type" value="google-spreadsheet-text-column"/> List widget, gets data from column A<br/>
+          <input type="radio" name="type" value="google-spreadsheet-line-cell"/> Graph widget, gets data from cell A2<br/>
+          <input type="radio" name="type" value="google-spreadsheet-line-column"/> Graph widget, gets dates from column A, values from column B<br/>
 
           {{ Form::submit('Save', array(
           'class' => 'btn btn-flat btn-info btn-sm pull-right'

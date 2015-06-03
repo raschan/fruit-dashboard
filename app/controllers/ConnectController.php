@@ -76,6 +76,10 @@ class ConnectController extends BaseController
 
                 // google spreadsheet stuff
                 'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+
+                'isBackgroundOn' => Auth::user()->isBackgroundOn,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+
             )
         );
     }
@@ -313,8 +317,42 @@ class ConnectController extends BaseController
             }
         }
 
+        if ($provider == 'quote') {
 
-  	return Redirect::route('auth.settings')
+            if (!$step){
+                return View::make('connect.quoteConnect');
+            }
+
+            if ($step == 2) {
+                
+                $type = Input::get('type');
+                $refresh = Input::get('refresh');
+                // $language = Input::get('language');                
+                $language = 'english';
+
+                # save the widget
+                $widget_data = array(
+                    'type'      =>  $type,
+                    'refresh'   =>  $refresh,
+                    'language'   =>  $language
+                );
+                $widget_json = json_encode($widget_data);
+
+                $widget = new Widget;
+                $widget->widget_name = 'quote widget';
+                $widget->widget_type = 'quote';
+                $widget->widget_source = $widget_json;
+                $widget->dashboard_id = $user->dashboards()->first()->id;
+                $widget->save();
+
+                return Redirect::route('dashboard.dashboard')
+                  ->with('success', 'Quote widget added.');
+            }
+        }
+
+    Log::info($provider);
+
+  	return Redirect::route('connect.connect')
    		->with('error', 'Unknown provider.');
 
     }
