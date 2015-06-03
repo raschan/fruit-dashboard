@@ -350,6 +350,31 @@ class ConnectController extends BaseController
             }
         }
 
+        if ($provider == 'note')
+        {
+            // save the widget
+            $widgetData = array(
+            );
+
+            $widgetJson = json_encode($widgetData);
+            $widget = new Widget;
+            $widget->widget_name = 'note widget';
+            $widget->widget_type = 'note';
+            $widget->widget_source = $widgetJson;
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // save an empty data line
+            $text = new Data;
+            $text->widget_id = $widget->id;
+            $text->data_object = 'Hello World';
+            $text->date = Carbon::now()->toDateString();
+            $text->save();
+
+            return Redirect::route('dashboard.dashboard')
+              ->with('success', 'Note widget added.');
+        }
+
     Log::info($provider);
 
   	return Redirect::route('connect.connect')
