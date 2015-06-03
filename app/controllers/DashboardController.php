@@ -100,28 +100,24 @@ class DashboardController extends BaseController
                         $dataArray = array_add($dataArray, $dataObject->date, $current_value);
                     }
             }
-            $valami = json_decode(Auth::user()->dashboards()->first()->widgetPosition);
-            $position = array();
-            foreach ($valami as $widgetPosition) {
-                $position[] = [
-                    'x'         => $widgetPosition->size_x,
-                    'y'         => $widgetPosition->size_y,
-                    'col'       => $widgetPosition->col,
-                    'row'       => $widgetPosition->row,
-                ];
-            }
-
-
+            $widgetPosition = json_decode($widget->position);
+            
+            $position = [
+                'x'     => $widgetPosition->size_x,
+                'y'     => $widgetPosition->size_y,
+                'col'   => $widgetPosition->col,
+                'row'   => $widgetPosition->row,
+            ];
 
             $newMetricArray = array(
                     "widget_id" => $widget->id,
                     "widget_type" => $widget->widget_type,
+                    "widget_position" => $position,
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
-                    "position" => $position,
             );
             $allMetrics[] = $newMetricArray;
         }
@@ -145,7 +141,7 @@ class DashboardController extends BaseController
                 'events' => Calculator::formatEvents(Auth::user()),
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
-                'dailyBackgroundURL' => '/img/backgrounds/3.png',
+                'dailyBackgroundURL' => '/img/backgrounds/3.png'
             )
         );
     }
