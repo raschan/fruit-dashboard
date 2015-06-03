@@ -118,6 +118,7 @@ class DashboardController extends BaseController
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
+                    "position"  => $position,
             );
             $allMetrics[] = $newMetricArray;
         }

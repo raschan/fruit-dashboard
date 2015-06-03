@@ -14,7 +14,7 @@
 
         @for ($i = 0; $i < count($allFunctions); $i++)
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i],'position' => $position[$i]])
+          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
         @endfor
 
@@ -45,11 +45,7 @@
                   positioning = gridster.serialize();
 
                   for (var j = positioning.length - 1; j >= 0; j--) {
-
-                    var widgetIdObject = {
-                      widget_id : @for ($i = 0; $i < count($allFunctions); $i++) {{ $allFunctions[$i]['widget_id'] }} @endfor
-                    };
-                    $.extend(positioning[j], widgetIdObject);
+                    $.extend(positioning[j], {widget_id:$widget[0].attributes[0].nodeValue});
                   };
 
                   positioning = JSON.stringify(positioning);
@@ -65,10 +61,7 @@
 
                   for (var j = positioning.length - 1; j >= 0; j--) {
 
-                    var widgetIdObject = {
-                      widget_id : @for ($i = 0; $i < count($allFunctions); $i++) {{ $allFunctions[$i]['widget_id'] }} @endfor
-                    };
-                    $.extend(positioning[j], widgetIdObject);
+                    $.extend(positioning[j], {widget_id:$widget[0].attributes[0].nodeValue});
                   };
 
                   positioning = JSON.stringify(positioning);
