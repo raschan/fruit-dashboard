@@ -129,7 +129,7 @@ class DashboardController extends BaseController
         # get the number of background images & collect them in an array
         $i = 0;
         $fileListArray = array();
-        $dir = 'public/img/backgrounds/';
+        $dir = public_path().'/img/backgrounds/';
 
         if ($handle = opendir($dir)) {
             while (($file = readdir($handle)) !== false){
