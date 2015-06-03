@@ -69,7 +69,6 @@ class DashboardController extends BaseController
         foreach ($widgets as $widget) {
 
             $current_value = "";
-
             $dataArray = array();
 
             switch ($widget->widget_type) {
@@ -109,15 +108,25 @@ class DashboardController extends BaseController
                         $dataArray = array_add($dataArray, $dataObject->date, $current_value);
                     }
             }
+            $widgetPosition = json_decode($widget->position);
+            
+            $position = [
+                'x'     => $widgetPosition->size_x,
+                'y'     => $widgetPosition->size_y,
+                'col'   => $widgetPosition->col,
+                'row'   => $widgetPosition->row,
+            ];
 
             $newMetricArray = array(
                     "widget_id" => $widget->id,
                     "widget_type" => $widget->widget_type,
+                    "widget_position" => $position,
                     "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
                     "positiveIsGood" => "true",
                     "history" => $dataArray,
                     "currentValue" => $current_value,
                     "oneMonthChange" => "",
+                    "position"  => $position,
             );
             $allMetrics[] = $newMetricArray;
         }
