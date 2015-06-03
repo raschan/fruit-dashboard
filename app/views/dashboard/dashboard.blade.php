@@ -43,9 +43,16 @@
                 min_size: [1, 1],
                 stop: function(e, ui, $widget) {
                   positioning = gridster.serialize();
-                  console.log(positioning);
+
+                  for (var j = positioning.length - 1; j >= 0; j--) {
+
+                    var widgetIdObject = {
+                      widget_id : @for ($i = 0; $i < count($allFunctions); $i++) {{ $allFunctions[$i]['widget_id'] }} @endfor
+                    };
+                    $.extend(positioning[j], widgetIdObject);
+                  };
+
                   positioning = JSON.stringify(positioning);
-                  console.log(positioning);
                   $.ajax({
                    type: "POST",
                    url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
@@ -55,9 +62,16 @@
               draggable: {
                 stop: function(e, ui, $widget) {
                   positioning = gridster.serialize();
-                  console.log(positioning);
+
+                  for (var j = positioning.length - 1; j >= 0; j--) {
+
+                    var widgetIdObject = {
+                      widget_id : @for ($i = 0; $i < count($allFunctions); $i++) {{ $allFunctions[$i]['widget_id'] }} @endfor
+                    };
+                    $.extend(positioning[j], widgetIdObject);
+                  };
+
                   positioning = JSON.stringify(positioning);
-                  console.log(positioning);
                   $.ajax({
                    type: "POST",
                    url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
