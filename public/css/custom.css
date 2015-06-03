@@ -710,7 +710,17 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	padding: 0;
 	text-align: center;
 	font-size: 18px;
-	font-weight: bold;
+	font-weight: normal;
+	color: #fff;
+	line-height: 1.25em;
+}
+
+#author{
+	margin: 0;
+	padding: 0;
+	text-align: right;
+	font-size: 14px;
+	font-weight: normal;
 	color: #fff;
 	line-height: 1.25em;
 }

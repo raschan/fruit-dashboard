@@ -333,9 +333,10 @@ class AuthController extends BaseController
 
 
         $client = GoogleSpreadsheetHelper::setGoogleClient();
-        $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
 
+        $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
         $iframe_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'iframe%')->get();
+        $quote_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'quote%')->get();
 
         return View::make('auth.settings',
             array(
@@ -351,8 +352,16 @@ class AuthController extends BaseController
                 // iframe stuff
                 'iframe_widgets'       => $iframe_widgets,
 
+                // quote stuff
+                'quote_widgets'       => $quote_widgets,
+
                 // payment stuff
                 'planName'          => $planName,
+
+                // background stuff
+                'isBackgroundOn' => Auth::user()->isBackgroundOn,
+                'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+
             )
         );
     }

@@ -605,7 +605,7 @@
               <div class="list-group-item" style="border:none;">
                 <i class="fa icon fa-file-text-o fa-4x pull-left"></i>
                 <h4 class="list-group-item-heading">iframe widgets</h4>
-                <div style="clear:both;"/>
+                <div style="clear:both;"></div>  
                 <ul>
                 @foreach ($iframe_widgets as $widget)
                   <li>
@@ -615,6 +615,25 @@
                 @endforeach
                 </ul>
                 <a href="{{ URL::route('connect.addwidget', 'iframe') }}" class="sm-pull-right">
+                  <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+                </a>
+              </div>
+
+              <div style="clear:both"></div>
+
+              <div class="list-group-item" style="border:none;">
+                <i class="fa icon fa-quote-left fa-4x pull-left"></i>
+                <h4 class="list-group-item-heading">Quote widgets</h4>
+                <div style="clear:both;"></div>  
+                <ul>
+                @foreach ($quote_widgets as $widget)
+                  <li>
+                    {{ $widget->widget_name }}
+                    [<a href="{{ URL::route('connect.deletewidget', $widget->id) }}">remove</a>]
+                  </li>
+                @endforeach
+                </ul>
+                <a href="{{ URL::route('connect.addwidget', 'quote') }}" class="sm-pull-right">
                   <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
                 </a>
               </div>

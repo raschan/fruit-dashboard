@@ -1,3 +1,4 @@
-<li class="dashboard-widget well" data-row="1" data-col="1" data-sizex="4" data-sizey="2"> 
-	<p id="quote" class="textShadow">To be beautiful means to be yourself. You don't need to be accepted by others. You need to be yourself.</p>
+<li data-id='{{ $widget_data["widget_id"] }}' class="dashboard-widget well" data-row="{{ $widget_data['position']['row'] }}" data-col="{{ $widget_data['position']['col'] }}" data-sizex="{{ $widget_data['position']['x'] }}" data-sizey="{{ $widget_data['position']['y'] }}">
+	<p id="quote" class="textShadow">{{ $quote }}</p>
+	<p id="author" class="textShadow pull-right">{{ $author }}</p>
 </li>
