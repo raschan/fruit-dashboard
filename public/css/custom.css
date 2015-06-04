@@ -696,7 +696,6 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	opacity:1;
 }
 
-<<<<<<< HEAD
 /* own class */
 .textShadow{
 	text-shadow: 1px 1px 1px rgba(20, 20, 20, 1);
@@ -736,12 +735,11 @@ h1.digitTime{
   	font-weight: lighter;
 }
 
-<<<<<<< HEAD
 /* grid li dot */
 ul{
 	list-style-type: none;
-=======
+	}
+
 .white-background {
 	background-color: #ffffff;
->>>>>>> 2060b21ac370031221fb295ecacfdacc3992f38e
 }

@@ -25,7 +25,6 @@
 
   @section('pageScripts')
     <script type="text/javascript">
-<<<<<<< HEAD
      $(document).ready(function() {
          var gridster;
          var positioning = [];
@@ -106,7 +105,6 @@
       console.log(y);
   });
 </script>
-=======
       $(document).ready(function() {
           var gridster;
           var positioning = [];
@@ -156,6 +154,5 @@
           });
       });
     </script>
->>>>>>> 2060b21ac370031221fb295ecacfdacc3992f38e
   @stop
 
