@@ -760,12 +760,8 @@ h1.digitTime {
 /* grid li dot */
 ul {
 	list-style-type: none;
-<<<<<<< HEAD
-	}
-
-=======
 }
->>>>>>> 3f65125b048b232cfaaad2e94b27b133a8a661ed
+
 .white-background {
 	background-color: #ffffff;
 }
