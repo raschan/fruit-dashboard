@@ -14,7 +14,7 @@
 
         @for ($i = 0; $i < count($allFunctions); $i++)
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+          @include('dashboard.widget', ['widget_data' => $allFunctions[$i], 'currentTime' => $currentTime])
 
         @endfor
 
@@ -101,26 +101,25 @@
 
     <!-- script for clock -->
     <script type="text/javascript">
-      function startTime() {
-          var today = new Date();
-          var h = today.getHours();
-          var m = today.getMinutes();
-          m = checkTime(m);
-          document.getElementById('clock').innerHTML = h+":"+m;
-          var t = setTimeout(function(){startTime()},500);
-      }
 
-      function checkTime(i) {
-        if (i<10){i = "0" + i};  // add zero in front of numbers < 10
-        return i;
-      }
+      $(document).ready(function()
+      {
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            m = checkTime(m);
+            $('.digitTime').html(h + ':' + m);
+            var t = setTimeout(function(){startTime()},500);
+        }
 
-      startTime();
-    </script>
-    
-    <script type="text/javascript">
-    /*window.fitText( document.getElementById("clock") );*/
-      
+        function checkTime(i) {
+          if (i<10){i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
+
+        startTime();
+      });
     </script>
       
   @stop

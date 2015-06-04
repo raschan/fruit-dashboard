@@ -151,6 +151,14 @@ class DashboardController extends BaseController
         # prepare stuff for google spreadsheet metrics end
         #####################################################
 
+        $ct = Carbon::now();
+
+        if ($ct->minute < 10)
+        {
+            $currentTime = $ct->hour.':0'.$ct->minute;
+        } else {
+            $currentTime = $ct->hour.':'.$ct->minute;
+        }
 
         return View::make(
             'dashboard.dashboard',
@@ -160,6 +168,7 @@ class DashboardController extends BaseController
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
                 'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+                'currentTime' => $currentTime,
             )
         );
     }

@@ -95,19 +95,20 @@ class WidgetRESTController extends BaseController {
 
 		if ($user)
 		{
-			$newPositions = json_decode($json);
+			Log::info($json);
+			$widgetPositions = json_decode($json);
 
-			foreach ($newPositions as $newPosition) 
+			foreach ($widgetPositions as $widgetPosition) 
 			{
-				$widget = Widget::find($newPosition->id);
+				$widget = Widget::find($widgetPosition->id);
 
 				if($widget)
 				{
 					$pos = [
-						"col" 		=> $newPosition->col,
-						"row" 		=> $newPosition->row,
-						"size_x" 	=> $newPosition->size_x,
-						"size_y" 	=> $newPosition->size_y
+						"col" 		=> $widgetPosition->col,
+						"row" 		=> $widgetPosition->row,
+						"size_x" 	=> $widgetPosition->size_x,
+						"size_y" 	=> $widgetPosition->size_y
 					];
 					$widget->position = json_encode($pos);
 					$widget->save();

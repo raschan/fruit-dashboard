@@ -1,3 +1,5 @@
+@include('dashboard.widget-clock', ['currentTime' => $currentTime])
+
 @if ($widget_data['widget_type'] =='google-spreadsheet-text-cell')
   @include('dashboard.widget-text', ['text' => $widget_data['currentValue'], 'id' => $widget_data['widget_id']])
 @endif
