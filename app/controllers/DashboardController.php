@@ -59,8 +59,6 @@ class DashboardController extends BaseController
         #####################################################
 
 
-
-
         #####################################################
         # prepare stuff for google spreadsheet metrics start
 
@@ -127,6 +125,9 @@ class DashboardController extends BaseController
                     } else {
                         $current_value = $ct->hour.':'.$ct->minute;
                     }
+
+                    Log::info($widget->position);
+
                     break;
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)

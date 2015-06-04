@@ -1,5 +1,8 @@
 @if ($widget_data['widget_type'] == 'clock')
-  @include('dashboard.widget.clock', ['currentTime' => $currentTime, ])
+  @include('dashboard.widget-clock', [
+    'currentTime' => $widget_data['currentValue'],
+    'id' => $widget_data['widget_id']
+   ])
 @endif
 
 @if ($widget_data['widget_type'] =='google-spreadsheet-text-cell')

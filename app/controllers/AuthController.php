@@ -150,7 +150,19 @@ class AuthController extends BaseController
 
             // attach dashboard & user
             $user->dashboards()->attach($dashboard->id, array('role' => 'owner'));
-            
+
+            //
+            // create default widgets
+
+            // clock widget
+            $widget = new Widget;
+            $widget->widget_name = 'clock';
+            $widget->widget_type = 'clock';
+            $widget->widget_source = '{}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+
             // create user on intercom
             IntercomHelper::signedup($user);
 

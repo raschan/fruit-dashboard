@@ -12,11 +12,9 @@
     <div id="content-wrapper" class="gridster">
       <ul>
 
-        @include('dashboard.widget-clock', ['currentTime' => $currentTime])
-
         @for ($i = 0; $i < count($allFunctions); $i++)
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i], 'currentTime' => $currentTime])
+          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
         @endfor
 
