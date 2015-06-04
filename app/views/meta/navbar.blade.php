@@ -11,7 +11,7 @@
 				<i class="dropdown-icon fa fa-bullhorn"></i>&nbsp;&nbsp;Feedback
 			</a>
 		<li role="presentation">
-			<a href="{{ URL::route('auth.settings') }}">
+			<a href="{{ URL::route('settings.settings') }}">
 				<i class="dropdown-icon fa fa-cogs"></i>&nbsp;&nbsp;Settings
 			</a>
 		</li>
