@@ -111,7 +111,10 @@ class DashboardController extends BaseController
                             'author' => $quoteObject->author
                     ]);
                     break;
-
+                case 'note';
+                    $widgetObject = json_decode($widget->widget_source);
+                    $current_value = Data::where('widget_id', $widget->id)->first()->data_object;
+                    break;
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
                                             ->orderBy('date','asc')

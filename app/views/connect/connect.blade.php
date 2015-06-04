@@ -66,6 +66,17 @@
         </li>
 
 
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+        @if ($user->canConnectMore())
+          <a href="{{ URL::route('connect.addwidget', 'note') }}">
+        @else
+          <a href="/plans">
+        @endif
+            <span class="icon fa fa-pencil fa-3x"></span>
+            <p>Notes</p>
+          </a>
+        </li>
+
       </ul>
 
       <!-- Braintree details modal box -->

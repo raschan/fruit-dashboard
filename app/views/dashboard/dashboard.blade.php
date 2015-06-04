@@ -137,7 +137,7 @@
                   positioning = JSON.stringify(positioning);
                   $.ajax({
                    type: "POST",
-                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                   url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
                  });
                 }
               },
@@ -147,12 +147,27 @@
                   positioning = JSON.stringify(positioning);
                   $.ajax({
                    type: "POST",
-                   url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                   url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
                  });
                 }
               }
             }).data('gridster');
 
+          });
+          $(function() {
+            
+            function sendText(ev) {
+              var text = $(ev.target).val() ? $(ev.target).val() : '';
+              var id = $(ev.target).attr('id');
+              
+              $.ajax({
+                type: 'POST',
+                url: '/api/widgets/save-text/' + id + '/' + text
+              });
+              
+            }
+
+            $('.note').keyup(_.debounce(sendText,500));
           });
       });
     </script>
