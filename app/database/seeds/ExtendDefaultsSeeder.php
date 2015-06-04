@@ -4,7 +4,7 @@ class ExtendDefaultsSeeder extends Seeder
 {
 	public function run()
 	{
-		$users = Users::all();
+		$users = User::all();
 
 		foreach ($users as $user) 
 		{
@@ -33,6 +33,7 @@ class ExtendDefaultsSeeder extends Seeder
 				if($widget->widget_type == 'clock')
 				{
 					$hasClock = true;
+					break;
 				}
 			}
 
@@ -44,14 +45,10 @@ class ExtendDefaultsSeeder extends Seeder
 	            $widget = new Widget;
 	            $widget->widget_name = 'clock';
 	            $widget->widget_type = 'clock';
-	            $widget->widget_source = '{"size_x":1,"size_y":1,"col":1,"row":1}';
+	            $widget->widget_source = '{"size_x":4,"size_y":1,"col":1,"row":1}';
 	            $widget->dashboard_id = $user->dashboards()->first()->id;
 	            $widget->save();
-	            Log::info('Clock made')
 			}
-
-
-            Log::info($user->email);
 		}
 	}
 }

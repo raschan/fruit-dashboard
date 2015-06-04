@@ -15,9 +15,7 @@
 
 @if ($widget_data['widget_type'] =='iframe')
   @include('dashboard.widget-iframe', [
-    'iframeUrl' => json_decode($widget_data["currentValue"], true)['iframeURL'], 
-    'id' => $widget_data['widget_id']
-  ])
+    'iframeUrl' => json_decode($widget_data["currentValue"], true)['iframeURL'],'id' => $widget_data['widget_id']])
 @endif
 
 @if ($widget_data['widget_type'] =='google-spreadsheet-text-column-random')
@@ -25,11 +23,7 @@
 @endif
 
 @if ($widget_data['widget_type'] =='quote')
-  @include('dashboard.widget-quote', [
-  	'quote' => json_decode($widget_data['currentValue'],true)['quote'], 
-  	'author' => json_decode($widget_data['currentValue'],true)['author'], 
-  	'id' => $widget_data['widget_id']
-  ])
+  @include('dashboard.widget-quote', ['quote' => json_decode($widget_data['currentValue'],true)['quote'], 'author' => json_decode($widget_data['currentValue'],true)['author'], 'id' => $widget_data['widget_id']])
 @endif
 
 @if($widget_data['widget_type'] == 'note')

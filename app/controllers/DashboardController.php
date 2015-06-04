@@ -149,19 +149,19 @@ class DashboardController extends BaseController
             ];
 
             $newMetricArray = array(
-                    "widget_id" => $widget->id,
-                    "widget_type" => $widget->widget_type,
-                    "widget_position" => $position,
-                    "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
-                    "positiveIsGood" => "true",
-                    "history" => $dataArray,
-                    "currentValue" => $current_value,
-                    "oneMonthChange" => "",
-                    "position"  => $position,
+                "widget_id" => $widget->id,
+                "widget_type" => $widget->widget_type,
+                "widget_position" => $position,
+                "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+                "positiveIsGood" => "true",
+                "history" => $dataArray,
+                "currentValue" => $current_value,
+                "oneMonthChange" => "",
+                "position"  => $position,
             );
             $allMetrics[] = $newMetricArray;
-        }
-
+        } // /foreach
+        
         # prepare stuff for google spreadsheet metrics end
         #####################################################
 

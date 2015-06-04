@@ -11,7 +11,6 @@
 
     <div id="content-wrapper" class="gridster">
       <ul>
-
         @for ($i = 0; $i < count($allFunctions); $i++)
 
           @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
