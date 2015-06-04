@@ -12,6 +12,8 @@
     <div id="content-wrapper" class="gridster">
       <ul>
 
+        @include('dashboard.widget-clock', ['currentTime' => $currentTime])
+
         @for ($i = 0; $i < count($allFunctions); $i++)
 
           @include('dashboard.widget', ['widget_data' => $allFunctions[$i], 'currentTime' => $currentTime])
@@ -84,6 +86,7 @@
           
           function sendText(ev) {
             var text = $(ev.target).val() ? $(ev.target).val() : '';
+            text = text.replace(/\n\r?/g, '[%LINEBREAK%]');
             var id = $(ev.target).attr('id');
             
             $.ajax({

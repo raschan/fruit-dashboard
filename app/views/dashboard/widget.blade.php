@@ -1,4 +1,6 @@
-@include('dashboard.widget-clock', ['currentTime' => $currentTime])
+@if ($widget_data['widget_type'] == 'clock')
+  @include('dashboard.widget.clock', ['currentTime' => $currentTime, ])
+@endif
 
 @if ($widget_data['widget_type'] =='google-spreadsheet-text-cell')
   @include('dashboard.widget-text', ['text' => $widget_data['currentValue'], 'id' => $widget_data['widget_id']])
@@ -28,5 +30,9 @@
 @endif
 
 @if($widget_data['widget_type'] == 'note')
-  @include('dashboard.widget-note', ['id' => $widget_data['widget_id'],'currentValue' => $widget_data['currentValue']])    
+  @include('dashboard.widget-note', [
+    'id' => $widget_data['widget_id'],
+    'currentValue' => $widget_data['currentValue'], 
+    'position' => $widget_data['position']
+  ])    
 @endif
