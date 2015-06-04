@@ -59,8 +59,6 @@ class DashboardController extends BaseController
         #####################################################
 
 
-
-
         #####################################################
         # prepare stuff for google spreadsheet metrics start
 
@@ -111,7 +109,26 @@ class DashboardController extends BaseController
                             'author' => $quoteObject->author
                     ]);
                     break;
+                case 'note';
+                    $widgetObject = json_decode($widget->widget_source);
+                    $current_value = Data::where('widget_id', $widget->id)->first()->data_object;
+                    $current_value = str_replace('[%LINEBREAK%]', "\n", $current_value);
 
+                    break;
+                case 'clock';
+                    $widgetObject = json_decode($widget->widget_source);
+                    
+                    $ct = Carbon::now(); // ct == current time
+                    if ($ct->minute < 10)
+                    {
+                        $current_value = $ct->hour.':0'.$ct->minute;
+                    } else {
+                        $current_value = $ct->hour.':'.$ct->minute;
+                    }
+
+                    Log::info($widget->position);
+
+                    break;
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
                                             ->orderBy('date','asc')
@@ -147,7 +164,6 @@ class DashboardController extends BaseController
 
         # prepare stuff for google spreadsheet metrics end
         #####################################################
-
 
         return View::make(
             'dashboard.dashboard',

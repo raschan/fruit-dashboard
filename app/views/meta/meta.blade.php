@@ -89,6 +89,7 @@
     {{ HTML::script('js/pixel-admin.min.js'); }}
     {{ HTML::script('js/chart.min.js'); }}
     {{ HTML::script('js/jquery.gridster.with-extras.min.js'); }}
+    {{ HTML::script('js/underscore-min.js'); }}
     <!-- /Base scripts -->
 
     <!-- Pagealert timeout -->

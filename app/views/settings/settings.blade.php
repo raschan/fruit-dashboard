@@ -17,7 +17,7 @@
             <h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Account settings</h4>
             <!-- Name -->
             {{ Form::open(array(
-              'action' => 'AuthController@doSettingsName',
+              'action' => 'SettingsController@doSettingsName',
               'id' => 'form-settings-name',
               'role' => 'form',
               'class' => 'form-horizontal' )) }}
@@ -68,7 +68,7 @@
 
                 <!-- Country -->
                 {{ Form::open(array(
-                'action' => 'AuthController@doSettingsCountry',
+                'action' => 'SettingsController@doSettingsCountry',
                 'id' => 'form-settings-country',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}
@@ -118,7 +118,7 @@
 
                 <!-- Email -->
                 {{ Form::open(array(
-                'action' => 'AuthController@doSettingsEmail',
+                'action' => 'SettingsController@doSettingsEmail',
                 'id' => 'form-settings-email',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}
@@ -174,7 +174,7 @@
 
                 <!-- Password -->
                 {{ Form::open(array(
-                'action' => 'AuthController@doSettingsPassword',
+                'action' => 'SettingsController@doSettingsPassword',
                 'id' => 'form-settings-password',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}
@@ -250,7 +250,7 @@
 
                 <!-- Background switch -->
                 {{ Form::open(array(
-                  'action' => 'AuthController@doSettingsBackground',
+                  'action' => 'SettingsController@doSettingsBackground',
                   'id' => 'form-settings-background',
                   'role' => 'form',
                   'class' => 'form-horizontal' )) }}
@@ -321,7 +321,7 @@
                 <!-- Summary Email Frequency -->
                 <!-- choose from dropdown -->
                 {{ Form::open(array(
-                'action' => 'AuthController@doSettingsFrequency',
+                'action' => 'SettingsController@doSettingsFrequency',
                 'id' => 'form-settings-frequency',
                 'role' => 'form',
                 'class' => 'form-horizontal' )) }}
@@ -461,25 +461,10 @@
             <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Manage connections</h4>
             <div class="list-group">
 
-              {{-- 
-              <!-- hidden for development, will not be rendered on client side -->   
-              <a href="{{ URL::route('connect.connect') }}" class="list-group-item">
-                <i class="fa icon fa-cc-paypal fa-4x pull-left"></i>
-                <h4 class="list-group-item-heading">PayPal</h4>
-                <p class="list-group-item-text">
-                  @if($paypal_connected)
-                  <span class="up">Connected.</span>
-                  @else 
-                  <span class="down">Not connected.</span>
-                  @endif
-                </p>
-              </a> <!-- / .list-group-item -->
-              <!-- / hidden for development, will not be rendered on client side -->
-              --}}   
-
+             
               <!-- stripe connect start -->
               <div class="list-group-item">
-                <i class="fa icon fa-cc-stripe fa-4x pull-left"></i>
+                <i class="icon pf pf-stripe pf-big pull-left right-space"></i>
                 @if($user->isStripeConnected())
                   <a href="{{ URL::route('auth.disconnect', 'stripe') }}">
                     <button id="disconnectStripe" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
@@ -506,10 +491,10 @@
 
               <!-- braintree connect start -->
               <div class="list-group-item">
-                <i class="fa icon fa-google fa-4x pull-left"></i>
+                <i class="icon pf pf-braintree pf-big pull-left right-space"></i>
                 @if($user->isBraintreeConnected())
                   <a href="{{ URL::route('auth.disconnect', 'braintree') }}">
-                    <button id="disconnectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
+                    <button id="disconnectBraintree" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
                   </a>  
                 @elseif ($user->canConnectMore())
                   <a href="/connect">
@@ -634,6 +619,25 @@
                 @endforeach
                 </ul>
                 <a href="{{ URL::route('connect.addwidget', 'quote') }}" class="sm-pull-right">
+                  <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+                </a>
+              </div>
+
+              <div style="clear:both"></div>
+
+              <div class="list-group-item" style="border:none;">
+                <i class="fa icon fa-quote-left fa-4x pull-left"></i>
+                <h4 class="list-group-item-heading">Note widgets</h4>
+                <div style="clear:both;"></div>  
+                <ul>
+                @foreach ($note_widgets as $widget)
+                  <li>
+                    {{ $widget->widget_name }}
+                    [<a href="{{ URL::route('connect.deletewidget', $widget->id) }}">remove</a>]
+                  </li>
+                @endforeach
+                </ul>
+                <a href="{{ URL::route('connect.addwidget', 'note') }}" class="sm-pull-right">
                   <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
                 </a>
               </div>
