@@ -2,7 +2,7 @@
 
 	{{Form::textarea('note', $currentValue, array(
 		'id' => $widget_data['widget_id'],
-		'class' => 'textShadow text-fill-note note'
+		'class' => 'text-fill-note note'
 		))}}
 
 </li>

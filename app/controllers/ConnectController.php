@@ -362,12 +362,13 @@ class ConnectController extends BaseController
             $widget->widget_type = 'note';
             $widget->widget_source = $widgetJson;
             $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->position = '{"size_x":1,"size_y":2,"col":1,"row":1}';
             $widget->save();
 
             // save an empty data line
             $text = new Data;
             $text->widget_id = $widget->id;
-            $text->data_object = 'Hello World';
+            $text->data_object = '';
             $text->date = Carbon::now()->toDateString();
             $text->save();
 

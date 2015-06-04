@@ -55,6 +55,7 @@ class SettingsController extends BaseController
         $google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
         $iframe_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'iframe%')->get();
         $quote_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'quote%')->get();
+        $note_widgets = $user->dashboards()->first()->widgets()->where('widget_type','like','note%')->get();
 
         return View::make('settings.settings',
             array(
@@ -64,15 +65,14 @@ class SettingsController extends BaseController
                 'stripeButtonUrl'   => OAuth2::getAuthorizeURL(),
                 
                 // google spreadsheet stuff 
-                'googleSpreadsheetButtonUrl'       => $client->createAuthUrl(),
-                'google_spreadsheet_widgets'       => $google_spreadsheet_widgets,
-
-                // iframe stuff
-                'iframe_widgets'       => $iframe_widgets,
-
-                // quote stuff
-                'quote_widgets'       => $quote_widgets,
-
+                'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+                
+                // widgets
+                'google_spreadsheet_widgets'    => $google_spreadsheet_widgets,
+                'iframe_widgets'                => $iframe_widgets,
+                'quote_widgets'                 => $quote_widgets,
+                'note_widgets'                  => $note_widgets,
+                
                 // payment stuff
                 'planName'          => $planName,
 
