@@ -696,15 +696,14 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	opacity:1;
 }
 
-/* own class */
-.textShadow{
+.textShadow {
 	text-shadow: 1px 1px 1px rgba(20, 20, 20, 1);
 	-webkit-text-stroke-width: 0.5px;
 	-webkit-text-stroke-color: #aaa;
 }
 
 /* quote */
-#quote{
+#quote {
 	margin: 0;
 	padding: 0;
 	text-align: center;
@@ -747,11 +746,16 @@ textarea[name=note] {
 }
 
 /* digital clock */
+
+.no-padding {
+	padding: 0;
+}
+
 h1.digitTime {
 	padding: 0;
   	margin: 0;
 	text-align: center;
-  	line-height: 1;
+  	line-height: 1em;
   	color: #fff;
   	font-size: 72px;
   	font-weight: lighter;
