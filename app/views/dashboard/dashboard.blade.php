@@ -56,18 +56,17 @@
                positioning = JSON.stringify(positioning);
                $.ajax({
                 type: "POST",
-                url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
               });
              }
            },
            draggable: {
              stop: function(e, ui, $widget) {
-               console.log(ui.$helper[0].offsetWidth);
                positioning = gridster.serialize();
                positioning = JSON.stringify(positioning);
                $.ajax({
                 type: "POST",
-                url: "/api/widgets/save/{{Auth::user()->id}}/" + positioning
+                url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
               });
              }
            }
