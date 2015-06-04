@@ -724,8 +724,30 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 	line-height: 1.25em;
 }
 
+/* note */
+#note{
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	font-weight: normal;
+	color: #fff;
+	line-height: 1.25em;
+}
+
+.text-fill-note {
+	width:100%;
+	height:100%; 
+	box-sizing: border-box;         /* For IE and modern versions of Chrome */
+	-moz-box-sizing: border-box;    /* For Firefox                          */
+	-webkit-box-sizing: border-box; /* For Safari                           */
+}
+
+textarea[name=note] {
+    resize: none;
+}
+
 /* digital clock */
-h1.digitTime{
+h1.digitTime {
 	padding: 0;
   	margin: 0;
 	text-align: center;
@@ -736,10 +758,14 @@ h1.digitTime{
 }
 
 /* grid li dot */
-ul{
+ul {
 	list-style-type: none;
+<<<<<<< HEAD
 	}
 
+=======
+}
+>>>>>>> 3f65125b048b232cfaaad2e94b27b133a8a661ed
 .white-background {
 	background-color: #ffffff;
 }

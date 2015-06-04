@@ -89,45 +89,45 @@ Route::get('dashboard', array(
 Route::get('statistics/{statID}', array(
     'before' => 'auth|trial_ended|cancelled|api_key',
     'as' => 'dashboard.single_stat',
-    'uses' => 'AuthController@showSinglestat'
+    'uses' => 'DashboardController@showSinglestat'
 ));
 
 
 // settings routes
 Route::get('settings', array(
     'before' => 'auth',
-    'as' => 'auth.settings',
-    'uses' => 'AuthController@showSettings'
+    'as' => 'settings.settings',
+    'uses' => 'SettingsController@showSettings'
 ));
 
 Route::post('settingsName', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsName'
+    'uses' => 'SettingsController@doSettingsName'
 ));
 
 Route::post('settingsCountry', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsCountry'
+    'uses' => 'SettingsController@doSettingsCountry'
 ));
 
 Route::post('settingsEmail', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsEmail'
+    'uses' => 'SettingsController@doSettingsEmail'
 ));
 
 Route::post('settingsPassword', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsPassword'
+    'uses' => 'SettingsController@doSettingsPassword'
 ));
 
 Route::post('settingsFrequency', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsFrequency'
+    'uses' => 'SettingsController@doSettingsFrequency'
 ));
 
 Route::post('settingsBackground', array(
     'before' => 'auth',
-    'uses' => 'AuthController@doSettingsBackground'
+    'uses' => 'SettingsController@doSettingsBackground'
 ));
 
 
@@ -224,9 +224,14 @@ Route::post('/api/events/braintree/{webhookId}', array(
 
 
 // AJAX endpoints
-Route::any('/api/widgets/save/{userId}/{position}', array(
+Route::any('/api/widgets/save-position/{userId}/{position}', array(
     'uses'  => 'WidgetRESTController@saveWidgetPosition',
 ));
+
+Route::any('/api/widgets/save-text/{widgetId}/{text?}', array(
+    'uses'  => 'WidgetRESTController@saveWidgetText',
+));
+
 /*
 |--------------------------------------------------------------------------
 | demo Routes

@@ -83,7 +83,7 @@ class WidgetRESTController extends BaseController {
 	}
 
 	/**
-	 * Save widget position on specified dashboard.
+	 * Save widget position.
 	 *
 	 * @param  int  $userId
 	 * @param  string $positions
@@ -113,9 +113,35 @@ class WidgetRESTController extends BaseController {
 					$widget->save();
 				}
 			}
+
+			return Response::make('everything okay',200);
+
 		} else {
 			// no such user
 			return Response::json(array('error' => 'no such user'));
+		}
+	}
+
+	/**
+	 * Save widget text.
+	 *
+	 * @param  int  $widgetId
+	 * @param  string $text
+	 * @return Response
+	 */
+
+	public function saveWidgetText($widgetId, $text = '')
+	{
+		$widgetData = Data::where('widget_id', $widgetId)->first();
+
+		if ($widgetData)
+		{
+			$widgetData->data_object = $text;
+			$widgetData->save();
+
+			return Response::make('everything okay',200);		
+		} else {
+			return Response::json(array('error' => 'bad widget id'));
 		}
 	}
 }
