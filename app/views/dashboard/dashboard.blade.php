@@ -9,7 +9,7 @@
 
   @section('pageContent')
 
-    <div id="content-wrapper" class="gridster">
+    <div id="content-wrapper" class="gridster not-visible">
       <ul>
       
         @for ($i = 0; $i < count($allFunctions); $i++)
@@ -96,6 +96,7 @@
             
           }
 
+          // user finished typing
           $('.note').keyup(_.debounce(sendText,500));
         });
       });
@@ -122,6 +123,8 @@
         }
 
         startTime();
+
+        $('#content-wrapper').fadeIn(500);
       });
     </script>
   
