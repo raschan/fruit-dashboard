@@ -753,12 +753,12 @@ textarea[name=note] {
 
 h1.digitTime {
 	padding: 0;
-  	margin: 0;
+	margin: 0;
 	text-align: center;
-  	line-height: 1em;
-  	color: #fff;
-  	font-size: 72px;
-  	font-weight: lighter;
+	line-height: 1em;
+	color: #fff;
+	font-size: 72px;
+	font-weight: lighter;
 }
 
 /* grid li dot */
@@ -770,6 +770,9 @@ ul {
 	background-color: #ffffff;
 }
 
+.white-text {
+	color: #ffffff;
+}
 
 .not-visible {
 	display: none;

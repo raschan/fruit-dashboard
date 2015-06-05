@@ -548,7 +548,7 @@
         </div> <!-- / .row -->
         <!-- /Connect a service  -->
 
-        <!-- Connect a service  -->
+        <!--  manage widgets  -->
 
         <div class="col-md-10 col-md-offset-1">
           <div class="col-sm-6 col-md-offset-3 widget-form-wrapper">
@@ -626,7 +626,7 @@
               <div style="clear:both"></div>
 
               <div class="list-group-item" style="border:none;">
-                <i class="fa icon fa-quote-left fa-4x pull-left"></i>
+                <i class="fa icon fa-pencil fa-4x pull-left"></i>
                 <h4 class="list-group-item-heading">Note widgets</h4>
                 <div style="clear:both;"></div>  
                 <ul>
@@ -642,10 +642,29 @@
                 </a>
               </div>
 
+              <div style="clear:both"></div>
+
+              <div class="list-group-item" style="border:none;">
+                <i class="fa icon fa-comment-o fa-4x pull-left"></i>
+                <h4 class="list-group-item-heading">Greeting widgets</h4>
+                <div style="clear:both;"></div>  
+                <ul>
+                @foreach ($greeting_widgets as $widget)
+                  <li>
+                    {{ $widget->widget_name }}
+                    [<a href="{{ URL::route('connect.deletewidget', $widget->id) }}">remove</a>]
+                  </li>
+                @endforeach
+                </ul>
+                <a href="{{ URL::route('connect.addwidget', 'greeting') }}" class="sm-pull-right">
+                  <button id="newWidget" class="btn btn-flat btn-info btn-sm pull-right" type="button">Add new widget</button>
+                </a>
+              </div>
+
             </div> <!-- / .panel-body -->
           </div> <!-- / .col-sm-6 -->
         </div> <!-- / .row -->
-        <!-- /Connect a service  -->
+        <!-- / manage widgets  -->
       </div> <!-- /. col-md-10 -->
     </div> <!-- / #content-wrapper -->
   @stop

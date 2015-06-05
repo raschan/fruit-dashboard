@@ -33,3 +33,10 @@
     'position' => $widget_data['position']
   ])    
 @endif
+
+@if($widget_data['widget_type'] == 'greeting')
+  @include('dashboard.widget-greeting', [
+    'id' => $widget_data['widget_id'],
+    'position' => $widget_data['position']
+  ])
+@endif
