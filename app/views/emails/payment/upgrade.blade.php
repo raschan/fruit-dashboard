@@ -1,9 +1,10 @@
 @extends('emails.meta.meta')
   @section('emailContent')
 
-    <div class="text-center">
-    	<p class='lead'>Upgraded</p>
-    	<p>High five</p>
-    </div>
+    <p>Congratulations!</p>
 
+    <p>You’ve just upgraded your Fruit Analytics account!</p>
+
+    <p>Enjoy your incoming statistics in the future too.</p>
+    
   @stop

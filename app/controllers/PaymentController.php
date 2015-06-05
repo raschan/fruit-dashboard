@@ -97,13 +97,8 @@ class PaymentController extends BaseController
 				IntercomHelper::subscribed($user,$plans[$planName]->name);
 
 				// send email to the user
-				$data = array(
-					'plan' => $plans[$planName],
-					);
-
 				try {
 					$email = Mailman::make('emails.payment.upgrade')
-						->with($data)
 						->to($user->email)
 						->subject('Upgrade')
 						->send();
@@ -149,13 +144,8 @@ class PaymentController extends BaseController
 
 			IntercomHelper::cancelled($user);
 
-			$data = array(
-				'plan' => $plan,
-				);
-
 			try {
 				$email = Mailman::make('emails.payment.downgrade')
-					->with($data)
 					->to($user->email)
 					->subject('Downgrade')
 					->send();

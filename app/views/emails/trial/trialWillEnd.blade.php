@@ -1,14 +1,12 @@
 @extends('emails.meta.meta')
   @section('emailContent')
-    <p>Hi @if(isset($user->name))
+    <p>Hi there @if(isset($user->name))
       {{$user->name}}
-    @else
-      there,
-    @endif</p>
+    @endif,</p>
 
     <p>Your trial of Fruit Analytics is almost over.</p> 
 
-    <p>Please choose from one of our plans to keep your account active ({{ HTML::secureLink('/plans','click here') }}) within the next 3 days or your account will be suspended.</p>  
+    <p>You can upgrade your account ({{ HTML::secureLink('/plans','here') }}) within the next 3 days to keep it alive, or it will be suspended.</p>  
 
-    <p>Either way, thanks for trying Fruit Analytics!</p>
+    <p>Either way, thanks for trying Fruit Analytics, we hope to see you really soon!</p>
   @stop
