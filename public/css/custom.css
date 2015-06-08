@@ -769,3 +769,8 @@ ul {
 .white-background {
 	background-color: #ffffff;
 }
+
+
+.not-visible {
+	display: none;
+}

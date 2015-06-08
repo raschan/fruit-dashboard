@@ -59,8 +59,6 @@ class DashboardController extends BaseController
         #####################################################
 
 
-
-
         #####################################################
         # prepare stuff for google spreadsheet metrics start
 
@@ -114,6 +112,22 @@ class DashboardController extends BaseController
                 case 'note';
                     $widgetObject = json_decode($widget->widget_source);
                     $current_value = Data::where('widget_id', $widget->id)->first()->data_object;
+                    $current_value = str_replace('[%LINEBREAK%]', "\n", $current_value);
+
+                    break;
+                case 'clock';
+                    $widgetObject = json_decode($widget->widget_source);
+                    
+                    $ct = Carbon::now(); // ct == current time
+                    if ($ct->minute < 10)
+                    {
+                        $current_value = $ct->hour.':0'.$ct->minute;
+                    } else {
+                        $current_value = $ct->hour.':'.$ct->minute;
+                    }
+
+                    Log::info($widget->position);
+
                     break;
                 default:
                     $dataObjects = Data::where('widget_id', $widget->id)
@@ -135,30 +149,21 @@ class DashboardController extends BaseController
             ];
 
             $newMetricArray = array(
-                    "widget_id" => $widget->id,
-                    "widget_type" => $widget->widget_type,
-                    "widget_position" => $position,
-                    "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
-                    "positiveIsGood" => "true",
-                    "history" => $dataArray,
-                    "currentValue" => $current_value,
-                    "oneMonthChange" => "",
-                    "position"  => $position,
+                "widget_id" => $widget->id,
+                "widget_type" => $widget->widget_type,
+                "widget_position" => $position,
+                "statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+                "positiveIsGood" => "true",
+                "history" => $dataArray,
+                "currentValue" => $current_value,
+                "oneMonthChange" => "",
+                "position"  => $position,
             );
             $allMetrics[] = $newMetricArray;
-        }
-
+        } // /foreach
+        
         # prepare stuff for google spreadsheet metrics end
         #####################################################
-
-        $ct = Carbon::now();
-
-        if ($ct->minute < 10)
-        {
-            $currentTime = $ct->hour.':0'.$ct->minute;
-        } else {
-            $currentTime = $ct->hour.':'.$ct->minute;
-        }
 
         return View::make(
             'dashboard.dashboard',
@@ -168,7 +173,6 @@ class DashboardController extends BaseController
                 'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
                 'isBackgroundOn' => Auth::user()->isBackgroundOn,
                 'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-                'currentTime' => $currentTime,
             )
         );
     }

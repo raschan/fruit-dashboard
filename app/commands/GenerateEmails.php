@@ -41,13 +41,13 @@ class GenerateEmails extends Command {
 		$user = User::find(1);
 		$data = array('user' => $user);
 
-		$email = Mailman::make('emails.trialWillEnd')
+		$email = Mailman::make('emails.trial.trialWillEnd')
 				->with($data)
 				->to('rashan86@gmail.com')
 				->subject('[Fruit Analytics] Your free trial is ending.')
 				->show();
 				//->send();
 
-		File::put(public_path().'/development_email.html',$email);
+		File::put(public_path().'/emails/development_email.html',$email);
 	}
 }

@@ -108,7 +108,7 @@ class SendDailyEmail extends Command {
 								//->show();
 								->send();
 
-							//File::put(public_path().'/summary_email.html',$email);
+							//File::put(public_path().'/emails/summary_email.html',$email);
 
 							$dailyEmailSent++;
 						}
@@ -176,7 +176,7 @@ class SendDailyEmail extends Command {
 								//->show();
 								->send();
 
-							//File::put(public_path().'/summary_email.html',$email);
+							//File::put(public_path().'/emails/summary_email.html',$email);
 								
 							$weeklyEmailSent++;
 						}
