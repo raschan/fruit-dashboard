@@ -112,6 +112,11 @@ body {
 
 /* growl */
 
+#growls {
+  top: auto;
+  bottom: 10px;
+}
+
 .growl.growl-notice {
 	background: #27ae60;
 	color: #fff;
