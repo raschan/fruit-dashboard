@@ -48,7 +48,7 @@
 				    	app_id: "nch9zmp2"
 			    	};
 			</script>
-			{{ HTML::script('js/intercom_io.js'); }}
+			<script type="text/javascript" src="dist/js/intercom_io.js"></script>
 			<!-- / Intercom Script -->
 		@show
 		@section('mixpanelUserTracking')

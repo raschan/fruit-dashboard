@@ -9,3 +9,6 @@ Thumbs.db
 startServer
 error_log
 /emails
+bower_components
+node_modules
+public/dist

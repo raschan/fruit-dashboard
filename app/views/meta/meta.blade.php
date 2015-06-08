@@ -22,26 +22,26 @@
       <!-- /Fonts -->
 
       <!-- Bootstrap core CSS -->
-      {{ HTML::style('css/bootstrap.min.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
       <!-- /Bootstrap -->
 
       <!-- Font Awesome CSS -->
-      {{ HTML::style('css/font-awesome.min.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/font-awesome.min.css">
       <!-- /FontAwesome -->
 
       <!-- PaymentFonts CSS -->
-      {{ HTML::style('css/paymentfont.min.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/paymentfont.min.css">
       <!-- /PaymentFonts CSS -->
 
       <!-- PixelAdmin -->
-      {{ HTML::style('css/pixel-admin.min.css') }}
-      {{ HTML::style('css/themes.min.css') }}
-      {{ HTML::style('css/widgets.min.css') }}
-      {{ HTML::style('css/pages.min.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/pixel-admin.min.css">
+      <link rel="stylesheet" type="text/css" href="dist/css/themes.min.css">
+      <link rel="stylesheet" type="text/css" href="dist/css/widgets.min.css">
+      <link rel="stylesheet" type="text/css" href="dist/css/pages.min.css">
       <!-- /PixelAdmin -->
 
       <!-- Gridster -->
-      {{ HTML::style('css/jquery.gridster.min.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/jquery.gridster.min.css">
       <!-- /Gridster -->
 
       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -50,7 +50,7 @@
       <![endif]-->
 
       <!-- Custom styles -->
-      {{ HTML::style('css/custom.css') }}
+      <link rel="stylesheet" type="text/css" href="dist/css/custom.css">
       <!-- /Custom styles -->
 
       <script type="text/javascript">
@@ -59,15 +59,15 @@
       <!-- /Pixeladmin js init array -->
       
       <!-- GoogleAnalyticsEvents -->
-      {{ HTML::script('js/google_events.js'); }}
+      <script type="text/javascript" src="dist/js/google_events.js"></script>
       <!-- /GoogleAnalyticsEvents -->
 
       <!-- Mixpanel event -->
-      {{ HTML::script('js/mixpanel_event.js') }}
+      <script type="text/javascript" src="dist/js/mixpanel_event.js"></script>
       <!-- / Mixpanel event -->
 
       <!-- Mixpanel user tracking -->
-      {{ HTML::script('js/mixpanel_user.js') }}
+      <script type="text/javascript" src="dist/js/mixpanel_user.js"></script>
       <!-- / Mixpanel user tracking -->
 
       <!-- Page specific stylesheet -->
@@ -84,12 +84,12 @@
 
   @section('scripts')
     <!-- Base scripts -->
-    {{ HTML::script('js/jquery.js'); }}
-    {{ HTML::script('js/bootstrap.min.js'); }}
-    {{ HTML::script('js/pixel-admin.min.js'); }}
-    {{ HTML::script('js/chart.min.js'); }}
-    {{ HTML::script('js/jquery.gridster.with-extras.min.js'); }}
-    {{ HTML::script('js/underscore-min.js'); }}
+    <script type="text/javascript" src="dist/js/jquery.min.js"></script>
+    <script type="text/javascript" src="dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="dist/js/pixel-admin.min.js"></script>
+    <script type="text/javascript" src="dist/js/chart.min.js"></script>
+    <script type="text/javascript" src="dist/js/jquery.gridster.with-extras.min.js"></script>
+    <script type="text/javascript" src="dist/js/underscore-min.js"></script>
     <!-- /Base scripts -->
 
     <!-- Pagealert timeout -->
@@ -113,7 +113,7 @@
     <!-- /PixelAdmin js start -->
 
     <!-- GoogleAnalytics -->
-    {{ HTML::script('js/google_analytics.js'); }}
+    <script type="text/javascript" src="dist/js/google_analytics.js"></script>
     <!-- GoogleAnalytics -->
   @show
      
