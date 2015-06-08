@@ -193,9 +193,9 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		
-		'Carbon'			=> 'Carbon\Carbon',
-		'Client'			=> 'GuzzleHttp\Client',
-		'Mailman' 			=> 'Waavi\Mailman\Facades\Facade',
+		'Carbon'						=> 'Carbon\Carbon',
+		'Client'						=> 'GuzzleHttp\Client',
+		'Mailman' 					=> 'Waavi\Mailman\Facades\Facade',
 	),
 
 );

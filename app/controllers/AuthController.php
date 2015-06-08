@@ -156,10 +156,19 @@ class AuthController extends BaseController
 
             // clock widget
             $widget = new Widget;
-            $widget->widget_name = 'clock';
+            $widget->widget_name = 'clock widget';
             $widget->widget_type = 'clock';
             $widget->widget_source = '{}';
-            $widget->position = '{"size_x":1,"size_y":1,"col":1,"row":1}';
+            $widget->position = '{"size_x":4,"size_y":1,"col":1,"row":1}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // greeting widget
+            $widget = new Widget;
+            $widget->widget_name = 'greeting widget';
+            $widget->widget_type = 'greeting';
+            $widget->widget_source = '{}';
+            $widget->position = '{"size_x":1,"size_y":1,"col":1,"row":2}';
             $widget->dashboard_id = $user->dashboards()->first()->id;
             $widget->save();
 

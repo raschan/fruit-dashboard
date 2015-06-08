@@ -230,18 +230,17 @@
     </script>
     <!-- /Saving text -->
 
-
     <!-- script for clock -->
     <script type="text/javascript">
       $(document).ready(function()
       {
         function startTime() {
-            var today = new Date();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            m = checkTime(m);
-            $('.digitTime').html(h + ':' + m);
-            var t = setTimeout(function(){startTime()},500);
+          var today = new Date();
+          var h = today.getHours();
+          var m = today.getMinutes();
+          m = checkTime(m);
+          $('.digitTime').html(h + ':' + m);
+          var t = setTimeout(function(){startTime()},500);
         }
 
         function checkTime(i) {
@@ -254,5 +253,19 @@
         $('#content-wrapper').fadeIn(500);
       });
     </script>
+    <!-- /script for clock -->
+    
+    <!-- Deciding on proper greeting -->
+    <script type="text/javascript">
+      $(document).ready(function()
+      {
+        var hours = new Date().getHours();
+        
+        if(17 <= hours || hours < 5) { $('#greeting').html('evening'); }
+        if(5 <= hours && hours < 13) { $('#greeting').html('morning'); }
+        if(13 <= hours && hours < 17) { $('#greeting').html('afternoon'); } 
+      });
+    </script>
+    <!-- /Deciding on proper greeting -->
   @stop
 
