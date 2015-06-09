@@ -176,6 +176,7 @@ class DashboardController extends BaseController
 				'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
 				'isBackgroundOn' => Auth::user()->isBackgroundOn,
 				'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+				'onDashboard' => true
 			)
 		);
 	}
