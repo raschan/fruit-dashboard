@@ -72,7 +72,7 @@ class ConnectController extends BaseController
 				'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
 
 				// braintree stuff
-				'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
+				//'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
 
 				// google spreadsheet stuff
 				'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
@@ -96,7 +96,7 @@ class ConnectController extends BaseController
 		# we will need the user
 		$user = Auth::user();
 
-
+		/*
 		if ($provider == 'stripe') {
 
 			if(Input::has('code'))
@@ -160,7 +160,7 @@ class ConnectController extends BaseController
 					->with('error', 'Something went wrong, try again');
 			}
 		}
-
+		*/
 		# if we auth with googlespreadsheet
 
 		if ($provider == 'googlespreadsheet') {

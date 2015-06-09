@@ -453,16 +453,14 @@
 
 				<!-- /Account settings -->
 
-				<!-- Connect a service  -->
-
+				<!-- Manage connections  -->
 				<div class="col-md-10 col-md-offset-1">
 				 <div class="col-sm-6 col-md-offset-3 connect-form connection-form-wrapper">
 					<div class="panel-body bordered sameHeight">
 						<h4><i class="fa fa-link"></i>&nbsp;&nbsp;Manage connections</h4>
 						<div class="list-group">
-
-						 
-							<!-- stripe connect start -->
+						{{--
+						  <!-- stripe connect start -->
 							<div class="list-group-item">
 								<i class="icon pf pf-stripe pf-big pull-left right-space"></i>
 								@if($user->isStripeConnected())
@@ -515,6 +513,7 @@
 								</p>
 							</div>
 							<!-- braintree connect end -->
+						--}}
 
 							<!-- google spreadsheet connect start -->
 							<div class="list-group-item">
@@ -546,10 +545,10 @@
 						</div> <!-- / .panel-body -->
 					</div> <!-- / .col-sm-6 -->
 				</div> <!-- / .row -->
-				<!-- /Connect a service  -->
+				<!-- /Manage connections  -->
+
 
 				<!--  manage widgets  -->
-
 				<div class="col-md-10 col-md-offset-1">
 					<div class="col-sm-6 col-md-offset-3 widget-form-wrapper">
 						<div class="panel-body bordered sameHeight">
@@ -588,7 +587,7 @@
 							<div style="clear:both"></div>
 
 							<div class="list-group-item" style="border:none;">
-								<i class="fa icon fa-pencil fa-4x pull-left"></i>
+								<i class="fa icon fa-clock-o fa-4x pull-left"></i>
 								<h4 class="list-group-item-heading">Clock widgets</h4>
 								<div style="clear:both;"></div>  
 								<ul>
@@ -684,6 +683,7 @@
 					</div> <!-- / .col-sm-6 -->
 				</div> <!-- / .row -->
 				<!-- / manage widgets  -->
+
 			</div> <!-- /. col-md-10 -->
 		</div> <!-- / #content-wrapper -->
 	@stop

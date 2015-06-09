@@ -6,7 +6,7 @@
 
   @section('pageContent')
     
-    <div id="content-wrapper" class="gridster">
+    <div id="content-wrapper" class="gridster not-visible">
 
       <ul>
 
@@ -20,7 +20,9 @@
             <p>Clock</p>
           </a>
         </li>
-
+       
+        {{--
+      
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ $stripeButtonUrl }}">
@@ -38,8 +40,11 @@
             <p>Braintree payments</p>
           </a>
         </li>
+        
+        --}}
 
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
           @if ($user->isGoogleSpreadsheetConnected())
             <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
           @elseif($user->canConnectMore())
@@ -53,7 +58,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
           @else
@@ -65,7 +70,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'quote') }}">
           @else
@@ -77,7 +82,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'note') }}">
           @else
@@ -89,7 +94,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="4" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
           @else
@@ -102,6 +107,7 @@
 
       </ul>
 
+      {{--
       <!-- Braintree details modal box -->
       <div id='modal-braintree-connect' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='true'>
         <div class='modal-dialog modal-lg'>
@@ -117,7 +123,8 @@
         </div>
       </div>
       <!-- /Braintree details modal box -->
-
+      --}}
+      
     </div> <!-- / #content-wrapper -->
 
   @stop
@@ -126,24 +133,26 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
-          var gridster;
-          var widget_width = $(window).width()/6-15;
-          var widget_height = $(window).height()/6-20;
+        var gridster;
+        var widget_width = $(window).width()/6-15;
+        var widget_height = $(window).height()/6-20;
 
-          $(function(){
+        $(function(){
 
-            gridster = $(".gridster ul").gridster({
-              widget_base_dimensions: [widget_width, widget_height],
-              widget_margins: [5, 5],
-              helper: 'clone',
-              resize: {
-                enabled: true,
-                max_size: [4, 4],
-                min_size: [1, 1]
-              }
-            }).data('gridster');
+          gridster = $(".gridster ul").gridster({
+            widget_base_dimensions: [widget_width, widget_height],
+            widget_margins: [5, 5],
+            helper: 'clone',
+            resize: {
+              enabled: false,
+              max_size: [1, 1],
+              min_size: [1, 1]
+            }
+          }).data('gridster');
 
-          });
+        });
+
+        $('#content-wrapper').fadeIn(500)
       });
     </script>
 
