@@ -56,6 +56,7 @@ class SettingsController extends BaseController
 		$iframe_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'iframe%')->get();
 		$quote_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'quote%')->get();
 		$note_widgets = $user->dashboards()->first()->widgets()->where('widget_type','like','note%')->get();
+		$clock_widgets = $user->dashboards()->first()->widgets()->where('widget_type','like','clock%')->get();
 		$greeting_widgets = $user->dashboards()->first()->widgets()->where('widget_type','like','greeting%')->get();
 
 		return View::make('settings.settings',
@@ -73,6 +74,7 @@ class SettingsController extends BaseController
 				'iframe_widgets'                => $iframe_widgets,
 				'quote_widgets'                 => $quote_widgets,
 				'note_widgets'                  => $note_widgets,
+				'clock_widgets'									=> $clock_widgets,
 				'greeting_widgets'              => $greeting_widgets,
 				
 				// payment stuff

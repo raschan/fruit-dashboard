@@ -12,6 +12,17 @@
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
+            <a href="{{ URL::route('connect.addwidget', 'clock') }}">
+          @else
+            <a href="/plans">
+          @endif
+            <span class="icon fa fa-clock-o fa-3x"></span>
+            <p>Clock</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+          @if ($user->canConnectMore())
             <a href="{{ $stripeButtonUrl }}">
           @else
             <a href="/plans">
@@ -21,14 +32,14 @@
           </a>
         </li>
 
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
           <a href="#" data-toggle='modal' data-target='#modal-braintree-connect'>
             <span class="icon pf-big pf-braintree"></span>
             <p>Braintree payments</p>
           </a>
         </li>
 
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
           @if ($user->isGoogleSpreadsheetConnected())
             <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
           @elseif($user->canConnectMore())
@@ -42,7 +53,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
           @else
@@ -54,7 +65,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'quote') }}">
           @else
@@ -66,7 +77,7 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'note') }}">
           @else
@@ -78,14 +89,14 @@
         </li>
 
 
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="4" data-sizex="1" data-sizey="1">
           @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
           @else
             <a href="/plans">
           @endif
             <span class="icon fa fa-comment-o fa-3x"></span>
-            <p>Greeting</p>
+            <p>Greetings</p>
           </a>
         </li>
 
