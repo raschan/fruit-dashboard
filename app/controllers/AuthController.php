@@ -178,7 +178,8 @@ class AuthController extends BaseController
 
             // signing the user in and redirect to dashboard
             Auth::login($user);
-            return Redirect::route('auth.signup')->with('success', 'Signup was successful.');
+            return Redirect::route('dashboard.dashboard')
+                ->with('success', 'Signup was successful.');
         }
     }
 
