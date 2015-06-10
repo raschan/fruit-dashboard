@@ -225,10 +225,18 @@ class User extends Eloquent implements UserInterface
         # get the number of day in the year
         $numberOfDayInYear = date('z');
 
+        # if there is backgrounds-production directory, go with that, otherwise go with backgrounds 
+        # (backgrounds-production is too large to be included in the git repository)
+
+        $directory = '/img/backgrounds-production/';
+        if (!file_exists(public_path().$directory)) {
+            $directory = '/img/backgrounds/';
+        }
+
         # get the number of background images & collect them in an array
         $i = 0;
         $fileListArray = array();
-        $dir = public_path().'/img/backgrounds/';
+        $dir = public_path().$directory;
 
         if ($handle = opendir($dir)) {
             while (($file = readdir($handle)) !== false){
@@ -245,7 +253,7 @@ class User extends Eloquent implements UserInterface
 
         # create the url that will be passed to the view
         $imageName = $fileListArray[$imageNumber];
-        $dailyBackgroundURL = '/img/backgrounds/'.$imageName;
+        $dailyBackgroundURL = $directory.$imageName;
 
         return $dailyBackgroundURL;
 
