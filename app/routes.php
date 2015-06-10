@@ -197,6 +197,13 @@ Route::any('connect.deletewidget/{widget_id}', array(
     'uses' => 'ConnectController@deleteWidget'
 ));
 
+// edit widget
+Route::get('connect.editwidget/{service}/{widget_id?}', array(
+    'before' => 'auth',
+    'as' => 'connect.editwidget',
+    'uses' => 'ConnectController@editWidget'
+));
+
 
 // subscription routes
 Route::get('/plans', array(
