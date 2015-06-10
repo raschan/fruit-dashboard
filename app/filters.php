@@ -72,11 +72,11 @@ Route::filter('api_key', function() {
 
 Route::filter('trial_ended', function()
 {
-    if (Auth::user()->isTrialEnded())
-    {
-        return Redirect::route('payment.plan')
-            ->with('error','Trial period ended.');
-    }
+    // if (Auth::user()->isTrialEnded())
+    // {
+    //     return Redirect::route('payment.plan')
+    //         ->with('error','Trial period ended.');
+    // }
 });
 
 Route::filter('cancelled', function()

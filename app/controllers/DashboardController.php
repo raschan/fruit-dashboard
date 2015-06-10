@@ -14,19 +14,20 @@ class DashboardController extends BaseController
 	|===================================================
 	*/
 	public function showDashboard()
-	{/*
+	{
+/*
 		if (!Auth::user()->isConnected() && Auth::user()->ready != 'connecting')
 		{
 			return Redirect::route('connect.connect')
 				->with('error','Connect a service first.');
 		}
-*/
 		// check if trial period is ended
 		if (Auth::user()->isTrialEnded())
 		{
 			return Redirect::route('auth.plan')
 				->with('error','Trial period ended.');
 		}
+*/
 
 		#####################################################
 		# prepare stuff for stripe & braintree metrics start
@@ -188,13 +189,15 @@ class DashboardController extends BaseController
 	*/
 	public function showSinglestat($statID)
 	{
+/*
 		// check if trial period is ended
 		if (Auth::user()->isTrialEnded())
 		{
 			return Redirect::route('auth.plan')
 				->with('error','Trial period ended.');
 		}
-
+*/
+		
 		#####################################################
 		# prepare stuff for stripe & braintree metrics start
 
