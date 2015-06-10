@@ -1,5 +1,7 @@
 <li data-id='{{ $id }}' class="dashboard-widget well" data-row="{{ $position['row'] }}" data-col="{{ $position['col'] }}" data-sizex="{{ $position['x'] }}" data-sizey="{{ $position['y'] }}">
-	<a class='link-button' href='/' data-toggle="modal" data-target='#widget-settings-{{ $id }}'><span class="fa fa-cog pull-right widget-close"></span></a>
+	<a class='link-button' href='' data-toggle="modal" data-target='#widget-settings-{{ $id }}'><span class="gs-option-widgets"></span></a>
+	<a href="{{ URL::route('connect.deletewidget', $id) }}"><span class="gs-close-widgets"></span></a>
+	
 	{{Form::textarea('note', $currentValue, array(
 		'id' => $id,
 		'class' => 'text-fill-note note'
@@ -18,11 +20,14 @@
 	      </div>
 	      <div class='modal-content'>
 	      	<div class='top-space bottom-space'>
-	      		<span>Name of the widget: {{ $widget_data['fullName'] }}</span>
+	      		<span class='left-space'>Widget Name: </span><input type='text' name='widget-{{ $id }}-Name' value="{{ $widget_data['fullName'] }}">
 	      	</div>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<!-- /note settings -->
+@append
+
+@section('pageScripts')
 @append
