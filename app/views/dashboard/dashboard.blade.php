@@ -25,7 +25,6 @@
 
   @section('pageScripts')
     <script type="text/javascript">
-    asdf
      $(document).ready(function() {
          var gridster;
          var positioning = [];
