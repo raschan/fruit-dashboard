@@ -25,6 +25,7 @@
 
   @section('pageScripts')
     <script type="text/javascript">
+    valami
      $(document).ready(function() {
          var gridster;
          var positioning = [];
