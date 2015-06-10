@@ -1,4 +1,4 @@
-<div class='gridster'>
+<div class='gridster connect'>
   <ul>
     <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       @if ($user->canConnectMore())
@@ -71,30 +71,30 @@
   </ul>
 </div>
 
-  @section('pageScripts')
+@section('pageScripts')
+  @parent
+  <!-- connect grid -->
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var gridster;
+      var widget_width = $(window).width()/6-15;
+      var widget_height = $(window).height()/6-20;
 
-    <!-- connect grid -->
-    <script type="text/javascript">
-      $(document).ready(function() {
-        var gridster;
-        var widget_width = $(window).width()/6-15;
-        var widget_height = $(window).height()/6-20;
+      $(function(){
 
-        $(function(){
+        gridster = $(".connect ul").gridster({
+          widget_base_dimensions: [widget_width, widget_height],
+          widget_margins: [5, 5],
+          helper: 'clone',
+          resize: {
+            enabled: false,
+            max_size: [1, 1],
+            min_size: [1, 1]
+          }
+        }).data('gridster');
 
-          gridster = $(".gridster ul").gridster({
-            widget_base_dimensions: [widget_width, widget_height],
-            widget_margins: [4, 4],
-            helper: 'clone',
-            resize: {
-              enabled: false,
-              max_size: [1, 1],
-              min_size: [1, 1]
-            }
-          }).data('gridster');
-
-        });
       });
-    </script>
-    <!-- /connect grid -->
-  @stop
+    });
+  </script>
+  <!-- /connect grid -->
+@stop

@@ -12,14 +12,14 @@
     <div id="content-wrapper">
       <!-- Modals -->
       <!-- Connect Modal-->
-      <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false'>
+      <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false' >
         <div class='modal-dialog modal-lg'>
           <div>
             <div class='modal-header'>
               <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
               <h4 class='modal-title'>Add new widget</h4>
             </div>
-            <div class='modal-content'>
+            <div class='modal-content theme-asphalt'>
               @include('connect.connect-modal')
             </div>
           </div>
