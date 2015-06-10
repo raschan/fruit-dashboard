@@ -100,7 +100,11 @@
     </script>
     <!-- /Pagealert timeout -->
 
-    
+    <!-- Page specific modals -->
+    @section('pageModals')
+    @show
+    <!-- /Page specific modals -->
+
     <!-- Page specific scripts -->
     @section('pageScripts')
     @show

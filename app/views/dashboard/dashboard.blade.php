@@ -9,17 +9,18 @@
 
   @section('pageContent')
 
-    <div id="content-wrapper" class="gridster not-visible">
-      <ul>
-      
-        @for ($i = 0; $i < count($allFunctions); $i++)
+    <div id="content-wrapper">
+      <div id="main-grid" class='gridster not-visible'>
+        <ul>
+        
+          @for ($i = 0; $i < count($allFunctions); $i++)
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+            @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
-        @endfor
+          @endfor
 
-      </ul>
-
+        </ul>
+      </div>
     </div> <!-- / #content-wrapper -->
   @stop
 
@@ -121,7 +122,7 @@
 
         startTime();
 
-        $('#content-wrapper').fadeIn(500);
+        $('.gridster').fadeIn(500);
       });
     </script>
     <!-- /script for clock -->
