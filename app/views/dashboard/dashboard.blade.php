@@ -25,11 +25,12 @@
 
   @section('pageScripts')
     <script type="text/javascript">
+    asdf
      $(document).ready(function() {
          var gridster;
          var positioning = [];
          var widget_width = $(window).width()/6-15;
-         var widget_height = $(window).height()/6-20;
+         var widget_height = $(window).height()/6-20; 
 
          $(function(){
 
