@@ -816,7 +816,7 @@ ul {
 	display: inline-block;
 }
 
-input.widget-name {
+.widget-name {
 	border: 1px solid gray;
 	background-color: LightYellow;
 }

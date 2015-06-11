@@ -25,6 +25,7 @@
   @stop
 
   @section('pageScripts')
+
     <!-- Grid functions -->
     <script type="text/javascript">
      $(document).ready(function() {
@@ -78,6 +79,8 @@
     </script>
     <!-- /Grid functions -->
 
+    {{ HTML::script('js/jquery.color.js') }}
+    {{ HTML::script('js/jquery.easing.1.3.js') }}
 
     <!-- Saving text and settings -->
     <script type="text/javascript">
@@ -95,19 +98,26 @@
         }
 
         function saveWidgetName(ev) {
-          var newName = $(ev.target).val();
-          var id = $(ev.target).attr('id');
+          
+          var input = $(ev.target).parent().parent().children('input');
+          var newName = input.val();
+          var id = input.attr('id');
 
           if (newName) {
             $.ajax({
               type: 'POST',
-              url: '/api/widgets/settings/name/' + id + '/' + newName
+              url: '/api/widgets/settings/name/' + id + '/' + newName,
+              success:function(message,code){
+                var current = input.css('background-color');
+
+                input.animate({'background-color':'LightGreen'},50,'easeInCirc');
+                input.animate({'background-color': current},100,'easeOutCirc');
+              }
             });            
           }
-
         }
         // user finished typing
-        $('.widget-name').keyup(_.debounce(saveWidgetName,500));
+        $('.save-widget-name').click(saveWidgetName);
         $('.note').keyup(_.debounce(sendText,500));
       });
     </script>

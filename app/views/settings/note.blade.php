@@ -1,8 +1,10 @@
+{{--
 <div class="row">
-  <div class='col-sm-4 text-right valign'>
+  <div class='col-sm-2 text-right valign'>
     <label>Background:</label>
   </div>
-  <div class='col-sm-8'>
+  <div class='col-sm-10'>
 		<span class='color-box'></span>
   </div>
 </div>
+--}}
