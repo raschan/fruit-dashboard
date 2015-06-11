@@ -51,16 +51,15 @@
      $(document).ready(function() {
          var gridster;
          var positioning = [];
-         /*var widget_width = $(window).width()/6-15;
-         var widget_height = $(window).height()/6-20;*/
+         var widget_width = $(window).width()/12-15;
+         var widget_height = $(window).height()/12-20;
 
          $(function(){
 
            gridster = $(".gridster ul").gridster({
              /* widget_base_dimenions - finer resizable steps*/
-             widget_base_dimensions: [100, 50],
+             widget_base_dimensions: [widget_width, widget_height],
              widget_margins: [5, 5],
-             max_cols: 9,
              helper: 'clone',
              serialize_params: function ($w, wgd) {
                  return {
