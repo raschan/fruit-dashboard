@@ -61,7 +61,7 @@ class DashboardController extends BaseController
 
 
 		#####################################################
-		# prepare stuff for google spreadsheet metrics start
+		# prepare stuff for other widgets start
 
 		$widgets = Auth::user()->dashboards()->first()->widgets;
 
@@ -100,22 +100,57 @@ class DashboardController extends BaseController
 				case 'quote';
 					$widgetObject = json_decode($widget->widget_source);
 
-					$quoteObject = Quote::where('type', '=', $widgetObject->type)
-											// ->where('language', '=', $widgetObject->language)
-											->where('language', '=', 'english')
-											->orderBy(DB::raw('RAND()'))
-											->first();
+					if (!isset($widgetObject->language)) {
+						$widgetObject->language = 'english';
+					}
+					if (!isset($widgetObject->refresh)) {
+						$widgetObject->refresh = 'daily';
+					}
+					if (!isset($widgetObject->type)) {
+						$widgetObject->type = 'quote-inspirational';
+					}
+
+					if ($widgetObject->refresh == 'every-refresh') {
+
+						# if it needs to be refreshed at every query
+						$quoteObject = Quote::where('type', '=', $widgetObject->type)
+						->where('language', '=', $widgetObject->language)
+						->orderBy(DB::raw('RAND()'))
+						->first();
+
+					} else {
+						# if it needs to be refreshed daily
+
+						# number of the day in the year
+						$numberOfDayInYear = date('z');
+
+						# get all the matching quotes
+						$quotes = Quote::where('type', '=', $widgetObject->type)
+						->where('language', '=', $widgetObject->language)
+						->get();
+
+						# count the quotes
+						$quoteCount = $quotes->count();
+
+				        # calculate which quote will we use
+				        $quoteNumber = $numberOfDayInYear % $quoteCount;
+
+				        # get the nth quote
+				        $quoteObject = $quotes->get($quoteNumber);
+					}
+
 					$current_value = json_encode([
 							'quote' => $quoteObject->quote,
 							'author' => $quoteObject->author
 					]);
 					break;
+				
 				case 'note';
 					$widgetObject = json_decode($widget->widget_source);
 					$current_value = Data::where('widget_id', $widget->id)->first()->data_object;
 					$current_value = str_replace('[%LINEBREAK%]', "\n", $current_value);
-
 					break;
+
 				case 'clock';
 					$widgetObject = json_decode($widget->widget_source);
 					
@@ -143,8 +178,9 @@ class DashboardController extends BaseController
 						$dataArray = array_add($dataArray, $dataObject->date, $current_value);
 					}
 			}
+
+
 			$widgetPosition = json_decode($widget->position);
-			
 			$position = [
 				'x'     => $widgetPosition->size_x,
 				'y'     => $widgetPosition->size_y,
@@ -166,7 +202,7 @@ class DashboardController extends BaseController
 			$allMetrics[] = $newMetricArray;
 		} // /foreach
 		
-		# prepare stuff for google spreadsheet metrics end
+		# prepare stuff for other widgets end
 		#####################################################
 
 		$user = Auth::user();

@@ -320,15 +320,19 @@ class ConnectController extends BaseController
 		if ($provider == 'quote') {
 
 			if (!$step){
-				return View::make('connect.quoteConnect');
+				return View::make('connect.quoteConnect')
+					->with(array(
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+					)
+				);
 			}
 
 			if ($step == 2) {
 				
 				$type = Input::get('type');
 				$refresh = Input::get('refresh');
-				// $language = Input::get('language');                
-				$language = 'english';
+				$language = Input::get('language');                
 
 				# save the widget
 				$widget_data = array(

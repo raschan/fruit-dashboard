@@ -28,7 +28,7 @@
           <br/>
           <br/>
 
-          <!--h4>Choose quote refresh frequency</h4>
+          <h4>Choose quote refresh frequency</h4>
 
           <input type="radio" name="refresh" value="daily" checked="checked"/> Daily<br/>
           <input type="radio" name="refresh" value="every-reload"/> Every reload<br/>
@@ -36,7 +36,7 @@
           <h4>Choose quote language</h4>
 
           <input type="radio" name="language" value="english" checked="checked"/> English<br/>
-          <input type="radio" name="language" value="hungarian"/> Hungarian<br/-->
+          <input type="radio" name="language" value="hungarian"/> Hungarian<br/>
 
           {{ Form::submit('Save', array(
           'class' => 'btn btn-flat btn-info btn-sm pull-right'
