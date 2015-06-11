@@ -68,6 +68,13 @@
       </a>
     </li>
 
+    <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+        <a href="{{ URL::route('connect.editwidget', 'background') }}">
+        <span class="icon fa fa-picture-o fa-3x"></span>
+        <p>Background</p>
+      </a>
+    </li>
+
   </ul>
 </div>
 
