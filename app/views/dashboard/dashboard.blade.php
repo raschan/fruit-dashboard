@@ -9,21 +9,44 @@
 
   @section('pageContent')
 
-    <div id="content-wrapper" class="gridster not-visible">
-      <ul>
-      
-        @for ($i = 0; $i < count($allFunctions); $i++)
+    <div id="content-wrapper">
+      <!-- Modals -->
+      <!-- Connect Modal-->
+      <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false' >
+        <div class='modal-dialog modal-lg'>
+          <div>
+            <div class='modal-header'>
+              <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
+              <h4 class='modal-title'>Add new widget</h4>
+            </div>
+            <div class='modal-content theme-asphalt'>
+              @include('connect.connect-modal')
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Connect Modal-->
+      <!-- /Modals -->
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+      <!-- widget list -->
+      <div class="gridster not-visible">
+        <ul>
+        
+          @for ($i = 0; $i < count($allFunctions); $i++)
 
-        @endfor
+            @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
-      </ul>
+          @endfor
 
+        </ul>
+      </div>
+      <!-- /widget list -->
     </div> <!-- / #content-wrapper -->
   @stop
 
   @section('pageScripts')
+
+    <!-- Grid functions -->
     <script type="text/javascript">
      $(document).ready(function() {
          var gridster;
@@ -121,7 +144,7 @@
 
         startTime();
 
-        $('#content-wrapper').fadeIn(500);
+        $('.gridster').fadeIn(500);
       });
     </script>
     <!-- /script for clock -->
@@ -138,5 +161,5 @@
       });
     </script>
     <!-- /Deciding on proper greeting -->
-  @stop
+  @append
 
