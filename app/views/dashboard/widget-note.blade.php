@@ -20,14 +20,11 @@
 	      </div>
 	      <div class='modal-content'>
 	      	<div class='top-space bottom-space'>
-	      		<span class='left-space'>Widget Name: </span><input type='text' name='widget-{{ $id }}-Name' value="{{ $widget_data['fullName'] }}">
+	      		<span class='left-space'>Widget Name: </span><input class='widget-name' type='text' id='{{ $id }}' value="{{ $widget_data['fullName'] }}" placeholder='Widget Name'>
 	      	</div>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<!-- /note settings -->
-@append
-
-@section('pageScripts')
 @append

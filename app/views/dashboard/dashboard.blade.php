@@ -25,6 +25,7 @@
   @stop
 
   @section('pageScripts')
+    <!-- Grid functions -->
     <script type="text/javascript">
      $(document).ready(function() {
          var gridster;
@@ -78,26 +79,36 @@
     <!-- /Grid functions -->
 
 
-    <!-- Saving text -->
+    <!-- Saving text and settings -->
     <script type="text/javascript">
       $(document).ready(function(){
-        $(function() {
+                  
+        function sendText(ev) {
+          var text = $(ev.target).val() ? $(ev.target).val() : '';
+          text = text.replace(/\n\r?/g, '[%LINEBREAK%]');
+          var id = $(ev.target).attr('id');
           
-          function sendText(ev) {
-            var text = $(ev.target).val() ? $(ev.target).val() : '';
-            text = text.replace(/\n\r?/g, '[%LINEBREAK%]');
-            var id = $(ev.target).attr('id');
-            
+          $.ajax({
+            type: 'POST',
+            url: '/api/widgets/save-text/' + id + '/' + text
+          });
+        }
+
+        function saveWidgetName(ev) {
+          var newName = $(ev.target).val();
+          var id = $(ev.target).attr('id');
+
+          if (newName) {
             $.ajax({
               type: 'POST',
-              url: '/api/widgets/save-text/' + id + '/' + text
-            });
-            
+              url: '/api/widgets/settings/name/' + id + '/' + newName
+            });            
           }
 
-          // user finished typing
-          $('.note').keyup(_.debounce(sendText,500));
-        });
+        }
+        // user finished typing
+        $('.widget-name').keyup(_.debounce(saveWidgetName,500));
+        $('.note').keyup(_.debounce(sendText,500));
       });
     </script>
     <!-- /Saving text -->
@@ -122,7 +133,7 @@
 
         startTime();
 
-        $('.gridster').fadeIn(500);
+        $('.not-visible').fadeIn(500);
       });
     </script>
     <!-- /script for clock -->
