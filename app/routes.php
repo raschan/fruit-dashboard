@@ -28,12 +28,8 @@ if(!App::environment('production'))
     ));
 
     Route::get('/test', array(
-        'uses' => 'DevController@show'
-    ));
-
-    Route::get('test', array(
-        'as'    => 'dev.test',
-        'uses'  => 'DevController@showTest'
+        'as'   => 'dev.test',
+        'uses' => 'DevController@showTest'
     ));
 
     Route::get('/email/{email}', array(
@@ -195,6 +191,13 @@ Route::any('connect.deletewidget/{widget_id}', array(
     'before' => 'auth',
     'as' => 'connect.deletewidget',
     'uses' => 'ConnectController@deleteWidget'
+));
+
+// edit widget
+Route::get('connect.editwidget/{service}/{widget_id?}', array(
+    'before' => 'auth',
+    'as' => 'connect.editwidget',
+    'uses' => 'ConnectController@editWidget'
 ));
 
 

@@ -1,11 +1,13 @@
-<p>snake case</p>
-<h1>{{ snake_case('Pappara ram') }}</h1>
-<h1>{{ snake_case('Pappara Ram') }}</h1>
-<h1>{{ snake_case('PapparaRam') }}</h1>
-<p>camel case</p>
-<h1>{{ camel_case('Pappara ram') }}</h1>
-<h1>{{ camel_case('Pappara Ram') }}</h1>
-<h1>{{ camel_case('PapparaRam') }}</h1>
-<p>snaked camel case</p>
-<h1>{{ snake_case(camel_case('PapparaRam')) }}</h1>
-<h1>{{ snake_case(camel_case('Pappara ram')) }}</h1>
+@extends('meta.base-user')
+		@section('pageContent')
+	<div id='content-wrapper'>
+		@include('dev.test2')
+		<p>include other page here</p>
+			<p>test1 content</p>
+	</div>
+		@append
+
+
+	@section('pageScripts')
+		<p> this is section from 'pageScripts' in test1</p>
+	@append

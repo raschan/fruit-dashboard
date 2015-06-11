@@ -169,15 +169,30 @@ class DashboardController extends BaseController
 		# prepare stuff for google spreadsheet metrics end
 		#####################################################
 
-		return View::make(
-			'dashboard.dashboard',
+		$user = Auth::user();
+		$client = GoogleSpreadsheetHelper::setGoogleClient();
+
+		return View::make('dashboard.dashboard',
 			array(
-				'allFunctions' => $allMetrics,
-				'events' => Calculator::formatEvents(Auth::user()),
-				'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
-				'isBackgroundOn' => Auth::user()->isBackgroundOn,
-				'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-				'onDashboard' => true
+				'user'                          => $user,
+				// widgets
+				'allFunctions' 									=> $allMetrics,
+				
+				// stripe stuff
+				'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
+
+				// braintree stuff
+				//'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
+
+				// google spreadsheet stuff
+				'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+
+				// other stuff
+				'isBackgroundOn' 								=> $user->isBackgroundOn,
+				'dailyBackgroundURL' 						=> $user->dailyBackgroundURL(),
+				
+				// to hide home button if on dashboard
+				'onDashboard' 									=> true,
 			)
 		);
 	}

@@ -9,33 +9,58 @@
 
   @section('pageContent')
 
-    <div id="content-wrapper" class="gridster not-visible">
-      <ul>
-      
-        @for ($i = 0; $i < count($allFunctions); $i++)
+    <div id="content-wrapper">
+      <!-- Modals -->
+      <!-- Connect Modal-->
+      <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false' >
+        <div class='modal-dialog modal-lg'>
+          <div>
+            <div class='modal-header'>
+              <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
+              <h4 class='modal-title'>Add new widget</h4>
+            </div>
+            <div class='modal-content theme-asphalt'>
+              @include('connect.connect-modal')
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Connect Modal-->
+      <!-- /Modals -->
 
-          @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+      <!-- widget list -->
+      <div class="gridster not-visible">
+        <ul>
+        
+          @for ($i = 0; $i < count($allFunctions); $i++)
 
-        @endfor
+            @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
 
-      </ul>
+          @endfor
 
+        </ul>
+      </div>
+      <!-- /widget list -->
     </div> <!-- / #content-wrapper -->
   @stop
 
   @section('pageScripts')
+
+    <!-- Grid functions -->
     <script type="text/javascript">
      $(document).ready(function() {
          var gridster;
          var positioning = [];
-         var widget_width = $(window).width()/6-15;
-         var widget_height = $(window).height()/6-20; 
+         /*var widget_width = $(window).width()/6-15;
+         var widget_height = $(window).height()/6-20;*/
 
          $(function(){
 
            gridster = $(".gridster ul").gridster({
-             widget_base_dimensions: [widget_width, widget_height],
+             /* widget_base_dimenions - finer resizable steps*/
+             widget_base_dimensions: [100, 50],
              widget_margins: [5, 5],
+             max_cols: 9,
              helper: 'clone',
              serialize_params: function ($w, wgd) {
                  return {
@@ -48,8 +73,8 @@
                },
              resize: {
                enabled: true,
-               max_size: [4, 4],
-               min_size: [1, 1],
+               max_size: [9, 9],
+               min_size: [2, 2],
                stop: function(e, ui, $widget) {
                 positioning = gridster.serialize();
                 positioning = JSON.stringify(positioning);
@@ -121,7 +146,7 @@
 
         startTime();
 
-        $('#content-wrapper').fadeIn(500);
+        $('.gridster').fadeIn(500);
       });
     </script>
     <!-- /script for clock -->
@@ -138,5 +163,5 @@
       });
     </script>
     <!-- /Deciding on proper greeting -->
-  @stop
+  @append
 

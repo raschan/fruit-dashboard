@@ -697,9 +697,7 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 }
 
 .textShadow {
-	text-shadow: 1px 1px 1px rgba(20, 20, 20, 1);
-	-webkit-text-stroke-width: 0.5px;
-	-webkit-text-stroke-color: #aaa;
+	text-shadow: 0px 0px 2px #aaa;
 }
 
 /* quote */
@@ -714,6 +712,11 @@ i#rightDropDown.dropdown-icon.fa.fa-2x.fa-cog:hover{
 }
 
 #author{
+	/* snap to bottom right*/
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+
 	margin: 0;
 	padding: 0;
 	text-align: right;
@@ -752,12 +755,18 @@ textarea[name=note] {
 }
 
 h1.digitTime {
+	/*
+	text-shadow: 0px 0px 2px #000;
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #000000;
+*/
 	padding: 0;
 	margin: 0;
 	text-align: center;
-	line-height: 1em;
-	color: #fff;
+	color: #ffffff;
+	letter-spacing: -5px;
 	font-size: 72px;
+	font-family: HelveticaNeue-Medium, 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: lighter;
 }
 

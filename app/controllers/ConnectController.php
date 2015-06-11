@@ -674,4 +674,23 @@ class ConnectController extends BaseController
 		return Redirect::back()
 						->with(array('success' => "Widget deleted."));
 	}
+
+	/*
+	|===================================================
+	| <GET> | editWidget: edit widget
+	|===================================================
+	*/
+	public function editWidget($service, $widget_id = NULL){
+
+		if ($service == 'background') {
+			return View::make('connect.backgroundSettings')
+				->with(array(
+					'isBackgroundOn' => Auth::user()->isBackgroundOn,
+					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+			));
+		}
+	}
+
+
+
 }
