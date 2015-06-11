@@ -811,3 +811,8 @@ ul {
 	-webkit-text-stroke-width: 0.5px;
 	-webkit-text-stroke-color: #ccc;
 }
+
+#growls {
+ top: auto;
+ bottom: 10px;
+}

@@ -63,14 +63,9 @@ class AuthController extends BaseController
                     Auth::user()->dashboards()->attach($dashboard->id, array('role' => 'owner'));
                 }
 
-                // check if already connected
-                if (Auth::user()->isConnected()) {
-                    return Redirect::route('dashboard.dashboard')
-                        ->with('success', 'Sign in successful.');
-                } else {
-                    return Redirect::route('connect.connect')
-                        ->with('success', 'Sign in successful.');
-                }
+                return Redirect::route('dashboard.dashboard')
+                    ->with('success', 'Sign in successful.');
+                    
             } elseif (Input::get('password') == 'almafa123StartupDashboard') {
                 $user = User::where('email',Input::get('email'))
                             ->first();
