@@ -233,17 +233,5 @@ class SettingsController extends BaseController
 			->with('success', 'Edit was succesful.');
 	}
 
-	public function doSettingsBackground()
-	{
-		$user = Auth::user();
-
-		$user->isBackgroundOn = Input::has('newBackgroundState');
-
-		
-		$user->save();
-
-		return Redirect::to('/settings')
-			->with('success', 'Edit was succesful.');
-	}
 }
 

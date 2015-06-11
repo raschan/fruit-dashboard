@@ -14,7 +14,7 @@
 
                 <!-- Background switch -->
                 {{ Form::open(array(
-                  'action' => 'SettingsController@doSettingsBackground',
+                  'action' => 'ConnectController@doSettingsBackground',
                   'id' => 'form-settings-background',
                   'role' => 'form',
                   'class' => 'form-horizontal' )) }}
