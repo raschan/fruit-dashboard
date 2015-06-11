@@ -8,9 +8,15 @@
 			</a>
 		</li>
 		<li role="presentation">
+			<a href='connect.connect'>
+				<i class="dropdown-icon fa fa-plus-circle"></i>&nbsp;&nbsp;Add New Widget
+			</a>
+		</li>
+		<li role="presentation">
 			<a href="https://fruitdashboard.uservoice.com/">
 				<i class="dropdown-icon fa fa-bullhorn"></i>&nbsp;&nbsp;Feedback
 			</a>
+		</li>
 		<li role="presentation">
 			<a href="{{ URL::route('settings.settings') }}">
 				<i class="dropdown-icon fa fa-cogs"></i>&nbsp;&nbsp;Settings

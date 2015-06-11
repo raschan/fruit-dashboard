@@ -155,9 +155,9 @@
       {
         var hours = new Date().getHours();
         
-        if(17 <= hours || hours < 5) { $('#greeting').html('evening'); }
-        if(5 <= hours && hours < 13) { $('#greeting').html('morning'); }
-        if(13 <= hours && hours < 17) { $('#greeting').html('afternoon'); } 
+        if(17 <= hours || hours < 5) { $('.greeting').html('evening'); }
+        if(5 <= hours && hours < 13) { $('.greeting').html('morning'); }
+        if(13 <= hours && hours < 17) { $('.greeting').html('afternoon'); } 
       });
     </script>
     <!-- /Deciding on proper greeting -->
