@@ -691,6 +691,23 @@ class ConnectController extends BaseController
 		}
 	}
 
+	/*
+	|===================================================
+	| <GET> | doSettingsBackground: edit background settings
+	|===================================================
+	*/
+	public function doSettingsBackground()
+	{
+		$user = Auth::user();
+
+		$user->isBackgroundOn = Input::has('newBackgroundState');
+
+		
+		$user->save();
+
+		return Redirect::to('/dashboard')
+			->with('success', 'Background settings edit was succesful.');
+	}
 
 
 }

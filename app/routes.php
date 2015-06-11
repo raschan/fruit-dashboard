@@ -130,11 +130,6 @@ Route::post('settingsFrequency', array(
     'uses' => 'SettingsController@doSettingsFrequency'
 ));
 
-Route::post('settingsBackground', array(
-    'before' => 'auth',
-    'uses' => 'SettingsController@doSettingsBackground'
-));
-
 
 Route::post('cancelSubscription', array(
     'before'    => 'auth',
@@ -202,6 +197,12 @@ Route::get('connect.editwidget/{service}/{widget_id?}', array(
     'before' => 'auth',
     'as' => 'connect.editwidget',
     'uses' => 'ConnectController@editWidget'
+));
+
+// background settings, should be moved to separate package
+Route::post('settingsBackground', array(
+    'before' => 'auth',
+    'uses' => 'ConnectController@doSettingsBackground'
 ));
 
 
