@@ -11,20 +11,8 @@
 
 @section('pageModals')
 	<!-- list settings -->
-	<div id='widget-settings-{{ $id }}' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false'>
-	  <div class='modal-dialog modal-sm'>
-	    <div>
-	      <div class='modal-header'>
-	        <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
-	        <h4 class='modal-title'>Settings</h4>
-	      </div>
-	      <div class='modal-content'>
-	      	<div class='top-space bottom-space'>
-	      		<span class='left-space'>Widget Name: </span><input class='widget-name' type='text' id='{{ $id }}' value="{{ $widget_data['fullName'] }}" placeholder='Widget Name'>
-	      	</div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	
+	@include('settings.widget-settings')
+	
 	<!-- /list settings -->
 @append

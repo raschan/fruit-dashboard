@@ -657,12 +657,15 @@ body {
 }
 
 .bottom-space {
-	margin-bottom: 15px
+	margin-bottom: 15px;
+}
+
+.bottom-space-sm {
+	margin-bottom: 5px;
 }
 
 .valign {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	vertical-align: center;
 }
 
 #settingsIcon{
@@ -802,4 +805,18 @@ ul {
 	text-shadow: 1px 1px 3px rgba(20, 20, 20, 1);
 	-webkit-text-stroke-width: 0.5px;
 	-webkit-text-stroke-color: #ccc;
+}
+
+/* widget settings */
+
+.color-box {
+	width: 15px;
+	height: 15px;
+	border: 1px solid gray;
+	display: inline-block;
+}
+
+input.widget-name {
+	border: 1px solid gray;
+	background-color: LightYellow;
 }
