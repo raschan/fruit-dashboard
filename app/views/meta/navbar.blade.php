@@ -3,12 +3,7 @@
 	<i class="dropdown-icon fa fa-2x fa-cog" id="rightDropDown" data-toggle="dropdown" aria-expanded="true"></i>
 	<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="rightDropDown">
 		<li role="presentation">
-			<a href='' data-toggle='modal' data-target='#modal-new-widget'>
-				<i class="dropdown-icon fa fa-plus-circle"></i>&nbsp;&nbsp;Add New Widget
-			</a>
-		</li>
-		<li role="presentation">
-			<a href='connect.connect'>
+			<a href="{{ URL::route('settings.settings') }}">
 				<i class="dropdown-icon fa fa-plus-circle"></i>&nbsp;&nbsp;Add New Widget
 			</a>
 		</li>
