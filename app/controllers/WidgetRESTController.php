@@ -3,6 +3,94 @@
 class WidgetRESTController extends BaseController {
 
 	/**
+	 * Save widget position.
+	 *
+	 * @param  int  $userId
+	 * @param  string $positions
+	 * @return Response
+	 */
+	public function saveWidgetPosition($userId, $json)
+	{
+		$user = User::where('id','=',$userId)->first();
+
+		if ($user)
+		{
+			Log::info($json);
+			$widgetPositions = json_decode($json);
+
+			foreach ($widgetPositions as $widgetPosition) 
+			{
+				$widget = Widget::find($widgetPosition->id);
+
+				if($widget)
+				{
+					$pos = [
+						"col" 		=> $widgetPosition->col,
+						"row" 		=> $widgetPosition->row,
+						"size_x" 	=> $widgetPosition->size_x,
+						"size_y" 	=> $widgetPosition->size_y
+					];
+					$widget->position = json_encode($pos);
+					$widget->save();
+				}
+			}
+
+			return Response::make('everything okay',200);
+
+		} else {
+			// no such user
+			return Response::json(array('error' => 'no such user'));
+		}
+	}
+
+	/**
+	 * Save widget text.
+	 *
+	 * @param  int  $widgetId
+	 * @param  string $text
+	 * @return Response
+	 */
+
+	public function saveWidgetText($widgetId, $text = '')
+	{
+		$widgetData = Data::where('widget_id', $widgetId)->first();
+
+		if ($widgetData)
+		{
+			$widgetData->data_object = $text;
+			$widgetData->save();
+
+			return Response::make('everything okay',200);		
+		} else {
+			return Response::json(array('error' => 'bad widget id'));
+		}
+	}
+
+	/**
+	 * Save widget name.
+	 *
+	 * @param  int  $widgetId
+	 * @param  string $newName
+	 * @return Response
+	 */
+
+	public function saveWidgetName($widgetId, $newName)
+	{
+		$widget = Widget::find($widgetId);
+
+		if ($widget)
+		{
+			$widget->widget_name = $newName;
+			$widget->save();
+
+			return Response::make('everything okay',200);		
+		} else {
+			return Response::json(array('error' => 'bad widget id'));
+		}
+	}	
+
+
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
@@ -80,69 +168,5 @@ class WidgetRESTController extends BaseController {
 	public function destroy($id)
 	{
 		//
-	}
-
-	/**
-	 * Save widget position.
-	 *
-	 * @param  int  $userId
-	 * @param  string $positions
-	 * @return Response
-	 */
-	public function saveWidgetPosition($userId, $json)
-	{
-		$user = User::where('id','=',$userId)->first();
-
-		if ($user)
-		{
-			Log::info($json);
-			$widgetPositions = json_decode($json);
-
-			foreach ($widgetPositions as $widgetPosition) 
-			{
-				$widget = Widget::find($widgetPosition->id);
-
-				if($widget)
-				{
-					$pos = [
-						"col" 		=> $widgetPosition->col,
-						"row" 		=> $widgetPosition->row,
-						"size_x" 	=> $widgetPosition->size_x,
-						"size_y" 	=> $widgetPosition->size_y
-					];
-					$widget->position = json_encode($pos);
-					$widget->save();
-				}
-			}
-
-			return Response::make('everything okay',200);
-
-		} else {
-			// no such user
-			return Response::json(array('error' => 'no such user'));
-		}
-	}
-
-	/**
-	 * Save widget text.
-	 *
-	 * @param  int  $widgetId
-	 * @param  string $text
-	 * @return Response
-	 */
-
-	public function saveWidgetText($widgetId, $text = '')
-	{
-		$widgetData = Data::where('widget_id', $widgetId)->first();
-
-		if ($widgetData)
-		{
-			$widgetData->data_object = $text;
-			$widgetData->save();
-
-			return Response::make('everything okay',200);		
-		} else {
-			return Response::json(array('error' => 'bad widget id'));
-		}
 	}
 }

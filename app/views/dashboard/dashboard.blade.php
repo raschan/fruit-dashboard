@@ -10,6 +10,7 @@
   @section('pageContent')
 
     <div id="content-wrapper">
+      {{--
       <!-- Modals -->
       <!-- Connect Modal-->
       <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false' >
@@ -27,9 +28,10 @@
       </div>
       <!-- /Connect Modal-->
       <!-- /Modals -->
-
+      --}}
       <!-- widget list -->
-      <div class="gridster not-visible">
+
+      <div id="main-grid" class='gridster not-visible'>
         <ul>
         
           @for ($i = 0; $i < count($allFunctions); $i++)
@@ -100,27 +102,46 @@
     </script>
     <!-- /Grid functions -->
 
+    {{ HTML::script('js/jquery.color.js') }}
+    {{ HTML::script('js/jquery.easing.1.3.js') }}
 
-    <!-- Saving text -->
+    <!-- Saving text and settings -->
     <script type="text/javascript">
       $(document).ready(function(){
-        $(function() {
+                  
+        function sendText(ev) {
+          var text = $(ev.target).val() ? $(ev.target).val() : '';
+          text = text.replace(/\n\r?/g, '[%LINEBREAK%]');
+          var id = $(ev.target).attr('id');
           
-          function sendText(ev) {
-            var text = $(ev.target).val() ? $(ev.target).val() : '';
-            text = text.replace(/\n\r?/g, '[%LINEBREAK%]');
-            var id = $(ev.target).attr('id');
-            
+          $.ajax({
+            type: 'POST',
+            url: '/api/widgets/save-text/' + id + '/' + text
+          });
+        }
+
+        function saveWidgetName(ev) {
+          
+          var input = $(ev.target).parent().parent().children('input');
+          var newName = input.val();
+          var id = input.attr('id');
+
+          if (newName) {
             $.ajax({
               type: 'POST',
-              url: '/api/widgets/save-text/' + id + '/' + text
-            });
-            
-          }
+              url: '/api/widgets/settings/name/' + id + '/' + newName,
+              success:function(message,code){
+                var current = input.css('background-color');
 
-          // user finished typing
-          $('.note').keyup(_.debounce(sendText,500));
-        });
+                input.animate({'background-color':'LightGreen'},50,'easeInCirc');
+                input.animate({'background-color': current},100,'easeOutCirc');
+              }
+            });            
+          }
+        }
+        // user finished typing
+        $('.save-widget-name').click(saveWidgetName);
+        $('.note').keyup(_.debounce(sendText,500));
       });
     </script>
     <!-- /Saving text -->
@@ -145,7 +166,7 @@
 
         startTime();
 
-        $('.gridster').fadeIn(500);
+        $('.not-visible').fadeIn(500);
       });
     </script>
     <!-- /script for clock -->
