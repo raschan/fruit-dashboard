@@ -816,3 +816,14 @@ ul {
  top: auto;
  bottom: 10px;
 }
+
+.widget-text {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: -5px;
+  font-size: 48px;
+  font-family: HelveticaNeue-Medium, 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: lighter;
+}
