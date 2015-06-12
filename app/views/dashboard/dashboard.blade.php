@@ -51,12 +51,13 @@
      $(document).ready(function() {
          var gridster;
          var positioning = [];
-         var widget_width = $(window).width()/6-15;
-         var widget_height = $(window).height()/6-20; 
+         var widget_width = $(window).width()/12-15;
+         var widget_height = $(window).height()/12-20;
 
          $(function(){
 
            gridster = $(".gridster ul").gridster({
+             /* widget_base_dimenions - finer resizable steps*/
              widget_base_dimensions: [widget_width, widget_height],
              widget_margins: [5, 5],
              helper: 'clone',
@@ -71,8 +72,8 @@
                },
              resize: {
                enabled: true,
-               max_size: [4, 4],
-               min_size: [1, 1],
+               max_size: [9, 9],
+               min_size: [2, 2],
                stop: function(e, ui, $widget) {
                 positioning = gridster.serialize();
                 positioning = JSON.stringify(positioning);

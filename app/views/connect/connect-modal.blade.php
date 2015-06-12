@@ -1,6 +1,6 @@
 <div class='gridster connect'>
   <ul>
-    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="2">
       @if ($user->canConnectMore())
         <a href="{{ URL::route('connect.addwidget', 'clock') }}">
       @else
@@ -11,7 +11,7 @@
       </a>
     </li>
    
-    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="2">
       @if ($user->isGoogleSpreadsheetConnected())
         <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
       @elseif($user->canConnectMore())
@@ -24,7 +24,7 @@
       </a>
     </li>
 
-    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="2">
       @if ($user->canConnectMore())
         <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
       @else
@@ -35,7 +35,7 @@
       </a>
     </li>
 
-    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="2">
       @if ($user->canConnectMore())
         <a href="{{ URL::route('connect.addwidget', 'quote') }}">
       @else
@@ -46,7 +46,7 @@
       </a>
     </li>
 
-    <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="2">
       @if ($user->canConnectMore())
         <a href="{{ URL::route('connect.addwidget', 'note') }}">
       @else
@@ -57,7 +57,7 @@
       </a>
     </li>
 
-    <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+    <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="2">
       @if ($user->canConnectMore())
         <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
       @else
