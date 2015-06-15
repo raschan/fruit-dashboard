@@ -274,6 +274,6 @@ Route::get('demo/statistics/{statID}', array(
 |--------------------------------------------------------------------------
 */
 
-Route::any('/api/{apiVersion?}', array(
+Route::post('/api/{apiVersion?}/{apiKey?}', array(
     'uses'  => 'ApiController@saveApiData',
 ));

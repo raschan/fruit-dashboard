@@ -417,6 +417,34 @@ class ConnectController extends BaseController
 			  ->with('success', 'Clock widget added.');
 		}
 
+
+		if ($provider == 'api')
+		{
+			// save the widget
+			$widgetData = array();
+			$widgetJson = json_encode($widgetData);
+
+			$widget = new Widget;
+			$widget->widget_name = 'API widget';
+			$widget->widget_type = 'api';
+			$widget->widget_source = $widgetJson;
+			$widget->dashboard_id = $user->dashboards()->first()->id;
+			$widget->position = '{"size_x":3,"size_y":3,"col":1,"row":1}';
+			$widget->save();
+
+			$apiKey = base64_encode(json_encode(array(
+				'wid'	=>	$widget->id
+			)));
+			$url = 'https://dashboard.tryfruit.com/api/0.1/'.$apiKey.'/';
+
+			return View::make('connect.apiConnect')
+				->with(array(
+					'url' => $url,
+					'isBackgroundOn' => Auth::user()->isBackgroundOn,
+					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL()
+				));
+		}
+
 		return Redirect::route('connect.connect')
 			->with('error', 'Unknown provider.');
 
