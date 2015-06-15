@@ -265,3 +265,15 @@ Route::get('demo/statistics/{statID}', array(
     'as' => 'demo.single_stat',
     'uses' => 'DemoController@showSinglestat'
 ));
+
+
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/api/{apiVersion?}/{apiKey?}', array(
+    'uses'  => 'ApiController@saveApiData',
+));

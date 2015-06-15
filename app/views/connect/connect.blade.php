@@ -11,11 +11,7 @@
       <ul>
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
-            <a href="{{ URL::route('connect.addwidget', 'clock') }}">
-          @else
-            <a href="/plans">
-          @endif
+          <a href="{{ URL::route('connect.addwidget', 'clock') }}">
             <span class="icon fa fa-clock-o fa-3x"></span>
             <p>Clock</p>
           </a>
@@ -24,13 +20,9 @@
         {{--
       
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
-            <a href="{{ $stripeButtonUrl }}">
-          @else
-            <a href="/plans">
-          @endif
-              <span class="icon pf-big pf-stripe"></span>
-              <p>Stripe payments</p>
+          <a href="{{ $stripeButtonUrl }}">
+            <span class="icon pf-big pf-stripe"></span>
+            <p>Stripe payments</p>
           </a>
         </li>
 
@@ -47,10 +39,8 @@
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
           @if ($user->isGoogleSpreadsheetConnected())
             <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
-          @elseif($user->canConnectMore())
-            <a href="{{ $googleSpreadsheetButtonUrl }}" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'>
           @else
-            <a href="/plans">
+            <a href="{{ $googleSpreadsheetButtonUrl }}" onclick='_gaq.push(["_trackEvent", "Connect", "Connecting Google Spreadsheet"]);mixpanel.track("Google Spreadsheet connect");'>
           @endif
             <span class="icon fa fa-google fa-3x"></span>
             <p>Google Spreadsheet</p>
@@ -59,11 +49,7 @@
 
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
-          @else
-            <a href="/plans">
-          @endif
             <span class="icon fa fa-file-text-o fa-3x"></span>
             <p>iframe</p>
           </a>
@@ -71,11 +57,7 @@
 
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'quote') }}">
-          @else
-            <a href="/plans">
-          @endif
             <span class="icon fa fa-quote-left fa-3x"></span>
             <p>Quotes</p>
           </a>
@@ -83,11 +65,7 @@
 
 
         <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'note') }}">
-          @else
-            <a href="/plans">
-          @endif
             <span class="icon fa fa-pencil fa-3x"></span>
             <p>Notes</p>
           </a>
@@ -95,15 +73,12 @@
 
 
         <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
-          @if ($user->canConnectMore())
             <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
-          @else
-            <a href="/plans">
-          @endif
             <span class="icon fa fa-comment-o fa-3x"></span>
             <p>Greetings</p>
           </a>
         </li>
+
 
         <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
             <a href="{{ URL::route('connect.editwidget', 'background') }}">
@@ -111,6 +86,15 @@
             <p>Background</p>
           </a>
         </li>
+
+
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="4" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'api') }}">
+            <span class="icon fa fa-code fa-3x"></span>
+            <p>Webhook / API</p>
+          </a>
+        </li>
+
       </ul>
 
       {{--
