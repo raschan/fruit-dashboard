@@ -281,6 +281,7 @@ class ConnectController extends BaseController
 					$widget->widget_type = Input::get('type');
 					$widget->widget_source = $widget_json;
 					$widget->dashboard_id = $user->dashboards()->first()->id;
+					$widget->position = '{"size_x":3,"size_y":4,"col":1,"row":1}';
 					$widget->save();
 
 					return Redirect::route('dashboard.dashboard')
@@ -310,6 +311,7 @@ class ConnectController extends BaseController
 				$widget->widget_type = 'iframe';
 				$widget->widget_source = $widget_json;
 				$widget->dashboard_id = $user->dashboards()->first()->id;
+				$widget->position = '{"size_x":6,"size_y":8,"col":1,"row":1}';
 				$widget->save();
 
 				return Redirect::route('dashboard.dashboard')
@@ -347,6 +349,7 @@ class ConnectController extends BaseController
 				$widget->widget_type = 'quote';
 				$widget->widget_source = $widget_json;
 				$widget->dashboard_id = $user->dashboards()->first()->id;
+				$widget->position = '{"size_x":6,"size_y":2,"col":1,"row":1}';
 				$widget->save();
 
 				return Redirect::route('dashboard.dashboard')
@@ -366,7 +369,7 @@ class ConnectController extends BaseController
 			$widget->widget_type = 'note';
 			$widget->widget_source = $widgetJson;
 			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":1,"size_y":2,"col":1,"row":1}';
+			$widget->position = '{"size_x":3,"size_y":3,"col":1,"row":1}';
 			$widget->save();
 
 			// save an empty data line
@@ -392,7 +395,7 @@ class ConnectController extends BaseController
 			$widget->widget_type = 'greeting';
 			$widget->widget_source = $widgetJson;
 			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":1,"size_y":1,"col":3,"row":1}';
+			$widget->position = '{"size_x":2,"size_y":2,"col":1,"row":1}';
 			$widget->save();
 
 			return Redirect::route('dashboard.dashboard')
@@ -410,7 +413,7 @@ class ConnectController extends BaseController
 			$widget->widget_type = 'clock';
 			$widget->widget_source = $widgetJson;
 			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":2,"size_y":1,"col":1,"row":1}';
+			$widget->position = '{"size_x":3,"size_y":2,"col":1,"row":1}';
 			$widget->save();
 
 			return Redirect::route('dashboard.dashboard')
