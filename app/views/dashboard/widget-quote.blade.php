@@ -3,7 +3,7 @@
 	<a href="{{ URL::route('connect.deletewidget', $id) }}"><span class="gs-close-widgets"></span></a>
 
 	<p id="quote" class="textShadow">{{ $quote }}</p>
-	<p id="author" class="textShadow pull-right">{{ $author }}</p>
+	{{-- <p id="author" class="textShadow pull-right">{{ $author }}</p> --}}
 </li>
 
 @section('pageModals')
