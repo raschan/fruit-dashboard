@@ -6,9 +6,8 @@
   @parent
 
         <!-- Appearance settings -->
-        <div class="col-md-10 col-md-offset-1">
-          <div class="row">
-            <div class="col-sm-6 col-md-offset-3 appearence-form-wrapper">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
               <div class="panel-body bordered getHeight">
                 <h4><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Background settings</h4>
 
@@ -70,9 +69,8 @@
                   </div>
                 {{ Form::close() }}
               </div>
-            </div> <!-- / .panel-body -->
-          </div> <!-- / .col-sm-6 -->
-        </div> <!-- /. col-md-10 -->
+            </div>
+          </div>
         <!-- /Appearance settings -->
 
 
