@@ -846,3 +846,7 @@ ul {
   font-family: HelveticaNeue-Medium, 'Helvetica Neue Medium', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: lighter;
 }
+
+.center {
+	text-align: center;
+}
