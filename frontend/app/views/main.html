@@ -1,0 +1,44 @@
+<div ng-controller="SettingsCtrl" id="settings-dropdown" >
+  <div class="btn-group" dropdown is-open="status.isopen">
+    <i id="settings-icon" class="fa fa-2x fa-cog dropdown-toggle" dropdown-toggle data-toggle="dropdown" aria-expanded="true"></i>
+    <ul class="dropdown-menu pull-right" role="menu">
+      <li>
+        <a href="#">
+          <i class="dropdown-icon fa fa-plus-circle"> </i>
+          Add new widget
+        </a>
+      </li>
+      <li>
+        <a href="https://fruitdashboard.uservoice.com">
+          <i class="dropdown-icon fa fa-bullhorn"> </i>
+          Feedback
+        </a>
+      </li>
+      <li>
+        <a href="#" ng-click="open()">
+          <i class="dropdown-icon fa fa-cogs"> </i>
+          Settings
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="dropdown-icon fa fa-power-off"> </i>
+          Sign out
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" ng-controller="DashboardCtrl as dashCtrl">
+  <div class="col-md-12">
+    <div gridster="gridsterOpts">
+      <ul>
+        <li gridster-item="customItemMap" ng-repeat="widget in dashCtrl.widgets" class="well opaque" hover="opaque">
+          <i class="panel-title-icon fa fa-times" ng-show="widget.hasClosingButton"></i>
+          {{widget.id}} | {{widget.size.x}} | {{ 'filtered' | reverse}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
