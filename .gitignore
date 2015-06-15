@@ -10,3 +10,6 @@ startServer
 error_log
 /emails
 /public/img/backgrounds-production
+bower_components/
+node_modules/
+public/dist/
