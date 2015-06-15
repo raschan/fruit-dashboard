@@ -16,10 +16,10 @@
     <!-- Header -->
     <div class="signup-header">
       <a href="http://analytics.tryfruit.com" class="logo">
-        Fruit Analytics
+        Fruit Dashboard
       </a> <!-- / .logo -->
       <div class="slogan">
-        Understand your business better.
+        The new tab for your startup
       </div> <!-- / .slogan -->
     </div>
     <!-- Form -->
@@ -59,8 +59,7 @@
   <!-- / Container -->
 
   <div class="have-account">
-    Not a member yet? <a href="{{ URL::route('auth.signup') }}">Sign Up now</a>
-    or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
+    Not a member yet? <a href="{{ URL::route('auth.signup') }}">Sign up</a>!
   </div>
 
 </body>

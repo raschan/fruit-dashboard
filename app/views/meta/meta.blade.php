@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
     <title>
-      Fruit Analytics
+      Fruit Dashboard
       @if (trim($__env->yieldContent('pageTitle')))
         | @yield('pageTitle')
       @endif

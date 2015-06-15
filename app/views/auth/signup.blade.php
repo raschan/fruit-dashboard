@@ -20,18 +20,18 @@
 
 		<!-- Left side -->
 		<div class="signin-info">
-			<a href="http://analytics.tryfruit.com" class="logo">
-				Fruit Analytics
+			<a href="http://dashboard.tryfruit.com" class="logo">
+				Fruit Dashboard
 			</a> <!-- / .logo -->
 			<div class="slogan">
-				Understand your business better.
+				The new tab for your startup.
 			</div> <!-- / .slogan -->
-			<ul>
-				<li><i class="fa fa-sitemap signin-icon"></i> One click, zero setup</li>
-				<li><i class="fa fa-file-text-o signin-icon"></i> Realtime view key metrics</li>
-				<li><i class="fa fa-outdent signin-icon"></i> Email reports</li>
-				<li><i class="fa fa-heart signin-icon"></i> Crafted with love</li>
-			</ul> <!-- / Info list -->
+			<!--ul>
+				<li><i class="fa fa-sitemap signin-icon"></i> Attach your favourite </li>
+				<li><i class="fa fa-file-text-o signin-icon"></i> Discuss it with your coworkers</li>
+				<li><i class="fa fa-outdent signin-icon"></i> Your dashboard at your new tab</li>
+				<li><i class="fa fa-heart signin-icon"></i> Designed with love</li>
+			</ul--> <!-- / Info list -->
 		</div>
 		<!-- / Left side -->
 
@@ -92,8 +92,7 @@
 		</div>
 		<!-- / Container -->
 		<div class="not-a-member">
-			Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign in</a> 
-			or check the <a href="{{ URL::route('demo.dashboard') }}">Demo</a>
+			Already have an account? <a href="{{ URL::route('auth.signin') }}">Sign in</a>.
 		</div>
 	
 	@stop
