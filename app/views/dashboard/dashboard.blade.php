@@ -162,5 +162,17 @@
       });
     </script>
     <!-- /Deciding on proper greeting -->
+
+    <!-- fittext -->
+    <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+
+        $("#digitClock").bind('resize', function(e){
+          $("h1.digitTime").fitText(0.3);
+        })
+      });
+    </script>
   @append
 
