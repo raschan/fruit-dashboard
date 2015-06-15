@@ -2,7 +2,7 @@
 	<a class='link-button' href='' data-toggle="modal" data-target='#widget-settings-{{ $id }}'><span class="gs-option-widgets"></span></a>
 	<a href="{{ URL::route('connect.deletewidget', $id) }}"><span class="gs-close-widgets"></span></a>
 	
-	<h3 class='white-text textShadow'>Good <span class='greeting'></span>@if(isset(Auth::user()->name)), {{ Auth::user()->name }}@endif! </h3>
+	<h3 class='white-text textShadow text-center'>Good <span class='greeting'></span>@if(isset(Auth::user()->name)), {{ Auth::user()->name }}@endif! </h3>
 </li>
 
 @section('pageModals')
