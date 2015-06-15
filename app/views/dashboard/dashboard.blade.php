@@ -9,41 +9,22 @@
 
   @section('pageContent')
 
-    <div id="content-wrapper">
-      {{--
-      <!-- Modals -->
-      <!-- Connect Modal-->
-      <div id='modal-new-widget' class='modal fade in' tabindex='-1' role='dialog' style="display:none;" aria-hidden='false' >
-        <div class='modal-dialog modal-lg'>
-          <div>
-            <div class='modal-header'>
-              <button type="button" class="close" data-dismiss='modal' aria-hidden='true'>x</button>
-              <h4 class='modal-title'>Add new widget</h4>
-            </div>
-            <div class='modal-content theme-asphalt'>
-              @include('connect.connect-modal')
-            </div>
+      <!-- widget list -->
+      <div class="container">
+        <div class="row">
+          <div class="gridster not-visible">
+            <ul>
+              @for ($i = 0; $i < count($allFunctions); $i++)
+
+                @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
+
+              @endfor
+            </ul>
           </div>
         </div>
       </div>
-      <!-- /Connect Modal-->
-      <!-- /Modals -->
-      --}}
-      <!-- widget list -->
-
-      <div id="main-grid" class='gridster not-visible'>
-        <ul>
-        
-          @for ($i = 0; $i < count($allFunctions); $i++)
-
-            @include('dashboard.widget', ['widget_data' => $allFunctions[$i]])
-
-          @endfor
-
-        </ul>
-      </div>
       <!-- /widget list -->
-    </div> <!-- / #content-wrapper -->
+
   @stop
 
   @section('pageScripts')
@@ -74,8 +55,6 @@
                },
              resize: {
                enabled: true,
-               max_size: [9, 9],
-               min_size: [2, 2],
                stop: function(e, ui, $widget) {
                 positioning = gridster.serialize();
                 positioning = JSON.stringify(positioning);
