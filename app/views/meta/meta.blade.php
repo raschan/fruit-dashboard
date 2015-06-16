@@ -90,6 +90,8 @@
     {{ HTML::script('js/chart.min.js'); }}
     {{ HTML::script('js/jquery.gridster.with-extras.min.js'); }}
     {{ HTML::script('js/underscore-min.js'); }}
+    {{ HTML::script('js/jquery.ba-resize.js'); }}
+    {{ HTML::script('js/jquery.fittext.js'); }}
     <!-- /Base scripts -->
 
     <!-- Pagealert timeout -->
