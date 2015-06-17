@@ -1,5 +1,4 @@
 #!/bin/bash
-cd /var/www/supdashboard/scripts
 # setting variables
 user="root"
 password="password"
@@ -11,7 +10,7 @@ mysql -u `echo $user` -p`echo $password` < create_database
 echo "Done."
 
 # migrating and seeding database
-cd /var/www/supdashboard
+cd ..
 php artisan migrate
 php artisan db:seed
  
