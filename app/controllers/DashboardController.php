@@ -189,16 +189,18 @@ class DashboardController extends BaseController
 			];
 
 			$newMetricArray = array(
-				"widget_id" 			=> $widget->id,
-				"widget_type" 		=> $widget->widget_type,
+				"widget_id" => $widget->id,
+				"widget_type" => $widget->widget_type,
 				"widget_position" => $position,
-				"statName" 				=> str_limit($widget->widget_name, $limit = 25, $end = '...'),
-				"fullName"				=> $widget->widget_name,
-				"positiveIsGood" 	=> "true",
-				"history" 				=> $dataArray,
-				"currentValue" 		=> $current_value,
-				"oneMonthChange" 	=> "",
-				"position"  			=> $position,
+				"widget_type" => $widget->widget_type,
+				"widget_ready" => $widget->widget_ready,
+				"statName" => str_limit($widget->widget_name, $limit = 25, $end = '...'),
+				"fullName" => $widget->widget_name,
+				"positiveIsGood" => "true",
+				"history" => $dataArray,
+				"currentValue" => $current_value,
+				"oneMonthChange" => "",
+				"position" => $position,
 			);
 			$allMetrics[] = $newMetricArray;
 		} // /foreach

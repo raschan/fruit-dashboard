@@ -223,6 +223,9 @@ class Calculator
                 $data->timestamp = date('Y-m-d H:i:s', $time);
                 $data->save();
 
+                $widget->widget_ready = true;
+                $widget->save();
+
             }
         }
 
@@ -283,6 +286,8 @@ class Calculator
                         $db_data->update(['data_object' => json_encode(array("value" => $value))]);
                     }
                 }
+                $widget->widget_ready = true;
+                $widget->save();
             }
         }
 
@@ -347,6 +352,8 @@ class Calculator
                     }
                     break; # just the first line
                 }
+                $widget->widget_ready = true;
+                $widget->save();
             }
         }
 
@@ -409,6 +416,8 @@ class Calculator
                         ]);
                     }
                 }
+                $widget->widget_ready = true;
+                $widget->save();
             }
         }
 
@@ -476,6 +485,8 @@ class Calculator
                         ]);
                     }
                 }
+                $widget->widget_ready = true;
+                $widget->save();
             }
         }
 
