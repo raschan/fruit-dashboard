@@ -224,7 +224,7 @@ class DashboardController extends BaseController
 				// google spreadsheet stuff
 				'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
 
-				// other stuff
+				// background stuff
 				'isBackgroundOn' 								=> $user->isBackgroundOn,
 				'dailyBackgroundURL' 						=> $user->dailyBackgroundURL(),
 				
@@ -373,7 +373,9 @@ class DashboardController extends BaseController
 					'currentMetrics' => $currentMetrics,
 					'widgets' => $widgets,
 					'metric_type' => 'normal',
-					'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected()
+					'isFinancialStuffConnected' => Auth::user()->isFinancialStuffConnected(),
+					'isBackgroundOn' => Auth::user()->isBackgroundOn,
+					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
 				)
 			);
 		}

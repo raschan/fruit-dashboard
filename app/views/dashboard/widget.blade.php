@@ -55,3 +55,10 @@
     'position' => $widget_data['position']
   ])
 @endif
+
+@if($widget_data['widget_type'] == 'google-spreadsheet-line-column')
+  @include('dashboard.widget-graph', [
+    'id' => $widget_data['widget_id'],
+    'position' => $widget_data['position']
+  ])
+@endif
