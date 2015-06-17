@@ -179,7 +179,7 @@
     <script type="text/javascript">
 
     var options = {
-      responsive: true,
+      responsive: false,
       maintainAspectRatio: false,
       showScale: false,
       showTooltips: false,
@@ -217,7 +217,7 @@
         ]
       };
 
-      ctx = $("#{{$allFunctions[$i]['widget_id']}}").get(0).getContext("2d");
+      ctx = $("#chart{{$allFunctions[$i]['widget_id']}}").get(0).getContext("2d");
       var Chart{{$allFunctions[$i]['widget_id']}} = new Chart(ctx).Line(data, options);
 
       /* / {{ $allFunctions[$i]['statName'] }} */

@@ -3,7 +3,7 @@
 	<a href="{{ URL::route('connect.deletewidget', $id) }}"><span class="gs-close-widgets"></span></a>
 
 	<a href="{{ URL::route('dashboard.single_stat', $widget_data['widget_id']) }}">
-		<canvas id="{{ $widget_data['widget_id'] }}"></canvas>
+		<canvas id="chart{{ $widget_data['widget_id'] }}"></canvas>
 	</a>
 </li>
 

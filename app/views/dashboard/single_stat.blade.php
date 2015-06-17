@@ -27,7 +27,9 @@
                   @endforeach
                 @endif
                 @foreach ($widgets as $widget)
+                  @if ($widget->widget_type=='google-spreadsheet-line-column')
                   <option value="{{ URL::route('dashboard.single_stat', $widget->id) }}" @if($data['id'] == $widget->id) selected @endif>{{ $widget->widget_name }}</option>
+                  @endif
                 @endforeach
               </select>
           </div>
@@ -314,15 +316,6 @@
           <div class="col-md-11">
             <p class='lead'>{{ $metricDetails['metricDescription'] }}</p>            
           </div>
-
-          @if ($metric_type == 'normal')
-          <div class="col-md-11">
-            <!-- FIXME - ack popup needed -->
-            <a href="{{ URL::route('connect.deletewidget', $widget->id) }}">
-              <button class='btn btn-warning btn-xs btn-flat'>Delete widget</button>
-            </a>
-          </div>
-          @endif
 
         </div>
 
