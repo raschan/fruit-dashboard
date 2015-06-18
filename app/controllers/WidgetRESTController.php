@@ -13,8 +13,11 @@ class WidgetRESTController extends BaseController {
 	{
 		$user = User::where('id','=',$userId)->first();
 
+		if ($userId==1) {
+			return Response::make('suggest user to register',200);
+		}
+
 		if ($user)
-		// if ($user && $userId!=1)
 		{
 			$widgetPositions = json_decode($json);
 			// Log::info($widgetPositions);
