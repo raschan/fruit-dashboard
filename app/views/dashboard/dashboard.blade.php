@@ -60,7 +60,7 @@
                 positioning = JSON.stringify(positioning);
                 $.ajax({
                   type: "POST",
-                  url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
+                  url: "/widgets/save-position/{{Auth::user()->id}}/" + positioning
                 });
                }
              },
@@ -70,7 +70,7 @@
                 positioning = JSON.stringify(positioning);
                 $.ajax({
                   type: "POST",
-                  url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
+                  url: "/widgets/save-position/{{Auth::user()->id}}/" + positioning
                 });
                }
              }
@@ -95,7 +95,7 @@
           
           $.ajax({
             type: 'POST',
-            url: '/api/widgets/save-text/' + id + '/' + text
+            url: '/widgets/save-text/' + id + '/' + text
           });
         }
 
@@ -108,7 +108,7 @@
           if (newName) {
             $.ajax({
               type: 'POST',
-              url: '/api/widgets/settings/name/' + id + '/' + newName,
+              url: '/widgets/settings/name/' + id + '/' + newName,
               success:function(message,code){
                 var current = input.css('background-color');
 
@@ -165,7 +165,6 @@
 
     <!-- fittext -->
     <script type="text/javascript">
-
       $(document).ready(function()
       {
 
@@ -174,5 +173,61 @@
         })
       });
     </script>
+    <!-- /fittext -->
+
+    <!-- chart.js options -->
+    <script type="text/javascript">
+
+    var options = {
+      responsive: false,
+      maintainAspectRatio: false,
+      showScale: false,
+      showTooltips: false,
+      pointDot: false,
+      tooltipXOffset: 0
+    };
+
+    var data, ctx;
+
+    @for ($i = 0; $i < count($allFunctions); $i++)
+      @if ($allFunctions[$i]['widget_type']=='google-spreadsheet-line-column')
+
+      /* {{ $allFunctions[$i]['statName'] }} */
+
+      data = {
+        labels: [@foreach ($allFunctions[$i]['history'] as $date => $value)"", @endforeach],
+        datasets: [
+            {
+                label: "{{ $allFunctions[$i]['statName'] }}",
+                fillColor: "rgba(151,187,205,0.4)",
+                strokeColor: "rgba(151,187,205,0.6)",
+                data: [
+                  @foreach ($allFunctions[$i]['history'] as $date => $value)
+                    @if (is_numeric($value))
+                      @if($value == null)
+                        0,
+                      @else
+                        {{ $value }},
+                      @endif 
+                    @else
+                        '{{ $value }}',
+                    @endif
+                  @endforeach]
+            }
+        ]
+      };
+
+      ctx = $("#chart{{$allFunctions[$i]['widget_id']}}").get(0).getContext("2d");
+      var Chart{{$allFunctions[$i]['widget_id']}} = new Chart(ctx).Line(data, options);
+
+      /* / {{ $allFunctions[$i]['statName'] }} */
+
+      @endif
+
+    @endfor
+
+    </script>
+    <!-- /chart.js options -->
+
   @append
 
