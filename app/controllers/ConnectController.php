@@ -68,8 +68,9 @@ class ConnectController extends BaseController
 		return View::make('connect.connect',
 			array(
 				'user'                          => $user,
+
 				// stripe stuff
-				'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
+				// 'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
 
 				// braintree stuff
 				//'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
@@ -168,6 +169,12 @@ class ConnectController extends BaseController
 			# we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
 
 			$client = GoogleSpreadsheetHelper::setGoogleClient();
+
+			if ($step == 0){
+				$url = $client->createAuthUrl();
+				Log::info($url);
+				return Redirect::away($url);
+			}
 
 			if (!$step){
 

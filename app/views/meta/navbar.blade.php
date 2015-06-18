@@ -17,10 +17,23 @@
 				<i class="dropdown-icon fa fa-cogs"></i>&nbsp;&nbsp;Settings
 			</a>
 		</li>
+		@if (Auth::check() && Auth::user()->id==1)
 		<li role="presentation">
-			<a onClick= '_gaq.push(["_trackEvent", "Signout", "Button Pushed"]);mixpanel.track("Signout");' href="{{ URL::route('auth.signout') }}">
-				<i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Sign out
+			<a onClick= '_gaq.push(["_trackEvent", "Sign up", "Button Pushed"]);mixpanel.track("Signout");' href="{{ URL::route('auth.signup') }}">
+				<i class="dropdown-icon fa fa-cloud"></i>&nbsp;&nbsp;Sign up
 			</a>
 		</li>
+		<li role="presentation">
+			<a onClick= '_gaq.push(["_trackEvent", "Sign in", "Button Pushed"]);mixpanel.track("Signout");' href="{{ URL::route('auth.signin') }}">
+				<i class="dropdown-icon fa fa-sign-in"></i>&nbsp;&nbsp;Sign in
+			</a>
+		</li>
+		@else
+		<li role="presentation">
+			<a onClick= '_gaq.push(["_trackEvent", "Sign out", "Button Pushed"]);mixpanel.track("Signout");' href="{{ URL::route('auth.signout') }}">
+				<i class="dropdown-icon fa fa-sign-out"></i>&nbsp;&nbsp;Sign out
+			</a>
+		</li>
+		@endif
 	</ul>
 </div>

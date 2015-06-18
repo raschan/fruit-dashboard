@@ -17,10 +17,9 @@ class AuthController extends BaseController
     public function showSignin()
     {
         if (Auth::check()) {
-            return Redirect::route('dashboard.dashboard');
-        } else {
-            return View::make('auth.signin');
-        }
+            Auth::logout();
+        } 
+        return View::make('auth.signin');
     }
 
     /*
@@ -63,8 +62,15 @@ class AuthController extends BaseController
                     Auth::user()->dashboards()->attach($dashboard->id, array('role' => 'owner'));
                 }
 
+                # be more personal
+                if (Auth::user()->name) {
+                    $message = 'Welcome back, '.Auth::user()->name.'!';
+                } else {
+                    $message = 'Welcome back.';
+                }
+
                 return Redirect::route('dashboard.dashboard')
-                    ->with('success', 'Sign in successful.');
+                    ->with('success', $message);
                     
             } else {
                 // auth unsuccessful -> redirect to login
@@ -83,10 +89,9 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('connect.connect');
-        } else {
-            return View::make('auth.signup');
-        }
+            Auth::logout();
+        } 
+        return View::make('auth.signup');
     }
 
     /*
@@ -165,7 +170,7 @@ class AuthController extends BaseController
             // signing the user in and redirect to dashboard
             Auth::login($user);
             return Redirect::route('dashboard.dashboard')
-                ->with('success', 'Signup was successful.');
+                ->with('success', 'Welcome to your new dashboard :)');
         }
     }
 
@@ -177,6 +182,6 @@ class AuthController extends BaseController
     public function doSignout()
     {
         Auth::logout();
-        return Redirect::route('auth.signin')->with('success', 'Sign out was successful.');
+        return Redirect::route('dashboard.dashboard')->with('success', 'Good bye.');
     }
 }

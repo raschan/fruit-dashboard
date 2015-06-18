@@ -41,16 +41,18 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-    if (Auth::guest())
-    {
-        if (Request::ajax())
-        {
-            return Response::make('Unauthorized', 401);
-        }
-        else
-        {
-            return Redirect::route('auth.signin');
-        }
+    # not auth, ajax request
+    if (Auth::guest() && Request::ajax()) {
+        return Response::make('Unauthorized', 401);
+    }
+    # not auth
+    if (Auth::guest()) {
+        return Redirect::route('auth.signin');
+    }
+    # auth, but with user id 1
+    if (Auth::check() && Auth::user()->id == 1) {
+        Auth::logout();
+        return Redirect::route('auth.signin');
     }
 });
 

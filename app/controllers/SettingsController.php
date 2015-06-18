@@ -117,7 +117,7 @@ class SettingsController extends BaseController
 			$user->save();
 			// setting data
 			return Redirect::to('/settings')
-				->with('success', 'Edit was successful.');
+				->with('success', 'Nice to have you here, '.$user->name.'.');
 		}
 	}
 

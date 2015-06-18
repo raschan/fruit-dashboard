@@ -20,7 +20,7 @@
 
 		<!-- Left side -->
 		<div class="signin-info">
-			<a href="http://dashboard.tryfruit.com" class="logo">
+			<a href="/" class="logo">
 				Fruit Dashboard
 			</a> <!-- / .logo -->
 			<div class="slogan">

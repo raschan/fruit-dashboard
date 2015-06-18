@@ -15,7 +15,7 @@
   <div class="signup-container">
     <!-- Header -->
     <div class="signup-header">
-      <a href="http://analytics.tryfruit.com" class="logo">
+      <a href="/" class="logo">
         Fruit Dashboard
       </a> <!-- / .logo -->
       <div class="slogan">
