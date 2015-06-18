@@ -81,11 +81,11 @@ Route::filter('trial_ended', function()
 
 Route::filter('cancelled', function()
 {
-    if (Auth::user()->plan == 'cancelled')
-    {
-        return Redirect::route('payment.plan')
-            ->with('error','Please subscribe.');
-    }
+    // if (Auth::user()->plan == 'cancelled')
+    // {
+    //     return Redirect::route('payment.plan')
+    //         ->with('error','Please subscribe.');
+    // }
 });
 
 /*

@@ -1,5 +1,10 @@
 <?php
 
+Route::get('/', function()
+{
+    return Redirect::route('dashboard.dashboard');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Dev routes (these routes are for testing API-s only)
@@ -43,11 +48,6 @@ if(!App::environment('production'))
 | Auth Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', function()
-{
-    return Redirect::route('dashboard.dashboard');
-});
-
 
 // sign up routes
 Route::get('signup', array(
@@ -82,7 +82,7 @@ Route::any('signout', array(
 
 // metric graph routes
 Route::get('dashboard', array(
-    'before' => 'auth|trial_ended|cancelled|api_key',
+    // 'before' => 'auth',
     'as' => 'dashboard.dashboard',
     'uses' => 'DashboardController@showDashboard'
 ));
