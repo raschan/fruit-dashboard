@@ -34,6 +34,7 @@ class DashboardController extends BaseController
 		if (Auth::guest()) {
 			Auth::loginUsingId(1);
 		}
+		$user = Auth::user();
 
 		#####################################################
 		# prepare stuff for stripe & braintree metrics start
@@ -67,6 +68,54 @@ class DashboardController extends BaseController
 
 		#####################################################
 		# prepare stuff for other widgets start
+
+        if (Auth::user()->dashboards->count() == 0) {
+
+			# this probably shouldn't happen
+
+            // create first dashboard for user
+            $dashboard = new Dashboard;
+            $dashboard->dashboard_name = "Dashboard #1";
+            $dashboard->save();
+
+            // attach dashboard & user
+            Auth::user()->dashboards()->attach($dashboard->id, array('role' => 'owner'));
+
+            // create default widgets
+
+            // clock widget
+            $widget = new Widget;
+            $widget->widget_name = 'clock widget';
+            $widget->widget_type = 'clock';
+            $widget->widget_source = '{}';
+            $widget->position = '{"size_x":6,"size_y":4,"col":3,"row":1}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // greeting widget
+            $widget = new Widget;
+            $widget->widget_name = 'greeting widget';
+            $widget->widget_type = 'greeting';
+            $widget->widget_source = '{}';
+            $widget->position = '{"size_x":6,"size_y":3,"col":3,"row":5}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // quote widget
+            $widget = new Widget;
+            $widget->widget_name = 'quote widget';
+            $widget->widget_type = 'quote';
+			$widget_data = array(
+				'type'      =>  'quote-inspirational',
+				'refresh'   =>  'daily',
+				'language'   =>  'english'
+			);
+			$widget_json = json_encode($widget_data);
+            $widget->widget_source = $widget_json;
+            $widget->position = '{"size_x":10,"size_y":1,"col":2,"row":8}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+        }
 
 		$widgets = Auth::user()->dashboards()->first()->widgets;
 
@@ -136,18 +185,27 @@ class DashboardController extends BaseController
 
 						# count the quotes
 						$quoteCount = $quotes->count();
+						if ($quoteCount == 0) {
+							$current_value = json_encode([
+									'quote' => 'No quote for Johnny today.',
+									'author' => 'Anonymous'
+							]);
+						} else {
+					        # calculate which quote will we use
+					        $quoteNumber = $numberOfDayInYear % $quoteCount;
 
-				        # calculate which quote will we use
-				        $quoteNumber = $numberOfDayInYear % $quoteCount;
+					        # get the nth quote
+					        $quoteObject = $quotes->get($quoteNumber);
 
-				        # get the nth quote
-				        $quoteObject = $quotes->get($quoteNumber);
+							$current_value = json_encode([
+									'quote' => $quoteObject->quote,
+									'author' => $quoteObject->author
+							]);
+
+						}
+
 					}
 
-					$current_value = json_encode([
-							'quote' => $quoteObject->quote,
-							'author' => $quoteObject->author
-					]);
 					break;
 				
 				case 'note';

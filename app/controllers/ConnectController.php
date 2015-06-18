@@ -20,62 +20,63 @@ class ConnectController extends BaseController
 		// selecting logged in user
 		$user = Auth::user();
 		
-		$braintree_connect_stepNumber = 1;
+		// $braintree_connect_stepNumber = 1;
 
-		if (Session::has('modal'))
-		{
-			$connectState = Session::get('modal');
+		// if (Session::has('modal'))
+		// {
+		// 	$connectState = Session::get('modal');
 
-			if ($connectState == 'braintree-credentials')
-			{
-				// this is the first step, this is default
-				// there was an authentication error with braintree
-			}
-			if ($connectState == 'braintree-webhook') 
-			{
-				// authentication with braintree was successful, 
-				// now lets show the webhook url
+		// 	if ($connectState == 'braintree-credentials')
+		// 	{
+		// 		// this is the first step, this is default
+		// 		// there was an authentication error with braintree
+		// 	}
+		// 	if ($connectState == 'braintree-webhook') 
+		// 	{
+		// 		// authentication with braintree was successful, 
+		// 		// now lets show the webhook url
 
-				$braintree_connect_stepNumber = 2;
-			}
-			if ($connectState == 'braintree-connect')
-			{
-				// webhook setup was successful
-				// show the 'import your data' step
-				$braintree_connect_stepNumber = 3;
-			}
-		}
+		// 		$braintree_connect_stepNumber = 2;
+		// 	}
+		// 	if ($connectState == 'braintree-connect')
+		// 	{
+		// 		// webhook setup was successful
+		// 		// show the 'import your data' step
+		// 		$braintree_connect_stepNumber = 3;
+		// 	}
+		// }
 
-		// we want to start on the second step with braintree, 
-		// if braintree credentials are okay
-		// we only save credentialss that were okay
-		if ($user->isBraintreeCredentialsValid())
-		{
-			$braintree_connect_stepNumber = 2;
-		}
+		// // we want to start on the second step with braintree, 
+		// // if braintree credentials are okay
+		// // we only save credentialss that were okay
+		// if ($user->isBraintreeCredentialsValid())
+		// {
+		// 	$braintree_connect_stepNumber = 2;
+		// }
 
-		// we want to show the 'import your data' step
-		// if webhook is already connected
-		if ($user->btWebhookConnected)
-		{
-			$braintree_connect_stepNumber = 3;
-		}
+		// // we want to show the 'import your data' step
+		// // if webhook is already connected
+		// if ($user->btWebhookConnected)
+		// {
+		// 	$braintree_connect_stepNumber = 3;
+		// }
 	   
-		// prepare stuff for google drive auth
-		$client = GoogleSpreadsheetHelper::setGoogleClient();
+		// // prepare stuff for google drive auth
+		// $client = GoogleSpreadsheetHelper::setGoogleClient();
 		
 		// returning view
 		return View::make('connect.connect',
 			array(
 				'user'                          => $user,
+
 				// stripe stuff
-				'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
+				// 'stripeButtonUrl'               => OAuth2::getAuthorizeURL(),
 
 				// braintree stuff
 				//'braintree_connect_stepNumber'  => $braintree_connect_stepNumber,
 
 				// google spreadsheet stuff
-				'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
+				// 'googleSpreadsheetButtonUrl'    => $client->createAuthUrl(),
 
 				'isBackgroundOn' => Auth::user()->isBackgroundOn,
 				'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
@@ -169,6 +170,12 @@ class ConnectController extends BaseController
 
 			$client = GoogleSpreadsheetHelper::setGoogleClient();
 
+			if ($step == 'init'){
+				$url = $client->createAuthUrl();
+				Log::info($url);
+				return Redirect::away($url);
+			}
+
 			if (!$step){
 
 				# first round -- we got a code in GET from google
@@ -218,7 +225,11 @@ class ConnectController extends BaseController
 				$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
 				$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-				return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
+				return View::make('connect.googleSpreadsheetConnect')->with(array(
+					'spreadsheetFeed' => $spreadsheetFeed,
+					'isBackgroundOn' => Auth::user()->isBackgroundOn,
+					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+				));
 			}
 
 			# we are in the wizard
@@ -244,12 +255,12 @@ class ConnectController extends BaseController
 					Session::put("spreadsheetName", $spreadsheet->getTitle());
 					
 					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(
-						array(
-							'step' => 2,
-							'worksheetFeed' => $worksheetFeed
-						)
-					);
+					return View::make('connect.googleSpreadsheetConnect')->with(array(
+						'step' => 2,
+						'worksheetFeed' => $worksheetFeed,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+					));
 				}
 
 				# if we are after wizard step #2
@@ -259,11 +270,11 @@ class ConnectController extends BaseController
 					Session::put("worksheetName", Input::get('worksheetName'));
 
 					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(
-						array(
-							'step' => 3
-						)
-					);
+					return View::make('connect.googleSpreadsheetConnect')->with(array(
+						'step' => 3,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+					));
 				}                
 
 				# if we are after wizard step #3

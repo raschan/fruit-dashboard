@@ -1,4 +1,4 @@
-@if ($widget_data['widget_ready'] == false)
+@if (isset($widget_data['widget_ready']) && $widget_data['widget_ready'] == false)
   @include('dashboard.widget-notready', [
     'id' => $widget_data['widget_id']
    ])

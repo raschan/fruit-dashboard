@@ -17,10 +17,9 @@ class AuthController extends BaseController
     public function showSignin()
     {
         if (Auth::check()) {
-            return Redirect::route('dashboard.dashboard');
-        } else {
-            return View::make('auth.signin');
-        }
+            Auth::logout();
+        } 
+        return View::make('auth.signin');
     }
 
     /*
@@ -63,8 +62,15 @@ class AuthController extends BaseController
                     Auth::user()->dashboards()->attach($dashboard->id, array('role' => 'owner'));
                 }
 
+                # be more personal
+                if (Auth::user()->name) {
+                    $message = 'Welcome back, '.Auth::user()->name.'!';
+                } else {
+                    $message = 'Welcome back.';
+                }
+
                 return Redirect::route('dashboard.dashboard')
-                    ->with('success', 'Sign in successful.');
+                    ->with('success', $message);
                     
             } else {
                 // auth unsuccessful -> redirect to login
@@ -83,10 +89,9 @@ class AuthController extends BaseController
     public function showSignup()
     {
         if (Auth::check()) {
-            return Redirect::route('connect.connect');
-        } else {
-            return View::make('auth.signup');
-        }
+            Auth::logout();
+        } 
+        return View::make('auth.signup');
     }
 
     /*
@@ -145,7 +150,7 @@ class AuthController extends BaseController
             $widget->widget_name = 'clock widget';
             $widget->widget_type = 'clock';
             $widget->widget_source = '{}';
-            $widget->position = '{"size_x":2,"size_y":1,"col":1,"row":1}';
+            $widget->position = '{"size_x":6,"size_y":4,"col":3,"row":1}';
             $widget->dashboard_id = $user->dashboards()->first()->id;
             $widget->save();
 
@@ -154,7 +159,22 @@ class AuthController extends BaseController
             $widget->widget_name = 'greeting widget';
             $widget->widget_type = 'greeting';
             $widget->widget_source = '{}';
-            $widget->position = '{"size_x":1,"size_y":1,"col":3,"row":1}';
+            $widget->position = '{"size_x":6,"size_y":3,"col":3,"row":5}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // quote widget
+            $widget = new Widget;
+            $widget->widget_name = 'quote widget';
+            $widget->widget_type = 'quote';
+            $widget_data = array(
+                'type'      =>  'quote-inspirational',
+                'refresh'   =>  'daily',
+                'language'   =>  'english'
+            );
+            $widget_json = json_encode($widget_data);
+            $widget->widget_source = $widget_json;
+            $widget->position = '{"size_x":10,"size_y":1,"col":2,"row":8}';
             $widget->dashboard_id = $user->dashboards()->first()->id;
             $widget->save();
 
@@ -165,7 +185,7 @@ class AuthController extends BaseController
             // signing the user in and redirect to dashboard
             Auth::login($user);
             return Redirect::route('dashboard.dashboard')
-                ->with('success', 'Signup was successful.');
+                ->with('success', 'Welcome to your new dashboard :)');
         }
     }
 
@@ -177,6 +197,6 @@ class AuthController extends BaseController
     public function doSignout()
     {
         Auth::logout();
-        return Redirect::route('auth.signin')->with('success', 'Sign out was successful.');
+        return Redirect::route('dashboard.dashboard')->with('success', 'Good bye.');
     }
 }
