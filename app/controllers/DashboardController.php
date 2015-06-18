@@ -29,6 +29,12 @@ class DashboardController extends BaseController
 		}
 */
 
+		# if the user is not logged in, load user with id=1
+
+		if (Auth::guest()) {
+			Auth::loginUsingId(1);
+		}
+
 		#####################################################
 		# prepare stuff for stripe & braintree metrics start
 
@@ -58,7 +64,6 @@ class DashboardController extends BaseController
 
 		# prepare stuff for stripe & braintree metrics end
 		#####################################################
-
 
 		#####################################################
 		# prepare stuff for other widgets start
