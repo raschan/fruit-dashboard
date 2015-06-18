@@ -150,7 +150,7 @@ class AuthController extends BaseController
             $widget->widget_name = 'clock widget';
             $widget->widget_type = 'clock';
             $widget->widget_source = '{}';
-            $widget->position = '{"size_x":2,"size_y":1,"col":1,"row":1}';
+            $widget->position = '{"size_x":6,"size_y":4,"col":3,"row":1}';
             $widget->dashboard_id = $user->dashboards()->first()->id;
             $widget->save();
 
@@ -159,7 +159,22 @@ class AuthController extends BaseController
             $widget->widget_name = 'greeting widget';
             $widget->widget_type = 'greeting';
             $widget->widget_source = '{}';
-            $widget->position = '{"size_x":1,"size_y":1,"col":3,"row":1}';
+            $widget->position = '{"size_x":6,"size_y":3,"col":3,"row":5}';
+            $widget->dashboard_id = $user->dashboards()->first()->id;
+            $widget->save();
+
+            // quote widget
+            $widget = new Widget;
+            $widget->widget_name = 'quote widget';
+            $widget->widget_type = 'quote';
+            $widget_data = array(
+                'type'      =>  'quote-inspirational',
+                'refresh'   =>  'daily',
+                'language'   =>  'english'
+            );
+            $widget_json = json_encode($widget_data);
+            $widget->widget_source = $widget_json;
+            $widget->position = '{"size_x":10,"size_y":1,"col":2,"row":8}';
             $widget->dashboard_id = $user->dashboards()->first()->id;
             $widget->save();
 

@@ -20,7 +20,25 @@ class GoogleSpreadsheetHelper {
 	    $refresh_token = $user->googleSpreadsheetRefreshToken;
 
 	    # give it a try
-	    $client->setAccessToken($credentials);
+        try {
+			$client->setAccessToken($credentials);
+        } catch (Exception $e) {
+
+        	# something went wrong, better disconnect the service
+
+        	Log::error($e);
+        	exit();
+
+			// $client = GoogleSpreadsheetHelper::setGoogleClient();
+			// $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+			// $guzzle_client = new GuzzleHttp\Client();
+			// $response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
+
+			$user->googleSpreadsheetRefreshToken = "";
+			$user->googleSpreadsheetCredentials = "";
+			$user->googleSpreadsheetEmail = "";
+			exit();
+        }
 
 	    # if the token is expired, 
 	    if ($client->isAccessTokenExpired()) {

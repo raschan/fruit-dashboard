@@ -40,7 +40,7 @@
           @if ($user->isGoogleSpreadsheetConnected())
             <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
           @else
-            <a href="/connect/googlespreadsheet/0">
+            <a href="/connect/googlespreadsheet/init">
           @endif
             <span class="icon fa fa-google fa-3x"></span>
             <p>Google Spreadsheet</p>

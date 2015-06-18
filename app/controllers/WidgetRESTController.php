@@ -14,9 +14,10 @@ class WidgetRESTController extends BaseController {
 		$user = User::where('id','=',$userId)->first();
 
 		if ($user)
+		// if ($user && $userId!=1)
 		{
-			Log::info($json);
 			$widgetPositions = json_decode($json);
+			// Log::info($widgetPositions);
 
 			foreach ($widgetPositions as $widgetPosition) 
 			{
