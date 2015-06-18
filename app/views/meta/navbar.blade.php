@@ -8,13 +8,18 @@
 			</a>
 		</li>
 		<li role="presentation">
+			<a href="{{ URL::route('settings.settings') }}">
+				<i class="dropdown-icon fa fa-cogs"></i>&nbsp;&nbsp;Settings
+			</a>
+		</li>
+		<li role="presentation">
 			<a href="https://fruitdashboard.uservoice.com/">
 				<i class="dropdown-icon fa fa-bullhorn"></i>&nbsp;&nbsp;Feedback
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="{{ URL::route('settings.settings') }}">
-				<i class="dropdown-icon fa fa-cogs"></i>&nbsp;&nbsp;Settings
+			<a href="https://github.com/tryfruit/fruit-dashboard/">
+				<i class="dropdown-icon fa fa-puzzle-piece"></i>&nbsp;&nbsp;Contribute
 			</a>
 		</li>
 		@if (Auth::check() && Auth::user()->id==1)
