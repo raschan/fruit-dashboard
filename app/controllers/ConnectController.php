@@ -225,7 +225,7 @@ class ConnectController extends BaseController
 				$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
 				$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-				return View::make('connect.googleSpreadsheetConnect')->with(array(
+				return View::make('connect.connect-googlespreadsheet')->with(array(
 					'spreadsheetFeed' => $spreadsheetFeed,
 					'isBackgroundOn' => Auth::user()->isBackgroundOn,
 					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
@@ -255,7 +255,7 @@ class ConnectController extends BaseController
 					Session::put("spreadsheetName", $spreadsheet->getTitle());
 					
 					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(array(
+					return View::make('connect.connect-googlespreadsheet')->with(array(
 						'step' => 2,
 						'worksheetFeed' => $worksheetFeed,
 						'isBackgroundOn' => Auth::user()->isBackgroundOn,
@@ -270,7 +270,7 @@ class ConnectController extends BaseController
 					Session::put("worksheetName", Input::get('worksheetName'));
 
 					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(array(
+					return View::make('connect.connect-googlespreadsheet')->with(array(
 						'step' => 3,
 						'isBackgroundOn' => Auth::user()->isBackgroundOn,
 						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
@@ -305,7 +305,10 @@ class ConnectController extends BaseController
 		if ($provider == 'iframe') {
 
 			if (!$step){
-				return View::make('connect.iframeConnect');
+				return View::make('connect.connect-iframe')->with(array(
+					'isBackgroundOn' => Auth::user()->isBackgroundOn,
+					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+				));
 			}
 
 			if ($step == 2) {
@@ -334,7 +337,7 @@ class ConnectController extends BaseController
 		if ($provider == 'quote') {
 
 			if (!$step){
-				return View::make('connect.quoteConnect')
+				return View::make('connect.connect-quote')
 					->with(array(
 						'isBackgroundOn' => Auth::user()->isBackgroundOn,
 						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
@@ -453,7 +456,7 @@ class ConnectController extends BaseController
 			)));
 			$url = 'https://dashboard.tryfruit.com/api/0.1/'.$apiKey.'/';
 
-			return View::make('connect.apiConnect')
+			return View::make('connect.connect-api')
 				->with(array(
 					'url' => $url,
 					'isBackgroundOn' => Auth::user()->isBackgroundOn,
@@ -731,7 +734,7 @@ class ConnectController extends BaseController
 	public function editWidget($service, $widget_id = NULL){
 
 		if ($service == 'background') {
-			return View::make('connect.backgroundSettings')
+			return View::make('connect.connect-background')
 				->with(array(
 					'isBackgroundOn' => Auth::user()->isBackgroundOn,
 					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
