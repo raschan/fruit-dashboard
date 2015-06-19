@@ -60,7 +60,7 @@
                 positioning = JSON.stringify(positioning);
                 $.ajax({
                   type: "POST",
-                  url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
+                  url: "/widgets/save-position/{{Auth::user()->id}}/" + positioning
                 });
                }
              },
@@ -70,7 +70,7 @@
                 positioning = JSON.stringify(positioning);
                 $.ajax({
                   type: "POST",
-                  url: "/api/widgets/save-position/{{Auth::user()->id}}/" + positioning
+                  url: "/widgets/save-position/{{Auth::user()->id}}/" + positioning
                 });
                }
              }
@@ -95,7 +95,7 @@
           
           $.ajax({
             type: 'POST',
-            url: '/api/widgets/save-text/' + id + '/' + text
+            url: '/widgets/save-text/' + id + '/' + text
           });
         }
 
@@ -108,7 +108,7 @@
           if (newName) {
             $.ajax({
               type: 'POST',
-              url: '/api/widgets/settings/name/' + id + '/' + newName,
+              url: '/widgets/settings/name/' + id + '/' + newName,
               success:function(message,code){
                 var current = input.css('background-color');
 

@@ -124,122 +124,125 @@ class DashboardController extends BaseController
 			$current_value = "";
 			$dataArray = array();
 
-			switch ($widget->widget_type) {
+			if ($widget->widget_ready == true) {
 
-				case 'google-spreadsheet-text-column':
-					$dataObjects = Data::where('widget_id', $widget->id)
-											->orderBy('date','asc')
-											->get();
-					foreach ($dataObjects as $dataObject) {
-						$array = json_decode($dataObject->data_object, true);
-						foreach ($array as $key => $value) {
-							$current_value = $value;
-							$dataArray = array_add($dataArray, $key, $current_value);
+				switch ($widget->widget_type) {
+
+					case 'google-spreadsheet-text-column':
+						$dataObjects = Data::where('widget_id', $widget->id)
+												->orderBy('date','asc')
+												->get();
+						foreach ($dataObjects as $dataObject) {
+							$array = json_decode($dataObject->data_object, true);
+							foreach ($array as $key => $value) {
+								$current_value = $value;
+								$dataArray = array_add($dataArray, $key, $current_value);
+							}
 						}
-					}
-					break;
+						break;
 
-				case 'iframe':
-					$current_value = $widget->widget_source;
-					break;
+					case 'iframe':
+						$current_value = $widget->widget_source;
+						break;
 
-				case 'google-spreadsheet-text-column-random';
-					$dataObject = Data::where('widget_id', $widget->id)
-											->orderBy(DB::raw('RAND()'))
-											->first();
-					$array = json_decode($dataObject->data_object, true);
-					$current_value = array_values($array)[0];
-					break;
-
-				case 'quote';
-					$widgetObject = json_decode($widget->widget_source);
-
-					if (!isset($widgetObject->language)) {
-						$widgetObject->language = 'english';
-					}
-					if (!isset($widgetObject->refresh)) {
-						$widgetObject->refresh = 'daily';
-					}
-					if (!isset($widgetObject->type)) {
-						$widgetObject->type = 'quote-inspirational';
-					}
-
-					if ($widgetObject->refresh == 'every-refresh') {
-
-						# if it needs to be refreshed at every query
-						$quoteObject = Quote::where('type', '=', $widgetObject->type)
-						->where('language', '=', $widgetObject->language)
-						->orderBy(DB::raw('RAND()'))
-						->first();
-
-					} else {
-						# if it needs to be refreshed daily
-
-						# number of the day in the year
-						$numberOfDayInYear = date('z');
-
-						# get all the matching quotes
-						$quotes = Quote::where('type', '=', $widgetObject->type)
-						->where('language', '=', $widgetObject->language)
-						->get();
-
-						# count the quotes
-						$quoteCount = $quotes->count();
-						if ($quoteCount == 0) {
-							$current_value = json_encode([
-									'quote' => 'No quote for Johnny today.',
-									'author' => 'Anonymous'
-							]);
-						} else {
-					        # calculate which quote will we use
-					        $quoteNumber = $numberOfDayInYear % $quoteCount;
-
-					        # get the nth quote
-					        $quoteObject = $quotes->get($quoteNumber);
-
-							$current_value = json_encode([
-									'quote' => $quoteObject->quote,
-									'author' => $quoteObject->author
-							]);
-
-						}
-
-					}
-
-					break;
-				
-				case 'note';
-					$widgetObject = json_decode($widget->widget_source);
-					$current_value = Data::where('widget_id', $widget->id)->first()->data_object;
-					$current_value = str_replace('[%LINEBREAK%]', "\n", $current_value);
-					break;
-
-				case 'clock';
-					$widgetObject = json_decode($widget->widget_source);
-					
-					$ct = Carbon::now(); // ct == current time
-					if ($ct->minute < 10)
-					{
-						$current_value = $ct->hour.':0'.$ct->minute;
-					} else {
-						$current_value = $ct->hour.':'.$ct->minute;
-					}
-					break;
-
-				case 'greeting';
-					$widgetObject = json_decode($widget->widget_source);
-					$current_value = '';
-					break;
-
-				default:
-					$dataObjects = Data::where('widget_id', $widget->id)
-											->orderBy('date','asc')
-											->get();
-					foreach ($dataObjects as $dataObject) {
+					case 'google-spreadsheet-text-column-random';
+						$dataObject = Data::where('widget_id', $widget->id)
+												->orderBy(DB::raw('RAND()'))
+												->first();
 						$array = json_decode($dataObject->data_object, true);
 						$current_value = array_values($array)[0];
-						$dataArray = array_add($dataArray, $dataObject->date, $current_value);
-					}
+						break;
+
+					case 'quote';
+						$widgetObject = json_decode($widget->widget_source);
+
+						if (!isset($widgetObject->language)) {
+							$widgetObject->language = 'english';
+						}
+						if (!isset($widgetObject->refresh)) {
+							$widgetObject->refresh = 'daily';
+						}
+						if (!isset($widgetObject->type)) {
+							$widgetObject->type = 'quote-inspirational';
+						}
+
+						if ($widgetObject->refresh == 'every-refresh') {
+
+							# if it needs to be refreshed at every query
+							$quoteObject = Quote::where('type', '=', $widgetObject->type)
+							->where('language', '=', $widgetObject->language)
+							->orderBy(DB::raw('RAND()'))
+							->first();
+
+						} else {
+							# if it needs to be refreshed daily
+
+							# number of the day in the year
+							$numberOfDayInYear = date('z');
+
+							# get all the matching quotes
+							$quotes = Quote::where('type', '=', $widgetObject->type)
+							->where('language', '=', $widgetObject->language)
+							->get();
+
+							# count the quotes
+							$quoteCount = $quotes->count();
+							if ($quoteCount == 0) {
+								$current_value = json_encode([
+										'quote' => 'No quote for Johnny today.',
+										'author' => 'Anonymous'
+								]);
+							} else {
+						        # calculate which quote will we use
+						        $quoteNumber = $numberOfDayInYear % $quoteCount;
+
+						        # get the nth quote
+						        $quoteObject = $quotes->get($quoteNumber);
+
+								$current_value = json_encode([
+										'quote' => $quoteObject->quote,
+										'author' => $quoteObject->author
+								]);
+
+							}
+
+						}
+
+						break;
+					
+					case 'note';
+						$widgetObject = json_decode($widget->widget_source);
+						$current_value = Data::where('widget_id', $widget->id)->first()->data_object;
+						$current_value = str_replace('[%LINEBREAK%]', "\n", $current_value);
+						break;
+
+					case 'clock';
+						$widgetObject = json_decode($widget->widget_source);
+						
+						$ct = Carbon::now(); // ct == current time
+						if ($ct->minute < 10)
+						{
+							$current_value = $ct->hour.':0'.$ct->minute;
+						} else {
+							$current_value = $ct->hour.':'.$ct->minute;
+						}
+						break;
+
+					case 'greeting';
+						$widgetObject = json_decode($widget->widget_source);
+						$current_value = '';
+						break;
+
+					default:
+						$dataObjects = Data::where('widget_id', $widget->id)
+												->orderBy('date','asc')
+												->get();
+						foreach ($dataObjects as $dataObject) {
+							$array = json_decode($dataObject->data_object, true);
+							$current_value = array_values($array)[0];
+							$dataArray = array_add($dataArray, $dataObject->date, $current_value);
+						}
+				}
 			}
 
 
