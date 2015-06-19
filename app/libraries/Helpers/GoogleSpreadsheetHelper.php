@@ -120,7 +120,7 @@ class GoogleSpreadsheetHelper {
 			$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
 			$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-			return View::make('connect.googleSpreadsheetConnect')->with(array(
+			return View::make('connect.connect-googlespreadsheet')->with(array(
 				'spreadsheetFeed' => $spreadsheetFeed,
 				'isBackgroundOn' => Auth::user()->isBackgroundOn,
 				'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
@@ -150,7 +150,7 @@ class GoogleSpreadsheetHelper {
 				Session::put("spreadsheetName", $spreadsheet->getTitle());
 				
 				# render wizard step #2
-				return View::make('connect.googleSpreadsheetConnect')->with(
+				return View::make('connect.connect-googlespreadsheet')->with(
 					array(
 						'step' => 2,
 						'worksheetFeed' => $worksheetFeed,
@@ -167,9 +167,11 @@ class GoogleSpreadsheetHelper {
 				Session::put("worksheetName", Input::get('worksheetName'));
 
 				# render wizard step #2
-				return View::make('connect.googleSpreadsheetConnect')->with(
+				return View::make('connect.connect-googlespreadsheet')->with(
 					array(
-						'step' => 3
+						'step' => 3,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
 					)
 				);
 			}                
