@@ -18,7 +18,7 @@
 			</a>
 		</li>
 		<li role="presentation">
-			<a href="https://github.com/tryfruit/fruit-dashboard/">
+			<a target="_blank" href="https://github.com/tryfruit/fruit-dashboard/">
 				<i class="dropdown-icon fa fa-puzzle-piece"></i>&nbsp;&nbsp;Contribute
 			</a>
 		</li>
