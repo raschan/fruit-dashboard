@@ -1,6 +1,4 @@
 <?php
-use Google\Spreadsheet\DefaultServiceRequest;
-use Google\Spreadsheet\ServiceRequestFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -161,133 +159,12 @@ class ConnectController extends BaseController
 			}
 		}
 		*/
+
+
 		# if we auth with googlespreadsheet
 
 		if ($provider == 'googlespreadsheet') {
-
-			# we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
-
-			$client = GoogleSpreadsheetHelper::setGoogleClient();
-
-			if (!$step){
-
-				# first round -- we got a code in GET from google
-
-				if (Input::has('code')) {
-
-					# lets get an access token
-					$client->authenticate(Input::get('code'));
-					$credentials = $client->getAccessToken(); // big JSON stuff
-
-					# lets make it an associative array
-					$tokens_decoded = json_decode($credentials, true);
-
-					# lets check if we have a refresh token already
-					$refresh_token = $user->googleSpreadsheetRefreshToken;
-					if (strlen($refresh_token)<10) {
-						# nope, let's use the one we got now
-						$refresh_token = $tokens_decoded['refresh_token'];
-					}
-
-					# database save the access-stuff-JSON and the refresh token
-					$user->googleSpreadsheetCredentials = $credentials;
-					$user->googleSpreadsheetRefreshToken = $refresh_token;
-					$user->save();
-
-					# good job, notify intercom
-					IntercomHelper::connected($user,'googlespreadsheet');
-
-					# lets call this route again, but without the code
-					if (Request::secure()) {
-						$redirect = 'https://';
-					} else {
-						$redirect = 'http://';
-					}
-					$redirect .= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-					header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL)); 
-					exit();
-				}
-
-				# second round, prepare the wizard
-
-				$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
-
-				# get the spreadsheet list
-				$serviceRequest = new DefaultServiceRequest($access_token);
-				ServiceRequestFactory::setInstance($serviceRequest);
-				$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-				$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-
-				return View::make('connect.googleSpreadsheetConnect')->with('spreadsheetFeed', $spreadsheetFeed);
-			}
-
-			# we are in the wizard
-
-			if ($step) {
-
-				$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
-
-				# init service
-				$serviceRequest = new DefaultServiceRequest($access_token);
-				ServiceRequestFactory::setInstance($serviceRequest);
-
-				# if we are after wizard step #1
-				if ($step == 2) {
-
-					# get the spreadsheet they asked for in the POST
-					$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-					$spreadsheet = $spreadsheetService->getSpreadsheetById(Input::get('spreadsheetId'));
-					$worksheetFeed = $spreadsheet->getWorksheets();
-
-					# save the spreadsheet name in SESSION
-					Session::put("spreadsheetId", Input::get('spreadsheetId'));
-					Session::put("spreadsheetName", $spreadsheet->getTitle());
-					
-					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(
-						array(
-							'step' => 2,
-							'worksheetFeed' => $worksheetFeed
-						)
-					);
-				}
-
-				# if we are after wizard step #2
-				if ($step == 3) {
-
-					# save the worksheet name in SESSION
-					Session::put("worksheetName", Input::get('worksheetName'));
-
-					# render wizard step #2
-					return View::make('connect.googleSpreadsheetConnect')->with(
-						array(
-							'step' => 3
-						)
-					);
-				}                
-
-				# if we are after wizard step #3
-				if ($step == 4) {
-
-					# save the widget
-					$widget_data = array(
-						'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
-						'googleWorksheetName'   =>  Session::get('worksheetName')
-					);
-					$widget_json = json_encode($widget_data);
-
-					$widget = new Widget;
-					$widget->widget_name = Session::get('worksheetName').' - '.Session::get('spreadsheetName');
-					$widget->widget_type = Input::get('type');
-					$widget->widget_source = $widget_json;
-					$widget->dashboard_id = $user->dashboards()->first()->id;
-					$widget->position = '{"size_x":3,"size_y":4,"col":1,"row":1}';
-					$widget->save();
-
-					return Redirect::route('dashboard.dashboard')
-					  ->with('success', 'Google Spreadsheet widget added.');
-				}  
-			}
+			return GoogleSpreadsheetHelper::wizard($step);
 		}
 
 		if ($provider == 'iframe') {
