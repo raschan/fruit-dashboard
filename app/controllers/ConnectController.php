@@ -95,238 +95,48 @@ class ConnectController extends BaseController
 		# we will need the user
 		$user = Auth::user();
 
-		/*
 		if ($provider == 'stripe') {
-
-			if(Input::has('code'))
-			{
-				// get the token with the code
-				$response = OAuth2::getRefreshToken(Input::get('code'));
-
-				if(isset($response['refresh_token']))
-				{
-					$user->stripeRefreshToken = $response['refresh_token'];
-					$user->stripeUserId = $response['stripe_user_id'];
-
-					Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-					$account = Stripe\Account::retrieve($user->stripeUserId);
-					// success
-					$returned_object = json_decode(strstr($account, '{'), true);
-
-					// save user
-					$user->ready = 'connecting';
-
-					// setting name if is null
-					if (strlen($user->name) == 0) {
-						$user->name = $returned_object['display_name'];
-					}
-					if (strlen($user->zoneinfo) == 0) {
-						$user->zoneinfo = $returned_object['country'];
-					}
-
-					$user->connectedServices++;
-					// saving user
-					$user->save();
-
-					IntercomHelper::connected($user,'stripe');
-
-					Queue::push('CalculateFirstTime', array('userID' => $user->id));
-					
-					return Redirect::route('dashboard.dashboard')
-						->with('success', ucfirst($provider).' connected.');
-				} else if (isset($response['error'])) {
-
-					Log::error($response['error_description']);
-					return Redirect::route('settings.settings')
-						->with('error', 'Something went wrong, try again later');
-				} else {
-
-					Log::error("Something went wrong with stripe connect, don't know what");
-					return Redirect::route('settings.settings')
-						->with('error', 'Something went wrong, try again later');
-				}
-
-			} else if (Input::has('error')) {
-				// there was an error in the request
-
-				Log::error(Input::get('error_description'));
-				return Redirect::route('settings.settings')
-					->with('error',Input::get('error_description'));
-			} else {
-				// we don't know what happened
-				Log::error('Unknown error with user: '.$user->email);
-				return Redirect::route('settings.settings')
-					->with('error', 'Something went wrong, try again');
-			}
+			return StripeHelper::wizard($step);
 		}
-		*/
-
-		# if we auth with googlespreadsheet
 
 		if ($provider == 'googlespreadsheet') {
 			return GoogleSpreadsheetHelper::wizard($step);
 		}
 
 		if ($provider == 'iframe') {
-
-			if (!$step){
-				return View::make('connect.connect-iframe')->with(array(
-					'isBackgroundOn' => Auth::user()->isBackgroundOn,
-					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-				));
-			}
-
-			if ($step == 2) {
-				
-				$url = Input::get('fullURL');
-
-				# save the widget
-				$widget_data = array(
-					'iframeURL'   => $url
-				);
-				$widget_json = json_encode($widget_data);
-
-				$widget = new Widget;
-				$widget->widget_name = 'iframe widget';
-				$widget->widget_type = 'iframe';
-				$widget->widget_source = $widget_json;
-				$widget->dashboard_id = $user->dashboards()->first()->id;
-				$widget->position = '{"size_x":6,"size_y":8,"col":1,"row":1}';
-				$widget->save();
-
-				return Redirect::route('dashboard.dashboard')
-				  ->with('success', 'iframe widget added.');
-			}
+			return IframeHelper::wizard($step);
 		}
 
 		if ($provider == 'quote') {
-
-			if (!$step){
-				return View::make('connect.connect-quote')
-					->with(array(
-						'isBackgroundOn' => Auth::user()->isBackgroundOn,
-						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-					)
-				);
-			}
-
-			if ($step == 2) {
-				
-				$type = Input::get('type');
-				$refresh = Input::get('refresh');
-				$language = Input::get('language');                
-
-				# save the widget
-				$widget_data = array(
-					'type'      =>  $type,
-					'refresh'   =>  $refresh,
-					'language'   =>  $language
-				);
-				$widget_json = json_encode($widget_data);
-
-				$widget = new Widget;
-				$widget->widget_name = 'quote widget';
-				$widget->widget_type = 'quote';
-				$widget->widget_source = $widget_json;
-				$widget->dashboard_id = $user->dashboards()->first()->id;
-				$widget->position = '{"size_x":6,"size_y":2,"col":1,"row":1}';
-				$widget->save();
-
-				return Redirect::route('dashboard.dashboard')
-				  ->with('success', 'Quote widget added.');
-			}
+			return QuoteHelper::wizard($step);
 		}
 
-		if ($provider == 'note')
-		{
-			// save the widget
-			$widgetData = array(
-			);
-
-			$widgetJson = json_encode($widgetData);
-			$widget = new Widget;
-			$widget->widget_name = 'note widget';
-			$widget->widget_type = 'note';
-			$widget->widget_source = $widgetJson;
-			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":3,"size_y":3,"col":1,"row":1}';
-			$widget->save();
-
-			// save an empty data line
-			$text = new Data;
-			$text->widget_id = $widget->id;
-			$text->data_object = '';
-			$text->date = Carbon::now()->toDateString();
-			$text->save();
-
-			return Redirect::route('dashboard.dashboard')
-			  ->with('success', 'Note widget added.');
+		if ($provider == 'note') {
+			return NoteHelper::wizard($step);
 		}
 
-
-		if ($provider == 'greeting')
-		{
-			// save the widget
-			$widgetData = array();
-			$widgetJson = json_encode($widgetData);
-
-			$widget = new Widget;
-			$widget->widget_name = 'greetings widget';
-			$widget->widget_type = 'greeting';
-			$widget->widget_source = $widgetJson;
-			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":2,"size_y":2,"col":1,"row":1}';
-			$widget->save();
-
-			return Redirect::route('dashboard.dashboard')
-			  ->with('success', 'Greetings widget added.');
+		if ($provider == 'greeting') {
+			return GreetingHelper::wizard($step);
 		}
 
-		if ($provider == 'clock')
-		{
-			// save the widget
-			$widgetData = array();
-			$widgetJson = json_encode($widgetData);
-
-			$widget = new Widget;
-			$widget->widget_name = 'clock widget';
-			$widget->widget_type = 'clock';
-			$widget->widget_source = $widgetJson;
-			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":3,"size_y":2,"col":1,"row":1}';
-			$widget->save();
-
-			return Redirect::route('dashboard.dashboard')
-			  ->with('success', 'Clock widget added.');
+		if ($provider == 'clock') {
+			return ClockHelper::wizard($step);
 		}
 
+		if ($provider == 'api'){
+			return ApiHelper::wizard($step);
+		}
 
-		if ($provider == 'api')
-		{
-			// save the widget
-			$widgetData = array();
-			$widgetJson = json_encode($widgetData);
+		if ($provider == 'text') {
+			Log::info('text');
+		}
 
-			$widget = new Widget;
-			$widget->widget_name = 'API widget';
-			$widget->widget_type = 'api';
-			$widget->widget_source = $widgetJson;
-			$widget->dashboard_id = $user->dashboards()->first()->id;
-			$widget->position = '{"size_x":3,"size_y":3,"col":1,"row":1}';
-			$widget->widget_ready = false;	# widget needs data to load to show properly
-			$widget->save();
+		if ($provider == 'graph') {
+			Log::info('graph');
+		}
 
-			$apiKey = base64_encode(json_encode(array(
-				'wid'	=>	$widget->id
-			)));
-			$url = 'https://dashboard.tryfruit.com/api/0.1/'.$apiKey.'/';
-
-			return View::make('connect.connect-api')
-				->with(array(
-					'url' => $url,
-					'isBackgroundOn' => Auth::user()->isBackgroundOn,
-					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL()
-				));
+		if ($provider == 'list') {
+			Log::info('list');
 		}
 
 		return Redirect::route('connect.connect')
