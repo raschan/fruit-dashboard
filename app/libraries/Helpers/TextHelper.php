@@ -24,8 +24,14 @@ class TextHelper {
 						));
 						break;
 					case 'google-spreadsheet-text-cell':
+						return Redirect::to('connect/new/googlespreadsheet/set-type')->with(array(
+							'type' => Input::get('source')
+						));
 						break;
 					case 'google-spreadsheet-text-column-random':
+						return Redirect::to('connect/new/googlespreadsheet/set-type')->with(array(
+							'type' => Input::get('source')
+						));
 						break;
 					default:
 						return Redirect::route('connect.connect')
