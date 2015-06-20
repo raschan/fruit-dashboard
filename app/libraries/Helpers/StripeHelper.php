@@ -366,4 +366,16 @@ class StripeHelper
                 ->with('error', 'Something went wrong, try again');
         }
     }
+
+    public static function disconnect($user){
+        $user->stripe_key = "";
+        $user->stripeUserId = "";
+        $user->stripeRefreshToken = "";
+        $user->save();
+        return true;
+    } # /function disconnect
+
+
+
+
 }

@@ -117,63 +117,32 @@ class ConnectController extends BaseController
 	*/
 	public function doDisconnect($service)
 	{
-		// NOTE: should we also remove the collected DB data?
-
 		// selecting the logged in User
 		$user = Auth::user();
 
-		if ($service == "stripe") {
-			// disconnecting stripe
+		# create class name, f.e. stripe --> StripeHelper
+		$widgetClassName = ucfirst($service).'Helper';
+		$widgetMethodName = 'disconnect';
 
-			// removing stripe key
-			$user->stripe_key = "";
-			$user->stripeUserId = "";
-			$user->stripeRefreshToken = "";
+		# check if class & method exists, f.e. StripeHelper::disconnect
+		if(class_exists($widgetClassName) && method_exists($widgetClassName, $widgetMethodName)){
 
-			$servicename = 'Stripe';
+			# it does, do disconnect
+			$disconnect = $widgetClassName::$widgetMethodName($user);
 
-		} else if ($service == "braintree") {
-			// disconnecting braintree
+		} else {
 
-			$user->btPrivateKey = null;
-			$user->btPublicKey = null;
-			$user->btEnvironment = null;
-			$user->btMerchantId = null;
-
-			$user->btWebhookId = null;
-			$user->btWebhookConnected = false;
-			
-			$servicename = 'Braintree';
-
-		} else if ($service == "googlespreadsheet") {
-
-			$client = GooglespreadsheetHelper::setGoogleClient();
-			$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
-
-			$guzzle_client = new GuzzleHttp\Client();
-			$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
-
-			$user->googleSpreadsheetRefreshToken = "";
-			$user->googleSpreadsheetCredentials = "";
-			$user->googleSpreadsheetEmail = "";
-
-			$servicename = 'Google Spreadsheet';
-
+			# it does not, go back to dashboard
+			return Redirect::route('dashboard.dashboard')
+				->with('error', 'Something went wrong.');
 		}
 
 		$user->connectedServices--;
-		// saving modification on user
 		$user->save();
-
-		if (!$user->isConnected())
-		{
-			$user->ready = 'notConnected';
-			$user->save();
-		}
 
 		// redirect to connect
 		return Redirect::route('settings.settings')
-			->with('success', 'Disconnected from ' . $servicename . '.');
+			->with('success', 'Service disconnected.');
 	}
 
 

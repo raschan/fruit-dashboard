@@ -452,16 +452,11 @@
 								@if($user->isGooglespreadsheetConnected())
 									<a href="{{ URL::route('auth.disconnect', 'googlespreadsheet') }}">
 										<button id="disconnectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Disconnect</button>
-									</a>  
-								@elseif ($user->canConnectMore())
-									<a href="{{ $googleSpreadsheetButtonUrl }}">
+									</a>
+								@endif
+						            <a href="{{ URL::route('connect/new', ['provider' => 'googlespreadsheet', 'step' => 'init']) }}">
 										<button id="connectGoogleSpreadsheets" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
 									</a>  
-								@else
-									<a href="/plans">
-										<button id="connectBraintree" class="btn btn-flat btn-info btn-sm pull-right" type="button">Connect</button>
-									</a>  
-								@endif
 								<h4 class="list-group-item-heading">Google Spreadsheet</h4>
 								<p class="list-group-item-text">
 									@if($user->isGooglespreadsheetConnected())

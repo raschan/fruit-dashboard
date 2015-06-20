@@ -125,7 +125,14 @@ class GooglespreadsheetHelper {
 				if (Input::has('code')) {
 
 					# lets get an access token
-					$client->authenticate(Input::get('code'));
+					try {
+						$client->authenticate(Input::get('code'));
+        			} catch (Exception $e) {
+        				GooglespreadsheetHelper::disconnect();
+						return Redirect::route('connect.connect')
+						  ->with('error', 'Something went wrong, try again please.');
+					}
+
 					$credentials = $client->getAccessToken(); // big JSON stuff
 
 					# lets make it an associative array
@@ -178,6 +185,26 @@ class GooglespreadsheetHelper {
 
 	} # /function wizard
 
+	public static function disconnect($user){
+
+		$refreshToken = $user->googleSpreadsheetRefreshToken;
+
+		$user->googleSpreadsheetRefreshToken = "";
+		$user->googleSpreadsheetCredentials = "";
+		$user->googleSpreadsheetEmail = "";
+		$user->save();
+
+		$guzzle_client = new GuzzleHttp\Client();
+		try {
+			$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$refreshToken);
+        } catch (Exception $e) {
+        	Log::error($e);
+        }
+
+		return true;
+
+	} # /function disconnect
+
 	public static function setGoogleClient(){
 	    $client = new Google_Client();
 	    $client->setClientId($_ENV['GOOGLE_CLIENTID']);
@@ -199,7 +226,6 @@ class GooglespreadsheetHelper {
         try {
 			$client->setAccessToken($credentials);
         } catch (Exception $e) {
-        	# something went wrong, better disconnect the service
         	Log::error($e);
         	exit();
         }
@@ -209,7 +235,27 @@ class GooglespreadsheetHelper {
 
 	        # let's get another one with the refreshtoken
 	        $refresh_token = $user->googleSpreadsheetRefreshToken;
-	        $client->refreshToken($refresh_token);
+	        try {        
+	        	$client->refreshToken($refresh_token);
+	        } catch (Exception $e) {
+	        	# something went wrong, better disconnect the service
+	        	Log::error($e);
+
+				$refreshToken = $user->googleSpreadsheetRefreshToken;
+
+				$user->googleSpreadsheetRefreshToken = "";
+				$user->googleSpreadsheetCredentials = "";
+				$user->googleSpreadsheetEmail = "";
+				$user->save();
+
+				$guzzle_client = new GuzzleHttp\Client();
+				try {
+					$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$refreshToken);
+		        } catch (Exception $e) {
+		        	Log::error($e);
+		        	exit();
+		        }
+	        }
 
 	        # get new credentials
 	        $credentials = $client->getAccessToken();
