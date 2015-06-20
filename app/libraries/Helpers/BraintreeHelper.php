@@ -460,6 +460,7 @@ class BraintreeHelper {
 
 		$user->btWebhookId = null;
 		$user->btWebhookConnected = false;
+		$user->save();
 
 		return true;
 

@@ -371,6 +371,7 @@ class StripeHelper
         $user->stripe_key = "";
         $user->stripeUserId = "";
         $user->stripeRefreshToken = "";
+        $user->save();
         return true;
     } # /function disconnect
 
