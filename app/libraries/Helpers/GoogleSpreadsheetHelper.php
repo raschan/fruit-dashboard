@@ -128,8 +128,9 @@ class GooglespreadsheetHelper {
 					try {
 						$client->authenticate(Input::get('code'));
         			} catch (Exception $e) {
+        				GooglespreadsheetHelper::disconnect();
 						return Redirect::route('connect.connect')
-						  ->with('success', 'Something went wrong, try again please.');
+						  ->with('error', 'Something went wrong, try again please.');
 					}
 
 					$credentials = $client->getAccessToken(); // big JSON stuff
@@ -198,7 +199,6 @@ class GooglespreadsheetHelper {
 			$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$refreshToken);
         } catch (Exception $e) {
         	Log::error($e);
-        	exit();
         }
 
 		return true;
