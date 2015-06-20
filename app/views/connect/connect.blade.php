@@ -25,14 +25,14 @@
         </li>
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'chart') }}">
+            <a href="{{ URL::route('connect/new', ['provider' => 'chart', 'step' => 'init']) }}">
             <span class="icon fa fa-bar-chart fa-3x"></span>
             <p>Chart widget</p>
           </a>
         </li>
 
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'list') }}">
+            <a href="{{ URL::route('connect/new', ['provider' => 'list', 'step' => 'init']) }}">
             <span class="icon fa fa-list fa-3x"></span>
             <p>List widget</p>
           </a>

@@ -19,7 +19,7 @@
                 )
                 ) }}
 
-                <input type="radio" name="type" value="google-spreadsheet-text-cell"/> Text widget, gets data from cell A2<br/>
+                <input type="radio" name="type" value="google-spreadsheet-text-cell" checked/> Text widget, gets data from cell A2<br/>
                 <input type="radio" name="type" value="google-spreadsheet-text-column-random"/> Text widget, randomly displays a cell from column A<br/>
                 <input type="radio" name="type" value="google-spreadsheet-text-column"/> List widget, gets data from column A<br/>
                 <input type="radio" name="type" value="google-spreadsheet-line-cell"/> Graph widget, gets data from cell A2<br/>
