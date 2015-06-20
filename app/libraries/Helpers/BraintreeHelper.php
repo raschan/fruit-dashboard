@@ -451,4 +451,19 @@ class BraintreeHelper {
 		return null;
 	}
 
+
+	public static function disconnect($user){
+		$user->btPrivateKey = null;
+		$user->btPublicKey = null;
+		$user->btEnvironment = null;
+		$user->btMerchantId = null;
+
+		$user->btWebhookId = null;
+		$user->btWebhookConnected = false;
+
+		return true;
+
+	} # /function disconnect
+
+
 }
