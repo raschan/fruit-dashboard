@@ -50,7 +50,7 @@ class SettingsController extends BaseController
 		}
 
 
-		$client = GoogleSpreadsheetHelper::setGoogleClient();
+		$client = GooglespreadsheetHelper::setGoogleClient();
 
 		$google_spreadsheet_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'google-spreadsheet%')->get();
 		$iframe_widgets = $user->dashboards()->first()->widgets()->where('widget_type', 'like', 'iframe%')->get();

@@ -279,7 +279,7 @@ class DashboardController extends BaseController
 		#####################################################
 
 		$user = Auth::user();
-		$client = GoogleSpreadsheetHelper::setGoogleClient();
+		$client = GooglespreadsheetHelper::setGoogleClient();
 
 		return View::make('dashboard.dashboard',
 			array(
