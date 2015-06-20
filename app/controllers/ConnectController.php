@@ -88,7 +88,7 @@ class ConnectController extends BaseController
 	| <ANY> | connectWizard: Add a widget, call the proper wizard to do that
 	|===================================================
 	*/
-	public function connectProvider($provider, $step = NULL)
+	public function connectWizard($provider, $step = NULL)
 	{
 
 		# create class name, f.e. stripe --> StripeHelper
