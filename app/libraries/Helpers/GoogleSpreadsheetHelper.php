@@ -29,7 +29,9 @@ class GooglespreadsheetHelper {
 			case 'set-type':
 
 				# save the widget type in SESSION
-				Session::put("type", Input::get('type'));
+				if (Input::get('type')) {
+					Session::put('type', Input::get('type'));
+				}
 
 				if (!$user->isGoogleSpreadsheetConnected()) {
 					# if the user hasn't authorized with google
@@ -40,9 +42,8 @@ class GooglespreadsheetHelper {
 				} else {
 					# otherwise render the spreadsheet chooser wizard page
 
-					$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
-
 					# get the spreadsheet list
+					$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 					$serviceRequest = new DefaultServiceRequest($access_token);
 					ServiceRequestFactory::setInstance($serviceRequest);
 					$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
@@ -53,12 +54,16 @@ class GooglespreadsheetHelper {
 						'step' => 'choose-spreadsheet',
 						'spreadsheetFeed' => $spreadsheetFeed,
 						'isBackgroundOn' => Auth::user()->isBackgroundOn,
-						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+						'type' => Session::get('type'),		
 					));
 				}
 				break; # / case 'set-type'
 
 			case 'set-spreadsheet':
+				if (Input::get('type')) {
+					Session::put('type', Input::get('type'));	
+				}
 
 				# save the spreadsheet ID in SESSION
 				Session::put("spreadsheetId", Input::get('spreadsheetId'));

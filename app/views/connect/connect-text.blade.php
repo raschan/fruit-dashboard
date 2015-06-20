@@ -48,6 +48,7 @@
                 {{ Form::submit('Save', array(
                 'class' => 'btn btn-flat btn-info btn-sm pull-right'
                 )) }}
+                <a href="{{ URL::route('connect.connect')}}"><button class="btn btn-warning btn-sm btn-flat pull-right" type="button">Cancel</button></a>
 
                 {{ Form::close() }}
 

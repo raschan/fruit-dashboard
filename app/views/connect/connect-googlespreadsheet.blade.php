@@ -53,6 +53,10 @@
                   </select>
                 </div>
 
+                @if ($type)
+                    <input type="hidden" name="type" value="{{ $type }}"/>
+                @endif
+
                 {{ Form::submit('Next >', array(
                 'class' => 'btn btn-flat btn-info btn-sm pull-right'
                 )) }}
