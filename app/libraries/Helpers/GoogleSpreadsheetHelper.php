@@ -125,7 +125,13 @@ class GooglespreadsheetHelper {
 				if (Input::has('code')) {
 
 					# lets get an access token
-					$client->authenticate(Input::get('code'));
+					try {
+						$client->authenticate(Input::get('code'));
+        			} catch (Exception $e) {
+						return Redirect::route('connect.connect')
+						  ->with('success', 'Something went wrong, try again please.');
+					}
+
 					$credentials = $client->getAccessToken(); // big JSON stuff
 
 					# lets make it an associative array
