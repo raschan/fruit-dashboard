@@ -53,7 +53,7 @@
                   </select>
                 </div>
 
-                @if ($type)
+                @if (isset($type))
                     <input type="hidden" name="type" value="{{ $type }}"/>
                 @endif
 
