@@ -85,8 +85,7 @@ class ConnectController extends BaseController
 
 	/*
 	|===================================================
-	| <ANY> | connectProvider: return route for connecting a provider
-	| authentication with OAuth2 protocol (favored)
+	| <ANY> | connectWizard: Add a widget, call the proper wizard to do that
 	|===================================================
 	*/
 	public function connectProvider($provider, $step = NULL)
@@ -100,7 +99,7 @@ class ConnectController extends BaseController
 		if(class_exists($widgetClassName) && method_exists($widgetClassName, $widgetMethodName)){
 
 			# it does, launch wizard
-			return $widgetClassName::$widgetMethodName();
+			return $widgetClassName::$widgetMethodName($step);
 
 		} else {
 
