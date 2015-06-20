@@ -18,7 +18,7 @@
         </li>
        
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'text') }}">
+            <a href="{{ URL::route('connect/new', ['provider' => 'text', 'step' => 'init']) }}">
             <span class="icon fa fa-font fa-3x"></span>
             <p>Text widget</p>
           </a>

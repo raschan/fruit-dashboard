@@ -155,9 +155,15 @@ Route::any('connect/{provider}/{step?}', array(
     'uses' => 'ConnectController@connectWizard'
 ));
 
-Route::any('connect.addwidget/{provider?}', array(
+Route::any('connect.addwidget/{provider?}/{step?}', array(
     'before' => 'auth',
     'as'    => 'connect.addwidget',
+    'uses' => 'ConnectController@connectWizard'
+));
+
+Route::any('connect/new/{provider?}/{step?}', array(
+    'before' => 'auth',
+    'as'    => 'connect/new',
     'uses' => 'ConnectController@connectWizard'
 ));
 
