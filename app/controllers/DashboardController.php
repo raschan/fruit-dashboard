@@ -233,6 +233,10 @@ class DashboardController extends BaseController
 						$current_value = '';
 						break;
 
+					case 'text':
+						$current_value = $widget->widget_source;
+						break;
+
 					default:
 						$dataObjects = Data::where('widget_id', $widget->id)
 												->orderBy('date','asc')
@@ -275,7 +279,7 @@ class DashboardController extends BaseController
 		#####################################################
 
 		$user = Auth::user();
-		$client = GoogleSpreadsheetHelper::setGoogleClient();
+		$client = GooglespreadsheetHelper::setGoogleClient();
 
 		return View::make('dashboard.dashboard',
 			array(

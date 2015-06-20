@@ -60,7 +60,7 @@ class ConnectController extends BaseController
 		// }
 	   
 		// // prepare stuff for google drive auth
-		// $client = GoogleSpreadsheetHelper::setGoogleClient();
+		// $client = GooglespreadsheetHelper::setGoogleClient();
 		
 		// returning view
 		return View::make('connect.connect',
@@ -85,63 +85,28 @@ class ConnectController extends BaseController
 
 	/*
 	|===================================================
-	| <ANY> | connectProvider: return route for connecting a provider
-	| authentication with OAuth2 protocol (favored)
+	| <ANY> | connectWizard: Add a widget, call the proper wizard to do that
 	|===================================================
 	*/
-	public function connectProvider($provider, $step = NULL)
+	public function connectWizard($provider, $step = NULL)
 	{
 
-		# we will need the user
-		$user = Auth::user();
+		# create class name, f.e. stripe --> StripeHelper
+		$widgetClassName = ucfirst($provider).'Helper';
+		$widgetMethodName = 'wizard';
 
-		if ($provider == 'stripe') {
-			return StripeHelper::wizard($step);
+		# check if class & method exists, f.e. StripeHelper::wizard
+		if(class_exists($widgetClassName) && method_exists($widgetClassName, $widgetMethodName)){
+
+			# it does, launch wizard
+			return $widgetClassName::$widgetMethodName($step);
+
+		} else {
+
+			# it does not, go back to connect page
+			return Redirect::route('connect.connect')
+				->with('error', 'Unknown provider.');			
 		}
-
-		if ($provider == 'googlespreadsheet') {
-			return GoogleSpreadsheetHelper::wizard($step);
-		}
-
-		if ($provider == 'iframe') {
-			return IframeHelper::wizard($step);
-		}
-
-		if ($provider == 'quote') {
-			return QuoteHelper::wizard($step);
-		}
-
-		if ($provider == 'note') {
-			return NoteHelper::wizard($step);
-		}
-
-		if ($provider == 'greeting') {
-			return GreetingHelper::wizard($step);
-		}
-
-		if ($provider == 'clock') {
-			return ClockHelper::wizard($step);
-		}
-
-		if ($provider == 'api'){
-			return ApiHelper::wizard($step);
-		}
-
-		if ($provider == 'text') {
-			Log::info('text');
-		}
-
-		if ($provider == 'graph') {
-			Log::info('graph');
-		}
-
-		if ($provider == 'list') {
-			Log::info('list');
-		}
-
-		return Redirect::route('connect.connect')
-			->with('error', 'Unknown provider.');
-
 	}
 
 
@@ -182,8 +147,8 @@ class ConnectController extends BaseController
 
 		} else if ($service == "googlespreadsheet") {
 
-			$client = GoogleSpreadsheetHelper::setGoogleClient();
-			$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+			$client = GooglespreadsheetHelper::setGoogleClient();
+			$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
 			$guzzle_client = new GuzzleHttp\Client();
 			$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
@@ -391,11 +356,9 @@ class ConnectController extends BaseController
 
 		$widget = Auth::user()->dashboards->first()->widgets()->find($widget_id);
 		$success = $widget->delete();
-		Log::info($success);
 
 		$data = Data::where("widget_id", "=", $widget_id);
 		$success = $data->delete();
-		Log::info($success);
 
 		return Redirect::back()
 						->with(array('success' => "Widget deleted."));

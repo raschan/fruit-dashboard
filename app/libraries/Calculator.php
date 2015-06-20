@@ -190,8 +190,8 @@ class Calculator
                 $worksheetName = $widget_source['googleWorksheetName'];
 
                 # setup Google stuff
-                $client = GoogleSpreadsheetHelper::setGoogleClient();
-                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                $client = GooglespreadsheetHelper::setGoogleClient();
+                $access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -242,8 +242,8 @@ class Calculator
                 $worksheetName = $widget_source['googleWorksheetName'];
 
                 # setup Google stuff
-                $client = GoogleSpreadsheetHelper::setGoogleClient();
-                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                $client = GooglespreadsheetHelper::setGoogleClient();
+                $access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -305,8 +305,8 @@ class Calculator
                 $worksheetName = $widget_source['googleWorksheetName'];
 
                 # setup Google stuff
-                $client = GoogleSpreadsheetHelper::setGoogleClient();
-                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                $client = GooglespreadsheetHelper::setGoogleClient();
+                $access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -371,8 +371,8 @@ class Calculator
                 $worksheetName = $widget_source['googleWorksheetName'];
 
                 # setup Google stuff
-                $client = GoogleSpreadsheetHelper::setGoogleClient();
-                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                $client = GooglespreadsheetHelper::setGoogleClient();
+                $access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);
@@ -434,8 +434,8 @@ class Calculator
                 $worksheetName = $widget_source['googleWorksheetName'];
 
                 # setup Google stuff
-                $client = GoogleSpreadsheetHelper::setGoogleClient();
-                $access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+                $client = GooglespreadsheetHelper::setGoogleClient();
+                $access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
                 # init service
                 $serviceRequest = new DefaultServiceRequest($access_token);

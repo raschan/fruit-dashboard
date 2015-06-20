@@ -2,7 +2,181 @@
 use Google\Spreadsheet\DefaultServiceRequest;
 use Google\Spreadsheet\ServiceRequestFactory;
 
-class GoogleSpreadsheetHelper {
+class GooglespreadsheetHelper {
+
+	public static function wizard($step = NULL){
+
+		# user is the authenticated user
+		$user = Auth::user();
+
+		# we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
+		$client = GooglespreadsheetHelper::setGoogleClient();
+
+		switch ($step) {
+
+			case 'init':
+
+				# render wizard step #1
+				return View::make('connect.connect-googlespreadsheet')->with(
+					array(
+						'step' => 'choose-type',
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+					)
+				);
+				break; # /case 'init'
+
+			case 'set-type':
+
+				# save the widget type in SESSION
+				if (Input::get('type')) {
+					Session::put('type', Input::get('type'));
+				}
+
+				if (!$user->isGoogleSpreadsheetConnected()) {
+					# if the user hasn't authorized with google
+					# go to google oauth page
+					$url = $client->createAuthUrl();
+					return Redirect::to($url);
+					break;
+				} else {
+					# otherwise render the spreadsheet chooser wizard page
+
+					# get the spreadsheet list
+					$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
+					$serviceRequest = new DefaultServiceRequest($access_token);
+					ServiceRequestFactory::setInstance($serviceRequest);
+					$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+					$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+
+					# render choose-spreadsheet wizard step
+					return View::make('connect.connect-googlespreadsheet')->with(array(
+						'step' => 'choose-spreadsheet',
+						'spreadsheetFeed' => $spreadsheetFeed,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+						'type' => Session::get('type'),		
+					));
+				}
+				break; # / case 'set-type'
+
+			case 'set-spreadsheet':
+				if (Input::get('type')) {
+					Session::put('type', Input::get('type'));	
+				}
+
+				# save the spreadsheet ID in SESSION
+				Session::put("spreadsheetId", Input::get('spreadsheetId'));
+
+				# init service
+				$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
+				$serviceRequest = new DefaultServiceRequest($access_token);
+				ServiceRequestFactory::setInstance($serviceRequest);
+
+				# get the spreadsheet they asked for in the POST
+				$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+				$spreadsheet = $spreadsheetService->getSpreadsheetById(Input::get('spreadsheetId'));
+
+				# save the spreadsheet name in SESSION
+				Session::put("spreadsheetName", $spreadsheet->getTitle());
+
+				# get the worksheet list for the selected spreadsheet
+				$worksheetFeed = $spreadsheet->getWorksheets();
+				
+				# render choose-worksheet wizard step
+				return View::make('connect.connect-googlespreadsheet')->with(
+					array(
+						'step' => 'choose-worksheet',
+						'worksheetFeed' => $worksheetFeed,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
+					)
+				);
+				break; # /case 'set-spreadsheet'
+
+			case 'set-worksheet':
+
+				# save the worksheet name in SESSION
+				Session::put("worksheetName", Input::get('worksheetName'));
+
+				# save the widget
+				$widget_data = array(
+					'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
+					'googleWorksheetName'   =>  Session::get('worksheetName')
+				);
+				$widget_json = json_encode($widget_data);
+
+				$widget = new Widget;
+				$widget->widget_name = Session::get('worksheetName').' - '.Session::get('spreadsheetName');
+				$widget->widget_type = Session::get('type');
+				$widget->widget_source = $widget_json;
+				$widget->widget_ready = false;
+				$widget->dashboard_id = $user->dashboards()->first()->id;
+				$widget->position = '{"size_x":3,"size_y":4,"col":1,"row":1}';
+				$widget->save();
+
+				return Redirect::route('dashboard.dashboard')
+				  ->with('success', 'Google Spreadsheet widget added.');
+				break; # / case 'set-worksheet'
+
+			default: // input has no step, this is the google auth return part
+
+				# we got a code in GET from google
+				if (Input::has('code')) {
+
+					# lets get an access token
+					$client->authenticate(Input::get('code'));
+					$credentials = $client->getAccessToken(); // big JSON stuff
+
+					# lets make it an associative array
+					$tokens_decoded = json_decode($credentials, true);
+
+					# lets check if we have a refresh token already
+					$refresh_token = $user->googleSpreadsheetRefreshToken;
+					if (strlen($refresh_token)<10) {
+						# nope, let's use the one we got now
+						$refresh_token = $tokens_decoded['refresh_token'];
+					}
+
+					# database save the access-stuff-JSON and the refresh token
+					$user->googleSpreadsheetCredentials = $credentials;
+					$user->googleSpreadsheetRefreshToken = $refresh_token;
+					$user->save();
+
+					# good job, notify intercom
+					IntercomHelper::connected($user,'googlespreadsheet');
+
+					# auth
+					$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
+
+					# get the spreadsheet list
+					$serviceRequest = new DefaultServiceRequest($access_token);
+					ServiceRequestFactory::setInstance($serviceRequest);
+					$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+					$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+
+					# render choose-spreadsheet wizard step
+					return View::make('connect.connect-googlespreadsheet')->with(array(
+						'step' => 'choose-spreadsheet',
+						'spreadsheetFeed' => $spreadsheetFeed,
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
+					));	
+				} else {
+					return View::make('connect.connect')->with(array(
+						'error' => 'Something went wrong with the Google authentication.',
+						'isBackgroundOn' => Auth::user()->isBackgroundOn,
+						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
+					));
+				}
+
+				break; # / default
+
+		} # /switch ($step)
+
+
+
+	} # /function wizard
 
 	public static function setGoogleClient(){
 	    $client = new Google_Client();
@@ -13,7 +187,7 @@ class GoogleSpreadsheetHelper {
 	    $client->setAccessType('offline');                
 	    $client->setApprovalPrompt('force');
 	    return $client;
-	}
+	} # /function setGoogleClient
 
 	public static function getGoogleAccessToken($client, $user){
 
@@ -56,148 +230,6 @@ class GoogleSpreadsheetHelper {
 	    $access_token = $tokens_decoded->access_token;
 
 	    return $access_token;
-	}
+	} # /function getGoogleAccessToken
 
-	public static function wizard($step = NULL){
-
-		$user = Auth::user();
-
-		# we will need a client for spreadsheet feeds + email + offline (to get a refreshtoken)
-
-		$client = GoogleSpreadsheetHelper::setGoogleClient();
-
-		if ($step == 'init'){
-			$url = $client->createAuthUrl();
-			return Redirect::to($url);
-		}
-
-		if (!$step){
-
-			# first round -- we got a code in GET from google
-
-			if (Input::has('code')) {
-
-				# lets get an access token
-				$client->authenticate(Input::get('code'));
-				$credentials = $client->getAccessToken(); // big JSON stuff
-
-				# lets make it an associative array
-				$tokens_decoded = json_decode($credentials, true);
-
-				# lets check if we have a refresh token already
-				$refresh_token = $user->googleSpreadsheetRefreshToken;
-				if (strlen($refresh_token)<10) {
-					# nope, let's use the one we got now
-					$refresh_token = $tokens_decoded['refresh_token'];
-				}
-
-				# database save the access-stuff-JSON and the refresh token
-				$user->googleSpreadsheetCredentials = $credentials;
-				$user->googleSpreadsheetRefreshToken = $refresh_token;
-				$user->save();
-
-				# good job, notify intercom
-				IntercomHelper::connected($user,'googlespreadsheet');
-
-				# lets call this route again, but without the code
-				if (Request::secure()) {
-					$redirect = 'https://';
-				} else {
-					$redirect = 'http://';
-				}
-				$redirect .= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-				header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL)); 
-				exit();
-			}
-
-			# second round, prepare the wizard
-
-			$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
-
-			# get the spreadsheet list
-			$serviceRequest = new DefaultServiceRequest($access_token);
-			ServiceRequestFactory::setInstance($serviceRequest);
-			$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-			$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-
-			return View::make('connect.connect-googlespreadsheet')->with(array(
-				'spreadsheetFeed' => $spreadsheetFeed,
-				'isBackgroundOn' => Auth::user()->isBackgroundOn,
-				'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
-			));
-		}
-
-		# we are in the wizard
-
-		if ($step) {
-
-			$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
-
-			# init service
-			$serviceRequest = new DefaultServiceRequest($access_token);
-			ServiceRequestFactory::setInstance($serviceRequest);
-
-			# if we are after wizard step #1
-			if ($step == 2) {
-
-				# get the spreadsheet they asked for in the POST
-				$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-				$spreadsheet = $spreadsheetService->getSpreadsheetById(Input::get('spreadsheetId'));
-				$worksheetFeed = $spreadsheet->getWorksheets();
-
-				# save the spreadsheet name in SESSION
-				Session::put("spreadsheetId", Input::get('spreadsheetId'));
-				Session::put("spreadsheetName", $spreadsheet->getTitle());
-				
-				# render wizard step #2
-				return View::make('connect.connect-googlespreadsheet')->with(
-					array(
-						'step' => 2,
-						'worksheetFeed' => $worksheetFeed,
-						'isBackgroundOn' => Auth::user()->isBackgroundOn,
-						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-					)
-				);
-			}
-
-			# if we are after wizard step #2
-			if ($step == 3) {
-
-				# save the worksheet name in SESSION
-				Session::put("worksheetName", Input::get('worksheetName'));
-
-				# render wizard step #2
-				return View::make('connect.connect-googlespreadsheet')->with(
-					array(
-						'step' => 3,
-						'isBackgroundOn' => Auth::user()->isBackgroundOn,
-						'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),
-					)
-				);
-			}                
-
-			# if we are after wizard step #3
-			if ($step == 4) {
-
-				# save the widget
-				$widget_data = array(
-					'googleSpreadsheetId'   =>  Session::get('spreadsheetId'),
-					'googleWorksheetName'   =>  Session::get('worksheetName')
-				);
-				$widget_json = json_encode($widget_data);
-
-				$widget = new Widget;
-				$widget->widget_name = Session::get('worksheetName').' - '.Session::get('spreadsheetName');
-				$widget->widget_type = Input::get('type');
-				$widget->widget_source = $widget_json;
-				$widget->widget_ready = false;
-				$widget->dashboard_id = $user->dashboards()->first()->id;
-				$widget->position = '{"size_x":3,"size_y":4,"col":1,"row":1}';
-				$widget->save();
-
-				return Redirect::route('dashboard.dashboard')
-				  ->with('success', 'Google Spreadsheet widget added.');
-			}  
-		}
-	}
-}
+} # /class GooglespreadsheetHelper

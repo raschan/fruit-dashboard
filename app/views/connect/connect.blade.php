@@ -17,6 +17,80 @@
           </a>
         </li>
        
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect/new', ['provider' => 'text', 'step' => 'init']) }}">
+            <span class="icon fa fa-font fa-3x"></span>
+            <p>Text widget</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'chart') }}">
+            <span class="icon fa fa-bar-chart fa-3x"></span>
+            <p>Chart widget</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'list') }}">
+            <span class="icon fa fa-list fa-3x"></span>
+            <p>List widget</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="5" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
+            <span class="icon fa fa-file-text-o fa-3x"></span>
+            <p>iframe</p>
+          </a>
+        </li>
+
+
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'quote') }}">
+            <span class="icon fa fa-quote-left fa-3x"></span>
+            <p>Quotes</p>
+          </a>
+        </li>
+
+
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'note') }}">
+            <span class="icon fa fa-pencil fa-3x"></span>
+            <p>Notes</p>
+          </a>
+        </li>
+
+
+        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
+            <span class="icon fa fa-comment-o fa-3x"></span>
+            <p>Greetings</p>
+          </a>
+        </li>
+
+
+        <li class="dashboard-widget well text-center white-background" data-row="3" data-col="4" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.editwidget', 'background') }}">
+            <span class="icon fa fa-picture-o fa-3x"></span>
+            <p>Background</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="4" data-col="1" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect/new', ['provider' => 'googlespreadsheet', 'step' => 'init']) }}">
+            <span class="icon fa fa-google fa-3x"></span>
+            <p>Google Spreadsheet</p>
+          </a>
+        </li>
+
+        <li class="dashboard-widget well text-center white-background" data-row="4" data-col="2" data-sizex="1" data-sizey="1">
+            <a href="{{ URL::route('connect.addwidget', 'api') }}">
+            <span class="icon fa fa-code fa-3x"></span>
+            <p>Webhook / API</p>
+          </a>
+        </li>
+
         {{--
       
         <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
@@ -32,68 +106,8 @@
             <p>Braintree payments</p>
           </a>
         </li>
-        
+
         --}}
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-          @if ($user->isGoogleSpreadsheetConnected())
-            <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
-          @else
-            <a href="/connect/googlespreadsheet/init">
-          @endif
-            <span class="icon fa fa-google fa-3x"></span>
-            <p>Google Spreadsheet</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="3" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'iframe') }}">
-            <span class="icon fa fa-file-text-o fa-3x"></span>
-            <p>iframe</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="1" data-col="4" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'quote') }}">
-            <span class="icon fa fa-quote-left fa-3x"></span>
-            <p>Quotes</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'note') }}">
-            <span class="icon fa fa-pencil fa-3x"></span>
-            <p>Notes</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="2" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'greeting') }}">
-            <span class="icon fa fa-comment-o fa-3x"></span>
-            <p>Greetings</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="3" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.editwidget', 'background') }}">
-            <span class="icon fa fa-picture-o fa-3x"></span>
-            <p>Background</p>
-          </a>
-        </li>
-
-
-        <li class="dashboard-widget well text-center white-background" data-row="2" data-col="4" data-sizex="1" data-sizey="1">
-            <a href="{{ URL::route('connect.addwidget', 'api') }}">
-            <span class="icon fa fa-code fa-3x"></span>
-            <p>Webhook / API</p>
-          </a>
-        </li>
 
       </ul>
 
@@ -107,7 +121,7 @@
               <h4 class='modal-title'>Connect Braintree</h4>
             </div>
             <div class='modal-content' style='background:white;'>
-              @include('connect.braintreeConnect',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
+              @include('connect.connect-braintree',array('user'=>$user,'stepNumber'=>$braintree_connect_stepNumber))
             </div>
           </div>
         </div>

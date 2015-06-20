@@ -140,11 +140,6 @@ Route::get('connect', array(
     'uses' => 'ConnectController@showConnect'
 ));
 
-Route::any('connect/{provider}/{step?}', array(
-    'before' => 'auth|trial_ended|cancelled',
-    'uses' => 'ConnectController@connectProvider'
-));
-
 Route::post('connectBraintree',array(
     'before'    => 'auth',
     'uses'      => 'ConnectController@doBraintreeConnect'
@@ -155,11 +150,21 @@ Route::any('import/{provider}',array(
     'uses'      => 'ConnectController@doImport'
 ));
 
+Route::any('connect/{provider}/{step?}', array(
+    'before' => 'auth',
+    'uses' => 'ConnectController@connectWizard'
+));
 
-Route::any('connect.addwidget/{provider?}', array(
+Route::any('connect.addwidget/{provider?}/{step?}', array(
     'before' => 'auth',
     'as'    => 'connect.addwidget',
-    'uses' => 'ConnectController@connectProvider'
+    'uses' => 'ConnectController@connectWizard'
+));
+
+Route::any('connect/new/{provider?}/{step?}', array(
+    'before' => 'auth',
+    'as'    => 'connect/new',
+    'uses' => 'ConnectController@connectWizard'
 ));
 
 Route::post('connect', array(
