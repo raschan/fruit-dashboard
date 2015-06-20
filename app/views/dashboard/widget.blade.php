@@ -69,4 +69,11 @@
     ])
   @endif
 
+  @if ($widget_data['widget_type'] == 'text')
+    @include('dashboard.widget-text', [
+      'text' => $widget_data['currentValue'], 
+      'id' => $widget_data['widget_id']
+     ])
+  @endif
+
 @endif

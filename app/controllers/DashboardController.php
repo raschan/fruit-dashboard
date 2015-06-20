@@ -233,6 +233,10 @@ class DashboardController extends BaseController
 						$current_value = '';
 						break;
 
+					case 'text':
+						$current_value = $widget->widget_source;
+						break;
+
 					default:
 						$dataObjects = Data::where('widget_id', $widget->id)
 												->orderBy('date','asc')

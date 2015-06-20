@@ -14,39 +14,19 @@
 
                 {{ Form::open(
                 array(
-                'url'=>'connect/text/1',
+                'url'=>'connect/text/source-selected',
                 'method' => 'post',
                 )
                 ) }}
 
-                <input type="radio" name="source" value="text"/> Enter the text manually<br/>
+                <input type="radio" name="source" value="text" checked/> Enter the text manually<br/>
                 <input type="radio" name="source" value="google-spreadsheet-text-cell"/> Google Spreadsheet, gets data from cell A2<br/>
                 <input type="radio" name="source" value="google-spreadsheet-text-column-random"/> Google Spreadsheet, randomly displays a cell from column A<br/>
 
-                {{ Form::submit('Save', array(
+                {{ Form::submit('Next', array(
                 'class' => 'btn btn-flat btn-info btn-sm pull-right'
                 )) }}
-
-                {{ Form::close() }}
-            @endif
-
-            @if (isset($step) && ($step == 'init'))
-                <h4><i class="fa fa-link"></i>&nbsp;&nbsp;Select text source</h4>
-
-                {{ Form::open(
-                array(
-                'url'=>'connect/text/type',
-                'method' => 'post',
-                )
-                ) }}
-
-                <input type="radio" name="type" value="text"/> Enter the text manually<br/>
-                <input type="radio" name="type" value="google-spreadsheet-text-cell"/> Google Spreadsheet, gets data from cell A2<br/>
-                <input type="radio" name="type" value="google-spreadsheet-text-column-random"/> Google Spreadsheet, randomly displays a cell from column A<br/>
-
-                {{ Form::submit('Save', array(
-                'class' => 'btn btn-flat btn-info btn-sm pull-right'
-                )) }}
+                <a href="{{ URL::route('connect.connect')}}"><button class="btn btn-warning btn-sm btn-flat pull-right" type="button">Cancel</button></a>
 
                 {{ Form::close() }}
             @endif
