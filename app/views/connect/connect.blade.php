@@ -78,11 +78,7 @@
         </li>
 
         <li class="dashboard-widget well text-center white-background" data-row="4" data-col="1" data-sizex="1" data-sizey="1">
-          @if ($user->isGoogleSpreadsheetConnected())
-            <a href="{{ URL::route('connect.addwidget', 'googlespreadsheet') }}">
-          @else
-            <a href="/connect/googlespreadsheet/init">
-          @endif
+            <a href="{{ URL::route('connect/new', ['provider' => 'googlespreadsheet', 'step' => 'init']) }}">
             <span class="icon fa fa-google fa-3x"></span>
             <p>Google Spreadsheet</p>
           </a>
