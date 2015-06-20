@@ -60,7 +60,7 @@ class ConnectController extends BaseController
 		// }
 	   
 		// // prepare stuff for google drive auth
-		// $client = GoogleSpreadsheetHelper::setGoogleClient();
+		// $client = GooglespreadsheetHelper::setGoogleClient();
 		
 		// returning view
 		return View::make('connect.connect',
@@ -147,8 +147,8 @@ class ConnectController extends BaseController
 
 		} else if ($service == "googlespreadsheet") {
 
-			$client = GoogleSpreadsheetHelper::setGoogleClient();
-			$access_token = GoogleSpreadsheetHelper::getGoogleAccessToken($client, $user);
+			$client = GooglespreadsheetHelper::setGoogleClient();
+			$access_token = GooglespreadsheetHelper::getGoogleAccessToken($client, $user);
 
 			$guzzle_client = new GuzzleHttp\Client();
 			$response = $guzzle_client->get("https://accounts.google.com/o/oauth2/revoke?token=".$user->googleSpreadsheetRefreshToken);
