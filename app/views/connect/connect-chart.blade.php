@@ -21,6 +21,7 @@
 
                 <input type="radio" name="source" value="google-spreadsheet-line-cell" checked/> Google Spreadsheet, gets data from cell A2<br/>
                 <input type="radio" name="source" value="google-spreadsheet-line-column"/> Google Spreadsheet, gets dates from column A, values from column B<br/>
+                <input type="radio" name="source" value="api"/> Push data to the API (with PHP / javascript etc.)<br/>
 
                 {{ Form::submit('Next', array(
                 'class' => 'btn btn-flat btn-info btn-sm pull-right'
