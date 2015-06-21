@@ -7,7 +7,7 @@ class ChartHelper {
 		switch ($step) {
 
 			case 'init':
-				return View::make('connect.connect-graph')->with(array(
+				return View::make('connect.connect-chart')->with(array(
 					'step' => 'select-source',
 					'isBackgroundOn' => Auth::user()->isBackgroundOn,
 					'dailyBackgroundURL' => Auth::user()->dailyBackgroundURL(),				
@@ -25,6 +25,9 @@ class ChartHelper {
 						return Redirect::to('connect/new/googlespreadsheet/set-type')->with(array(
 							'type' => Input::get('source')
 						));
+						break;
+					case 'api':
+						return Redirect::to('connect/new/api/init');
 						break;
 					default:
 						return Redirect::route('connect.connect')
