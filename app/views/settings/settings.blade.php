@@ -12,7 +12,7 @@
 			<!-- Account settings -->
 			<div class="col-md-10 col-md-offset-1">
 				<div class="row">
-					<div class="col-sm-6 col-md-offset-3 account-form-wrapper">
+					<div class="col-sm-6 col-sm-offset-3 account-form-wrapper">
 					<div class="panel-body account-form bordered getHeight">
 						<h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Account settings</h4>
 						<!-- Name -->
@@ -245,7 +245,7 @@
 				<!-- Notification settings -->
 				<div class="col-md-10 col-md-offset-1">
 					<div class="row">
-						<div class="col-sm-6 col-md-offset-3 notification-form-wrapper">
+						<div class="col-sm-6 col-sm-offset-3 notification-form-wrapper">
 							<div class="panel-body account-form bordered getHeight">
 								<h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Notification settings</h4>
 
@@ -318,7 +318,7 @@
 				<!-- Subscription settings -->
 				<div class="col-md-10 col-md-offset-1">
 					<div class="row">
-						<div class="col-sm-6 col-md-offset-3 subscription-form-wrapper">
+						<div class="col-sm-6 col-sm-offset-3 subscription-form-wrapper">
 							<div class="panel-body account-form bordered getHeight">
 								<h4><i class="fa fa-cog"></i>&nbsp;&nbsp;Subscription settings</h4>
 
@@ -386,7 +386,8 @@
 
 				<!-- Manage connections  -->
 				<div class="col-md-10 col-md-offset-1">
-				 <div class="col-sm-6 col-md-offset-3 connect-form connection-form-wrapper">
+				<div class="row">
+				 <div class="col-sm-6 col-sm-offset-3 connect-form connection-form-wrapper">
 					<div class="panel-body bordered sameHeight">
 						<h4><i class="fa fa-link"></i>&nbsp;&nbsp;Manage connections</h4>
 						<div class="list-group">
@@ -470,13 +471,15 @@
 							</div> <!-- / .list-group -->
 						</div> <!-- / .panel-body -->
 					</div> <!-- / .col-sm-6 -->
+				</div>
 				</div> <!-- / .row -->
 				<!-- /Manage connections  -->
 
 
 				<!--  manage widgets  -->
 				<div class="col-md-10 col-md-offset-1">
-					<div class="col-sm-6 col-md-offset-3 widget-form-wrapper">
+					<div class="row">
+					<div class="col-sm-6 col-sm-offset-3 widget-form-wrapper">
 						<div class="panel-body bordered sameHeight">
 							<h4><i class="fa fa-link"></i>&nbsp;&nbsp;Manage widgets</h4>
 
@@ -618,6 +621,7 @@
 
 						</div> <!-- / .panel-body -->
 					</div> <!-- / .col-sm-6 -->
+				</div>
 				</div> <!-- / .row -->
 				<!-- / manage widgets  -->
 
