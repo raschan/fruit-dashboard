@@ -899,3 +899,17 @@ input::-webkit-input-placeholder {
    text-transform: uppercase;
    font-size: 23px;
 }
+
+.settingsWidget{
+	padding: 0;
+	opacity: 0.75;
+	height:125px;
+	margin: 0 3px 3px 0;
+}
+
+.settingsWidgetContent{
+	text-align:center;
+	padding:30px;
+	width:100%;
+	height:100%;
+}
