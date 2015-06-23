@@ -896,7 +896,6 @@ input{
 
 input::-webkit-input-placeholder {
    color: #fff;
-   text-transform: uppercase;
    font-size: 23px;
 }
 
@@ -941,8 +940,7 @@ button.cancelButton{
 	-webkit-text-stroke-color: #ccc;
 }
 /* greetings input style */
-input#userName,
-input#username_id{
+input.userName{
 	display: inline;
 	width: 75%;
 	height: auto;
@@ -955,9 +953,8 @@ input#username_id{
   	font-size: 50px;
 }
 
-input#userName:focus,
-input#username_id:focus{
-	border-bottom: 1px solid #fff;
+input.userName:focus{
+	border-bottom: 1px solid #fff !important;
 }
 
 div.yourname-form{
@@ -970,4 +967,12 @@ button#signup-next{
 
 div.form-actions{
 	text-align: center;
+}
+/*
+input.placeholderSize{
+	font-size: 15px;
+}*/
+
+input.signUp::-webkit-input-placeholder{
+	font-size:18px;
 }
