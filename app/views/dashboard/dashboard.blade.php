@@ -9,6 +9,13 @@
 
   @section('pageContent')
 
+      <!-- add new widget -->
+      <div>
+        <a href="{{ URL::route('connect.connect') }}">
+          <i class="dropdown-icon fa fa-2x fa-plus" id="addNewWidget"></i>
+        </a>
+      </div>
+
       <!-- widget list -->
       <div class="container">
         <div class="row">

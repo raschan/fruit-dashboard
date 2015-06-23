@@ -922,3 +922,21 @@ input#password_id.form-control.input-lg::-webkit-input-placeholder{
 button.cancelButton{
 	margin-right: 3px;
 }
+
+#addNewWidget{
+	position: absolute;
+	bottom: 25px;
+	left: 25px;
+	text-shadow: 1px 1px 3px rgba(20, 20, 20, 1);
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #ccc;
+	color: #555;
+}
+
+#addNewWidget:hover{
+	color: #333;
+	cursor: pointer;
+	text-shadow: 1px 1px 3px rgba(20, 20, 20, 1);
+	-webkit-text-stroke-width: 0.5px;
+	-webkit-text-stroke-color: #ccc;
+}
