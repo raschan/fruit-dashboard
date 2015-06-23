@@ -968,11 +968,88 @@ button#signup-next{
 div.form-actions{
 	text-align: center;
 }
-/*
-input.placeholderSize{
-	font-size: 15px;
-}*/
 
 input.signUp::-webkit-input-placeholder{
 	font-size:18px;
+}
+
+/* premium ribbon */
+.ribbon:before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 13px;
+    right: -17px;
+    z-index: 999;
+    
+    width: 86px;
+    height: 20px;
+    
+    text-align: center;
+    -webkit-transform: rotateZ(45deg);
+    -moz-transform: rotateZ(45deg);
+    
+    /* Rhombus */
+    border-width: 0 20px 20px 20px;
+    border-style: solid;
+    border-color: transparent transparent #600 transparent;
+}
+
+.ribbon:after{
+    display: block;
+    position: absolute;
+    content: "premium";
+    
+    top: 14px;
+    right: -15px;
+    width: 84px;
+    height: 20px;
+    z-index: 9999;
+    
+    background: transparent;
+    background-image:
+        
+        -webkit-linear-gradient(45deg, 
+        transparent 0%,
+        transparent 77%,
+        rgba(255,255,255,0.3) 80%,
+        rgba(255,255,255,0.3) 81%, 
+        rgba(0,0,0,0.5) 82%,
+        transparent 83%
+        ),
+        
+        -webkit-linear-gradient(-45deg,
+        transparent 0%,
+        transparent 17%,
+        rgba(0,0,0,0.5) 18%,
+        rgba(255,255,255,0.3) 19%,
+        rgba(255,255,255,0.3) 20%,
+        transparent 23%
+        );
+    background-image:
+        -moz-linear-gradient(45deg, 
+        transparent 0%,
+        transparent 77%,
+        rgba(255,255,255,0.3) 80%,
+        rgba(255,255,255,0.3) 81%, 
+        rgba(0,0,0,0.5) 82%,
+        transparent 83%
+        ),
+        -moz-linear-gradient(-45deg,
+        transparent 0%,
+        transparent 17%,
+        rgba(0,0,0,0.5) 18%,
+        rgba(255,255,255,0.3) 19%,
+        rgba(255,255,255,0.3) 20%,
+        transparent 23%
+        );
+    
+    -webkit-transform: rotateZ(45deg);
+    -moz-transform: rotateZ(45deg);
+    
+    color: rgba(255,255,255,1);
+    font-size: 12px;
+    font-family: georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    text-shadow: 0 1px rgba(255,255,25,0.1);
 }
