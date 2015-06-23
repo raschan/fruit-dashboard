@@ -28,6 +28,12 @@
             'class' => 'btn btn-flat btn-info btn-sm pull-right'
             )) }}
 
+            <a href="{{ URL::route('connect.connect')}}">
+                {{ Form::button('Cancel', array(
+                'class' => 'btn btn-warning btn-sm btn-flat pull-right cancelButton'
+                )) }}
+            </a>
+
             {{ Form::close() }}
 
             @endif
