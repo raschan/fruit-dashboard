@@ -118,9 +118,11 @@
             });            
           }
         }
+
         // user finished typing
         $('.save-widget-name').click(saveWidgetName);
         $('.note').keyup(_.debounce(sendText,500));
+        
       });
     </script>
     <!-- /Saving text -->

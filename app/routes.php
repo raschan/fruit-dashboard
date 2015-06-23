@@ -133,6 +133,11 @@ Route::post('cancelSubscription', array(
 ));
 
 
+Route::post('doSignupOnDashboard', array(
+    'uses'      => 'AuthController@doSignupOnDashboard'
+));
+
+
 // connect routes
 Route::get('connect', array(
     // 'before' => 'auth|trial_ended|cancelled',
@@ -248,6 +253,11 @@ Route::post('/widgets/save-text/{widgetId}/{text?}', array(
 
 Route::post('/widgets/settings/name/{widgetId}/{newName}', array(
     'uses'  => 'WidgetRESTController@saveWidgetName',
+));
+
+Route::post('/widgets/settings/username/{newName}', array(
+    'before'    => 'auth',
+    'uses'  => 'WidgetRESTController@saveUserName',
 ));
 
 /*
