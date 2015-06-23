@@ -18,8 +18,16 @@ class AuthController extends BaseController
     {
         if (Auth::check()) {
             Auth::logout();
-        } 
-        return View::make('auth.signin');
+        }
+        $user = User::find(1);
+        
+        return View::make('auth.signin',
+            array(
+                // background stuff
+                'isBackgroundOn' => $user->isBackgroundOn,
+                'dailyBackgroundURL' => $user->dailyBackgroundURL(), 
+            )
+        );
     }
 
     /*
@@ -91,7 +99,14 @@ class AuthController extends BaseController
         if (Auth::check()) {
             Auth::logout();
         } 
-        return View::make('auth.signup');
+        $user = User::find(1);
+        return View::make('auth.signup',
+            array(
+                // background stuff
+                'isBackgroundOn' => $user->isBackgroundOn,
+                'dailyBackgroundURL' => $user->dailyBackgroundURL(), 
+            )
+        );
     }
 
     /*

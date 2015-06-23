@@ -9,7 +9,7 @@
 
 @section('pageContent')
 
-<body class="theme-asphalt page-signup" style="">
+<body @if(isset($isBackgroundOn)) @if($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif @endif class="theme-asphalt page-signup" style="">
 
   <!-- Container -->
   <div class="signup-container">

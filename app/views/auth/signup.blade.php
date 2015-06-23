@@ -14,7 +14,7 @@
 
 @section('pageContent')
 
-<body class="theme-asphalt page-signin" style="">
+<body @if(isset($isBackgroundOn)) @if($isBackgroundOn) style="background: url({{$dailyBackgroundURL}}) no-repeat center center fixed" @endif @endif class="theme-asphalt page-signin" style="">
 	<!-- Container -->
 	<div class="signin-container">
 
