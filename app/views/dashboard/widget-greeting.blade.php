@@ -55,8 +55,12 @@
 // if user is registered, saveUserName function
 @if (Auth::user()->id != 1)
   init.push(function () {
-    function saveUserName(ev) {          
-      var newName = $(ev.target).val();
+    function saveUserName(event) {
+      var keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+        event.preventDefault();  
+      }          
+      var newName = $(event.target).val();
       if (newName) {
         $.ajax({
           type: 'POST',
@@ -66,14 +70,28 @@
         });            
       }
     }
-    $('#userName').keyup(_.debounce(saveUserName,500));
+    $('#userName').keyup(_.debounce(saveUserName,1000));
   });
 // if user is not registered, signup form
 @else 
   init.push(function () {
-    $('#signup-next').on('click', function (){
+    @if (Session::get('error'))
       $('.yourname-form').slideUp('fast', function (){
         $('.signup-form').slideDown('fast');
+      });
+    @endif
+    $('#username_id').on('keydown', function (event){
+      var keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+        event.preventDefault();
+        $('#signup-next').click();
+      }    
+    });
+    $('#signup-next').on('click', function (){
+      $('.yourname-form').slideUp('fast', function (){
+        $('.signup-form').slideDown('fast', function() {
+          $('#email_id').focus();
+        });
       });
     });
   });
