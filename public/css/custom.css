@@ -918,3 +918,7 @@ input#email_id.form-control.input-lg::-webkit-input-placeholder,
 input#password_id.form-control.input-lg::-webkit-input-placeholder{
 	font-size: 18px;
 }
+
+button.cancelButton{
+	margin-right: 3px;
+}
