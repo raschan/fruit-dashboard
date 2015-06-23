@@ -6,18 +6,18 @@
   <!-- If user is registered -->
   @if (Auth::user()->id != 1)
   	<p class='greetings-text white-text textShadow text-center'>Good <span class='greeting'></span>
-      @if(isset(Auth::user()->name)), {{ Auth::user()->name }} <input id="userName" class="form-control" name="userName" type="text">@endif!
+      @if(isset(Auth::user()->name)), <input id="userName" value="{{ Auth::user()->name }}" class="form-control white-text textShadow text-center" name="userName" type="text">@endif!
     </p>
   <!-- If user is not registered -->  
   @else 
     <p class='greetings-text white-text textShadow text-center'>
       
       <div class="yourname-form">
-      What's your name?
+      <span id="yourNameId" class="greetings-text white-text textShadow text-center">What's your name?</span>
       <!-- Form -->
       {{ Form::open(array('action' => 'AuthController@doSignupOnDashboard', 'id' => 'signup-form_id' )) }}
-        {{ Form::text('name', Input::old('name'), array('autofocus' => true, 'class' => 'form-control input-lg', 'id' => 'username_id')) }}
-        <button type="button" id="signup-next">Next</button>
+        {{ Form::text('name', Input::old('name'), array('autofocus' => true, 'autocomplete' => 'off', 'class' => 'form-control input-lg greetings-text white-text textShadow text-center', 'id' => 'username_id')) }}
+        <button type="button" id="signup-next" class="btn btn-flat btn-info btn-sm">Next</button>
       </div>
 
       <div class="signup-form hidden-form">
@@ -32,9 +32,9 @@
         <div class="form-actions">
           {{ Form::submit('Sign up' , array(
             'id' => 'id_submit',
-            'class' => 'signin-btn bg-primary',
+            'class' => 'btn btn-success',
             'onClick' => '_gaq.push(["_trackEvent", "Signup", "Button Pushed"]);mixpanel.track("Signup");')) }}
-            or login here
+            <span class="white-text">or <a class="white-text" href="signin">Login here</a></span>
             <!-- <a href="#" class="forgot-password" id="forgot-password-link">Forgot your password?</a> -->
           </div> <!-- / .form-actions -->
           {{ Form::close() }}

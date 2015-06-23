@@ -940,3 +940,34 @@ button.cancelButton{
 	-webkit-text-stroke-width: 0.5px;
 	-webkit-text-stroke-color: #ccc;
 }
+/* greetings input style */
+input#userName,
+input#username_id{
+	display: inline;
+	width: 75%;
+	height: auto;
+  	margin: 0 auto;
+  	background: 0;
+  	border: 0;
+  	color: #fff;
+	outline: none;
+  	text-align: center;
+  	font-size: 50px;
+}
+
+input#userName:focus,
+input#username_id:focus{
+	border-bottom: 1px solid #fff;
+}
+
+div.yourname-form{
+	text-align: center;
+}
+
+button#signup-next{
+	margin-bottom: 31px;
+}
+
+div.form-actions{
+	text-align: center;
+}
